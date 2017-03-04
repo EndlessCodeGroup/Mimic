@@ -7,4 +7,4 @@ And, inspired by [Vault](https://github.com/MilkBowl/Vault), I started writing M
 With Mimic you not needed download all RPG plugins and write specified code for each plugin to support them, just use Mimic as dependecy.
 
 ## How to use it as dependency (Maven, Gradle, sbt, Leiningen)
-To include this API to your project use [JitPack repo](https://jitpack.io/#ru.endlesscode/MimicAPI).
+To include this API to your project use [JitPack repository](https://jitpack.io/#ru.endlesscode/MimicAPI).
