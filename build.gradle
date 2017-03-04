@@ -2,6 +2,7 @@ group 'ru.endlesscode'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = targetCompatibility = 1.7
 
