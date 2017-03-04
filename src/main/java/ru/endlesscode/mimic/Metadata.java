@@ -34,8 +34,20 @@ import java.lang.annotation.*;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Metadata {
     /**
+     * Returns system name
+     *
+     * @implSpec
+     * You should use for it same value as for {@link BaseSystem#getName()}.
+     * As option, you can use one constant in both cases.
+     *
+     * @return name of system
+     */
+    String name();
+
+    /**
      * Returns system type
      *
+     * @see SystemType
      * @return the system type
      */
     SystemType systemType();

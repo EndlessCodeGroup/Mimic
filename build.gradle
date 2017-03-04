@@ -1,5 +1,5 @@
 group 'ru.endlesscode'
-version '0.1.0'
+version '0.1.1'
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
@@ -10,6 +10,7 @@ ext {
     bukkitVersion = '1.8'
 }
 
+// Adding Java 1.8 tags support to javadoc
 javadoc {
     options.tags = ["apiNote:a:API Note:", "implSpec:a:Implementation Requirements:", "implNote:a:Implementation Note:"]
 }
