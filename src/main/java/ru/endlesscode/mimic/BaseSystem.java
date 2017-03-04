@@ -21,8 +21,8 @@ package ru.endlesscode.mimic;
 /**
  * This interface should be implemented by any system that should work with Mimic.
  *
- * @author  Osip Fatkullin
- * @since   1.0
+ * @author Osip Fatkullin
+ * @since 1.0
  */
 public interface BaseSystem {
     /**

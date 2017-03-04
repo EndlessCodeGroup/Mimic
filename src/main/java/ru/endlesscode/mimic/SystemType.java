@@ -18,41 +18,38 @@
 
 package ru.endlesscode.mimic;
 
-import org.bukkit.plugin.ServicePriority;
-
-import java.lang.annotation.*;
+import ru.endlesscode.mimic.classes.ClassSystem;
+import ru.endlesscode.mimic.levels.LevelSystem;
 
 /**
- * This annotation provides meta-information about system class to load it.
- * You must use it for all systems that you've added.
+ * Available system types used in {@link Metadata ru.enlesscode.mimic.Metadata}
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
-@Documented
-@Target(value = ElementType.TYPE)
-@Retention(value = RetentionPolicy.RUNTIME)
-public @interface Metadata {
+public enum SystemType {
     /**
-     * Returns system type
-     *
-     * @return the system type
+     * Level System type
      */
-    SystemType systemType();
+    LEVEL(LevelSystem.class),
 
     /**
-     * Returns priority of system
-     *
-     * @return priority of
+     * Class System type
      */
-    ServicePriority priority() default ServicePriority.Normal;
+    CLASS(ClassSystem.class);
+
+    private final Class<? extends BaseSystem> systemClass;
+
+    SystemType(Class<? extends BaseSystem> systemClass) {
+        this.systemClass = systemClass;
+    }
 
     /**
-     * Returns classes that should exists for system working
+     * Returns system class
      *
-     * @return array of {@code String} with class names
-     * @implSpec Example for SkillAPI:
-     * classes = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
+     * @return system class
      */
-    String[] classes() default {};
+    public Class<? extends BaseSystem> getSystemClass() {
+        return systemClass;
+    }
 }

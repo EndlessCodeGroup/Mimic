@@ -40,7 +40,7 @@ public interface LevelSystem extends BaseSystem {
     /**
      * Sets current experience level for player
      *
-     * @param player Player to set level
+     * @param player   Player to set level
      * @param newLevel New experience level
      */
     public void setPlayerLevel(Player player, int newLevel);
@@ -48,7 +48,7 @@ public interface LevelSystem extends BaseSystem {
     /**
      * Checks player reached required experience level
      *
-     * @param player Player to check level
+     * @param player        Player to check level
      * @param requiredLevel Required experience level
      */
     public boolean didPlayerReachLevel(Player player, int requiredLevel);
@@ -60,7 +60,7 @@ public interface LevelSystem extends BaseSystem {
      * Never use negative amount to decrease player level, use
      * {@link #decreasePlayerLevel(Player, int)} instead.
      *
-     * @param player Player to increase level
+     * @param player    Player to increase level
      * @param lvlAmount Amount of additional levels
      */
     public void increasePlayerLevel(Player player, int lvlAmount);
@@ -72,7 +72,7 @@ public interface LevelSystem extends BaseSystem {
      * Never use negative amount to increase player level, use
      * {@link #increasePlayerLevel(Player, int)} instead.
      *
-     * @param player Player to decrease level
+     * @param player    Player to decrease level
      * @param lvlAmount Amount of levels to take away
      */
     public void decreasePlayerLevel(Player player, int lvlAmount);
@@ -88,7 +88,7 @@ public interface LevelSystem extends BaseSystem {
     /**
      * Sets player's total experience points
      *
-     * @param player Player to set experience
+     * @param player             Player to set experience
      * @param newTotalExperience New total experience
      */
     public void setTotalPlayerExp(Player player, int newTotalExperience);
@@ -112,7 +112,7 @@ public interface LevelSystem extends BaseSystem {
      * This method changes experience on current level, to set total player
      * experience use {@link #setPlayerExp(Player, int)}
      *
-     * @param player Player to set experience
+     * @param player        Player to set experience
      * @param newExperience New level experience points
      */
     public void setPlayerExp(Player player, int newExperience);
@@ -128,7 +128,7 @@ public interface LevelSystem extends BaseSystem {
     /**
      * Gives player the amount of experience specified
      *
-     * @param player Player to give experience
+     * @param player    Player to give experience
      * @param expAmount Exp amount to give
      */
     public void giveExpToPlayer(Player player, int expAmount);
@@ -136,7 +136,7 @@ public interface LevelSystem extends BaseSystem {
     /**
      * Takes away player the amount of experience specified
      *
-     * @param player Player to take away experience
+     * @param player    Player to take away experience
      * @param expAmount Exp amount to take away
      */
     public void takeExpFromPlayer(Player player, int expAmount);

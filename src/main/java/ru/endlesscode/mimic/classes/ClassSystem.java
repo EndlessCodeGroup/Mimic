@@ -40,7 +40,7 @@ public interface ClassSystem extends BaseSystem {
     /**
      * Check player has required class
      *
-     * @param player Player to check class
+     * @param player        Player to check class
      * @param requiredClass Required class name
      * @return {@code true} if player has required class
      */
