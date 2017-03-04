@@ -49,7 +49,8 @@ public enum SystemType {
      *
      * @return system class
      */
-    public Class<? extends BaseSystem> getSystemClass() {
-        return systemClass;
+    public <T extends BaseSystem> Class<T> getSystemClass() {
+        //noinspection unchecked
+        return (Class<T>) systemClass;
     }
 }
