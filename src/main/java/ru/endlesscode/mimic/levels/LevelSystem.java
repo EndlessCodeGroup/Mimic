@@ -50,6 +50,7 @@ public interface LevelSystem extends BaseSystem {
      *
      * @param player        Player to check level
      * @param requiredLevel Required experience level
+     * @return {@code true} if player player did reach required level
      */
     public boolean didPlayerReachLevel(Player player, int requiredLevel);
 
