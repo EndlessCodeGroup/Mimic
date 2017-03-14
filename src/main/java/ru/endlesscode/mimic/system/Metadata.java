@@ -24,8 +24,8 @@ import ru.endlesscode.mimic.system.SystemType;
 import java.lang.annotation.*;
 
 /**
- * This annotation provides meta-information about system class to load it.
- * You must use it for all systems that you've added.
+ * This annotation provides meta-information about factory to load it.
+ * You must annotate with this all factories that you've added.
  *
  * @author Osip Fatkullin
  * @since 1.0
@@ -35,22 +35,14 @@ import java.lang.annotation.*;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Metadata {
     /**
-     * Returns system type
+     * Returns priority of factory
      *
-     * @see SystemType
-     * @return the system type
-     */
-    SystemType systemType();
-
-    /**
-     * Returns priority of system
-     *
-     * @return priority of
+     * @return Priority of factory
      */
     ServicePriority priority() default ServicePriority.Normal;
 
     /**
-     * Returns system that should exists for system working
+     * Returns classes that should exists for all systems working
      *
      * @implSpec
      * Example for SkillAPI:

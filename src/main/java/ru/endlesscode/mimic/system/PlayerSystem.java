@@ -19,22 +19,17 @@
 package ru.endlesscode.mimic.system;
 
 /**
- * This interface should be implemented by any system that should work with Mimic.
+ * This interface should be implemented by any system that
+ * should work with Mimic.
+ *
+ * <p>Implementation should contain something player-related
+ * object to get data from.
+ * </p>
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
 public interface PlayerSystem {
-    /**
-     * Returns the name of system.
-     *
-     * @implNote
-     * Usually used name of the plugin that implements system.
-     *
-     * @return name of system
-     */
-    public String getName();
-
     /**
      * Checks if this system is found and enabled
      *

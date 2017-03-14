@@ -23,6 +23,9 @@ import org.bukkit.entity.Player;
 /**
  * Abstract factory for getting player systems
  *
+ * <p>Implementation should be annotated by {@link ru.endlesscode.mimic.system.Metadata}
+ * </p>
+ *
  * @author Osip Fatkullin
  * @since 1.0
  */
@@ -45,4 +48,14 @@ public interface SystemFactory {
      * @return Class system for specified player
      */
     public ClassSystem getClassSystem(Player player);
+
+    /**
+     * Returns the name of system.
+     *
+     * @implNote
+     * Usually used name of the plugin that implements system.
+     *
+     * @return name of system
+     */
+    public String getName();
 }
