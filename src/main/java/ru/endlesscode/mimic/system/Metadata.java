@@ -19,7 +19,6 @@
 package ru.endlesscode.mimic.system;
 
 import org.bukkit.plugin.ServicePriority;
-import ru.endlesscode.mimic.system.SystemType;
 
 import java.lang.annotation.*;
 

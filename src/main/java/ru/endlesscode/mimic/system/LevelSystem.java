@@ -18,8 +18,6 @@
 
 package ru.endlesscode.mimic.system;
 
-import ru.endlesscode.mimic.system.PlayerSystem;
-
 /**
  * System that provides methods to work with players level systems.
  * You can check or change values of level and experience.
