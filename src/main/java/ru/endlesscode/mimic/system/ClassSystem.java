@@ -16,9 +16,7 @@
  * along with Mimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.classes;
-
-import ru.endlesscode.mimic.PlayerSystem;
+package ru.endlesscode.mimic.system;
 
 import java.util.List;
 
@@ -48,7 +46,7 @@ public interface ClassSystem extends PlayerSystem {
      * Gets primary class for player.
      *
      * @apiNote
-     * Class is called "primary" because some systems can support many classes
+     * Class is called "primary" because some systems can support many system
      * for one player.
      *
      * @return Primary class name
@@ -56,16 +54,16 @@ public interface ClassSystem extends PlayerSystem {
     public String getPrimaryClass();
 
     /**
-     * Gets {@code Lost} of player classes
+     * Gets {@code Lost} of player system
      *
      * @apiNote
-     * This method actual for systems which support many classes for one player.
+     * This method actual for systems which support many system for one player.
      * If system not support - it just return {@code List} with one element.
      *
      * @implSpec
      * Method shouldn't return {@code null}, but can return empty {@code List}
      *
-     * @return {@code List} of player classes names
+     * @return {@code List} of player system names
      */
     public List<String> getClasses();
 }

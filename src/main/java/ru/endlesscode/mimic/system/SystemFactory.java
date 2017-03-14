@@ -1,5 +1,5 @@
 /*
- * This file is part of Mimic.
+ * This file is part of MimicAPI.
  * Copyright (C) 2017 Osip Fatkullin
  *
  * MimicAPI is free software: you can redistribute it and/or modify
@@ -16,11 +16,9 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic;
+package ru.endlesscode.mimic.system;
 
 import org.bukkit.entity.Player;
-import ru.endlesscode.mimic.classes.ClassSystem;
-import ru.endlesscode.mimic.levels.LevelSystem;
 
 /**
  * Abstract factory for getting player systems
@@ -31,6 +29,9 @@ import ru.endlesscode.mimic.levels.LevelSystem;
 public interface SystemFactory {
     /**
      * Gets player level system
+     *
+     * @implSpec
+     * If system not implemented, just
      *
      * @param player    Player to get level system
      * @return Level system for specified player

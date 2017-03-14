@@ -16,10 +16,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic;
-
-import ru.endlesscode.mimic.classes.ClassSystem;
-import ru.endlesscode.mimic.levels.LevelSystem;
+package ru.endlesscode.mimic.system;
 
 /**
  * Available system types used in {@link Metadata ru.enlesscode.mimic.Metadata}

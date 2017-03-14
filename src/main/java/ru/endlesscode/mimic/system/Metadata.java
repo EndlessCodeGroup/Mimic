@@ -16,9 +16,10 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic;
+package ru.endlesscode.mimic.system;
 
 import org.bukkit.plugin.ServicePriority;
+import ru.endlesscode.mimic.system.SystemType;
 
 import java.lang.annotation.*;
 
@@ -49,11 +50,11 @@ public @interface Metadata {
     ServicePriority priority() default ServicePriority.Normal;
 
     /**
-     * Returns classes that should exists for system working
+     * Returns system that should exists for system working
      *
      * @implSpec
      * Example for SkillAPI:
-     * classes = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
+     * system = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
      *
      * @return array of {@code String} with class names
      */
