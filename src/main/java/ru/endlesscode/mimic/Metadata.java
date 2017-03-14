@@ -51,9 +51,11 @@ public @interface Metadata {
     /**
      * Returns classes that should exists for system working
      *
-     * @return array of {@code String} with class names
-     * @implSpec Example for SkillAPI:
+     * @implSpec
+     * Example for SkillAPI:
      * classes = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
+     *
+     * @return array of {@code String} with class names
      */
     String[] classes() default {};
 }

@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'ru.endlesscode'
-version '0.1.3'
+version '0.1.4'
 
 sourceCompatibility = targetCompatibility = 1.7
 

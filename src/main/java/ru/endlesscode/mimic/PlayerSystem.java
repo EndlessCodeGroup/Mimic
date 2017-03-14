@@ -24,7 +24,7 @@ package ru.endlesscode.mimic;
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface BaseSystem {
+public interface PlayerSystem {
     /**
      * Returns the name of system.
      *

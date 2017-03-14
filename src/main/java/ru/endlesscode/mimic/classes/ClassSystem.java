@@ -18,8 +18,7 @@
 
 package ru.endlesscode.mimic.classes;
 
-import org.bukkit.entity.Player;
-import ru.endlesscode.mimic.BaseSystem;
+import ru.endlesscode.mimic.PlayerSystem;
 
 import java.util.List;
 
@@ -29,22 +28,21 @@ import java.util.List;
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface ClassSystem extends BaseSystem {
+public interface ClassSystem extends PlayerSystem {
     /**
      * Checks player has any class
      *
      * @return {@code true} if player has any class
      */
-    public boolean playerHasClass();
+    public boolean hasClass();
 
     /**
-     * Check player has required class
+     * Checks player has required class
      *
-     * @param player        Player to check class
      * @param requiredClass Required class name
      * @return {@code true} if player has required class
      */
-    public boolean playerHasRequiredClass(Player player, String requiredClass);
+    public boolean hasRequiredClass(String requiredClass);
 
     /**
      * Gets primary class for player.
@@ -53,10 +51,9 @@ public interface ClassSystem extends BaseSystem {
      * Class is called "primary" because some systems can support many classes
      * for one player.
      *
-     * @param player Player to get class
      * @return Primary class name
      */
-    public String getPlayerPrimaryClass(Player player);
+    public String getPrimaryClass();
 
     /**
      * Gets {@code Lost} of player classes
@@ -68,8 +65,7 @@ public interface ClassSystem extends BaseSystem {
      * @implSpec
      * Method shouldn't return {@code null}, but can return empty {@code List}
      *
-     * @param player Player to get classes
      * @return {@code List} of player classes names
      */
-    public List<String> getPlayerClasses(Player player);
+    public List<String> getClasses();
 }

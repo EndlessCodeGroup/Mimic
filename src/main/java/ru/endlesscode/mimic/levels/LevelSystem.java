@@ -18,8 +18,7 @@
 
 package ru.endlesscode.mimic.levels;
 
-import org.bukkit.entity.Player;
-import ru.endlesscode.mimic.BaseSystem;
+import ru.endlesscode.mimic.PlayerSystem;
 
 /**
  * System that provides methods to work with players level systems.
@@ -28,117 +27,105 @@ import ru.endlesscode.mimic.BaseSystem;
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface LevelSystem extends BaseSystem {
+public interface LevelSystem extends PlayerSystem {
     /**
      * Gets current experience level of player
      *
-     * @param player The player to get level
      * @return Current experience level
      */
-    public int getPlayerLevel(Player player);
+    public int getLevel();
 
     /**
      * Sets current experience level for player
      *
-     * @param player   Player to set level
      * @param newLevel New experience level
      */
-    public void setPlayerLevel(Player player, int newLevel);
+    public void setLevel(int newLevel);
 
     /**
      * Checks player reached required experience level
      *
-     * @param player        Player to check level
      * @param requiredLevel Required experience level
      * @return {@code true} if player player did reach required level
      */
-    public boolean didPlayerReachLevel(Player player, int requiredLevel);
+    public boolean didReachLevel(int requiredLevel);
 
     /**
      * Increases the player level by a specified amount.
      *
      * @apiNote
      * Never use negative amount to decrease player level, use
-     * {@link #decreasePlayerLevel(Player, int)} instead.
+     * {@link #decreaseLevel(int)} instead.
      *
-     * @param player    Player to increase level
      * @param lvlAmount Amount of additional levels
      */
-    public void increasePlayerLevel(Player player, int lvlAmount);
+    public void increaseLevel(int lvlAmount);
 
     /**
      * Decreases the player level by a specified amount.
      *
      * @apiNote
      * Never use negative amount to increase player level, use
-     * {@link #increasePlayerLevel(Player, int)} instead.
+     * {@link #increaseLevel(int)} instead.
      *
-     * @param player    Player to decrease level
      * @param lvlAmount Amount of levels to take away
      */
-    public void decreasePlayerLevel(Player player, int lvlAmount);
+    public void decreaseLevel(int lvlAmount);
 
     /**
      * Gets player's total experience points
      *
-     * @param player Player to get total experience
      * @return Total experience points
      */
-    public int getTotalPlayerExp(Player player);
+    public int getTotalExp();
 
     /**
      * Sets player's total experience points
      *
-     * @param player             Player to set experience
      * @param newTotalExperience New total experience
      */
-    public void setTotalPlayerExp(Player player, int newTotalExperience);
+    public void setTotalExp(int newTotalExperience);
 
     /**
      * Gets player's current level experience points
      *
      * @apiNote
      * This method returns experience on current level, to get total player
-     * experience use {@link #getTotalPlayerExp(Player)}
+     * experience use {@link #getTotalExp()}
      *
-     * @param player Player to get experience
      * @return Current level experience points
      */
-    public int getPlayerExp(Player player);
+    public int getExp();
 
     /**
      * Sets player's current level experience points
      *
      * @apiNote
      * This method changes experience on current level, to set total player
-     * experience use {@link #setPlayerExp(Player, int)}
+     * experience use {@link #setTotalExp(int)}
      *
-     * @param player        Player to set experience
      * @param newExperience New level experience points
      */
-    public void setPlayerExp(Player player, int newExperience);
+    public void setExp(int newExperience);
 
     /**
      * Get the total amount of experience required for the player to reach level
      *
-     * @param player The Player
      * @return Experience required to level up
      */
-    public int getPlayerExpToLevel(Player player);
+    public int getExpToLevel();
 
     /**
      * Gives player the amount of experience specified
      *
-     * @param player    Player to give experience
      * @param expAmount Exp amount to give
      */
-    public void giveExpToPlayer(Player player, int expAmount);
+    public void giveExp(int expAmount);
 
     /**
      * Takes away player the amount of experience specified
      *
-     * @param player    Player to take away experience
      * @param expAmount Exp amount to take away
      */
-    public void takeExpFromPlayer(Player player, int expAmount);
+    public void takeExp(int expAmount);
 }

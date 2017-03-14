@@ -1,5 +1,5 @@
 /*
- * This file is part of MimicAPI.
+ * This file is part of Mimic.
  * Copyright (C) 2017 Osip Fatkullin
  *
  * MimicAPI is free software: you can redistribute it and/or modify
@@ -18,39 +18,30 @@
 
 package ru.endlesscode.mimic;
 
+import org.bukkit.entity.Player;
 import ru.endlesscode.mimic.classes.ClassSystem;
 import ru.endlesscode.mimic.levels.LevelSystem;
 
 /**
- * Available system types used in {@link Metadata ru.enlesscode.mimic.Metadata}
+ * Abstract factory for getting player systems
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
-public enum SystemType {
+public interface SystemFactory {
     /**
-     * Level System type
-     */
-    LEVEL(LevelSystem.class),
-
-    /**
-     * Class System type
-     */
-    CLASS(ClassSystem.class);
-
-    private final Class<? extends PlayerSystem> systemClass;
-
-    SystemType(Class<? extends PlayerSystem> systemClass) {
-        this.systemClass = systemClass;
-    }
-
-    /**
-     * Returns system class
+     * Gets player level system
      *
-     * @return system class
+     * @param player    Player to get level system
+     * @return Level system for specified player
      */
-    public <T extends PlayerSystem> Class<T> getSystemClass() {
-        //noinspection unchecked
-        return (Class<T>) systemClass;
-    }
+    public LevelSystem getLevelSystem(Player player);
+
+    /**
+     * Gets player class system
+     *
+     * @param player    Player to get class system
+     * @return Class system for specified player
+     */
+    public ClassSystem getClassSystem(Player player);
 }
