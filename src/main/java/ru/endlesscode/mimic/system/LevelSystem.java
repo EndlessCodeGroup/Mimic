@@ -18,46 +18,42 @@
 
 package ru.endlesscode.mimic.system;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * System that provides methods to work with players level systems.
  * You can check or change values of level and experience.
  *
+ * <p>Before implementing run an eye over all default method implementations
+ * and override all methods that works not properly for your case.</p>
+ *
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface LevelSystem extends PlayerSystem {
-    /**
-     * Gets current experience level of player
-     *
-     * @return Current experience level
-     */
-    public int getLevel();
+public abstract class LevelSystem implements PlayerSystem {
+    protected final ExpLevelConverter converter;
 
     /**
-     * Sets current experience level for player
+     * Constructor that initialize converter.
      *
-     * @param newLevel New experience level
+     * @param converter Converter
      */
-    public void setLevel(int newLevel);
+    protected LevelSystem(@NotNull ExpLevelConverter converter) {
+        this.converter = converter;
+    }
 
     /**
-     * Checks player reached required experience level
+     * Gives assigned converter.
      *
-     * @param requiredLevel Required experience level
-     * @return {@code true} if player player did reach required level
+     * @implSpec
+     * Must return not null object.
+     *
+     * @return The converter
      */
-    public boolean didReachLevel(int requiredLevel);
-
-    /**
-     * Increases the player level by a specified amount.
-     *
-     * @apiNote
-     * Never use negative amount to decrease player level, use
-     * {@link #decreaseLevel(int)} instead.
-     *
-     * @param lvlAmount Amount of additional levels
-     */
-    public void increaseLevel(int lvlAmount);
+    @NotNull
+    public ExpLevelConverter getConverter() {
+        return this.converter;
+    }
 
     /**
      * Decreases the player level by a specified amount.
@@ -68,21 +64,148 @@ public interface LevelSystem extends PlayerSystem {
      *
      * @param lvlAmount Amount of levels to take away
      */
-    public void decreaseLevel(int lvlAmount);
+    public void decreaseLevel(int lvlAmount) {
+        lvlAmount = Math.min(lvlAmount, this.getLevel());
+        this.increaseLevel(-lvlAmount);
+    }
 
     /**
-     * Gets player's total experience points
+     * Increases the player level by a specified amount.
+     *
+     * @apiNote
+     * Never use negative amount to decrease player level, use
+     * {@link #decreaseLevel(int)} instead.
+     *
+     * @param lvlAmount Amount of additional levels
+     */
+    public void increaseLevel(int lvlAmount) {
+        int currentLevel = this.getLevel();
+        this.setLevel(currentLevel + lvlAmount);
+    }
+
+    /**
+     * Checks player reached required experience level.
+     *
+     * @apiNote
+     * Required level shouldn't be less than 0.
+     *
+     * @param requiredLevel Required experience level
+     * @return {@code true} if player player did reach required level
+     */
+    public boolean didReachLevel(int requiredLevel) {
+        return requiredLevel <= this.getLevel();
+    }
+
+    /**
+     * Gets current experience level of player.
+     *
+     * @return Current experience level
+     * @throws IllegalStateException If player-related object not exists
+     */
+    public abstract int getLevel();
+
+    /**
+     * Sets current experience level for player.
+     *
+     * @apiNote
+     * Argument can not be lesser than zero.
+     *
+     * @param newLevel New experience level
+     * @throws IllegalStateException If player-related object not exists
+     */
+    public abstract void setLevel(int newLevel);
+
+    /**
+     * Takes away player the amount of experience specified.
+     *
+     * @param expAmount Exp amount to take away
+     */
+    public void takeExp(int expAmount) {
+        expAmount = Math.min(expAmount, this.getTotalExp());
+        this.giveExp(-expAmount);
+    }
+
+    /**
+     * Gives player the amount of experience specified.
+     *
+     * @apiNote
+     * This method relates to total experience, which means that it can
+     * change both level and experience.
+     *
+     * @param expAmount Exp amount to give
+     */
+    public void giveExp(int expAmount) {
+        int totalExp = this.getTotalExp();
+        this.setTotalExp(totalExp + expAmount);
+    }
+
+    /**
+     * Gets player's total experience points.
      *
      * @return Total experience points
      */
-    public int getTotalExp();
+    public int getTotalExp() {
+        int levelExp = this.converter.levelToExp(this.getLevel());
+        return levelExp + this.getExp();
+    }
 
     /**
      * Sets player's total experience points
      *
      * @param newTotalExperience New total experience
      */
-    public void setTotalExp(int newTotalExperience);
+    public void setTotalExp(int newTotalExperience) {
+        newTotalExperience = Math.max(0, newTotalExperience);
+
+        double level = this.converter.expToLevel(newTotalExperience);
+        int fullLevel = this.converter.expToFullLevel(newTotalExperience);
+        double experiencePercent = level - fullLevel;
+
+        this.setLevel(fullLevel);
+        this.setExp((int) (this.converter.getExpToReachNextLevel(fullLevel) * experiencePercent));
+    }
+
+    /**
+     * Checks player has required total experience
+     *
+     * @param requiredExp Required total experience amount
+     * @return {@code true} if player player has required total experience
+     */
+    public boolean hasExp(int requiredExp) {
+        return requiredExp <= this.getTotalExp();
+    }
+
+    /**
+     * Gets player's current fractional XP
+     *
+     * @apiNote
+     * This is a percentage value. 0 is "no progress" and 1 is "next level".
+     *
+     * @return Current fractional XP.
+     */
+    public double getFractionalExp() {
+        int level = getLevel();
+        int exp = this.getExp();
+
+        if (exp == 0) {
+            return 0;
+        }
+
+        return (double) exp / converter.getExpToReachNextLevel(level);
+    }
+
+    /**
+     * Sets player's current fractional XP
+     *
+     * @apiNote
+     * This is a percentage value. 0 is "no progress" and 1 is "next level".
+     *
+     * @param fractionalExp Fractional XP value between 0 ans 1.
+     */
+    public void setFractionalExp(double fractionalExp) {
+        int level = getLevel();
+        this.setExp((int) (converter.getExpToReachNextLevel(level) * fractionalExp));
+    }
 
     /**
      * Gets player's current level experience points
@@ -92,38 +215,35 @@ public interface LevelSystem extends PlayerSystem {
      * experience use {@link #getTotalExp()}
      *
      * @return Current level experience points
+     * @throws IllegalStateException If player-related object not exists
      */
-    public int getExp();
+    public abstract int getExp();
 
     /**
-     * Sets player's current level experience points
+     * Sets player's current level experience points.
      *
      * @apiNote
-     * This method changes experience on current level, to set total player
-     * experience use {@link #setTotalExp(int)}
+     * Be careful with this method! To change experience value better to use
+     * {@link #giveExp(int)} and {@link #takeExp(int)}. This method changes
+     * experience on current level, to set total player experience use
+     * {@link #setTotalExp(int)}. New experience value shouldn't be less than 0
+     * and bigger than maximal possible XP on current level.
+     *
+     * @implNote
+     * You should add argument value validation to your implementation because
+     * new value may be bigger than maximal possible experience on current level,
+     * and you must trim it to the limit.
      *
      * @param newExperience New level experience points
+     * @throws IllegalStateException If player-related object not exists
      */
-    public void setExp(int newExperience);
+    public abstract void setExp(int newExperience);
 
     /**
-     * Get the total amount of experience required for the player to reach level
+     * Get the total amount of experience required for the player to reach level.
      *
      * @return Experience required to level up
+     * @throws IllegalStateException If player-related object not exists
      */
-    public int getExpToLevel();
-
-    /**
-     * Gives player the amount of experience specified
-     *
-     * @param expAmount Exp amount to give
-     */
-    public void giveExp(int expAmount);
-
-    /**
-     * Takes away player the amount of experience specified
-     *
-     * @param expAmount Exp amount to take away
-     */
-    public void takeExp(int expAmount);
+    public abstract int getExpToNextLevel();
 }

@@ -18,21 +18,61 @@
 
 package ru.endlesscode.mimic.system;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
  * System that provides methods to work with players class systems.
  *
+ * <p>Before implementing run an eye over all default method implementations
+ * and override all methods that works not properly for your case.</p>
+ *
+ * {@see {@link PlayerSystem}} To read more about implementation.
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface ClassSystem extends PlayerSystem {
+public abstract class ClassSystem implements PlayerSystem {
     /**
      * Checks player has any class
      *
      * @return {@code true} if player has any class
      */
-    public boolean hasClass();
+    public boolean hasClass() {
+        return !this.getPrimaryClass().isEmpty();
+    }
+
+    /**
+     * Checks player has one of required classes
+     *
+     * @param requiredClasses List of required classes
+     * @return {@code true} if player has one of required class
+     */
+    public boolean hasOneOfRequiredClasses(@NotNull List<String> requiredClasses) {
+        for (String requiredClass : requiredClasses) {
+            if (this.hasRequiredClass(requiredClass)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks player has all required classes
+     *
+     * @param requiredClasses List of required classes
+     * @return {@code true} if player has all required class
+     */
+    public boolean hasAllRequiredClasses(@NotNull List<String> requiredClasses) {
+        for (String requiredClass : requiredClasses) {
+            if (!this.hasRequiredClass(requiredClass)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Checks player has required class
@@ -40,7 +80,9 @@ public interface ClassSystem extends PlayerSystem {
      * @param requiredClass Required class name
      * @return {@code true} if player has required class
      */
-    public boolean hasRequiredClass(String requiredClass);
+    public boolean hasRequiredClass(@NotNull String requiredClass) {
+        return this.getClasses().contains(requiredClass);
+    }
 
     /**
      * Gets primary class for player.
@@ -49,9 +91,16 @@ public interface ClassSystem extends PlayerSystem {
      * Class is called "primary" because some systems can support many system
      * for one player.
      *
+     * @implSpec
+     * Method shouldn't return {@code null}, but can return empty {@code String}
+     *
      * @return Primary class name
      */
-    public String getPrimaryClass();
+    @NotNull
+    public String getPrimaryClass() {
+        List<String> playerClasses = this.getClasses();
+        return playerClasses.isEmpty() ? "" : playerClasses.get(0);
+    }
 
     /**
      * Gets {@code Lost} of player system
@@ -61,9 +110,12 @@ public interface ClassSystem extends PlayerSystem {
      * If system not support - it just return {@code List} with one element.
      *
      * @implSpec
-     * Method shouldn't return {@code null}, but can return empty {@code List}
+     * Method shouldn't return {@code null}, but can return empty {@code List}.
+     * Also must not contain null objects.
      *
      * @return {@code List} of player system names
+     * @throws IllegalStateException If player-related object not exists.
      */
-    public List<String> getClasses();
+    @NotNull
+    public abstract List<String> getClasses();
 }

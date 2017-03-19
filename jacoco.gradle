@@ -16,25 +16,15 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system;
+apply plugin: 'jacoco'
 
-/**
- * This interface should be implemented by any system that should work
- * with Mimic.
- *
- * <p>Implementation should contain something player-related object to
- * get data from. For this object recommended use
- * {@link ru.endlesscode.mimic.ref.ExistingWeakReference}
- * </p>
- *
- * @author Osip Fatkullin
- * @since 1.0
- */
-public interface PlayerSystem {
-    /**
-     * Checks if this system is found and enabled
-     *
-     * @return {@code true} if works, otherwise {@code false}
-     */
-    public boolean isEnabled();
+jacoco {
+    toolVersion = "0.7.9"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+    }
 }

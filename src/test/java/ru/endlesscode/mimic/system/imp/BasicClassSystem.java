@@ -16,25 +16,37 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system;
+package ru.endlesscode.mimic.system.imp;
+
+import ru.endlesscode.mimic.system.ClassSystem;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * This interface should be implemented by any system that should work
- * with Mimic.
- *
- * <p>Implementation should contain something player-related object to
- * get data from. For this object recommended use
- * {@link ru.endlesscode.mimic.ref.ExistingWeakReference}
- * </p>
+ * Basic implementation of class system
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface PlayerSystem {
-    /**
-     * Checks if this system is found and enabled
-     *
-     * @return {@code true} if works, otherwise {@code false}
-     */
-    public boolean isEnabled();
+public class BasicClassSystem extends ClassSystem {
+    private List<String> classes;
+
+    public BasicClassSystem(String... classes) {
+        this.setClasses(classes);
+    }
+
+    @Override
+    public List<String> getClasses() {
+        return classes;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setClasses(String... classes) {
+        this.classes = Arrays.asList(classes);
+    }
 }

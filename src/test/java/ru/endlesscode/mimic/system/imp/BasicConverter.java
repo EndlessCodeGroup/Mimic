@@ -16,25 +16,31 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system;
+package ru.endlesscode.mimic.system.imp;
+
+import ru.endlesscode.mimic.system.ExpLevelConverter;
 
 /**
- * This interface should be implemented by any system that should work
- * with Mimic.
+ * Basic implementation of ExpLevelConverter.
  *
- * <p>Implementation should contain something player-related object to
- * get data from. For this object recommended use
- * {@link ru.endlesscode.mimic.ref.ExistingWeakReference}
- * </p>
+ * <p>For each level needed 10XP.</p>
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface PlayerSystem {
-    /**
-     * Checks if this system is found and enabled
-     *
-     * @return {@code true} if works, otherwise {@code false}
-     */
-    public boolean isEnabled();
+public class BasicConverter extends ExpLevelConverter {
+    @Override
+    public int levelToExp(int level) {
+        return level * 10;
+    }
+
+    @Override
+    public double expToLevel(int exp) {
+        return exp / 10.;
+    }
+
+    @Override
+    public int getExpToReachNextLevel(int level) {
+        return 10;
+    }
 }
