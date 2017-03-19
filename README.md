@@ -1,4 +1,4 @@
-# Mimic [![Release](https://jitpack.io/v/ru.endlesscode/MimicAPI.svg)](https://jitpack.io/#ru.endlesscode/MimicAPI) | [![Build Status](https://img.shields.io/travis/OsipXD/MimicAPI.svg)](https://travis-ci.org/OsipXD/MimicAPI) [![Test Coverage](https://img.shields.io/codecov/c/github/OsipXD/MimicAPI.svg)](https://codecov.io/gh/OsipXD/MimicAPI) [![Code Climate](https://img.shields.io/codeclimate/github//OsipXD/MimicAPI.svg)](https://codeclimate.com/github/OsipXD/MimicAPI)
+# Mimic [![Release](https://jitpack.io/v/ru.endlesscode/MimicAPI.svg)](https://jitpack.io/#ru.endlesscode/MimicAPI) | [![Build Status](https://img.shields.io/travis/OsipXD/MimicAPI.svg)](https://travis-ci.org/OsipXD/MimicAPI) [![Test Coverage](https://img.shields.io/codecov/c/github/OsipXD/MimicAPI.svg)](https://codecov.io/gh/OsipXD/MimicAPI) [![Code Quality](https://codebeat.co/badges/b8d67e40-337b-4991-8543-cdd65c16e485)](https://codebeat.co/projects/github-com-osipxd-mimicapi-master)
 Abstraction API for Bukkit RPG plugins
 
 ## What is Mimic?
