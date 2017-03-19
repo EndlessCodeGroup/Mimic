@@ -46,6 +46,11 @@ public class BasicClassSystem extends ClassSystem {
         return true;
     }
 
+    @Override
+    public String getName() {
+        return "Basic Class System";
+    }
+
     public void setClasses(String... classes) {
         this.classes = Arrays.asList(classes);
     }

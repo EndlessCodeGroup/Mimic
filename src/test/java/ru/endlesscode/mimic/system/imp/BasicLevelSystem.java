@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.system.LevelSystem;
  * @since 1.0
  */
 public class BasicLevelSystem extends LevelSystem {
-    private int level = 1;
+    private int level = 0;
     private int exp = 0;
 
     /**
@@ -40,6 +40,11 @@ public class BasicLevelSystem extends LevelSystem {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return "Basic Level System";
     }
 
     @Override
