@@ -37,4 +37,14 @@ public interface PlayerSystem {
      * @return {@code true} if works, otherwise {@code false}
      */
     public boolean isEnabled();
+
+    /**
+     * Returns the name of system.
+     *
+     * @implNote
+     * Usually used name of the plugin that implements system.
+     *
+     * @return name of system
+     */
+    public String getName();
 }
