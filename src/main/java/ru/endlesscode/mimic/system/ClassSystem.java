@@ -28,7 +28,8 @@ import java.util.List;
  * <p>Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.</p>
  *
- * {@see {@link PlayerSystem}} To read more about implementation.
+ * <p>See {@link PlayerSystem} To read more about implementation.</p>
+ *
  * @author Osip Fatkullin
  * @since 1.0
  */
