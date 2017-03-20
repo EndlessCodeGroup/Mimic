@@ -16,31 +16,44 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system.imp;
+package ru.endlesscode.mimic.system.impl;
 
-import ru.endlesscode.mimic.system.ExpLevelConverter;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.system.ClassSystem;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Basic implementation of ExpLevelConverter.
- *
- * <p>For each level needed 10XP.</p>
+ * Basic implementation of class system
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
-public class BasicConverter extends ExpLevelConverter {
+public class BasicClassSystem extends ClassSystem {
+    private List<String> classes;
+
+    public BasicClassSystem(String... classes) {
+        this.setClasses(classes);
+    }
+
+    @NotNull
     @Override
-    public int levelToExp(int level) {
-        return level * 10;
+    public List<String> getClasses() {
+        return classes;
     }
 
     @Override
-    public double expToLevel(int exp) {
-        return exp / 10.;
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
-    public int getExpToReachNextLevel(int level) {
-        return 10;
+    public String getName() {
+        return "Basic Class System";
+    }
+
+    public void setClasses(String... classes) {
+        this.classes = Arrays.asList(classes);
     }
 }

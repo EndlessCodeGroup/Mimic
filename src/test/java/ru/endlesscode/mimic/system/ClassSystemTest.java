@@ -20,7 +20,7 @@ package ru.endlesscode.mimic.system;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.endlesscode.mimic.system.imp.BasicClassSystem;
+import ru.endlesscode.mimic.system.impl.BasicClassSystem;
 
 import java.util.Arrays;
 import java.util.List;

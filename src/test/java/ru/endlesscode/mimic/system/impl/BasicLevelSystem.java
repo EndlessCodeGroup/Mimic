@@ -16,7 +16,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system.imp;
+package ru.endlesscode.mimic.system.impl;
 
 import ru.endlesscode.mimic.system.LevelSystem;
 

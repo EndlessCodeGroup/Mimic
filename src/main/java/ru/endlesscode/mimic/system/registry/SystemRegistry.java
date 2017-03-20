@@ -18,7 +18,7 @@
 
 package ru.endlesscode.mimic.system.registry;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.PlayerSystem;
 
 import java.util.logging.Logger;

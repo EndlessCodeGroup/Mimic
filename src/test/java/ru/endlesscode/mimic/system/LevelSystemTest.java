@@ -20,8 +20,8 @@ package ru.endlesscode.mimic.system;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.endlesscode.mimic.system.imp.BasicConverter;
-import ru.endlesscode.mimic.system.imp.BasicLevelSystem;
+import ru.endlesscode.mimic.system.impl.BasicConverter;
+import ru.endlesscode.mimic.system.impl.BasicLevelSystem;
 
 import static org.junit.Assert.*;
 
