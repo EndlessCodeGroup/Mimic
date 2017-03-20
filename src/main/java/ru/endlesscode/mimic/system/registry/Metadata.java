@@ -16,9 +16,9 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system;
+package ru.endlesscode.mimic.system.registry;
 
-import org.bukkit.plugin.ServicePriority;
+import ru.endlesscode.mimic.system.PlayerSystem;
 
 import java.lang.annotation.*;
 
@@ -34,11 +34,18 @@ import java.lang.annotation.*;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Metadata {
     /**
+     * Returns system type
+     *
+     * @return the system type
+     */
+    Class<? extends PlayerSystem> systemType();
+
+    /**
      * Returns priority of factory
      *
      * @return Priority of factory
      */
-    ServicePriority priority() default ServicePriority.Normal;
+    SystemPriority priority() default SystemPriority.NORMAL;
 
     /**
      * Returns classes that should exists for all systems working

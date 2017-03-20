@@ -16,44 +16,21 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system.imp;
-
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.system.ClassSystem;
-
-import java.util.Arrays;
-import java.util.List;
+package ru.endlesscode.mimic.system.registry;
 
 /**
- * Basic implementation of class system
+ * System priorities.
+ *
+ * <p>System with higher priority will be loaded first. Use priorities to
+ * resolve conflicts.</p>
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
-public class BasicClassSystem extends ClassSystem {
-    private List<String> classes;
-
-    public BasicClassSystem(String... classes) {
-        this.setClasses(classes);
-    }
-
-    @NotNull
-    @Override
-    public List<String> getClasses() {
-        return classes;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return "Basic Class System";
-    }
-
-    public void setClasses(String... classes) {
-        this.classes = Arrays.asList(classes);
-    }
+public enum SystemPriority {
+    LOWEST,
+    LOW,
+    NORMAL,
+    HIGH,
+    HIGHEST
 }
