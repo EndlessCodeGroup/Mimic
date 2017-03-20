@@ -25,29 +25,32 @@ import ru.endlesscode.mimic.system.PlayerSystem;
  * Adapter to work with systems {@code Metadata}
  *
  * @see Metadata
+ * @param <SubsystemT>  Subsystem type
  * @author Osip Fatkullin
  * @since 1.0
  */
-public class MetadataAdapter {
-    private Metadata meta;
+public class MetadataAdapter<SubsystemT extends PlayerSystem> {
+    private final Metadata meta;
+    private final Class<? super SubsystemT> systemClass;
 
     /**
      * Gets metadata from class annotation. If annotation not exists - throws exception.
      *
      * @see Metadata
-     * @param theClass  Class to get meta
-     * @param <T>       ErrorCode what implements {@code PlayerSystem}
-     * @return {@code Metadata} if exists, otherwise throw exception
+     * @param <SubsystemT>  Subsystem type
+     * @param theClass      Subsystem class
+     * @return {@code MetadataAdapter} if metadata exists, otherwise throws exception
      * @throws IllegalArgumentException If {@code Metadata} not exists
      */
     @NotNull
-    public static <T extends PlayerSystem> MetadataAdapter getNotNullMeta(@NotNull Class<T> theClass) {
+    public static <SubsystemT extends PlayerSystem> MetadataAdapter getNotNullMeta(
+            @NotNull Class<SubsystemT> theClass) {
         Metadata meta = theClass.getAnnotation(Metadata.class);
         if (meta == null) {
             throw new IllegalArgumentException("Class not contains metadata");
         }
 
-        return new MetadataAdapter(meta);
+        return new MetadataAdapter<>(meta, theClass);
     }
 
     /**
@@ -55,8 +58,9 @@ public class MetadataAdapter {
      *
      * @param meta The metadata
      */
-    protected MetadataAdapter(@NotNull Metadata meta) {
+    protected MetadataAdapter(@NotNull Metadata meta, Class<SubsystemT> systemClass) {
         this.meta = meta;
+        this.systemClass = systemClass.getSuperclass();
     }
 
     /**
@@ -81,12 +85,10 @@ public class MetadataAdapter {
     /**
      * Returns system type.
      *
-     * @param <T> System type class
-     * @return System type
+     * @return System class
      */
-    public <T extends PlayerSystem> Class<T> getSystemTypeClass() {
-        //noinspection unchecked
-        return (Class<T>) meta.systemType();
+    public Class<? super SubsystemT> getSystemClass() {
+        return systemClass;
     }
 
     /**
@@ -95,7 +97,7 @@ public class MetadataAdapter {
      * @return System type name
      */
     public String getSystemName() {
-        return getSystemTypeClass().getSimpleName();
+        return getSystemClass().getSimpleName();
     }
 
     /**

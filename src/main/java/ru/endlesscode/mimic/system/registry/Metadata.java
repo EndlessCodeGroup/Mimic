@@ -18,8 +18,6 @@
 
 package ru.endlesscode.mimic.system.registry;
 
-import ru.endlesscode.mimic.system.PlayerSystem;
-
 import java.lang.annotation.*;
 
 /**
@@ -33,13 +31,6 @@ import java.lang.annotation.*;
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Metadata {
-    /**
-     * Returns system type
-     *
-     * @return the system type
-     */
-    Class<? extends PlayerSystem> systemType();
-
     /**
      * Returns priority of factory
      *

@@ -20,6 +20,7 @@ package ru.endlesscode.mimic.system.impl;
 
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.ClassSystem;
+import ru.endlesscode.mimic.system.registry.Metadata;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.List;
  * @author Osip Fatkullin
  * @since 1.0
  */
+@Metadata
 public class BasicClassSystem extends ClassSystem {
     private List<String> classes;
 

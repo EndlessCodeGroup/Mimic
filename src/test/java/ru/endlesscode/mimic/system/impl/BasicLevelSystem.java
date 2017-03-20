@@ -19,6 +19,8 @@
 package ru.endlesscode.mimic.system.impl;
 
 import ru.endlesscode.mimic.system.LevelSystem;
+import ru.endlesscode.mimic.system.registry.Metadata;
+import ru.endlesscode.mimic.system.registry.SystemPriority;
 
 /**
  * Basic implementation of LevelSystem independent from player-related object
@@ -26,6 +28,7 @@ import ru.endlesscode.mimic.system.LevelSystem;
  * @author Osip Fatkullin
  * @since 1.0
  */
+@Metadata(priority = SystemPriority.LOWEST)
 public class BasicLevelSystem extends LevelSystem {
     private int level = 0;
     private int exp = 0;
