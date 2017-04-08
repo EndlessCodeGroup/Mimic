@@ -16,9 +16,8 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system.impl;
+package ru.endlesscode.mimic.system;
 
-import ru.endlesscode.mimic.system.LevelSystem;
 import ru.endlesscode.mimic.system.registry.Metadata;
 import ru.endlesscode.mimic.system.registry.SystemPriority;
 
@@ -29,15 +28,15 @@ import ru.endlesscode.mimic.system.registry.SystemPriority;
  * @since 1.0
  */
 @Metadata(priority = SystemPriority.LOWEST)
-public class BasicLevelSystem extends LevelSystem {
+public class BasicLevelSystemImpl extends LevelSystem {
     private int level = 0;
     private int exp = 0;
 
     /**
      * Constructor that initialize basic converter.
      */
-    public BasicLevelSystem() {
-        super(new BasicConverter());
+    public BasicLevelSystemImpl() {
+        super(new BasicConverterImp());
     }
 
     @Override

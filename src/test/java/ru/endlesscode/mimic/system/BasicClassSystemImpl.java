@@ -16,10 +16,9 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system.impl;
+package ru.endlesscode.mimic.system;
 
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.system.ClassSystem;
 import ru.endlesscode.mimic.system.registry.Metadata;
 
 import java.util.Arrays;
@@ -32,10 +31,10 @@ import java.util.List;
  * @since 1.0
  */
 @Metadata
-public class BasicClassSystem extends ClassSystem {
+public class BasicClassSystemImpl extends ClassSystem {
     private List<String> classes;
 
-    public BasicClassSystem(String... classes) {
+    public BasicClassSystemImpl(String... classes) {
         this.setClasses(classes);
     }
 

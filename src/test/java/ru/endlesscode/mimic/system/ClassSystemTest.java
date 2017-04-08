@@ -20,7 +20,6 @@ package ru.endlesscode.mimic.system;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.endlesscode.mimic.system.impl.BasicClassSystem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +31,11 @@ import static org.junit.Assert.*;
  * @since 1.0
  */
 public class ClassSystemTest {
-    private BasicClassSystem cs;
+    private BasicClassSystemImpl cs;
 
     @Before
     public void setUp() {
-        this.cs = new BasicClassSystem();
+        this.cs = new BasicClassSystemImpl();
     }
 
     @Test

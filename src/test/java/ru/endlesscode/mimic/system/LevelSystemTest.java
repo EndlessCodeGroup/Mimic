@@ -20,13 +20,11 @@ package ru.endlesscode.mimic.system;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.endlesscode.mimic.system.impl.BasicConverter;
-import ru.endlesscode.mimic.system.impl.BasicLevelSystem;
 
 import static org.junit.Assert.*;
 
 /**
- * Test of LevelSystem class using {@link BasicLevelSystem} as implementation
+ * Test of LevelSystem class using {@link BasicLevelSystemImpl} as implementation
  *
  * @author Osip Fatkullin
  * @since 1.0
@@ -36,7 +34,7 @@ public class LevelSystemTest {
 
     @Before
     public void setUp() {
-        this.ls = new BasicLevelSystem();
+        this.ls = new BasicLevelSystemImpl();
     }
 
     @Test
@@ -44,7 +42,7 @@ public class LevelSystemTest {
         ExpLevelConverter converter = ls.getConverter();
 
         assertNotNull(converter);
-        assertTrue(converter instanceof BasicConverter);
+        assertTrue(converter instanceof BasicConverterImp);
     }
 
     @Test

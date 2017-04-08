@@ -16,9 +16,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.system.impl;
-
-import ru.endlesscode.mimic.system.ExpLevelConverter;
+package ru.endlesscode.mimic.system;
 
 /**
  * Basic implementation of ExpLevelConverter.
@@ -28,7 +26,7 @@ import ru.endlesscode.mimic.system.ExpLevelConverter;
  * @author Osip Fatkullin
  * @since 1.0
  */
-public class BasicConverter extends ExpLevelConverter {
+public class BasicConverterImp extends ExpLevelConverter {
     @Override
     public int levelToExp(int level) {
         return level * 10;
