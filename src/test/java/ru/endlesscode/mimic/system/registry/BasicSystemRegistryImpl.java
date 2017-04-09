@@ -23,7 +23,6 @@ import ru.endlesscode.mimic.system.BasicClassSystemImpl;
 import ru.endlesscode.mimic.system.PlayerSystem;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author Osip Fatkullin
@@ -34,13 +33,6 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
      * Map of providers.
      */
     private final Map<Class<?>, List<RegisteredSystemProvider<?>>> providers = new HashMap<>();
-
-    /**
-     * Constructor with logger initialization
-     */
-    protected BasicSystemRegistryImpl() {
-        super(Logger.getLogger("BasicSystemRegistry"));
-    }
 
     @Override
     protected <SubsystemT extends PlayerSystem> void registerSystem(
@@ -125,7 +117,7 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
                 return subsystemClass.getConstructor(String[].class).newInstance((Object) new String[] {"ClassOne", "ClassTwo"});
             }
         } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException("Instance from given class can't be created");
+            throw new IllegalArgumentException("Instance from given class can't be created", e);
         }
 
         return super.createSubsystemInstance(subsystemClass);

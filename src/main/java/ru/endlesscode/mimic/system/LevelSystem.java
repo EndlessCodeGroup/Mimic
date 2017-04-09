@@ -65,8 +65,9 @@ public abstract class LevelSystem implements PlayerSystem {
      * @param lvlAmount Amount of levels to take away
      */
     public void decreaseLevel(int lvlAmount) {
-        lvlAmount = Math.min(lvlAmount, this.getLevel());
-        this.increaseLevel(-lvlAmount);
+        int currentLevel = this.getLevel();
+        int allowedAmount = Math.min(lvlAmount, currentLevel);
+        this.increaseLevel(-allowedAmount);
     }
 
     /**
@@ -121,8 +122,9 @@ public abstract class LevelSystem implements PlayerSystem {
      * @param expAmount Exp amount to take away
      */
     public void takeExp(int expAmount) {
-        expAmount = Math.min(expAmount, this.getTotalExp());
-        this.giveExp(-expAmount);
+        int currentTotalExp = this.getTotalExp();
+        int allowedAmount = Math.min(expAmount, currentTotalExp);
+        this.giveExp(-allowedAmount);
     }
 
     /**
@@ -155,14 +157,15 @@ public abstract class LevelSystem implements PlayerSystem {
      * @param newTotalExperience New total experience
      */
     public void setTotalExp(int newTotalExperience) {
-        newTotalExperience = Math.max(0, newTotalExperience);
+        int allowedTotalExperience = Math.max(0, newTotalExperience);
 
-        double level = this.converter.expToLevel(newTotalExperience);
-        int fullLevel = this.converter.expToFullLevel(newTotalExperience);
+        double level = this.converter.expToLevel(allowedTotalExperience);
+        int fullLevel = this.converter.expToFullLevel(allowedTotalExperience);
+        int expToNextLevel = this.converter.getExpToReachNextLevel(fullLevel);
         double experiencePercent = level - fullLevel;
 
         this.setLevel(fullLevel);
-        this.setExp((int) (this.converter.getExpToReachNextLevel(fullLevel) * experiencePercent));
+        this.setExp((int) (expToNextLevel * experiencePercent));
     }
 
     /**
@@ -184,13 +187,13 @@ public abstract class LevelSystem implements PlayerSystem {
      * @return Current fractional XP.
      */
     public double getFractionalExp() {
-        int level = getLevel();
         int exp = this.getExp();
 
         if (exp == 0) {
             return 0;
         }
 
+        int level = this.getLevel();
         return (double) exp / converter.getExpToReachNextLevel(level);
     }
 

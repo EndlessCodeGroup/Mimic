@@ -29,8 +29,8 @@ import ru.endlesscode.mimic.system.registry.SystemPriority;
  */
 @Metadata(priority = SystemPriority.LOWEST)
 public class BasicLevelSystemImpl extends LevelSystem {
-    private int level = 0;
-    private int exp = 0;
+    private int level;
+    private int exp;
 
     /**
      * Constructor that initialize basic converter.
@@ -66,10 +66,10 @@ public class BasicLevelSystemImpl extends LevelSystem {
 
     @Override
     public void setExp(int newExperience) {
-        newExperience = Math.max(0, newExperience);
-        newExperience = Math.min(converter.getExpToReachNextLevel(0) - 1, newExperience);
+        int allowedExp = Math.max(0, newExperience);
+        allowedExp = Math.min(converter.getExpToReachNextLevel(0) - 1, allowedExp);
 
-        this.exp = newExperience;
+        this.exp = allowedExp;
     }
 
     @Override

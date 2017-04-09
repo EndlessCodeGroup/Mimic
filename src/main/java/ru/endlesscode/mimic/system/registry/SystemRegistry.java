@@ -21,8 +21,6 @@ package ru.endlesscode.mimic.system.registry;
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.PlayerSystem;
 
-import java.util.logging.Logger;
-
 /**
  * This is class responsible for accounting all system hooks.
  *
@@ -37,17 +35,6 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public abstract class SystemRegistry {
-    private final Logger log;
-
-    /**
-     * Constructor with logger initialization
-     *
-     * @param log Logger for messages
-     */
-    protected SystemRegistry(Logger log) {
-        this.log = log;
-    }
-
     /**
      * Registers subsystem that given as instance.
      *
@@ -94,30 +81,27 @@ public abstract class SystemRegistry {
     }
 
     /**
-     * Tries to hook subsystem. If hook failed throws exception.
+     * Tries to hook givenSubsystem. If hook failed throws exception.
      *
      * @implNote
-     * If {@code subsystem} is {@code null}, will be created new. You can override
+     * If {@code givenSubsystem} is {@code null}, will be created new. You can override
      * {@link #createSubsystemInstance(Class)} to change instance creating algorithm.
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
-     * @param subsystem         Instance of the subsystem (can be {@code null})
+     * @param givenSubsystem    Instance of the subsystem (can be {@code null})
      * @throws SystemNotNeededException If some requirements aren't met
      */
     protected <SubsystemT extends PlayerSystem> void tryToAddSubsystem(
             @NotNull Class<? extends SubsystemT> subsystemClass,
-            SubsystemT subsystem)
+            SubsystemT givenSubsystem)
             throws SystemNotNeededException {
         MetadataAdapter meta = MetadataAdapter.getNotNullMeta(subsystemClass);
         if (!meta.requiredClassesExists()) {
             throw new SystemNotNeededException(String.format("Required classes for '%s' not found.", subsystemClass.getSimpleName()));
         }
 
-        if (subsystem == null) {
-            subsystem = this.createSubsystemInstance(subsystemClass);
-        }
-
+        SubsystemT subsystem = givenSubsystem == null ? this.createSubsystemInstance(subsystemClass) : givenSubsystem;
         this.registerSystem(subsystem, meta);
     }
 
@@ -132,13 +116,12 @@ public abstract class SystemRegistry {
      * @return Created subsystem instance
      * @throws IllegalArgumentException If instance can't be created
      */
-    @NotNull
-    protected <SubsystemT extends PlayerSystem> SubsystemT createSubsystemInstance(
+    protected @NotNull <SubsystemT extends PlayerSystem> SubsystemT createSubsystemInstance(
             @NotNull Class<? extends SubsystemT> subsystemClass) {
         try {
             return subsystemClass.getConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException("Instance from given class can't be created");
+            throw new IllegalArgumentException("Instance from given class can't be created", e);
         }
     }
 

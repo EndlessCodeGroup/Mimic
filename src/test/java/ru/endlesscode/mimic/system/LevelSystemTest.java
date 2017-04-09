@@ -48,10 +48,10 @@ public class LevelSystemTest {
     @Test
     public void testLevelGetSet() throws Exception {
         this.ls.setLevel(10);
-        assertEquals(10, this.ls.getLevel());
+        assertEquals(10, ls.getLevel());
 
         this.ls.setLevel(-10);
-        assertEquals(0, this.ls.getLevel());
+        assertEquals(0, ls.getLevel());
     }
 
     @Test
