@@ -30,14 +30,15 @@ package ru.endlesscode.mimic.system;
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface PlayerSystem {
+public interface PlayerSystem extends Cloneable {
 
     /**
-     * Initializes current player system with concrete player
+     * Initializes and returns copy of current system
      *
-     * @param args Initial args
+     * @param args Args for initialization
+     * @return Initialized system copy
      */
-    public void init(Object... args);
+    public PlayerSystem initializedCopy(Object... args);
 
     /**
      * Checks if this system is found and enabled
