@@ -40,10 +40,11 @@ public abstract class SystemRegistry {
      *
      * @param <SubsystemT>  Subsystem type
      * @param subsystem     Instance of the subsystem
-     * @throws RegistryOperationException If registering failed
+     * @throws SystemNotRegisteredException If registering failed
+     * @throws SystemNotNeededException     If registering not needed
      */
     public <SubsystemT extends PlayerSystem> void registerSubsystem(@NotNull SubsystemT subsystem)
-            throws RegistryOperationException {
+            throws SystemNotRegisteredException, SystemNotNeededException {
         this.registerSubsystem(subsystem.getClass(), subsystem);
     }
 
@@ -52,10 +53,11 @@ public abstract class SystemRegistry {
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
-     * @throws RegistryOperationException If registering failed
+     * @throws SystemNotRegisteredException If registering failed
+     * @throws SystemNotNeededException     If registering not needed
      */
     public <SubsystemT extends PlayerSystem> void registerSubsystem(@NotNull Class<SubsystemT> subsystemClass)
-            throws RegistryOperationException {
+            throws SystemNotRegisteredException, SystemNotNeededException {
         this.registerSubsystem(subsystemClass, null);
     }
 
@@ -68,11 +70,12 @@ public abstract class SystemRegistry {
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
      * @param subsystem         Instance of the subsystem (can be {@code null})
-     * @throws RegistryOperationException If registering failed
+     * @throws SystemNotRegisteredException If registering failed
+     * @throws SystemNotNeededException     If registering not needed
      */
     protected <SubsystemT extends PlayerSystem> void registerSubsystem(
             @NotNull Class<? extends SubsystemT> subsystemClass, SubsystemT subsystem)
-            throws RegistryOperationException {
+            throws SystemNotRegisteredException, SystemNotNeededException {
         try {
             this.tryToRegisterSubsystem(subsystemClass, subsystem);
         } catch (IllegalArgumentException e) {
