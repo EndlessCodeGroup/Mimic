@@ -35,7 +35,7 @@ import java.util.List;
         priority = SystemPriority.HIGH,
         classes = {"ru.endlesscode.mimic.system.ClassSystem", "ru.endlesscode.mimic.WrongClass"})
 public class WrongClassSystemImpl extends ClassSystem {
-    private List<String> classes = new ArrayList<>();
+    private final List<String> classes = new ArrayList<>();
 
     @NotNull
     @Override

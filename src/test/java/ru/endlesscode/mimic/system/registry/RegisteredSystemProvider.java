@@ -18,6 +18,7 @@
 
 package ru.endlesscode.mimic.system.registry;
 
+import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.PlayerSystem;
 
 /**
@@ -28,9 +29,9 @@ import ru.endlesscode.mimic.system.PlayerSystem;
  * @since 1.0
  */
 public class RegisteredSystemProvider<SubsystemT extends PlayerSystem> implements Comparable<RegisteredSystemProvider<?>> {
-    private Class<?> system;
-    private SubsystemT provider;
-    private SystemPriority priority;
+    private final Class<?> system;
+    private final SubsystemT provider;
+    private final SystemPriority priority;
 
     public RegisteredSystemProvider(Class<?> system, SubsystemT provider, SystemPriority priority) {
         this.system = system;
@@ -51,7 +52,7 @@ public class RegisteredSystemProvider<SubsystemT extends PlayerSystem> implement
     }
 
     @Override
-    public int compareTo(RegisteredSystemProvider<?> other) {
+    public int compareTo(@NotNull RegisteredSystemProvider<?> other) {
         if (priority.ordinal() == other.getPriority().ordinal()) {
             return 0;
         } else {

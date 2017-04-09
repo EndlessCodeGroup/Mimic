@@ -45,14 +45,6 @@ public class ExistingWeakReferenceTest {
         assertEquals(obj, givenObj);
     }
 
-    @Test
-    public void testGettingNotNullReferentWithQueue() throws Exception {
-        ExistingWeakReference<Object> ref = new ExistingWeakReference<>(obj, null);
-        Object givenObj = ref.get();
-
-        assertEquals(obj, givenObj);
-    }
-
     @Test(expected = IllegalStateException.class)
     public void testGettingNullReferenceMustThrowException() throws Exception {
         ExistingWeakReference<Object> ref = new ExistingWeakReference<>(obj);

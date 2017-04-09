@@ -18,7 +18,6 @@
 
 package ru.endlesscode.mimic.ref;
 
-import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 
 /**
@@ -34,13 +33,6 @@ public class ExistingWeakReference<T> extends WeakReference<T> {
      */
     public ExistingWeakReference(T referent) {
         super(referent);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public ExistingWeakReference(T referent, ReferenceQueue<? super T> q) {
-        super(referent, q);
     }
 
     /**
