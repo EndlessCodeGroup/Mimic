@@ -43,11 +43,11 @@ public class MetadataAdapter<SubsystemT extends PlayerSystem> {
      * @throws IllegalArgumentException If {@code Metadata} not exists
      */
     @NotNull
-    public static <SubsystemT extends PlayerSystem> MetadataAdapter getNotNullMeta(
+    public static <SubsystemT extends PlayerSystem> MetadataAdapter<SubsystemT> getNotNullMeta(
             @NotNull Class<SubsystemT> theClass) {
         Metadata meta = theClass.getAnnotation(Metadata.class);
         if (meta == null) {
-            throw new IllegalArgumentException("Class not contains metadata");
+            throw new IllegalArgumentException("Class not contains metadata.");
         }
 
         return new MetadataAdapter<>(meta, theClass);

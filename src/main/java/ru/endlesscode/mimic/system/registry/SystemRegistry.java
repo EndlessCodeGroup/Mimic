@@ -53,8 +53,10 @@ public abstract class SystemRegistry {
      *
      * @param <SubsystemT>  Subsystem type
      * @param subsystem     Instance of the subsystem
+     * @throws RegistryOperationException If registering failed
      */
-    public <SubsystemT extends PlayerSystem> void addSubsystem(@NotNull SubsystemT subsystem) {
+    public <SubsystemT extends PlayerSystem> void addSubsystem(@NotNull SubsystemT subsystem)
+            throws RegistryOperationException {
         this.addSubsystem(subsystem.getClass(), subsystem);
     }
 
@@ -63,8 +65,10 @@ public abstract class SystemRegistry {
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
+     * @throws RegistryOperationException If registering failed
      */
-    public <SubsystemT extends PlayerSystem> void addSubsystem(@NotNull Class<SubsystemT> subsystemClass) {
+    public <SubsystemT extends PlayerSystem> void addSubsystem(@NotNull Class<SubsystemT> subsystemClass)
+            throws RegistryOperationException {
         this.addSubsystem(subsystemClass, null);
     }
 
@@ -72,18 +76,20 @@ public abstract class SystemRegistry {
      * Adds hook of subsystem if subsystem is can be added.
      *
      * @implNote
-     * If registering fails, will be printed message to console.
+     * If registering fails, will be thrown exception.
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
      * @param subsystem         Instance of the subsystem (can be {@code null})
+     * @throws RegistryOperationException If registering failed
      */
     protected <SubsystemT extends PlayerSystem> void addSubsystem(
-            @NotNull Class<? extends SubsystemT> subsystemClass, SubsystemT subsystem) {
+            @NotNull Class<? extends SubsystemT> subsystemClass, SubsystemT subsystem)
+            throws RegistryOperationException {
         try {
             this.tryToAddSubsystem(subsystemClass, subsystem);
-        } catch (Exception e) {
-            log.severe("[Hook] " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new SystemNotRegisteredException("System didn't registered.", e);
         }
     }
 
@@ -97,12 +103,15 @@ public abstract class SystemRegistry {
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
      * @param subsystem         Instance of the subsystem (can be {@code null})
+     * @throws SystemNotNeededException If some requirements aren't met
      */
     protected <SubsystemT extends PlayerSystem> void tryToAddSubsystem(
-            @NotNull Class<? extends SubsystemT> subsystemClass, SubsystemT subsystem) {
+            @NotNull Class<? extends SubsystemT> subsystemClass,
+            SubsystemT subsystem)
+            throws SystemNotNeededException {
         MetadataAdapter meta = MetadataAdapter.getNotNullMeta(subsystemClass);
         if (!meta.requiredClassesExists()) {
-            return;
+            throw new SystemNotNeededException(String.format("Required classes for '%s' not found.", subsystemClass.getSimpleName()));
         }
 
         if (subsystem == null) {
@@ -110,9 +119,6 @@ public abstract class SystemRegistry {
         }
 
         this.registerSystem(subsystem, meta);
-
-        String status = subsystem.isEnabled() ? "Loaded" : "Waiting";
-        log.info(String.format("[%s] %s found: %s", meta.getSystemName(), subsystem.getName(), status));
     }
 
     /**
@@ -127,7 +133,8 @@ public abstract class SystemRegistry {
      * @throws IllegalArgumentException If instance can't be created
      */
     @NotNull
-    protected <SubsystemT extends PlayerSystem> SubsystemT createSubsystemInstance(@NotNull Class<? extends SubsystemT> subsystemClass) {
+    protected <SubsystemT extends PlayerSystem> SubsystemT createSubsystemInstance(
+            @NotNull Class<? extends SubsystemT> subsystemClass) {
         try {
             return subsystemClass.getConstructor().newInstance();
         } catch (ReflectiveOperationException e) {
@@ -153,13 +160,19 @@ public abstract class SystemRegistry {
      * Use pattern Prototype to initialize new system objects. Subsystems must be
      * initializable (must contains init method).
      *
+     * @implSpec
+     * Never return {@code null}. Throw exception instead.
+     *
      * @param <SystemT>         System type
      * @param systemTypeClass   System type class
      * @param args              Arguments that needed to recognize player
      * @return System assigned to player
+     * @throws SystemNotRegisteredException If needed system not registered
      */
-    protected abstract <SystemT extends PlayerSystem> SystemT getSystem(@NotNull Class<SystemT> systemTypeClass,
-                                                                     Object... args);
+    @NotNull
+    protected abstract <SystemT extends PlayerSystem> SystemT getSystem(
+            @NotNull Class<SystemT> systemTypeClass,
+            Object... args) throws SystemNotRegisteredException;
 
     /**
      * Unregisters all subsystems
@@ -172,7 +185,8 @@ public abstract class SystemRegistry {
      * Unregister specified subsystem
      *
      * @param <SubsystemT>      Subsystem type
-     * @param subsystemClass    Class of the subsystem
+     * @param subsystem         The subsystem
      */
-    public abstract <SubsystemT extends PlayerSystem> void unregisterSubsystem(@NotNull Class<SubsystemT> subsystemClass);
+    public abstract <SubsystemT extends PlayerSystem> void unregisterSubsystem(
+            @NotNull SubsystemT subsystem);
 }

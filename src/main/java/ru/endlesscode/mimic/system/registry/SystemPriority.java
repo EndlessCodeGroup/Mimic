@@ -32,5 +32,9 @@ public enum SystemPriority {
     LOW,
     NORMAL,
     HIGH,
-    HIGHEST
+    HIGHEST;
+
+    public static SystemPriority fromString(String string) {
+        return SystemPriority.valueOf(string.toUpperCase());
+    }
 }

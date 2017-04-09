@@ -97,8 +97,7 @@ public abstract class ClassSystem implements PlayerSystem {
      *
      * @return Primary class name
      */
-    @NotNull
-    public String getPrimaryClass() {
+    public @NotNull String getPrimaryClass() {
         List<String> playerClasses = this.getClasses();
         return playerClasses.isEmpty() ? "" : playerClasses.get(0);
     }
@@ -117,6 +116,5 @@ public abstract class ClassSystem implements PlayerSystem {
      * @return {@code List} of player system names
      * @throws IllegalStateException If player-related object not exists.
      */
-    @NotNull
-    public abstract List<String> getClasses();
+    public abstract @NotNull List<String> getClasses();
 }
