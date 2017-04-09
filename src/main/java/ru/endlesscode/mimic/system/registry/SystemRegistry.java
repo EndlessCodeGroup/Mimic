@@ -49,7 +49,8 @@ public abstract class SystemRegistry {
     }
 
     /**
-     * Registers hook of subsystem that given as class.
+     * Registers hook of subsystem that given as class. Use registering
+     * with instance instead, if you can. Because this method is a slower.
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem

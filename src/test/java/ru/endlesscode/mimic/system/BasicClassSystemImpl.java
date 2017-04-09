@@ -52,14 +52,10 @@ public class BasicClassSystemImpl extends ClassSystem {
      * @return Initialized system copy
      */
     @Override
-    public BasicClassSystemImpl initializedCopy(Object... args) {
-        try {
-            BasicClassSystemImpl copy = this.clone();
-            copy.setClasses((String[]) args);
-            return copy;
-        } catch (CloneNotSupportedException ignored) {}
-
-        return null;
+    public BasicClassSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
+        BasicClassSystemImpl copy = this.clone();
+        copy.setClasses((String[]) args);
+        return copy;
     }
 
     @Override

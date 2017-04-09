@@ -45,8 +45,7 @@ public class BasicLevelSystemImpl extends LevelSystem {
     }
 
     @Override
-    public BasicLevelSystemImpl initializedCopy(Object... args) {
-        // Nothing needed
+    public BasicLevelSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
         return null;
     }
 

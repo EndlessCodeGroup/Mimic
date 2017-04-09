@@ -31,14 +31,15 @@ package ru.endlesscode.mimic.system;
  * @since 1.0
  */
 public interface PlayerSystem extends Cloneable {
-
     /**
      * Initializes and returns copy of current system
      *
      * @param args Args for initialization
      * @return Initialized system copy
+     * @throws CloneNotSupportedException If the object's class does not
+     *                  support the {@code Cloneable} interface.
      */
-    public PlayerSystem initializedCopy(Object... args);
+    public PlayerSystem initializedCopy(Object... args) throws CloneNotSupportedException;
 
     /**
      * Checks if this system is found and enabled
