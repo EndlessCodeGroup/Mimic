@@ -48,6 +48,16 @@ public class WrongClassSystemImpl extends ClassSystem {
         return false;
     }
 
+    /**
+     * Initializes current player system with concrete player
+     *
+     * @param args Initial args
+     */
+    @Override
+    public void init(Object... args) {
+        // Nothing
+    }
+
     @Override
     public String getName() {
         return "Wrong Class System";

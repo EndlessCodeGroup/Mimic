@@ -45,6 +45,16 @@ public class WrongConstructorClassSystemImpl extends ClassSystem {
     }
 
     /**
+     * Initializes current player system with concrete player
+     *
+     * @param args Initial args
+     */
+    @Override
+    public void init(Object... args) {
+        // Nothing needed
+    }
+
+    /**
      * Returns the name of system.
      *
      * @return name of system

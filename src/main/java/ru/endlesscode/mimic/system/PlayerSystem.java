@@ -31,13 +31,20 @@ package ru.endlesscode.mimic.system;
  * @since 1.0
  */
 public interface PlayerSystem {
+
+    /**
+     * Initializes current player system with concrete player
+     *
+     * @param args Initial args
+     */
+    public void init(Object... args);
+
     /**
      * Checks if this system is found and enabled
      *
      * @return {@code true} if works, otherwise {@code false}
      */
     public boolean isEnabled();
-
     /**
      * Returns the name of system.
      *

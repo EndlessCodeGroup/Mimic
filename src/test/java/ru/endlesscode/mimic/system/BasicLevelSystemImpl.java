@@ -45,6 +45,11 @@ public class BasicLevelSystemImpl extends LevelSystem {
     }
 
     @Override
+    public void init(Object... args) {
+        // Nothing needed
+    }
+
+    @Override
     public String getName() {
         return "Basic Level System";
     }

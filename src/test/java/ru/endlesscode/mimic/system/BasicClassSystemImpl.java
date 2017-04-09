@@ -34,10 +34,6 @@ import java.util.List;
 public class BasicClassSystemImpl extends ClassSystem {
     private List<String> classes;
 
-    public BasicClassSystemImpl(String... classes) {
-        this.setClasses(classes);
-    }
-
     @NotNull
     @Override
     public List<String> getClasses() {
@@ -47,6 +43,16 @@ public class BasicClassSystemImpl extends ClassSystem {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    /**
+     * Initializes current player system with concrete player
+     *
+     * @param args Initial args
+     */
+    @Override
+    public void init(Object... args) {
+        this.setClasses((String[]) args);
     }
 
     @Override

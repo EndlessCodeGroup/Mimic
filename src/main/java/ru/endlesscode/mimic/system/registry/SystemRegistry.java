@@ -140,20 +140,19 @@ public abstract class SystemRegistry {
      * Gets system assigned to specified
      *
      * @implNote
-     * Use pattern Prototype to initialize new system objects. Subsystems must be
-     * initializable (must contains init method).
+     * Use pattern Prototype to initialize new system objects. All subsystems
+     * contains method {@link PlayerSystem#init(Object...)}.
      *
      * @implSpec
      * Never return {@code null}. Throw exception instead.
      *
      * @param <SystemT>         System type
      * @param systemTypeClass   System type class
-     * @param args              Arguments that needed to recognize player
+     * @param args              Arguments that needed to initialize system
      * @return System assigned to player
      * @throws SystemNotRegisteredException If needed system not registered
      */
-    @NotNull
-    protected abstract <SystemT extends PlayerSystem> SystemT getSystem(
+    protected abstract @NotNull <SystemT extends PlayerSystem> SystemT getSystem(
             @NotNull Class<SystemT> systemTypeClass,
             Object... args) throws SystemNotRegisteredException;
 

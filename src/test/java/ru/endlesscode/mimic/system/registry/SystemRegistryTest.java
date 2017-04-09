@@ -53,7 +53,7 @@ public class SystemRegistryTest {
     public void testAddRightSubsystemByInstance() throws Exception {
         registry = new BasicSystemRegistryImpl();
         registry.addSubsystem(new BasicLevelSystemImpl());
-        registry.addSubsystem(new BasicClassSystemImpl("ClassOne", "ClassTwo"));
+        registry.addSubsystem(new BasicClassSystemImpl());
 
         assertNotNull("System must be registered", registry.getSystem(LevelSystem.class));
         assertNotNull("System must be registered", registry.getSystem(ClassSystem.class));

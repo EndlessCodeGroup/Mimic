@@ -19,7 +19,6 @@
 package ru.endlesscode.mimic.system.registry;
 
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.system.BasicClassSystemImpl;
 import ru.endlesscode.mimic.system.PlayerSystem;
 
 import java.util.*;
@@ -106,20 +105,5 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
                 }
             }
         } catch (NoSuchElementException ignored) {}
-    }
-
-    @NotNull
-    @Override
-    protected <SubsystemT extends PlayerSystem> SubsystemT createSubsystemInstance(
-            @NotNull Class<? extends SubsystemT> subsystemClass) {
-        try {
-            if (subsystemClass == BasicClassSystemImpl.class) {
-                return subsystemClass.getConstructor(String[].class).newInstance((Object) new String[] {"ClassOne", "ClassTwo"});
-            }
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException("Instance from given class can't be created", e);
-        }
-
-        return super.createSubsystemInstance(subsystemClass);
     }
 }

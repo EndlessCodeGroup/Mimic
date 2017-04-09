@@ -18,6 +18,8 @@
 
 package ru.endlesscode.mimic.ref;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -40,7 +42,7 @@ public class ExistingWeakReference<T> extends WeakReference<T> {
      * @throws IllegalStateException If referent object already not exists
      */
     @Override
-    public T get() {
+    public @NotNull T get() {
         T referent = super.get();
         if (referent == null) {
             throw new IllegalStateException("Referent object is null");
