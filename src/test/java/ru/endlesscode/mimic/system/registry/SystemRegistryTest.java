@@ -34,8 +34,8 @@ public class SystemRegistryTest {
     @Test
     public void testAddRightSubsystemByClass() throws Exception {
         registry = new BasicSystemRegistryImpl();
-        registry.addSubsystem(BasicLevelSystemImpl.class);
-        registry.addSubsystem(BasicClassSystemImpl.class);
+        registry.registerSubsystem(BasicLevelSystemImpl.class);
+        registry.registerSubsystem(BasicClassSystemImpl.class);
 
         assertNotNull("System must be registered", registry.getSystem(LevelSystem.class));
         assertNotNull("System must be registered", registry.getSystem(ClassSystem.class));
@@ -44,7 +44,7 @@ public class SystemRegistryTest {
     @Test(expected = SystemNotRegisteredException.class)
     public void testAddWrongSubsystemByClass() throws Exception {
         registry = new BasicSystemRegistryImpl();
-        registry.addSubsystem(WrongConstructorClassSystemImpl.class);
+        registry.registerSubsystem(WrongConstructorClassSystemImpl.class);
 
         fail("Must be thrown exception");
     }
@@ -52,8 +52,8 @@ public class SystemRegistryTest {
     @Test
     public void testAddRightSubsystemByInstance() throws Exception {
         registry = new BasicSystemRegistryImpl();
-        registry.addSubsystem(new BasicLevelSystemImpl());
-        registry.addSubsystem(new BasicClassSystemImpl());
+        registry.registerSubsystem(new BasicLevelSystemImpl());
+        registry.registerSubsystem(new BasicClassSystemImpl());
 
         assertNotNull("System must be registered", registry.getSystem(LevelSystem.class));
         assertNotNull("System must be registered", registry.getSystem(ClassSystem.class));
@@ -62,7 +62,7 @@ public class SystemRegistryTest {
     @Test(expected = SystemNotNeededException.class)
     public void testAddWrongSubsystemByInstance() throws Exception {
         registry = new BasicSystemRegistryImpl();
-        registry.addSubsystem(new WrongClassSystemImpl());
+        registry.registerSubsystem(new WrongClassSystemImpl());
 
         fail("Must be thrown exception");
     }

@@ -42,9 +42,9 @@ public abstract class SystemRegistry {
      * @param subsystem     Instance of the subsystem
      * @throws RegistryOperationException If registering failed
      */
-    public <SubsystemT extends PlayerSystem> void addSubsystem(@NotNull SubsystemT subsystem)
+    public <SubsystemT extends PlayerSystem> void registerSubsystem(@NotNull SubsystemT subsystem)
             throws RegistryOperationException {
-        this.addSubsystem(subsystem.getClass(), subsystem);
+        this.registerSubsystem(subsystem.getClass(), subsystem);
     }
 
     /**
@@ -54,9 +54,9 @@ public abstract class SystemRegistry {
      * @param subsystemClass    Class of the subsystem
      * @throws RegistryOperationException If registering failed
      */
-    public <SubsystemT extends PlayerSystem> void addSubsystem(@NotNull Class<SubsystemT> subsystemClass)
+    public <SubsystemT extends PlayerSystem> void registerSubsystem(@NotNull Class<SubsystemT> subsystemClass)
             throws RegistryOperationException {
-        this.addSubsystem(subsystemClass, null);
+        this.registerSubsystem(subsystemClass, null);
     }
 
     /**
@@ -70,11 +70,11 @@ public abstract class SystemRegistry {
      * @param subsystem         Instance of the subsystem (can be {@code null})
      * @throws RegistryOperationException If registering failed
      */
-    protected <SubsystemT extends PlayerSystem> void addSubsystem(
+    protected <SubsystemT extends PlayerSystem> void registerSubsystem(
             @NotNull Class<? extends SubsystemT> subsystemClass, SubsystemT subsystem)
             throws RegistryOperationException {
         try {
-            this.tryToAddSubsystem(subsystemClass, subsystem);
+            this.tryToRegisterSubsystem(subsystemClass, subsystem);
         } catch (IllegalArgumentException e) {
             throw new SystemNotRegisteredException("System didn't registered.", e);
         }
@@ -92,7 +92,7 @@ public abstract class SystemRegistry {
      * @param givenSubsystem    Instance of the subsystem (can be {@code null})
      * @throws SystemNotNeededException If some requirements aren't met
      */
-    protected <SubsystemT extends PlayerSystem> void tryToAddSubsystem(
+    protected <SubsystemT extends PlayerSystem> void tryToRegisterSubsystem(
             @NotNull Class<? extends SubsystemT> subsystemClass,
             SubsystemT givenSubsystem)
             throws SystemNotNeededException {
@@ -141,7 +141,7 @@ public abstract class SystemRegistry {
      *
      * @implNote
      * Use pattern Prototype to initialize new system objects. All subsystems
-     * contains method {@link PlayerSystem#init(Object...)}.
+     * contains method {@link PlayerSystem#initializedCopy(Object...)} for this.
      *
      * @implSpec
      * Never return {@code null}. Throw exception instead.
