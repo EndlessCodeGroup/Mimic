@@ -50,8 +50,8 @@ public class WrongConstructorClassSystemImpl extends ClassSystem {
      * @param args Initial args
      */
     @Override
-    public void init(Object... args) {
-        // Nothing needed
+    public WrongConstructorClassSystemImpl initializedCopy(Object... args) {
+        return this;
     }
 
     /**

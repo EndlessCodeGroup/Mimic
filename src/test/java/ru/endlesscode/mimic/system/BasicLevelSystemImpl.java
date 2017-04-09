@@ -45,8 +45,9 @@ public class BasicLevelSystemImpl extends LevelSystem {
     }
 
     @Override
-    public void init(Object... args) {
+    public BasicLevelSystemImpl initializedCopy(Object... args) {
         // Nothing needed
+        return null;
     }
 
     @Override

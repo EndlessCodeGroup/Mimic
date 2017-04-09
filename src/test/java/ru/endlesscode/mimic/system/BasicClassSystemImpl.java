@@ -46,13 +46,25 @@ public class BasicClassSystemImpl extends ClassSystem {
     }
 
     /**
-     * Initializes current player system with concrete player
+     * Initializes and returns copy of current system
      *
-     * @param args Initial args
+     * @param args Args for initialization
+     * @return Initialized system copy
      */
     @Override
-    public void init(Object... args) {
-        this.setClasses((String[]) args);
+    public BasicClassSystemImpl initializedCopy(Object... args) {
+        try {
+            BasicClassSystemImpl copy = this.clone();
+            copy.setClasses((String[]) args);
+            return copy;
+        } catch (CloneNotSupportedException ignored) {}
+
+        return null;
+    }
+
+    @Override
+    protected BasicClassSystemImpl clone() throws CloneNotSupportedException {
+        return (BasicClassSystemImpl) super.clone();
     }
 
     @Override

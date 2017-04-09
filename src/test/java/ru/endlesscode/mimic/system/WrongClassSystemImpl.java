@@ -54,8 +54,9 @@ public class WrongClassSystemImpl extends ClassSystem {
      * @param args Initial args
      */
     @Override
-    public void init(Object... args) {
+    public WrongClassSystemImpl initializedCopy(Object... args) {
         // Nothing
+        return null;
     }
 
     @Override
