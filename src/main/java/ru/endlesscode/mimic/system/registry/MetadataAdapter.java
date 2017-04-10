@@ -58,9 +58,29 @@ public class MetadataAdapter<SubsystemT extends PlayerSystem> {
      *
      * @param meta The metadata
      */
-    protected MetadataAdapter(@NotNull Metadata meta, Class<SubsystemT> systemClass) {
+    protected MetadataAdapter(@NotNull Metadata meta, Class<SubsystemT> subsystemClass) {
         this.meta = meta;
-        this.systemClass = systemClass.getSuperclass();
+        this.systemClass = findSystemClass(subsystemClass);
+    }
+
+    /**
+     * Finds and returns system class for given subsystem.
+     *
+     * @param subsystemClass Class of subsystem
+     * @return System class
+     */
+    protected Class<? super SubsystemT> findSystemClass(Class<SubsystemT> subsystemClass) {
+        Class<? super SubsystemT> superclass;
+        Class<? super SubsystemT> systemClass = subsystemClass;
+        do {
+            superclass = systemClass.getSuperclass();
+
+            if (superclass == Object.class) {
+                return systemClass;
+            }
+
+            systemClass = superclass;
+        } while (true);
     }
 
     /**
