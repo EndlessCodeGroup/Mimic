@@ -141,24 +141,25 @@ public abstract class SystemRegistry {
             @NotNull MetadataAdapter meta);
 
     /**
-     * Gets system assigned to specified
+     * Gets system assigned to specified player.
      *
      * @implNote
      * Use pattern Prototype to initialize new system objects. All subsystems
      * contains method {@link PlayerSystem#initializedCopy(Object...)} for this.
      *
      * @implSpec
-     * Never return {@code null}. Throw exception instead.
+     * Never return {@code null}. Throw exception instead. Also you must create
+     * public method that will use this method, and filter args.
      *
      * @param <SystemT>         System type
      * @param systemTypeClass   System type class
      * @param args              Arguments that needed to initialize system
      * @return System assigned to player
-     * @throws SystemNotRegisteredException If needed system not registered
+     * @throws SystemNotFoundException If needed system not found in registry
      */
     protected abstract @NotNull <SystemT extends PlayerSystem> SystemT getSystem(
             @NotNull Class<SystemT> systemTypeClass,
-            Object... args) throws SystemNotRegisteredException;
+            Object... args) throws SystemNotFoundException;
 
     /**
      * Unregisters all subsystems

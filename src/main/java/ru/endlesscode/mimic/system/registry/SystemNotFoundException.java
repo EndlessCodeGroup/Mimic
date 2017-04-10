@@ -19,17 +19,16 @@
 package ru.endlesscode.mimic.system.registry;
 
 /**
- * Thrown when system can't be registered.
- * from register.
+ * Thrown when system hook can't be loaded from registry.
  *
  * @author Osip Fatkullin
  * @since 1.0
  */
-public class SystemNotRegisteredException extends RegistryOperationException {
+public class SystemNotFoundException extends RegistryOperationException {
     /**
      * Constructs extension with no parameters
      */
-    public SystemNotRegisteredException() {
+    public SystemNotFoundException() {
         super();
     }
 
@@ -41,7 +40,7 @@ public class SystemNotRegisteredException extends RegistryOperationException {
      *              permitted, and indicates that the cause is nonexistent or
      *              unknown)
      */
-    public SystemNotRegisteredException(Throwable cause) {
+    public SystemNotFoundException(Throwable cause) {
         super(cause);
     }
 
@@ -50,7 +49,7 @@ public class SystemNotRegisteredException extends RegistryOperationException {
      *
      * @param message The detail message
      */
-    public SystemNotRegisteredException(String message) {
+    public SystemNotFoundException(String message) {
         super(message);
     }
 
@@ -62,7 +61,7 @@ public class SystemNotRegisteredException extends RegistryOperationException {
      *                {@link #getCause()} method). (A {@code null} value is
      *                permitted, and indicates that the cause is nonexistent or
      */
-    public SystemNotRegisteredException(String message, Throwable cause) {
+    public SystemNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 }

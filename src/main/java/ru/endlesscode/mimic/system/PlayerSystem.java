@@ -47,6 +47,7 @@ public interface PlayerSystem extends Cloneable {
      * @return {@code true} if works, otherwise {@code false}
      */
     public boolean isEnabled();
+
     /**
      * Returns the name of system.
      *

@@ -50,10 +50,13 @@ public class RegistryOperationExceptionsTest {
     @Test
     public void testConstructorWithoutParameters() throws Exception {
         try {
-            if (this.type == ExceptionType.NOT_REGISTERED) {
-                throw new SystemNotRegisteredException();
-            } else {
-                throw new SystemNotNeededException();
+            switch (this.type) {
+                case NOT_REGISTERED:
+                    throw new SystemNotRegisteredException();
+                case NOT_FOUND:
+                    throw new SystemNotFoundException();
+                default:
+                    throw new SystemNotNeededException();
             }
         } catch (RegistryOperationException e) {
             assertNull("Message must be null", e.getMessage());
@@ -63,10 +66,13 @@ public class RegistryOperationExceptionsTest {
     @Test
     public void testConstructorWithDetailMessage() throws Exception {
         try {
-            if (this.type == ExceptionType.NOT_REGISTERED) {
-                throw new SystemNotRegisteredException("Message one");
-            } else {
-                throw new SystemNotNeededException("Message one");
+            switch (this.type) {
+                case NOT_REGISTERED:
+                    throw new SystemNotRegisteredException("Message one");
+                case NOT_FOUND:
+                    throw new SystemNotFoundException("Message one");
+                default:
+                    throw new SystemNotNeededException("Message one");
             }
         } catch (RegistryOperationException e) {
             assertEquals("Must use message from parameter", "Message one", e.getMessage());
@@ -76,10 +82,13 @@ public class RegistryOperationExceptionsTest {
     @Test
     public void testConstructorWithCause() throws Exception {
         try {
-            if (this.type == ExceptionType.NOT_REGISTERED) {
-                throw new SystemNotRegisteredException(new Exception("Message two"));
-            } else {
-                throw new SystemNotNeededException(new Exception("Message two"));
+            switch (this.type) {
+                case NOT_REGISTERED:
+                    throw new SystemNotRegisteredException(new Exception("Message two"));
+                case NOT_FOUND:
+                    throw new SystemNotFoundException(new Exception("Message two"));
+                default:
+                    throw new SystemNotNeededException(new Exception("Message two"));
             }
         } catch (RegistryOperationException e) {
             assertEquals("Must use message from cause", "java.lang.Exception: Message two", e.getMessage());
@@ -89,10 +98,13 @@ public class RegistryOperationExceptionsTest {
     @Test
     public void testConstructorWithMessageAndCause() throws Exception {
         try {
-            if (this.type == ExceptionType.NOT_REGISTERED) {
-                throw new SystemNotRegisteredException("Message three", new Exception("Message four"));
-            } else {
-                throw new SystemNotNeededException("Message three", new Exception("Message four"));
+            switch (this.type) {
+                case NOT_REGISTERED:
+                    throw new SystemNotRegisteredException("Message three", new Exception("Message four"));
+                case NOT_FOUND:
+                    throw new SystemNotFoundException("Message three", new Exception("Message four"));
+                default:
+                    throw new SystemNotNeededException("Message three", new Exception("Message four"));
             }
         } catch (RegistryOperationException e) {
             assertEquals("Must use message from parameter", "Message three", e.getMessage());
@@ -100,6 +112,6 @@ public class RegistryOperationExceptionsTest {
     }
 
     private enum ExceptionType {
-        NOT_REGISTERED, NOT_NEEDED
+        NOT_REGISTERED, NOT_NEEDED, NOT_FOUND
     }
 }
