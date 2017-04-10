@@ -39,7 +39,7 @@ public class RegistryOperationExceptionsTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { ExceptionType.NOT_REGISTERED }, { ExceptionType.NOT_NEEDED }
+                { ExceptionType.NOT_REGISTERED }, { ExceptionType.NOT_FOUND }, { ExceptionType.NOT_NEEDED }
         });
     }
 
