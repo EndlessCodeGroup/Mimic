@@ -156,10 +156,12 @@ public abstract class SystemRegistry {
      * @param args              Arguments that needed to initialize system
      * @return System assigned to player
      * @throws SystemNotFoundException If needed system not found in registry
+     * @throws CloneNotSupportedException If needed system can't be cloned and initialized
      */
     protected abstract @NotNull <SystemT extends PlayerSystem> SystemT getSystem(
             @NotNull Class<SystemT> systemTypeClass,
-            Object... args) throws SystemNotFoundException;
+            Object... args)
+            throws SystemNotFoundException, CloneNotSupportedException;
 
     /**
      * Unregisters all subsystems

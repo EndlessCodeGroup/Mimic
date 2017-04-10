@@ -64,11 +64,11 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
     @NotNull
     @Override
     protected <SystemT extends PlayerSystem> SystemT getSystem(@NotNull Class<SystemT> systemTypeClass, Object... args)
-            throws SystemNotRegisteredException {
+            throws SystemNotFoundException, CloneNotSupportedException {
         List<RegisteredSystemProvider<?>> registered = providers.get(systemTypeClass);
 
         if (registered == null) {
-            throw new SystemNotRegisteredException(String.format("System '%s' not found", systemTypeClass.getSimpleName()));
+            throw new SystemNotFoundException(String.format("System '%s' not found", systemTypeClass.getSimpleName()));
         }
 
         return systemTypeClass.cast(registered.get(0).getProvider());
