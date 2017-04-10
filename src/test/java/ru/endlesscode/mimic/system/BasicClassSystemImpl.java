@@ -52,10 +52,20 @@ public class BasicClassSystemImpl extends ClassSystem {
      * @return Initialized system copy
      */
     @Override
-    public BasicClassSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
+    public @NotNull BasicClassSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
         BasicClassSystemImpl copy = this.clone();
         copy.setClasses((String[]) args);
         return copy;
+    }
+
+    /**
+     * Returns player-related object
+     *
+     * @return Player-related object
+     */
+    @Override
+    public @NotNull Object getHandler() {
+        return this;
     }
 
     @Override

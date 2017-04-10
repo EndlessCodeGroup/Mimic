@@ -18,6 +18,7 @@
 
 package ru.endlesscode.mimic.system;
 
+import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.registry.Metadata;
 import ru.endlesscode.mimic.system.registry.SystemPriority;
 
@@ -45,8 +46,13 @@ public class BasicLevelSystemImpl extends LevelSystem {
     }
 
     @Override
-    public BasicLevelSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
-        return null;
+    public @NotNull BasicLevelSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
+        return (BasicLevelSystemImpl) this.clone();
+    }
+
+    @Override
+    public @NotNull Object getHandler() {
+        return this;
     }
 
     @Override

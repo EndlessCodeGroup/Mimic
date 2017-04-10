@@ -18,6 +18,8 @@
 
 package ru.endlesscode.mimic.system;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * This interface should be implemented by any system that should work
  * with Mimic.
@@ -39,7 +41,14 @@ public interface PlayerSystem extends Cloneable {
      * @throws CloneNotSupportedException If the object's class does not
      *                  support the {@code Cloneable} interface.
      */
-    public PlayerSystem initializedCopy(Object... args) throws CloneNotSupportedException;
+    public @NotNull PlayerSystem initializedCopy(Object... args) throws CloneNotSupportedException;
+
+    /**
+     * Returns player-related object
+     *
+     * @return Player-related object
+     */
+    public @NotNull Object getHandler();
 
     /**
      * Checks if this system is found and enabled
