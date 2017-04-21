@@ -46,16 +46,6 @@ public class WrongFactoryClassSystemImpl extends ClassSystem {
     }
 
     /**
-     * Initializes current player system with concrete player
-     *
-     * @param args Initial args
-     */
-    @Override
-    public @NotNull WrongFactoryClassSystemImpl initializedCopy(Object... args) {
-        return new WrongFactoryClassSystemImpl();
-    }
-
-    /**
      * Returns player-related object
      *
      * @return Player-related object

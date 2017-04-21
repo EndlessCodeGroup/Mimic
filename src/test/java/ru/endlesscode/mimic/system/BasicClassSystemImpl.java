@@ -49,19 +49,6 @@ public class BasicClassSystemImpl extends ClassSystem {
     }
 
     /**
-     * Initializes and returns copy of current system
-     *
-     * @param args Args for initialization
-     * @return Initialized system copy
-     */
-    @Override
-    public @NotNull BasicClassSystemImpl initializedCopy(Object... args) {
-        BasicClassSystemImpl copy = new BasicClassSystemImpl();
-        copy.setClasses((String[]) args);
-        return copy;
-    }
-
-    /**
      * Returns player-related object
      *
      * @return Player-related object

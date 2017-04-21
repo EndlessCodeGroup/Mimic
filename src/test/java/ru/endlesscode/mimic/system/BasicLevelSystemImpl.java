@@ -49,11 +49,6 @@ public class BasicLevelSystemImpl extends LevelSystem {
     }
 
     @Override
-    public @NotNull BasicLevelSystemImpl initializedCopy(Object... args) {
-        return new BasicLevelSystemImpl();
-    }
-
-    @Override
     public @NotNull Object getHandler() {
         return this;
     }

@@ -35,14 +35,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface PlayerSystem {
     /**
-     * Initializes and returns copy of current system
-     *
-     * @param args Args for initialization
-     * @return Initialized system copy
-     */
-    public @NotNull PlayerSystem initializedCopy(Object... args);
-
-    /**
      * Returns player-related object
      *
      * @return Player-related object

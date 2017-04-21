@@ -50,16 +50,6 @@ public class WrongClassSystemImpl extends ClassSystem {
     }
 
     /**
-     * Initializes current player system with concrete player
-     *
-     * @param args Initial args
-     */
-    @Override
-    public @NotNull WrongClassSystemImpl initializedCopy(Object... args) {
-        return this;
-    }
-
-    /**
      * Returns player-related object
      *
      * @return Player-related object
