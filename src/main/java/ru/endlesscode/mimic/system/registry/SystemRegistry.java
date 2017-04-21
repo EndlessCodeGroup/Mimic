@@ -21,6 +21,7 @@ package ru.endlesscode.mimic.system.registry;
 
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.PlayerSystem;
+import ru.endlesscode.mimic.system.SystemFactory;
 
 /**
  * This is class responsible for accounting all system hooks.
@@ -36,19 +37,6 @@ import ru.endlesscode.mimic.system.PlayerSystem;
  * @since 1.0
  */
 public abstract class SystemRegistry {
-    /**
-     * Registers subsystem that given as instance.
-     *
-     * @param <SubsystemT>  Subsystem type
-     * @param subsystem     Instance of the subsystem
-     * @throws SystemNotRegisteredException If registering failed
-     * @throws SystemNotNeededException     If registering not needed
-     */
-    public <SubsystemT extends PlayerSystem> void registerSubsystem(@NotNull SubsystemT subsystem)
-            throws SystemNotRegisteredException, SystemNotNeededException {
-        this.registerSubsystem(subsystem.getClass(), subsystem);
-    }
-
     /**
      * Registers hook of subsystem that given as class. Use registering
      * with instance instead, if you can. Because this method is a slower.
@@ -71,98 +59,92 @@ public abstract class SystemRegistry {
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
-     * @param subsystem         Instance of the subsystem (can be {@code null})
+     * @param subsystemFactory  Subsystem factory (can be {@code null})
      * @throws SystemNotRegisteredException If registering failed
      * @throws SystemNotNeededException     If registering not needed
      */
-    protected <SubsystemT extends PlayerSystem> void registerSubsystem(
-            @NotNull Class<? extends SubsystemT> subsystemClass, SubsystemT subsystem)
+    public <SubsystemT extends PlayerSystem> void registerSubsystem(
+            @NotNull Class<? extends SubsystemT> subsystemClass, SystemFactory<SubsystemT> subsystemFactory)
             throws SystemNotRegisteredException, SystemNotNeededException {
         try {
-            this.tryToRegisterSubsystem(subsystemClass, subsystem);
+            this.tryToRegisterSubsystem(subsystemClass, subsystemFactory);
         } catch (IllegalArgumentException e) {
             throw new SystemNotRegisteredException("System didn't registered.", e);
         }
     }
 
     /**
-     * Tries to hook givenSubsystem. If hook failed throws exception.
+     * Tries to register given factory. If hook failed throws exception.
      *
      * @implNote
-     * If {@code givenSubsystem} is {@code null}, will be created new. You can override
-     * {@link #createSubsystemInstance(Class)} to change instance creating algorithm.
+     * If {@code givenFactory} is {@code null}, it gets from class. You can override
+     * {@link #getSubsystemFactory(Class)} to change factory getting algorithm.
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
-     * @param givenSubsystem    Instance of the subsystem (can be {@code null})
+     * @param givenFactory      Instance of the subsystem (can be {@code null})
      * @throws SystemNotNeededException If some requirements aren't met
      */
     protected <SubsystemT extends PlayerSystem> void tryToRegisterSubsystem(
             @NotNull Class<? extends SubsystemT> subsystemClass,
-            SubsystemT givenSubsystem)
+            SystemFactory<SubsystemT> givenFactory)
             throws SystemNotNeededException {
         MetadataAdapter meta = MetadataAdapter.getNotNullMeta(subsystemClass);
         if (!meta.requiredClassesExists()) {
             throw new SystemNotNeededException(String.format("Required classes for '%s' not found.", subsystemClass.getSimpleName()));
         }
 
-        SubsystemT subsystem = givenSubsystem == null ? this.createSubsystemInstance(subsystemClass) : givenSubsystem;
+        SystemFactory<SubsystemT> subsystem = givenFactory == null ? this.getSubsystemFactory(subsystemClass) : givenFactory;
         this.registerSystem(subsystem, meta);
     }
 
     /**
-     * Creates instance of subsystem from given class.
+     * Gets and returns factory from given class.
      *
      * @implSpec
      * Should not return {@code null}. Throw {@code IllegalArgumentException} instead.
+     * In every subsystem needed to create factory
      *
      * @param <SubsystemT>      Subsystem type
      * @param subsystemClass    Class of the subsystem
-     * @return Created subsystem instance
-     * @throws IllegalArgumentException If instance can't be created
+     * @return Factory of subsystem
+     * @throws IllegalArgumentException If factory not found
      */
-    protected @NotNull <SubsystemT extends PlayerSystem> SubsystemT createSubsystemInstance(
+    protected @NotNull <SubsystemT extends PlayerSystem> SystemFactory<SubsystemT> getSubsystemFactory(
             @NotNull Class<? extends SubsystemT> subsystemClass) {
         try {
-            return subsystemClass.getConstructor().newInstance();
+            //noinspection unchecked
+            return (SystemFactory<SubsystemT>) subsystemClass.getField("FACTORY").get(null);
         } catch (ReflectiveOperationException e) {
-            throw new IllegalArgumentException("Instance from given class can't be created", e);
+            throw new IllegalArgumentException("Factory not found in given class", e);
         }
     }
 
     /**
-     * Registers approved subsystem.
+     * Registers approved subsystem factory.
      *
-     * @param <SubsystemT>  Subsystem type
-     * @param subsystem     Instance of the subsystem
-     * @param meta          Subsystem metadata
+     * @param <SubsystemT>          Subsystem type
+     * @param subsystemFactory      Subsystem factory
+     * @param meta                  Subsystem metadata
      */
     protected abstract <SubsystemT extends PlayerSystem> void registerSystem(
-            @NotNull SubsystemT subsystem,
+            @NotNull SystemFactory<SubsystemT> subsystemFactory,
             @NotNull MetadataAdapter meta);
 
     /**
      * Gets system assigned to specified player.
      *
-     * @implNote
-     * Use pattern Prototype to initialize new system objects. All subsystems
-     * contains method {@link PlayerSystem#initializedCopy(Object...)} for this.
-     *
      * @implSpec
-     * Never return {@code null}. Throw exception instead. Also you must create
-     * public method that will use this method, and filter args.
+     * Never return {@code null}. Throw exception instead.
      *
      * @param <SystemT>         System type
      * @param systemTypeClass   System type class
-     * @param args              Arguments that needed to initialize system
-     * @return System assigned to player
+     * @return System factory
      * @throws SystemNotFoundException If needed system not found in registry
-     * @throws CloneNotSupportedException If needed system can't be cloned and initialized
      */
-    protected abstract @NotNull <SystemT extends PlayerSystem> SystemT getSystem(
-            @NotNull Class<SystemT> systemTypeClass,
-            Object... args)
-            throws SystemNotFoundException, CloneNotSupportedException;
+    public abstract @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getSystem(
+            @NotNull Class<SystemT> systemTypeClass)
+            throws SystemNotFoundException;
 
     /**
      * Unregisters all subsystems

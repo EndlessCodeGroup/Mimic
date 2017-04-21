@@ -33,6 +33,8 @@ import java.util.List;
  */
 @Metadata
 public class BasicClassSystemImpl extends ClassSystem {
+    public static final SystemFactory<BasicClassSystemImpl> FACTORY = arg -> new BasicClassSystemImpl();
+
     private List<String> classes;
 
     @NotNull

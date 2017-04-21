@@ -31,6 +31,8 @@ import ru.endlesscode.mimic.system.registry.SystemPriority;
  */
 @Metadata(priority = SystemPriority.LOWEST)
 public class BasicLevelSystemImpl extends LevelSystem {
+    public static final SystemFactory<BasicLevelSystemImpl> FACTORY = arg -> new BasicLevelSystemImpl();
+
     private int level;
     private int exp;
 

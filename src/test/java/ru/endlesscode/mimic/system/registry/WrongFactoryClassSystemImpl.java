@@ -30,8 +30,8 @@ import java.util.List;
  * @since 1.0
  */
 @Metadata
-public class WrongConstructorClassSystemImpl extends ClassSystem {
-    private WrongConstructorClassSystemImpl() {
+public class WrongFactoryClassSystemImpl extends ClassSystem {
+    private WrongFactoryClassSystemImpl() {
         // Wrong constructor
     }
 
@@ -51,8 +51,8 @@ public class WrongConstructorClassSystemImpl extends ClassSystem {
      * @param args Initial args
      */
     @Override
-    public @NotNull WrongConstructorClassSystemImpl initializedCopy(Object... args) {
-        return new WrongConstructorClassSystemImpl();
+    public @NotNull WrongFactoryClassSystemImpl initializedCopy(Object... args) {
+        return new WrongFactoryClassSystemImpl();
     }
 
     /**

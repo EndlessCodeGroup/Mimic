@@ -19,11 +19,16 @@
 
 package ru.endlesscode.mimic.system.registry;
 
+import org.junit.Before;
 import org.junit.Test;
-import ru.endlesscode.mimic.system.*;
+import ru.endlesscode.mimic.system.BasicClassSystemImpl;
+import ru.endlesscode.mimic.system.BasicLevelSystemImpl;
+import ru.endlesscode.mimic.system.WrongClassSystemImpl;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Osip Fatkullin
@@ -32,38 +37,38 @@ import static org.junit.Assert.fail;
 public class SystemRegistryTest {
     private SystemRegistry registry;
 
-    @Test
-    public void testAddRightSubsystemByClass() throws Exception {
-        registry = new BasicSystemRegistryImpl();
-        registry.registerSubsystem(BasicLevelSystemImpl.class);
-        registry.registerSubsystem(BasicClassSystemImpl.class);
-
-        assertNotNull("System must be registered", registry.getSystem(LevelSystem.class));
-        assertNotNull("System must be registered", registry.getSystem(ClassSystem.class));
+    @Before
+    public void setUp() throws Exception {
+        this.registry = spy(new BasicSystemRegistryImpl());
     }
 
-    @Test(expected = SystemNotRegisteredException.class)
-    public void testAddWrongSubsystemByClass() throws Exception {
-        registry = new BasicSystemRegistryImpl();
-        registry.registerSubsystem(WrongConstructorClassSystemImpl.class);
+    @Test
+    public void testAddRightSubsystemByClass() throws Exception {
+        registry.registerSubsystem(BasicLevelSystemImpl.class);
+        verify(registry).registerSystem(eq(BasicLevelSystemImpl.FACTORY), any(MetadataAdapter.class));
 
-        fail("Must be thrown exception");
+        registry.registerSubsystem(BasicClassSystemImpl.class);
+        verify(registry).registerSystem(eq(BasicClassSystemImpl.FACTORY), any(MetadataAdapter.class));
     }
 
     @Test
     public void testAddRightSubsystemByInstance() throws Exception {
-        registry = new BasicSystemRegistryImpl();
-        registry.registerSubsystem(new BasicLevelSystemImpl());
-        registry.registerSubsystem(new BasicClassSystemImpl());
+        registry.registerSubsystem(BasicLevelSystemImpl.class, BasicLevelSystemImpl.FACTORY);
+        registry.registerSubsystem(BasicClassSystemImpl.class, BasicClassSystemImpl.FACTORY);
 
-        assertNotNull("System must be registered", registry.getSystem(LevelSystem.class));
-        assertNotNull("System must be registered", registry.getSystem(ClassSystem.class));
+        verify(registry, never()).getSubsystemFactory(any());
+    }
+
+    @Test(expected = SystemNotRegisteredException.class)
+    public void testAddWrongSubsystemByClass() throws Exception {
+        registry.registerSubsystem(WrongFactoryClassSystemImpl.class);
+
+        fail("Must be thrown exception");
     }
 
     @Test(expected = SystemNotNeededException.class)
-    public void testAddWrongSubsystemByInstance() throws Exception {
-        registry = new BasicSystemRegistryImpl();
-        registry.registerSubsystem(new WrongClassSystemImpl());
+    public void testAddNotNeededSubsystem() throws Exception {
+        registry.registerSubsystem(WrongClassSystemImpl.class);
 
         fail("Must be thrown exception");
     }

@@ -21,90 +21,29 @@ package ru.endlesscode.mimic.system.registry;
 
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.PlayerSystem;
-
-import java.util.*;
+import ru.endlesscode.mimic.system.SystemFactory;
 
 /**
  * @author Osip Fatkullin
  * @since 1.0
  */
 public class BasicSystemRegistryImpl extends SystemRegistry {
-    /**
-     * Map of providers.
-     */
-    private final Map<Class<?>, List<RegisteredSystemProvider<?>>> providers = new HashMap<>();
-
     @Override
     protected <SubsystemT extends PlayerSystem> void registerSystem(
-            @NotNull SubsystemT subsystem,
-            @NotNull MetadataAdapter meta) {
-        Class<?> system = meta.getSystemClass();
-        SystemPriority priority = meta.getPriority();
-        RegisteredSystemProvider<SubsystemT> registeredProvider = new RegisteredSystemProvider<>(system, subsystem, priority);
-
-        this.insertProvider(registeredProvider);
-    }
-
-    private <SubsystemT extends PlayerSystem> void insertProvider(
-            RegisteredSystemProvider<SubsystemT> registeredProvider) {
-        Class<?> system = registeredProvider.getSystem();
-        List<RegisteredSystemProvider<?>> registered = providers.get(system);
-        if (registered == null) {
-            registered = new ArrayList<>();
-            providers.put(system, registered);
-        }
-
-        int position = Collections.binarySearch(registered, registeredProvider);
-        if (position < 0) {
-            registered.add(-(position + 1), registeredProvider);
-        } else {
-            registered.add(position, registeredProvider);
-        }
-    }
+            @NotNull SystemFactory<SubsystemT> subsystemFactory,
+            @NotNull MetadataAdapter meta) {}
 
     @NotNull
     @Override
-    protected <SystemT extends PlayerSystem> SystemT getSystem(@NotNull Class<SystemT> systemTypeClass, Object... args)
-            throws SystemNotFoundException, CloneNotSupportedException {
-        List<RegisteredSystemProvider<?>> registered = providers.get(systemTypeClass);
-
-        if (registered == null) {
-            throw new SystemNotFoundException(String.format("System '%s' not found", systemTypeClass.getSimpleName()));
-        }
-
-        return systemTypeClass.cast(registered.get(0).getProvider());
+    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getSystem(
+            @NotNull Class<SystemT> systemTypeClass)
+            throws SystemNotFoundException {
+        return arg -> null;
     }
 
     @Override
-    public void unregisterAllSubsystems() {
-        providers.clear();
-    }
+    public void unregisterAllSubsystems() {}
 
     @Override
-    public <SubsystemT extends PlayerSystem> void unregisterSubsystem(@NotNull SubsystemT subsystem) {
-        Iterator<Map.Entry<Class<?>, List<RegisteredSystemProvider<?>>>> it = providers.entrySet().iterator();
-
-        try {
-            while (it.hasNext()) {
-                Map.Entry<Class<?>, List<RegisteredSystemProvider<?>>> entry = it.next();
-                Iterator<RegisteredSystemProvider<?>> it2 = entry.getValue().iterator();
-
-                try {
-                    // Removed entries that are from this plugin
-                    while (it2.hasNext()) {
-                        RegisteredSystemProvider<?> registered = it2.next();
-
-                        if (registered.getProvider().equals(subsystem)) {
-                            it2.remove();
-                        }
-                    }
-                } catch (NoSuchElementException ignored) {}
-
-                // Get rid of the empty list
-                if (entry.getValue().size() == 0) {
-                    it.remove();
-                }
-            }
-        } catch (NoSuchElementException ignored) {}
-    }
+    public <SubsystemT extends PlayerSystem> void unregisterSubsystem(@NotNull SubsystemT subsystem) {}
 }
