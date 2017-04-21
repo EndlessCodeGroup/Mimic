@@ -27,11 +27,7 @@ apply from: 'jacoco.gradle'
 group 'ru.endlesscode'
 version '1.0'
 
-sourceCompatibility = targetCompatibility = 1.7
-
-ext {
-    bukkitVersion = '1.8'
-}
+sourceCompatibility = targetCompatibility = 1.8
 
 // Adding Java 1.8 tags support to javadoc
 javadoc {
@@ -68,11 +64,6 @@ publishing {
 
 repositories {
     mavenCentral()
-
-    maven {
-        name 'spigot-repo'
-        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
 }
 
 dependencies {

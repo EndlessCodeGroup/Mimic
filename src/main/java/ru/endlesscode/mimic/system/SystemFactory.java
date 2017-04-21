@@ -19,11 +19,11 @@
 package ru.endlesscode.mimic.system;
 
 /**
- * Factory to create
+ * Factory to create System instance
  *
  * @author Osip Fatkullin
  * @since 1.1
  */
-public interface SystemFactory<SystemT extends PlayerSystem> {
-    public SystemT get(Object arg);
+public interface SystemFactory<T extends PlayerSystem> {
+    public T get(Object arg);
 }
