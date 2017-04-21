@@ -20,11 +20,17 @@
 package ru.endlesscode.mimic.system;
 
 /**
- * Factory to create System instance
+ * Factory to create subsystem instances
  *
  * @author Osip Fatkullin
  * @since 1.1
  */
 public interface SystemFactory<T extends PlayerSystem> {
+    /**
+     * Creates new instance of subsystem for specified player
+     *
+     * @param arg Argument to specify player
+     * @return Subsystem object
+     */
     public T get(Object arg);
 }
