@@ -32,16 +32,14 @@ import org.jetbrains.annotations.NotNull;
  * @author Osip Fatkullin
  * @since 1.0
  */
-public interface PlayerSystem extends Cloneable {
+public interface PlayerSystem {
     /**
      * Initializes and returns copy of current system
      *
      * @param args Args for initialization
      * @return Initialized system copy
-     * @throws CloneNotSupportedException If the object's class does not
-     *                  support the {@code Cloneable} interface.
      */
-    public @NotNull PlayerSystem initializedCopy(Object... args) throws CloneNotSupportedException;
+    public @NotNull PlayerSystem initializedCopy(Object... args);
 
     /**
      * Returns player-related object

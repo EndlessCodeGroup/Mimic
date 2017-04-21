@@ -54,8 +54,8 @@ public class WrongClassSystemImpl extends ClassSystem {
      * @param args Initial args
      */
     @Override
-    public @NotNull WrongClassSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
-        return (WrongClassSystemImpl) this.clone();
+    public @NotNull WrongClassSystemImpl initializedCopy(Object... args) {
+        return this;
     }
 
     /**

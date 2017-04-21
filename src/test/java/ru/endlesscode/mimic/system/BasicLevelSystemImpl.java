@@ -46,8 +46,8 @@ public class BasicLevelSystemImpl extends LevelSystem {
     }
 
     @Override
-    public @NotNull BasicLevelSystemImpl initializedCopy(Object... args) throws CloneNotSupportedException {
-        return (BasicLevelSystemImpl) this.clone();
+    public @NotNull BasicLevelSystemImpl initializedCopy(Object... args) {
+        return new BasicLevelSystemImpl();
     }
 
     @Override
