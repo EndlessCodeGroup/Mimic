@@ -23,6 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.system.PlayerSystem;
 import ru.endlesscode.mimic.system.SystemFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * This is class responsible for accounting all system hooks.
  *
@@ -128,6 +131,7 @@ public abstract class SystemRegistry {
      * Registers approved subsystem factory.
      *
      * @param <FactoryT>        Factory type
+     * @param factoryClass      Class of the factory
      * @param subsystemFactory  Concrete subsystem factory
      * @param meta              Subsystem metadata
      */
@@ -137,18 +141,67 @@ public abstract class SystemRegistry {
             @NotNull MetadataAdapter meta);
 
     /**
-     * Gets system assigned to specified player.
+     * Gets system factory by system class.
+     *
+     * <p>Searches factory class inside system class and delegates it to
+     * {@link #getFactory(Class)}</p>
+     *
+     * @param <SystemT>   System type
+     * @param systemClass System class
+     * @return System factory
+     * @throws SystemNotFoundException If needed system not found in registry
+     * @since 1.1
+     */
+    public @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getSystemFactory(
+            @NotNull Class<SystemT> systemClass)
+            throws SystemNotFoundException {
+        try {
+            Class<SystemFactory<SystemT>> factoryClass = getFactoryClass(systemClass);
+            return getFactory(factoryClass);
+        } catch (IllegalArgumentException e) {
+            throw new SystemNotFoundException("Wrong system class.", e);
+        }
+    }
+
+    /**
+     * Gets inner factory class from given system class.
+     *
+     * @implNote
+     * Each Player System must contains inner factory class.
+     *
+     * @param <SystemT>   System type
+     * @param systemClass System class
+     * @return Inner factory class from system class
+     * @throws IllegalArgumentException  If needed system factory not found in registry
+     * @since 1.1
+     */
+    protected @NotNull <SystemT extends PlayerSystem> Class<SystemFactory<SystemT>> getFactoryClass(
+            Class<SystemT> systemClass) {
+        Class<?>[] innerClasses = systemClass.getDeclaredClasses();
+        for (Class<?> innerClass : innerClasses) {
+            List<Class<?>> interfaces = Arrays.asList(innerClass.getInterfaces());
+            if (interfaces.contains(SystemFactory.class)) {
+                //noinspection unchecked
+                return (Class<SystemFactory<SystemT>>) innerClass;
+            }
+        }
+
+        throw new IllegalArgumentException ("Given class not contains any System Factory");
+    }
+
+    /**
+     * Gets system factory by factory class.
      *
      * @implSpec
      * Never return {@code null}. Throw exception instead.
      *
-     * @param <SystemT>         System type
-     * @param systemTypeClass   System type class
+     * @param <SystemT>    System type
+     * @param factoryClass System type class
      * @return System factory
      * @throws SystemNotFoundException If needed system not found in registry
      */
-    public abstract @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getSystem(
-            @NotNull Class<SystemT> systemTypeClass)
+    public abstract @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
+            @NotNull Class<SystemFactory<SystemT>> factoryClass)
             throws SystemNotFoundException;
 
     /**

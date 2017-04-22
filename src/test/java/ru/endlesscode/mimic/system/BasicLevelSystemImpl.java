@@ -91,5 +91,5 @@ public class BasicLevelSystemImpl extends LevelSystem {
         return converter.getExpToReachNextLevel(0) - this.exp;
     }
 
-    private static abstract class LevelSystemFactory implements SystemFactory<LevelSystem> {}
+    public static abstract class LevelSystemFactory implements SystemFactory<LevelSystem> {}
 }

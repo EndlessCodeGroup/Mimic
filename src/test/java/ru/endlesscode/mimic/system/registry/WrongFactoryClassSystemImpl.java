@@ -80,4 +80,6 @@ public class WrongFactoryClassSystemImpl extends ClassSystem {
     public @NotNull List<String> getClasses() {
         return new ArrayList<>();
     }
+
+    public static abstract class WrongInnerClass {}
 }

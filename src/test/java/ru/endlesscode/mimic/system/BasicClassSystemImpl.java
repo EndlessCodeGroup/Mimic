@@ -77,5 +77,5 @@ public class BasicClassSystemImpl extends ClassSystem {
         this.classes = Arrays.asList(classes);
     }
 
-    private static abstract class ClassSystemFactory implements SystemFactory<ClassSystem> {}
+    public static abstract class ClassSystemFactory implements SystemFactory<ClassSystem> {}
 }

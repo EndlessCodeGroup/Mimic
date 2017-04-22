@@ -23,8 +23,10 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.endlesscode.mimic.system.BasicClassSystemImpl;
 import ru.endlesscode.mimic.system.BasicLevelSystemImpl;
+import ru.endlesscode.mimic.system.LevelSystem;
 import ru.endlesscode.mimic.system.WrongClassSystemImpl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,10 +47,16 @@ public class SystemRegistryTest {
     @Test
     public void testAddRightSubsystemByClass() throws Exception {
         registry.registerSubsystem(BasicLevelSystemImpl.class);
-        verify(registry).registerSystem(any(), eq(BasicLevelSystemImpl.FACTORY), any(MetadataAdapter.class));
+        verify(registry).registerSystem(
+                eq(BasicLevelSystemImpl.LevelSystemFactory.class),
+                eq(BasicLevelSystemImpl.FACTORY),
+                any(MetadataAdapter.class));
 
         registry.registerSubsystem(BasicClassSystemImpl.class);
-        verify(registry).registerSystem(any(), eq(BasicClassSystemImpl.FACTORY), any(MetadataAdapter.class));
+        verify(registry).registerSystem(
+                eq(BasicClassSystemImpl.ClassSystemFactory.class),
+                eq(BasicClassSystemImpl.FACTORY),
+                any(MetadataAdapter.class));
     }
 
     @Test
@@ -71,5 +79,32 @@ public class SystemRegistryTest {
         registry.registerSubsystem(WrongClassSystemImpl.class);
 
         fail("Must be thrown exception");
+    }
+
+    @Test(expected = SystemNotFoundException.class)
+    public void testGetSystemFactoryMustThrowException() throws Exception {
+        registry.getSystemFactory(WrongFactoryClassSystemImpl.class);
+
+        fail("Must throw exception!");
+    }
+
+    @Test
+    public void testGetFactoryClassMustBeRight() throws Exception {
+        Class<?> factoryClass = registry.getFactoryClass(BasicLevelSystemImpl.class);
+        assertEquals(BasicLevelSystemImpl.LevelSystemFactory.class, factoryClass);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetFactoryClassWithoutInnerClasses() throws Exception {
+        registry.getFactoryClass(LevelSystem.class);
+
+        fail("Must throw exception!");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetFactoryClassWithWrongInnerClass() throws Exception {
+        registry.getFactoryClass(WrongFactoryClassSystemImpl.class);
+
+        fail("Must throw exception!");
     }
 }

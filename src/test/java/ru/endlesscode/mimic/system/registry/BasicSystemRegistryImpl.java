@@ -36,9 +36,7 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
 
     @NotNull
     @Override
-    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getSystem(
-            @NotNull Class<SystemT> systemTypeClass)
-            throws SystemNotFoundException {
+    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(@NotNull Class<SystemFactory<SystemT>> systemFactoryClass) throws SystemNotFoundException {
         return arg -> null;
     }
 
