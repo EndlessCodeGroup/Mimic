@@ -22,15 +22,20 @@ package ru.endlesscode.mimic.system;
 /**
  * Factory to create subsystem instances
  *
+ * @implSpec
+ * This interface must be implemented for each Player System
+ * (not subsystem).
+ *
+ * @param <T> SystemType
  * @author Osip Fatkullin
  * @since 1.1
  */
 public interface SystemFactory<T extends PlayerSystem> {
     /**
-     * Creates new instance of subsystem for specified player
+     * Creates new subsystem object with player initialization
      *
-     * @param arg Argument to specify player
-     * @return Subsystem object
+     * @param playerArg Player object
+     * @return Player system for specified player
      */
-    public T get(Object arg);
+    public T get(Object playerArg);
 }

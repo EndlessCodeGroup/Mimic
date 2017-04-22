@@ -45,10 +45,10 @@ public class SystemRegistryTest {
     @Test
     public void testAddRightSubsystemByClass() throws Exception {
         registry.registerSubsystem(BasicLevelSystemImpl.class);
-        verify(registry).registerSystem(eq(BasicLevelSystemImpl.FACTORY), any(MetadataAdapter.class));
+        verify(registry).registerSystem(any(), eq(BasicLevelSystemImpl.FACTORY), any(MetadataAdapter.class));
 
         registry.registerSubsystem(BasicClassSystemImpl.class);
-        verify(registry).registerSystem(eq(BasicClassSystemImpl.FACTORY), any(MetadataAdapter.class));
+        verify(registry).registerSystem(any(), eq(BasicClassSystemImpl.FACTORY), any(MetadataAdapter.class));
     }
 
     @Test

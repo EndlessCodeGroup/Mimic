@@ -29,8 +29,9 @@ import ru.endlesscode.mimic.system.SystemFactory;
  */
 public class BasicSystemRegistryImpl extends SystemRegistry {
     @Override
-    protected <SubsystemT extends PlayerSystem> void registerSystem(
-            @NotNull SystemFactory<SubsystemT> subsystemFactory,
+    protected <FactoryT extends SystemFactory> void registerSystem(
+            @NotNull Class<FactoryT> factoryClass,
+            @NotNull FactoryT subsystemFactory,
             @NotNull MetadataAdapter meta) {}
 
     @NotNull
@@ -45,5 +46,5 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
     public void unregisterAllSubsystems() {}
 
     @Override
-    public <SubsystemT extends PlayerSystem> void unregisterSubsystem(@NotNull SubsystemT subsystem) {}
+    public <FactoryT extends SystemFactory> void unregisterSubsystem(@NotNull FactoryT factory) {}
 }

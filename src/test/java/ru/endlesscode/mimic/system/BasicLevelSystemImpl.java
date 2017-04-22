@@ -31,7 +31,12 @@ import ru.endlesscode.mimic.system.registry.SystemPriority;
  */
 @Metadata(priority = SystemPriority.LOWEST)
 public class BasicLevelSystemImpl extends LevelSystem {
-    public static final SystemFactory<BasicLevelSystemImpl> FACTORY = arg -> new BasicLevelSystemImpl();
+    public static final LevelSystemFactory FACTORY = new LevelSystemFactory() {
+        @Override
+        public LevelSystem get(Object playerArg) {
+            return new BasicLevelSystemImpl();
+        }
+    };
 
     private int level;
     private int exp;
@@ -85,4 +90,6 @@ public class BasicLevelSystemImpl extends LevelSystem {
     public int getExpToNextLevel() {
         return converter.getExpToReachNextLevel(0) - this.exp;
     }
+
+    private static abstract class LevelSystemFactory implements SystemFactory<LevelSystem> {}
 }
