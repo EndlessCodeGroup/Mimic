@@ -197,8 +197,8 @@ public abstract class SystemRegistry {
      * @return System factory
      * @throws SystemNotFoundException If factory for needed system not found in registry
      */
-    public abstract @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
-            @NotNull Class<SystemFactory<SystemT>> factoryClass)
+    public abstract <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
+            @NotNull Class<? extends SystemFactory<SystemT>> factoryClass)
             throws SystemNotFoundException;
 
     /**

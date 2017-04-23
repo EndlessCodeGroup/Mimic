@@ -30,7 +30,7 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
 public class BasicSystemRegistryImpl extends SystemRegistry {
     @Override
     public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
-            @NotNull Class<SystemFactory<SystemT>> systemFactoryClass)
+            @NotNull Class<? extends SystemFactory<SystemT>> systemFactoryClass)
             throws SystemNotFoundException {
         return new SystemFactory<>(arg -> null);
     }

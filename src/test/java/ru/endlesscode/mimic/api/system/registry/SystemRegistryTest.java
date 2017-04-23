@@ -78,6 +78,12 @@ public class SystemRegistryTest {
         fail("Must be thrown exception");
     }
 
+    @Test
+    public void testGetSystemFactoryMustBeRight() throws Exception {
+        registry.getSystemFactory(LevelSystem.class);
+        verify(registry).getFactory(LevelSystem.Factory.class);
+    }
+
     @Test(expected = SystemNotFoundException.class)
     public void testGetSystemFactoryMustThrowException() throws Exception {
         registry.getSystemFactory(WrongFactoryClassSystemImpl.class);

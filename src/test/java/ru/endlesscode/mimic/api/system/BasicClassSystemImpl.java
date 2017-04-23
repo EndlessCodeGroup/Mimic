@@ -31,7 +31,7 @@ import java.util.List;
  * @author Osip Fatkullin
  * @since 1.0
  */
-@Metadata
+@Metadata(classes = {"ru.endlesscode.mimic.api.system.ClassSystem"})
 public class BasicClassSystemImpl extends ClassSystem {
     public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl());
 
