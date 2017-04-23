@@ -21,6 +21,8 @@ package ru.endlesscode.mimic.api.system;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Function;
+
 /**
  * System that provides methods to work with players level systems.
  * You can check or change values of level and experience.
@@ -250,4 +252,13 @@ public abstract class LevelSystem implements PlayerSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     public abstract int getExpToNextLevel();
+
+    /**
+     * Factory of level systems
+     */
+    public static class Factory extends SystemFactory<LevelSystem> {
+        public Factory(Function<Object, ? extends LevelSystem> constructor) {
+            super(constructor);
+        }
+    }
 }

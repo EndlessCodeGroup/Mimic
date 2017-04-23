@@ -23,9 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * This is class responsible for accounting all system hooks.
  *
@@ -44,12 +41,13 @@ public abstract class SystemRegistry {
      * Registers hook of subsystem that given as class. Use registering
      * with instance instead, if you can. Because this method is a slower.
      *
-     * @param <SubsystemT>      Subsystem type
-     * @param subsystemClass    Class of the subsystem
+     * @param <SubsystemT>   Subsystem type
+     * @param subsystemClass Class of the subsystem
      * @throws SystemNotRegisteredException If registering failed
      * @throws SystemNotNeededException     If registering not needed
      */
-    public <SubsystemT extends PlayerSystem> void registerSubsystem(@NotNull Class<SubsystemT> subsystemClass)
+    public <SubsystemT extends PlayerSystem> void registerSubsystem(
+            @NotNull Class<SubsystemT> subsystemClass)
             throws SystemNotRegisteredException, SystemNotNeededException {
         this.registerSubsystem(subsystemClass, null);
     }
@@ -60,17 +58,18 @@ public abstract class SystemRegistry {
      * @implNote
      * If registering fails, will be thrown exception.
      *
-     * @param <SubsystemT>      Subsystem type
-     * @param subsystemClass    Class of the subsystem
-     * @param subsystemFactory  Subsystem factory (can be {@code null})
+     * @param <SubsystemT>   Subsystem type
+     * @param subsystemClass Class of the subsystem
+     * @param systemFactory  Subsystem factory (can be {@code null})
      * @throws SystemNotRegisteredException If registering failed
      * @throws SystemNotNeededException     If registering not needed
      */
     public <SubsystemT extends PlayerSystem> void registerSubsystem(
-            @NotNull Class<? extends SubsystemT> subsystemClass, SystemFactory<SubsystemT> subsystemFactory)
+            @NotNull Class<SubsystemT> subsystemClass,
+            SystemFactory<? super SubsystemT> systemFactory)
             throws SystemNotRegisteredException, SystemNotNeededException {
         try {
-            this.tryToRegisterSubsystem(subsystemClass, subsystemFactory);
+            this.tryToRegisterSubsystem(subsystemClass, systemFactory);
         } catch (IllegalArgumentException | ClassCastException e) {
             throw new SystemNotRegisteredException("System didn't registered.", e);
         }
@@ -83,24 +82,23 @@ public abstract class SystemRegistry {
      * If {@code givenFactory} is {@code null}, it gets from class. You can override
      * {@link #getSubsystemFactory(Class)} to change factory getting algorithm.
      *
-     * @param <SubsystemT>  Subsystem type
-     * @param systemClass   Class of the subsystem
-     * @param givenFactory  Instance of the system factory (can be {@code null})
+     * @param <SystemT>      System type
+     * @param subsystemClass Class of the subsystem
+     * @param givenFactory   Instance of the system factory (can be {@code null})
      * @throws SystemNotNeededException If some requirements aren't met
      */
-    protected <SubsystemT extends PlayerSystem> void tryToRegisterSubsystem(
-            @NotNull Class<SubsystemT> systemClass,
-            SystemFactory<? super SubsystemT> givenFactory)
+    protected <SystemT extends PlayerSystem> void tryToRegisterSubsystem(
+            @NotNull Class<? extends SystemT> subsystemClass,
+            SystemFactory<SystemT> givenFactory)
             throws SystemNotNeededException {
-        MetadataAdapter meta = MetadataAdapter.getNotNullMeta(systemClass);
+        MetadataAdapter meta = MetadataAdapter.getNotNullMeta(subsystemClass);
         if (!meta.requiredClassesExists()) {
-            throw new SystemNotNeededException(String.format("Required classes for '%s' not found.", systemClass.getSimpleName()));
+            throw new SystemNotNeededException(String.format("Required classes for '%s' not found.", subsystemClass.getSimpleName()));
         }
 
-        SystemFactory<? super SubsystemT> factory = givenFactory == null ? this.getSubsystemFactory(systemClass) : givenFactory;
+        SystemFactory<SystemT> factory = givenFactory == null ? this.getSubsystemFactory(subsystemClass) : givenFactory;
         //noinspection unchecked
-        Class<SystemFactory<? super SubsystemT>> factoryClass =
-                (Class<SystemFactory<? super SubsystemT>>) factory.getClass().getSuperclass();
+        Class<SystemFactory<SystemT>> factoryClass = (Class<SystemFactory<SystemT>>) factory.getClass();
 
         this.registerSystem(factoryClass, factory, meta);
     }
@@ -112,12 +110,12 @@ public abstract class SystemRegistry {
      * Should not return {@code null}. Throw {@code IllegalArgumentException} instead.
      * In every subsystem needed to create factory
      *
-     * @param <SystemT>         System type
-     * @param subsystemClass    Class of the subsystem
+     * @param <SystemT>      System type
+     * @param subsystemClass Class of the subsystem
      * @return Factory of system
      * @throws IllegalArgumentException If factory not found
      */
-    protected @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getSubsystemFactory(
+    protected <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getSubsystemFactory(
             @NotNull Class<? extends SystemT> subsystemClass) {
         try {
             //noinspection unchecked
@@ -130,12 +128,12 @@ public abstract class SystemRegistry {
     /**
      * Registers approved subsystem factory.
      *
-     * @param <FactoryT>        Factory type
-     * @param factoryClass      Class of the factory
-     * @param subsystemFactory  Concrete subsystem factory
-     * @param meta              Subsystem metadata
+     * @param <FactoryT>       Factory type
+     * @param factoryClass     Class of the factory
+     * @param subsystemFactory Concrete subsystem factory
+     * @param meta             Subsystem metadata
      */
-    protected abstract <FactoryT extends SystemFactory> void registerSystem(
+    protected abstract <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerSystem(
             @NotNull Class<FactoryT> factoryClass,
             @NotNull FactoryT subsystemFactory,
             @NotNull MetadataAdapter meta);
@@ -152,7 +150,7 @@ public abstract class SystemRegistry {
      * @throws SystemNotFoundException If needed system not found in registry
      * @since 1.1
      */
-    public @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getSystemFactory(
+    public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getSystemFactory(
             @NotNull Class<SystemT> systemClass)
             throws SystemNotFoundException {
         try {
@@ -175,12 +173,11 @@ public abstract class SystemRegistry {
      * @throws IllegalArgumentException  If needed system factory not found in registry
      * @since 1.1
      */
-    protected @NotNull <SystemT extends PlayerSystem> Class<SystemFactory<SystemT>> getFactoryClass(
+    protected <SystemT extends PlayerSystem> @NotNull Class<SystemFactory<SystemT>> getFactoryClass(
             Class<SystemT> systemClass) {
         Class<?>[] innerClasses = systemClass.getDeclaredClasses();
         for (Class<?> innerClass : innerClasses) {
-            List<Class<?>> interfaces = Arrays.asList(innerClass.getInterfaces());
-            if (interfaces.contains(SystemFactory.class)) {
+            if (innerClass.getSuperclass() == SystemFactory.class) {
                 //noinspection unchecked
                 return (Class<SystemFactory<SystemT>>) innerClass;
             }
@@ -196,9 +193,9 @@ public abstract class SystemRegistry {
      * Never return {@code null}. Throw exception instead.
      *
      * @param <SystemT>    System type
-     * @param factoryClass System type class
+     * @param factoryClass Factory class
      * @return System factory
-     * @throws SystemNotFoundException If needed system not found in registry
+     * @throws SystemNotFoundException If factory for needed system not found in registry
      */
     public abstract @NotNull <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
             @NotNull Class<SystemFactory<SystemT>> factoryClass)
@@ -214,8 +211,8 @@ public abstract class SystemRegistry {
     /**
      * Unregister specified subsystem factory
      *
-     * @param <FactoryT>    Subsystem factory type
-     * @param factory       The factory
+     * @param <FactoryT> Subsystem factory type
+     * @param factory    The factory
      */
     public abstract <FactoryT extends SystemFactory> void unregisterSubsystem(
             @NotNull FactoryT factory);

@@ -19,38 +19,19 @@
 
 package ru.endlesscode.mimic.api.system;
 
-import java.util.function.Function;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Factory to create subsystem instances
- *
- * @implSpec
- * This interface must be implemented for each Player System
- * (not subsystem).
- *
- * @param <T> SystemType
  * @author Osip Fatkullin
  * @since 1.1
  */
-public class SystemFactory<T extends PlayerSystem> {
-    private Function<Object, ? extends T> constructor;
-
-    /**
-     * Creates factory for constructing system
-     *
-     * @param constructor Function to create system
-     */
-    public SystemFactory(Function<Object, ? extends T> constructor) {
-        this.constructor = constructor;
-    }
-
-    /**
-     * Creates new subsystem object with player initialization
-     *
-     * @param playerArg Player object
-     * @return Player system for specified player
-     */
-    public T get(Object playerArg) {
-        return constructor.apply(playerArg);
+public class SystemFactoryTest {
+    @Test
+    public void testGet() throws Exception {
+        ClassSystem classSystem = new BasicClassSystemImpl();
+        SystemFactory<ClassSystem> factory = new SystemFactory<>(arg -> classSystem);
+        assertEquals(classSystem, factory.get(null));
     }
 }

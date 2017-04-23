@@ -21,10 +21,7 @@ package ru.endlesscode.mimic.api.system.registry;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.endlesscode.mimic.api.system.BasicClassSystemImpl;
-import ru.endlesscode.mimic.api.system.BasicLevelSystemImpl;
-import ru.endlesscode.mimic.api.system.LevelSystem;
-import ru.endlesscode.mimic.api.system.WrongClassSystemImpl;
+import ru.endlesscode.mimic.api.system.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -48,13 +45,13 @@ public class SystemRegistryTest {
     public void testAddRightSubsystemByClass() throws Exception {
         registry.registerSubsystem(BasicLevelSystemImpl.class);
         verify(registry).registerSystem(
-                eq(BasicLevelSystemImpl.LevelSystemFactory.class),
+                eq(LevelSystem.Factory.class),
                 eq(BasicLevelSystemImpl.FACTORY),
                 any(MetadataAdapter.class));
 
         registry.registerSubsystem(BasicClassSystemImpl.class);
         verify(registry).registerSystem(
-                eq(BasicClassSystemImpl.ClassSystemFactory.class),
+                eq(ClassSystem.Factory.class),
                 eq(BasicClassSystemImpl.FACTORY),
                 any(MetadataAdapter.class));
     }
@@ -90,13 +87,13 @@ public class SystemRegistryTest {
 
     @Test
     public void testGetFactoryClassMustBeRight() throws Exception {
-        Class<?> factoryClass = registry.getFactoryClass(BasicLevelSystemImpl.class);
-        assertEquals(BasicLevelSystemImpl.LevelSystemFactory.class, factoryClass);
+        Class<?> factoryClass = registry.getFactoryClass(LevelSystem.class);
+        assertEquals(LevelSystem.Factory.class, factoryClass);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetFactoryClassWithoutInnerClasses() throws Exception {
-        registry.getFactoryClass(LevelSystem.class);
+        registry.getFactoryClass(PlayerSystem.class);
 
         fail("Must throw exception!");
     }

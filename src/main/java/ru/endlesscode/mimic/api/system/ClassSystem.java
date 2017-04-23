@@ -22,6 +22,7 @@ package ru.endlesscode.mimic.api.system;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * System that provides methods to work with players class systems.
@@ -118,4 +119,13 @@ public abstract class ClassSystem implements PlayerSystem {
      * @throws IllegalStateException If player-related object not exists.
      */
     public abstract @NotNull List<String> getClasses();
+
+    /**
+     * Factory of class systems
+     */
+    public static class Factory extends SystemFactory<ClassSystem> {
+        public Factory(Function<Object, ? extends ClassSystem> constructor) {
+            super(constructor);
+        }
+    }
 }

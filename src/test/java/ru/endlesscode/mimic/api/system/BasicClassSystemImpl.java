@@ -33,12 +33,7 @@ import java.util.List;
  */
 @Metadata
 public class BasicClassSystemImpl extends ClassSystem {
-    public static final ClassSystemFactory FACTORY = new ClassSystemFactory() {
-        @Override
-        public ClassSystem get(Object playerArg) {
-            return new BasicClassSystemImpl();
-        }
-    };
+    public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl());
 
     private List<String> classes;
 
@@ -76,6 +71,4 @@ public class BasicClassSystemImpl extends ClassSystem {
     public void setClasses(String... classes) {
         this.classes = Arrays.asList(classes);
     }
-
-    public static abstract class ClassSystemFactory implements SystemFactory<ClassSystem> {}
 }

@@ -29,15 +29,19 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
  */
 public class BasicSystemRegistryImpl extends SystemRegistry {
     @Override
-    protected <FactoryT extends SystemFactory> void registerSystem(
-            @NotNull Class<FactoryT> factoryClass,
-            @NotNull FactoryT subsystemFactory,
-            @NotNull MetadataAdapter meta) {}
+    public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
+            @NotNull Class<SystemFactory<SystemT>> systemFactoryClass)
+            throws SystemNotFoundException {
+        return new SystemFactory<>(arg -> null);
+    }
 
-    @NotNull
+
     @Override
-    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(@NotNull Class<SystemFactory<SystemT>> systemFactoryClass) throws SystemNotFoundException {
-        return arg -> null;
+    protected <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerSystem(
+            @NotNull Class<FactoryT> factoryClass, @NotNull
+            FactoryT subsystemFactory,
+            @NotNull MetadataAdapter meta) {
+
     }
 
     @Override
