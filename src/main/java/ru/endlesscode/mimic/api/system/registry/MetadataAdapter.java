@@ -32,7 +32,6 @@ import ru.endlesscode.mimic.api.system.PlayerSystem;
  */
 public class MetadataAdapter<SubsystemT extends PlayerSystem> {
     private final Metadata meta;
-    private final Class<? super SubsystemT> systemClass;
 
     /**
      * Gets metadata from class annotation. If annotation not exists - throws exception.
@@ -61,27 +60,6 @@ public class MetadataAdapter<SubsystemT extends PlayerSystem> {
      */
     protected MetadataAdapter(@NotNull Metadata meta, Class<SubsystemT> subsystemClass) {
         this.meta = meta;
-        this.systemClass = findSystemClass(subsystemClass);
-    }
-
-    /**
-     * Finds and returns system class for given subsystem.
-     *
-     * @param subsystemClass Class of subsystem
-     * @return System class
-     */
-    protected Class<? super SubsystemT> findSystemClass(Class<SubsystemT> subsystemClass) {
-        Class<? super SubsystemT> superclass;
-        Class<? super SubsystemT> systemClass = subsystemClass;
-        do {
-            superclass = systemClass.getSuperclass();
-
-            if (superclass == Object.class) {
-                return systemClass;
-            }
-
-            systemClass = superclass;
-        } while (true);
     }
 
     /**
@@ -101,24 +79,6 @@ public class MetadataAdapter<SubsystemT extends PlayerSystem> {
         } catch (ClassNotFoundException e) {
             return false;
         }
-    }
-
-    /**
-     * Returns system type.
-     *
-     * @return System class
-     */
-    public Class<? super SubsystemT> getSystemClass() {
-        return systemClass;
-    }
-
-    /**
-     * Returns system type name that used in log messages.
-     *
-     * @return System type name
-     */
-    public String getSystemName() {
-        return getSystemClass().getSimpleName();
     }
 
     /**
