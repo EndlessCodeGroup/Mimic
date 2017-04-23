@@ -204,16 +204,28 @@ public abstract class SystemRegistry {
     /**
      * Unregisters all subsystems
      *
-     * @apiNote Use it before plugin disabling
+     * @apiNote
+     * Use it before plugin disabling
      */
     public abstract void unregisterAllSubsystems();
 
     /**
-     * Unregister specified subsystem factory
+     * Unregister specified subsystem
      *
-     * @param <FactoryT> Subsystem factory type
+     * @param <SubsystemT>   Subsystem type
+     * @param subsystemClass Subsystem class
+     */
+    public <SubsystemT extends PlayerSystem> void unregisterSubsystem(@NotNull Class<SubsystemT> subsystemClass) {
+        SystemFactory<? super SubsystemT> factory = this.getSubsystemFactory(subsystemClass);
+        unregisterFactory(factory);
+    }
+
+    /**
+     * Unregister specified factory
+     *
+     * @param <SubsystemT> Subsystem factory type
      * @param factory    The factory
      */
-    public abstract <FactoryT extends SystemFactory> void unregisterSubsystem(
-            @NotNull FactoryT factory);
+    public abstract <SubsystemT extends PlayerSystem> void unregisterFactory(
+            @NotNull SystemFactory<? extends SubsystemT> factory);
 }

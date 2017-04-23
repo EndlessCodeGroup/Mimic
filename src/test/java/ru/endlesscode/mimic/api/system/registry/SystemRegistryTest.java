@@ -110,4 +110,11 @@ public class SystemRegistryTest {
 
         fail("Must throw exception!");
     }
+
+    @Test
+    public void testUnregisterSubsystem() throws Exception {
+        registry.unregisterSubsystem(BasicLevelSystemImpl.class);
+
+        verify(registry).unregisterFactory(BasicLevelSystemImpl.FACTORY);
+    }
 }

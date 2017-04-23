@@ -48,5 +48,5 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
     public void unregisterAllSubsystems() {}
 
     @Override
-    public <FactoryT extends SystemFactory> void unregisterSubsystem(@NotNull FactoryT factory) {}
+    public <SubsystemT extends PlayerSystem> void unregisterFactory(@NotNull SystemFactory<? extends SubsystemT> factory) {}
 }
