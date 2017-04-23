@@ -33,7 +33,7 @@ import java.util.function.Function;
  * @since 1.1
  */
 public class SystemFactory<T extends PlayerSystem> {
-    private Function<Object, ? extends T> constructor;
+    private final Function<Object, ? extends T> constructor;
 
     /**
      * Creates factory for constructing system
