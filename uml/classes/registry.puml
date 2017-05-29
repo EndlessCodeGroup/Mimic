@@ -1,0 +1,48 @@
+@startuml
+class RegistryOperationException extends java.lang.Exception
+class SystemNotRegisteredException extends RegistryOperationException
+class SystemNotFoundException extends RegistryOperationException
+class SystemNotNeededException extends RegistryOperationException
+abstract class SystemRegistry {
+    +registerSubsystem(Class<SubsystemT>) : void
+    +registerSubsystem(Class<SubsystemT>, SystemFactory<? super SubsystemT>) : void
+    #tryToRegisterSubsystem(Class<SubsystemT>, SystemFactory<? super SubsystemT>) : void
+    #getSubsystemFactory(Class<? extends SystemT>) : SystemFactory<SystemT>
+    #{abstract}registerSystem(Class<FactoryT>, FactoryT, MetadataAdapter) : void
+    +getSystemFactory(Class<SystemT>) : SystemFactory<SystemT>
+    #getFactoryClass(Class<SystemT>) : Class<SystemFactory<SystemT>> : void
+    +{abstract}getFactory(Class<? extends SystemFactory<SystemT>>) : SystemFactory<SystemT>
+    +{abstract}unregisterAllSubsystems() : void
+    +unregisterSubsystem(Class<SubsystemT>) : void
+    +{abstract}unregisterFactory(SystemFactory<? extends SubsystemT>) : void
+}
+
+SystemNotRegisteredException <.. SystemRegistry : <throws>
+SystemNotFoundException <.. SystemRegistry : <throws>
+SystemNotNeededException <.. SystemRegistry : <throws>
+
+interface Metadata {
+    +{abstract}priority() : SystemPriority
+    +{abstract}classes() : String[]
+}
+
+class MetadataAdapter {
+    #MetadataAdapter(Metadata, Class<SubsystemT>)
+    __
+    +{static}getNotNullMeta(Class<SubsystemT>) : MetadataAdapter
+    +requiredClassesExists() : boolean
+    __
+    +priority : SystemPriority
+}
+
+Metadata "1" <--* "1" MetadataAdapter
+
+enum SystemPriority {
+    LOWEST
+    LOW
+    NORMAL
+    HIGH
+    HIGHEST
+    +{static}fromString(String) : SystemPriority
+}
+@enduml

@@ -1,0 +1,123 @@
+@startuml
+
+package ru.endlesscode.mimic.api {
+    package system {
+    interface PlayerSystem {
+        +handler : Object
+        +name : String
+        +enabled : boolean
+    }
+
+    abstract class LevelSystem  implements PlayerSystem {
+        #LevelSystem(ExpLevelConverter)
+        __
+        +{abstract} exp : int
+        +{abstract} level : int
+        ..
+        +fractionalExp : double
+        __
+        +decreaseLevel(int) : void
+        +increaseLevel(int) : void
+        +didReachLevel(int) : void
+        +takeExp(int) : void
+        +hasExp(int) : void
+        +getExpToNextLevel() : int
+        +getConverter() : ExpLevelConverter
+    }
+
+    abstract class ExpLevelConverter {
+        +expToFullLevel(int) : int
+        +expToLevel(int) : double
+        +levelToExp(int) : int
+        +getExpToReachNextLevel(int) : int
+    }
+
+    abstract class ClassSystem implements PlayerSystem {
+        +{abstract} getClasses() : List<String>
+        ..
+        +hasClass() : boolean
+        +hasOneOfRequiredClasses(List<String>) : boolean
+        +hasAllRequiredClasses(List<String>) : boolean
+        +hasRequiredClass(String) : boolean
+        +getPrimaryClass() : String
+    }
+
+    class SystemFactory<T extends PlayerSystem> {
+        +SystemFactory(Function<Object, ? extends T>)
+        __
+        get(Object) : T
+    }
+
+    class ClassSystem.Factory<ClassSystem> extends SystemFactory {
+        +Factory(Function<Object, ? extends ClassSystem>)
+    }
+
+    class LevelSystem.Factory<LevelSystem> extends SystemFactory {
+        +Factory(Function<Object, ? extends LevelSystem>)
+    }
+
+    ExpLevelConverter <--* LevelSystem
+    ClassSystem +-- ClassSystem.Factory
+    LevelSystem +-- LevelSystem.Factory
+
+        package registry {
+            class RegistryOperationException extends java.lang.Exception
+            class SystemNotRegisteredException extends RegistryOperationException
+            class SystemNotFoundException extends RegistryOperationException
+            class SystemNotNeededException extends RegistryOperationException
+            abstract class SystemRegistry {
+                +registerSubsystem(Class<SubsystemT>) : void
+                +registerSubsystem(Class<SubsystemT>, SystemFactory<? super SubsystemT>) : void
+                #tryToRegisterSubsystem(Class<SubsystemT>, SystemFactory<? super SubsystemT>) : void
+                #getSubsystemFactory(Class<? extends SystemT>) : SystemFactory<SystemT>
+                #{abstract}registerSystem(Class<FactoryT>, FactoryT, MetadataAdapter) : void
+                +getSystemFactory(Class<SystemT>) : SystemFactory<SystemT>
+                #getFactoryClass(Class<SystemT>) : Class<SystemFactory<SystemT>> : void
+                +{abstract}getFactory(Class<? extends SystemFactory<SystemT>>) : SystemFactory<SystemT>
+                +{abstract}unregisterAllSubsystems() : void
+                +unregisterSubsystem(Class<SubsystemT>) : void
+                +{abstract}unregisterFactory(SystemFactory<? extends SubsystemT>) : void
+            }
+
+            SystemNotRegisteredException <.. SystemRegistry : <throws>
+            SystemNotFoundException <.. SystemRegistry : <throws>
+            SystemNotNeededException <.. SystemRegistry : <throws>
+
+            interface Metadata {
+                +{abstract}priority() : SystemPriority
+                +{abstract}classes() : String[]
+            }
+
+            class MetadataAdapter {
+                #MetadataAdapter(Metadata, Class<SubsystemT>)
+                __
+                +{static}getNotNullMeta(Class<SubsystemT>) : MetadataAdapter
+                +requiredClassesExists() : boolean
+                __
+                +priority : SystemPriority
+            }
+
+            Metadata "1" <--* "1" MetadataAdapter
+
+            enum SystemPriority {
+                LOWEST
+                LOW
+                NORMAL
+                HIGH
+                HIGHEST
+                +{static}fromString(String) : SystemPriority
+            }
+        }
+    }
+
+    package ref {
+        class ExistingWeakReference extends java.lang.ref.WeakReference {
+            +get() : T
+        }
+
+        java.lang.IllegalStateException <.. ExistingWeakReference : <throws>
+        java.lang +-- java.lang.ref
+    }
+}
+
+@enduml
