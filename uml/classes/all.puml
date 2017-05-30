@@ -45,7 +45,7 @@ package ru.endlesscode.mimic.api {
     class SystemFactory<T extends PlayerSystem> {
         +SystemFactory(Function<Object, ? extends T>)
         __
-        get(Object) : T
+        +get(Object) : T
     }
 
     class ClassSystem.Factory<ClassSystem> extends SystemFactory {
@@ -91,10 +91,10 @@ package ru.endlesscode.mimic.api {
             class MetadataAdapter {
                 #MetadataAdapter(Metadata, Class<SubsystemT>)
                 __
+                +priority : SystemPriority
+                __
                 +{static}getNotNullMeta(Class<SubsystemT>) : MetadataAdapter
                 +requiredClassesExists() : boolean
-                __
-                +priority : SystemPriority
             }
 
             Metadata "1" <--* "1" MetadataAdapter
@@ -113,7 +113,9 @@ package ru.endlesscode.mimic.api {
     }
 
     package ref {
-        class ExistingWeakReference extends java.lang.ref.WeakReference {
+        class ExistingWeakReference<T> extends java.lang.ref.WeakReference {
+            +ExistingWeakReference(T)
+            __
             +get() : T
         }
 
@@ -121,6 +123,8 @@ package ru.endlesscode.mimic.api {
         java.lang +-- java.lang.ref
     }
 }
+
+class java.lang.ref.WeakReference<T>
 
 hide java.lang.Exception members
 hide java.lang.IllegalStateException members
