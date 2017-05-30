@@ -1,0 +1,20 @@
+@startuml
+hide footbox
+title System Factory
+
+participant SystemFactory << C,#ADD1B2 >>
+participant constructor << Lambda >>
+
+[-> SystemFactory: << create >>
+note right: Pass lambda that constructs\nplayer system as parameter
+...
+[-> SystemFactory: get(param)
+activate SystemFactory
+SystemFactory -> constructor: << call with param >>
+activate constructor
+SystemFactory <-- constructor: Return constructed system
+deactivate constructor
+
+[<-- SystemFactory: Return system
+deactivate SystemFactory
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+hide footbox
+title Existing Weak Reference (Proxy)
+
+participant ExistingWeakReference << (C,#ADD1B2) >>
+participant WeakReference << (C,#ADD1B2) >>
+
+[-> ExistingWeakReference: Request referent
+activate ExistingWeakReference
+
+ExistingWeakReference -> WeakReference: Request referent
+activate WeakReference
+ExistingWeakReference <-- WeakReference: Return referent
+deactivate WeakReference
+
+alt referent is null
+    [<-- ExistingWeakReference: Throw IllegalStateException
+else else
+    [<-- ExistingWeakReference: Return referent
+end
+deactivate ExistingWeakReference
+|||
+@enduml

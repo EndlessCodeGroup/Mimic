@@ -1,0 +1,64 @@
+@startuml
+title System Registry
+
+participant SystemRegistry << (A,#a9dcdf) >>
+participant MetadataAdapter << (C,#ADD1B2) >>
+participant ConcreteSystemRegistry << (C,#ADD1B2) >>
+
+== Subsystem Registering ==
+[-> SystemRegistry: registerSubsystem(class, factory)
+activate SystemRegistry
+
+group try
+    SystemRegistry -> MetadataAdapter: Request metadata adapter for class
+    activate MetadataAdapter
+    MetadataAdapter -> MetadataAdapter: Check metadata annotation existence
+    alt metadata exists
+        MetadataAdapter -> MetadataAdapter: << Create new adapter >>
+        SystemRegistry <-- MetadataAdapter: Return metadata adapter
+    else else
+        SystemRegistry <-- MetadataAdapter: Throw IllegalArgumentExtension
+        deactivate MetadataAdapter
+    end
+    SystemRegistry -> MetadataAdapter: Check required classes existence
+    activate MetadataAdapter
+    SystemRegistry <-- MetadataAdapter
+    deactivate MetadataAdapter
+    alt classes exists
+        SystemRegistry -> ConcreteSystemRegistry: **registerSystem(factoryClass, factory, meta)**
+        activate ConcreteSystemRegistry
+        deactivate ConcreteSystemRegistry
+    else else
+        [<-- SystemRegistry: Throw SystemNotNeededException
+    end
+else catch
+    [<-- SystemRegistry: Throw SystemNotRegisteredException
+end
+deactivate SystemRegistry
+...
+== Getting system factory ==
+[-> SystemRegistry: getSystemFactory(class)
+activate SystemRegistry
+
+group try
+    SystemRegistry -> SystemRegistry: Get factory class
+    SystemRegistry -> ConcreteSystemRegistry: **getSystemFactory(factoryClass)**
+    activate ConcreteSystemRegistry
+    SystemRegistry <-- ConcreteSystemRegistry: Return factory
+    deactivate ConcreteSystemRegistry
+    [<-- SystemRegistry: Return factory
+else catch
+    [<-- SystemRegistry: Throw SystemNotFoundException
+end
+deactivate SystemRegistry
+...
+== Subsystem unregistering ==
+[-> SystemRegistry: unregisterSubsystem(subsystemClass)
+activate SystemRegistry
+SystemRegistry -> SystemRegistry: Get subsystem factory from \nsubsystem class
+SystemRegistry -> ConcreteSystemRegistry: **unregisterFactory(factory)**
+activate ConcreteSystemRegistry
+deactivate ConcreteSystemRegistry
+deactivate SystemRegistry
+|||
+@enduml
