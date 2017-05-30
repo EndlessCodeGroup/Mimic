@@ -1,8 +1,0 @@
-@startuml
-class ExistingWeakReference extends java.lang.ref.WeakReference {
-    +get() : T
-}
-
-java.lang.IllegalStateException <.. ExistingWeakReference : <throws>
-java.lang +-- java.lang.ref
-@enduml
