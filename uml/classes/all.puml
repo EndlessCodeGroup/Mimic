@@ -1,5 +1,4 @@
 @startuml
-
 package ru.endlesscode.mimic.api {
     package system {
     interface PlayerSystem {
@@ -133,5 +132,4 @@ hide RegistryOperationException members
 hide SystemNotFoundException members
 hide SystemNotNeededException members
 hide SystemNotRegisteredException members
-
 @enduml
