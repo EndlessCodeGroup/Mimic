@@ -107,6 +107,8 @@ package ru.endlesscode.mimic.api {
                 HIGHEST
                 +{static}fromString(String) : SystemPriority
             }
+
+            SystemFactory "many" --o "1" SystemRegistry : contains
         }
     }
 
@@ -119,5 +121,13 @@ package ru.endlesscode.mimic.api {
         java.lang +-- java.lang.ref
     }
 }
+
+hide java.lang.Exception members
+hide java.lang.IllegalStateException members
+hide java.lang.ref.WeakReference members
+hide RegistryOperationException members
+hide SystemNotFoundException members
+hide SystemNotNeededException members
+hide SystemNotRegisteredException members
 
 @enduml
