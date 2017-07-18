@@ -3,6 +3,7 @@
 
 ## Directory-based project format:
 .idea/
+*.iml
 
 ## Ignore all jars
 *.jar
