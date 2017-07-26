@@ -36,14 +36,14 @@ import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
  */
 public interface PlayerSystem {
     /**
-     * Returns player-related object
+     * Returns player-related object.
      *
      * @return Player-related object
      */
     public @NotNull Object getHandler();
 
     /**
-     * Checks if this system is found and enabled
+     * Checks if this system is found and enabled.
      *
      * @return {@code true} if works, otherwise {@code false}
      */

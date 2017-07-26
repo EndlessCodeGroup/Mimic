@@ -155,7 +155,7 @@ public abstract class LevelSystem implements PlayerSystem {
     }
 
     /**
-     * Sets player's total experience points
+     * Sets player's total experience points.
      *
      * @param newTotalExperience New total experience
      */
@@ -172,7 +172,7 @@ public abstract class LevelSystem implements PlayerSystem {
     }
 
     /**
-     * Checks player has required total experience
+     * Checks player has required total experience.
      *
      * @param requiredExp Required total experience amount
      * @return {@code true} if player player has required total experience
@@ -182,7 +182,7 @@ public abstract class LevelSystem implements PlayerSystem {
     }
 
     /**
-     * Gets player's current fractional XP
+     * Gets player's current fractional XP.
      *
      * @apiNote
      * This is a percentage value. 0 is "no progress" and 1 is "next level".
@@ -201,7 +201,7 @@ public abstract class LevelSystem implements PlayerSystem {
     }
 
     /**
-     * Sets player's current fractional XP
+     * Sets player's current fractional XP.
      *
      * @apiNote
      * This is a percentage value. 0 is "no progress" and 1 is "next level".
@@ -214,7 +214,7 @@ public abstract class LevelSystem implements PlayerSystem {
     }
 
     /**
-     * Gets player's current level experience points
+     * Gets player's current level experience points.
      *
      * @apiNote
      * This method returns experience on current level, to get total player
@@ -254,7 +254,7 @@ public abstract class LevelSystem implements PlayerSystem {
     public abstract int getExpToNextLevel();
 
     /**
-     * Factory of level systems
+     * Factory of level systems.
      */
     public static class Factory extends SystemFactory<LevelSystem> {
         public Factory(Function<Object, ? extends LevelSystem> constructor) {

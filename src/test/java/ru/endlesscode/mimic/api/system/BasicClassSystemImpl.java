@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Basic implementation of class system
+ * Basic implementation of class system.
  *
  * @author Osip Fatkullin
  * @since 1.0
@@ -48,11 +48,6 @@ public class BasicClassSystemImpl extends ClassSystem {
         return true;
     }
 
-    /**
-     * Returns player-related object
-     *
-     * @return Player-related object
-     */
     @Override
     public @NotNull Object getHandler() {
         return this;

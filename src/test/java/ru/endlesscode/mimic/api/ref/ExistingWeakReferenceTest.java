@@ -25,7 +25,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Testing ExistingWeakReference class
+ * Testing ExistingWeakReference class.
  *
  * @author Osip Fatkullin
  * @since 1.0

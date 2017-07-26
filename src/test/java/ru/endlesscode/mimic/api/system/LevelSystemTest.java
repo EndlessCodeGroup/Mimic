@@ -24,12 +24,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Test of LevelSystem class using {@link BasicLevelSystemImpl} as implementation
- *
- * @author Osip Fatkullin
- * @since 1.0
- */
 public class LevelSystemTest {
     private LevelSystem ls;
 

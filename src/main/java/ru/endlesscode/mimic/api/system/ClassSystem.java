@@ -37,7 +37,7 @@ import java.util.function.Function;
  */
 public abstract class ClassSystem implements PlayerSystem {
     /**
-     * Checks player has any class
+     * Checks player has any class.
      *
      * @return {@code true} if player has any class
      */
@@ -46,7 +46,7 @@ public abstract class ClassSystem implements PlayerSystem {
     }
 
     /**
-     * Checks player has one of required classes
+     * Checks player has one of required classes.
      *
      * @param requiredClasses List of required classes
      * @return {@code true} if player has one of required class
@@ -62,7 +62,7 @@ public abstract class ClassSystem implements PlayerSystem {
     }
 
     /**
-     * Checks player has all required classes
+     * Checks player has all required classes.
      *
      * @param requiredClasses List of required classes
      * @return {@code true} if player has all required class
@@ -78,7 +78,7 @@ public abstract class ClassSystem implements PlayerSystem {
     }
 
     /**
-     * Checks player has required class
+     * Checks player has required class.
      *
      * @param requiredClass Required class name
      * @return {@code true} if player has required class
@@ -105,7 +105,7 @@ public abstract class ClassSystem implements PlayerSystem {
     }
 
     /**
-     * Gets {@code Lost} of player system
+     * Gets {@code Lost} of player system.
      *
      * @apiNote
      * This method actual for systems which support many system for one player.
@@ -121,7 +121,7 @@ public abstract class ClassSystem implements PlayerSystem {
     public abstract @NotNull List<String> getClasses();
 
     /**
-     * Factory of class systems
+     * Factory of class systems.
      */
     public static class Factory extends SystemFactory<ClassSystem> {
         public Factory(Function<Object, ? extends ClassSystem> constructor) {

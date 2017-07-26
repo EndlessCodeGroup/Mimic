@@ -28,14 +28,14 @@ package ru.endlesscode.mimic.api.system.registry;
  */
 public class SystemNotRegisteredException extends RegistryOperationException {
     /**
-     * Constructs extension with no parameters
+     * Constructs extension with no parameters.
      */
     public SystemNotRegisteredException() {
         super();
     }
 
     /**
-     * Constructs extension with specified cause
+     * Constructs extension with specified cause.
      *
      * @param cause The cause (which is saved for later retrieval by the
      *              {@link #getCause()} method). (A {@code null} value is
@@ -47,7 +47,7 @@ public class SystemNotRegisteredException extends RegistryOperationException {
     }
 
     /**
-     * Constructs exception with detail message
+     * Constructs exception with detail message.
      *
      * @param message The detail message
      */
@@ -56,7 +56,7 @@ public class SystemNotRegisteredException extends RegistryOperationException {
     }
 
     /**
-     * Constructs exception with specified detail message and cause
+     * Constructs exception with specified detail message and cause.
      *
      * @param message The detail message
      * @param cause   The cause (which is saved for later retrieval by the

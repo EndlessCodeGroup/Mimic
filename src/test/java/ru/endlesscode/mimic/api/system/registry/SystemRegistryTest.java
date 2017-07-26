@@ -29,10 +29,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-/**
- * @author Osip Fatkullin
- * @since 1.0
- */
 public class SystemRegistryTest {
     private SystemRegistry registry;
 

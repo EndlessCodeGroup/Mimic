@@ -28,7 +28,7 @@ package ru.endlesscode.mimic.api.system;
  */
 public abstract class ExpLevelConverter {
     /**
-     * Converts experience to full level
+     * Converts experience to full level.
      *
      * @param exp Experience amount
      * @return Amount of full levels
@@ -38,7 +38,7 @@ public abstract class ExpLevelConverter {
     }
 
     /**
-     * Converts experience to level
+     * Converts experience to level.
      *
      * @param exp Experience amount
      * @return Level amount
@@ -46,7 +46,7 @@ public abstract class ExpLevelConverter {
     public abstract double expToLevel(int exp);
 
     /**
-     * Converts level to exp
+     * Converts level to exp.
      *
      * @param level Player level
      * @return Experience amount to reach given level from 0 exp
@@ -54,7 +54,7 @@ public abstract class ExpLevelConverter {
     public abstract int levelToExp(int level);
 
     /**
-     * Gets how much experience you need to reach specified level
+     * Gets how much experience you need to reach specified level.
      *
      * @param level Current level
      * @return Experience from current to next level

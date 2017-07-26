@@ -22,7 +22,7 @@ package ru.endlesscode.mimic.api.system;
 import java.util.function.Function;
 
 /**
- * Factory to create subsystem instances
+ * Factory to create subsystem instances.
  *
  * @implSpec
  * This interface must be implemented for each Player System
@@ -36,7 +36,7 @@ public class SystemFactory<T extends PlayerSystem> {
     private final Function<Object, ? extends T> constructor;
 
     /**
-     * Creates factory for constructing system
+     * Creates factory for constructing system.
      *
      * @param constructor Function to create system
      */
@@ -45,7 +45,7 @@ public class SystemFactory<T extends PlayerSystem> {
     }
 
     /**
-     * Creates new subsystem object with player initialization
+     * Creates new subsystem object with player initialization.
      *
      * @param playerArg Player object
      * @return Player system for specified player

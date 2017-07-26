@@ -27,10 +27,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * @author Osip Fatkullin
- * @since 1.0
- */
 public class ClassSystemTest {
     private BasicClassSystemImpl cs;
 

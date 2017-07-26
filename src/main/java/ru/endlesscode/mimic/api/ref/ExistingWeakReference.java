@@ -32,14 +32,19 @@ import java.lang.ref.WeakReference;
  */
 public class ExistingWeakReference<T> extends WeakReference<T> {
     /**
-     * {@inheritDoc}
+     * Creates a new weak reference that refers to the given object.  The new
+     * reference is not registered with any queue. If referent is null {@link #get()}
+     * will throw IllegalStateException.
+     *
+     * @param referent object the new weak reference will refer to
      */
     public ExistingWeakReference(T referent) {
         super(referent);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc}.
+     *
      * @throws IllegalStateException If referent object already not exists
      */
     @Override

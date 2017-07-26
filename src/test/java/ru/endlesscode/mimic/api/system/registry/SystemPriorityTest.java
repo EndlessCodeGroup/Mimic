@@ -23,10 +23,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Osip Fatkullin
- * @since 1.0
- */
 public class SystemPriorityTest {
     @Test
     public void testValueOf() throws Exception {

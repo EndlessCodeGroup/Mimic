@@ -24,7 +24,7 @@ import ru.endlesscode.mimic.api.system.registry.Metadata;
 import ru.endlesscode.mimic.api.system.registry.SystemPriority;
 
 /**
- * Basic implementation of LevelSystem independent from player-related object
+ * Basic implementation of LevelSystem independent from player-related object.
  *
  * @author Osip Fatkullin
  * @since 1.0

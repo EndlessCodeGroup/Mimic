@@ -29,10 +29,6 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-/**
- * @author Osip Fatkullin
- * @since 1.0
- */
 @RunWith(Parameterized.class)
 public class RegistryOperationExceptionsTest {
     private final ExceptionType type;

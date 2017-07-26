@@ -28,10 +28,6 @@ import ru.endlesscode.mimic.api.system.WrongClassSystemImpl;
 
 import static org.junit.Assert.*;
 
-/**
- * @author Osip Fatkullin
- * @since 1.0
- */
 public class MetadataAdapterTest {
     private MetadataAdapter<BasicLevelSystemImpl> levelSystemMeta;
     private MetadataAdapter<BasicClassSystemImpl> classSystemMeta;

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Basic implementation of class system
+ * Basic implementation of class system.
  *
  * @author Osip Fatkullin
  * @since 1.0
@@ -49,11 +49,6 @@ public class WrongClassSystemImpl extends ClassSystem {
         return false;
     }
 
-    /**
-     * Returns player-related object
-     *
-     * @return Player-related object
-     */
     @Override
     public @NotNull Object getHandler() {
         return this;

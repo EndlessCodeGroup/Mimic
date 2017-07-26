@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 
 /**
- * Adapter to work with systems {@code Metadata}
+ * Adapter to work with systems {@code Metadata}.
  *
  * @see Metadata
  * @param <SubsystemT>  Subsystem type
@@ -82,7 +82,7 @@ public class MetadataAdapter<SubsystemT extends PlayerSystem> {
     }
 
     /**
-     * Returns system priority
+     * Returns system priority.
      *
      * @return System priority
      */

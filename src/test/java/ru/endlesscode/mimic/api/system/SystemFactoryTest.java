@@ -23,10 +23,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author Osip Fatkullin
- * @since 1.1
- */
 public class SystemFactoryTest {
     @Test
     public void testGet() throws Exception {

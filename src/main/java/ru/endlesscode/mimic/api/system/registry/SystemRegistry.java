@@ -93,7 +93,8 @@ public abstract class SystemRegistry {
             throws SystemNotNeededException {
         MetadataAdapter meta = MetadataAdapter.getNotNullMeta(subsystemClass);
         if (!meta.requiredClassesExists()) {
-            throw new SystemNotNeededException(String.format("Required classes for '%s' not found.", subsystemClass.getSimpleName()));
+            throw new SystemNotNeededException(
+                    String.format("Required classes for '%s' not found.", subsystemClass.getSimpleName()));
         }
 
         SystemFactory<SystemT> factory = givenFactory == null ? this.getSubsystemFactory(subsystemClass) : givenFactory;
@@ -183,7 +184,7 @@ public abstract class SystemRegistry {
             }
         }
 
-        throw new IllegalArgumentException ("Given class not contains any System Factory");
+        throw new IllegalArgumentException("Given class not contains any System Factory");
     }
 
     /**
@@ -202,7 +203,7 @@ public abstract class SystemRegistry {
             throws SystemNotFoundException;
 
     /**
-     * Unregisters all subsystems
+     * Unregisters all subsystems.
      *
      * @apiNote
      * Use it before plugin disabling
@@ -210,7 +211,7 @@ public abstract class SystemRegistry {
     public abstract void unregisterAllSubsystems();
 
     /**
-     * Unregister specified subsystem
+     * Unregister specified subsystem.
      *
      * @param <SubsystemT>   Subsystem type
      * @param subsystemClass Subsystem class
@@ -221,7 +222,7 @@ public abstract class SystemRegistry {
     }
 
     /**
-     * Unregister specified factory
+     * Unregister specified factory.
      *
      * @param <SubsystemT> Subsystem factory type
      * @param factory    The factory
