@@ -5,8 +5,6 @@ apply plugin: 'idea'
 
 group = 'ru.endlesscode'
 
-apply from: api.file('gradle/jacoco.gradle')
-
 // Java version
 sourceCompatibility = targetCompatibility = '1.8'
 
