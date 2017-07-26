@@ -103,7 +103,7 @@ public abstract class LevelSystem implements PlayerSystem {
     /**
      * Gets current experience level of player.
      *
-     * @return Current experience level
+     * @return Current experience level or 0 if player has no level
      * @throws IllegalStateException If player-related object not exists
      */
     public abstract int getLevel();
@@ -147,7 +147,7 @@ public abstract class LevelSystem implements PlayerSystem {
     /**
      * Gets player's total experience points.
      *
-     * @return Total experience points
+     * @return Total experience points or 0 if player has no exp
      */
     public int getTotalExp() {
         int levelExp = this.converter.levelToExp(this.getLevel());
@@ -220,7 +220,7 @@ public abstract class LevelSystem implements PlayerSystem {
      * This method returns experience on current level, to get total player
      * experience use {@link #getTotalExp()}
      *
-     * @return Current level experience points
+     * @return Current level experience points or 0 if player has no exp
      * @throws IllegalStateException If player-related object not exists
      */
     public abstract int getExp();
@@ -248,7 +248,7 @@ public abstract class LevelSystem implements PlayerSystem {
     /**
      * Get the total amount of experience required for the player to reach level.
      *
-     * @return Experience required to level up
+     * @return Experience required to level up or -1 if level-up is impossible
      * @throws IllegalStateException If player-related object not exists
      */
     public abstract int getExpToNextLevel();
