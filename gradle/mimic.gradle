@@ -1,0 +1,59 @@
+// Shared Gradle configuration for Mimic projects
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+group = 'ru.endlesscode'
+
+apply from: api.file('gradle/jacoco.gradle')
+
+// Java version
+sourceCompatibility = targetCompatibility = '1.8'
+
+afterEvaluate {
+    // Set it again in case ForgeGradle or BukkitGradle resets it
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+// Adding Java 1.8 tags support to javadoc
+javadoc {
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.tags = ['apiNote:a:API Note:', 'implSpec:a:Implementation Requirements:', 'implNote:a:Implementation Note:']
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// Apply and configure Checkstyle
+apply plugin: 'checkstyle'
+
+checkstyle {
+    toolVersion = '8.1'
+    configFile = api.file('config/checkstyle.xml')
+    configProperties = [
+            'basedir': project.projectDir,
+            'severity': 'warning'
+    ]
+}
+
+// Include LICENSE in final JAR
+processResources {
+    from 'LICENSE.txt'
+}
+
+// Gradle version used for generating the Gradle wrapper
+task wrapper(type: Wrapper) {
+    gradleVersion = api.gradleVersion
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly group: 'org.jetbrains', name: 'annotations', version: '15.0'
+    testCompileOnly group: 'org.jetbrains', name: 'annotations', version: '15.0'
+}
