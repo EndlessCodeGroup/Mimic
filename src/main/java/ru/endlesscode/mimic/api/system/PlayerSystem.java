@@ -57,5 +57,5 @@ public interface PlayerSystem {
      *
      * @return name of system
      */
-    public String getName();
+    public @NotNull String getName();
 }

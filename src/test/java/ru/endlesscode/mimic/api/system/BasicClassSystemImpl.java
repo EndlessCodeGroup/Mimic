@@ -22,7 +22,7 @@ package ru.endlesscode.mimic.api.system;
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.registry.Metadata;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,35 +35,25 @@ import java.util.List;
 public class BasicClassSystemImpl extends ClassSystem {
     public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl());
 
-    private List<String> classes;
-
     @NotNull
     @Override
     public List<String> getClasses() {
-        return classes;
+        return new ArrayList<>();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return false;
     }
 
     @Override
     public @NotNull Object getHandler() {
-        return this;
+        return new Object();
     }
 
-    @Override
-    protected BasicClassSystemImpl clone() throws CloneNotSupportedException {
-        return (BasicClassSystemImpl) super.clone();
-    }
-
+    @NotNull
     @Override
     public String getName() {
-        return "Basic Class System";
-    }
-
-    public void setClasses(String... classes) {
-        this.classes = Arrays.asList(classes);
+        return "";
     }
 }

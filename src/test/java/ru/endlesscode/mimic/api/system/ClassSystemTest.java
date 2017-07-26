@@ -26,37 +26,39 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static ru.endlesscode.mockito.MockitoExtra.MOCKS_ONLY_ABSTRACTS;
 
 public class ClassSystemTest {
-    private BasicClassSystemImpl cs;
+    private ClassSystem cs;
 
     @Before
     public void setUp() {
-        this.cs = new BasicClassSystemImpl();
+        this.cs = mock(ClassSystem.class, MOCKS_ONLY_ABSTRACTS);
     }
 
     @Test
     public void testHasClassMustReturnTrue() throws Exception {
-        this.cs.setClasses("SomeClass");
+        prepareClasses("SomeClass");
         assertTrue(cs.hasClass());
 
-
-        this.cs.setClasses("SomeClass", "AnotherClass");
+        prepareClasses("SomeClass", "AnotherClass");
         assertTrue(cs.hasClass());
     }
 
     @Test
     public void testHasClassMustReturnFalse() throws Exception {
-        this.cs.setClasses();
+        prepareClasses();
         assertFalse(cs.hasClass());
 
-        this.cs.setClasses("");
+        prepareClasses("");
         assertFalse(cs.hasClass());
     }
 
     @Test
     public void testHasRequiredClassMustReturnTrue() throws Exception {
-        this.cs.setClasses("First", "Second", "Third");
+        prepareClasses("First", "Second", "Third");
 
         assertTrue(cs.hasRequiredClass("First"));
         assertTrue(cs.hasRequiredClass("Second"));
@@ -65,7 +67,7 @@ public class ClassSystemTest {
 
     @Test
     public void testHasRequiredClassMustReturnFalse() throws Exception {
-        this.cs.setClasses("First", "Second", "Third");
+        prepareClasses("First", "Second", "Third");
 
         assertFalse(cs.hasRequiredClass("SomeClass"));
         assertFalse(cs.hasRequiredClass("FirstClass"));
@@ -76,13 +78,13 @@ public class ClassSystemTest {
     public void testHasOneOfRequiredClassesMustReturnTrue() throws Exception {
         List<String> requiredClasses = Arrays.asList("First", "Second", "Third");
 
-        this.cs.setClasses("First");
+        prepareClasses("First");
         assertTrue(cs.hasOneOfRequiredClasses(requiredClasses));
 
-        this.cs.setClasses("Second");
+        prepareClasses("Second");
         assertTrue(cs.hasOneOfRequiredClasses(requiredClasses));
 
-        this.cs.setClasses("Third");
+        prepareClasses("Third");
         assertTrue(cs.hasOneOfRequiredClasses(requiredClasses));
     }
 
@@ -90,10 +92,10 @@ public class ClassSystemTest {
     public void testHasOneOfRequiredClassesMustReturnFalse() throws Exception {
         List<String> requiredClasses = Arrays.asList("First", "Second", "Third");
 
-        this.cs.setClasses();
+        prepareClasses();
         assertFalse(cs.hasOneOfRequiredClasses(requiredClasses));
 
-        this.cs.setClasses("Fourth");
+        prepareClasses("Fourth");
         assertFalse(cs.hasOneOfRequiredClasses(requiredClasses));
     }
 
@@ -101,7 +103,7 @@ public class ClassSystemTest {
     public void testHasAllRequiredClassesMustReturnTrue() throws Exception {
         List<String> requiredClasses = Arrays.asList("First", "Second");
 
-        this.cs.setClasses("First", "Second", "Third");
+        prepareClasses("First", "Second", "Third");
         assertTrue(cs.hasAllRequiredClasses(requiredClasses));
     }
 
@@ -110,37 +112,29 @@ public class ClassSystemTest {
         List<String> requiredClasses = Arrays.asList("First", "Second");
 
 
-        this.cs.setClasses();
+        prepareClasses();
         assertFalse(cs.hasAllRequiredClasses(requiredClasses));
 
-        this.cs.setClasses("First", "Third");
+        prepareClasses("First", "Third");
         assertFalse(cs.hasAllRequiredClasses(requiredClasses));
     }
 
     @Test
     public void testGetPrimaryClassReturnEmpty() throws Exception {
-        this.cs.setClasses();
+        prepareClasses();
         assertEquals("", cs.getPrimaryClass());
 
-        this.cs.setClasses("");
+        prepareClasses("");
         assertEquals("", cs.getPrimaryClass());
     }
 
     @Test
     public void testGetPrimaryClassReturnProperlyClass() throws Exception {
-        this.cs.setClasses("PrimaryClass", "SecondaryClass");
+        prepareClasses("PrimaryClass", "SecondaryClass");
         assertEquals("PrimaryClass", cs.getPrimaryClass());
     }
 
-    @Test
-    public void testGetClassesReturnList() throws Exception {
-        this.cs.setClasses("First", "Second");
-        assertEquals(Arrays.asList("First", "Second"), this.cs.getClasses());
-    }
-
-    @Test
-    public void testGetClassesReturnEmpty() throws Exception {
-        this.cs.setClasses();
-        assertTrue(this.cs.getClasses().isEmpty());
+    private void prepareClasses(String... classes) {
+        when(cs.getClasses()).thenReturn(Arrays.asList(classes));
     }
 }
