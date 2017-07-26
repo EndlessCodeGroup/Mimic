@@ -37,6 +37,15 @@ checkstyle {
     ]
 }
 
+// Disable checkstyle by default (won't run unless 'checkstyle' is explicitly invoked)
+task checkstyle(dependsOn: tasks.withType(Checkstyle))
+
+gradle.taskGraph.whenReady { TaskExecutionGraph graph ->
+    if (!graph.allTasks.contains(tasks.checkstyle)) {
+        graph.allTasks.findAll { it.name.startsWith('checkstyle') }.each { it.enabled = false }
+    }
+}
+
 // Include LICENSE in final JAR
 processResources {
     from 'LICENSE.txt'
