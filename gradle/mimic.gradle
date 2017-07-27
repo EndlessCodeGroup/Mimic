@@ -30,20 +30,12 @@ apply plugin: 'checkstyle'
 
 checkstyle {
     toolVersion = '8.1'
+    sourceSets = []
     configFile = api.file('config/checkstyle.xml')
     configProperties = [
             'basedir': project.projectDir,
             'severity': 'warning'
     ]
-}
-
-// Disable checkstyle by default (won't run unless 'checkstyle' is explicitly invoked)
-task checkstyle(dependsOn: tasks.withType(Checkstyle))
-
-gradle.taskGraph.whenReady { TaskExecutionGraph graph ->
-    if (!graph.allTasks.contains(tasks.checkstyle)) {
-        graph.allTasks.findAll { it.name.startsWith('checkstyle') }.each { it.enabled = false }
-    }
 }
 
 // Include LICENSE in final JAR
@@ -63,12 +55,10 @@ jacoco {
     toolVersion = "0.7.9"
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled true
-    }
+jacocoTestReport.reports {
+    xml.enabled true
+    csv.enabled false
+    html.enabled true
 }
 
 check.dependsOn jacocoTestReport
