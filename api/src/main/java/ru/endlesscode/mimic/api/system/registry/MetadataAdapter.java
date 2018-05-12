@@ -28,7 +28,7 @@ import ru.endlesscode.mimic.api.system.PlayerSystem;
  * @see Metadata
  * @param <SubsystemT>  Subsystem type
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class MetadataAdapter<SubsystemT extends PlayerSystem> {
     private final Metadata meta;

@@ -34,7 +34,7 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
  * Recommended to use a singleton pattern when implement this class.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public abstract class SystemRegistry {
     /**

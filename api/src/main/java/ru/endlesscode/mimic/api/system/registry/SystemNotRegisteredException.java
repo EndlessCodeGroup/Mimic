@@ -24,7 +24,7 @@ package ru.endlesscode.mimic.api.system.registry;
  * from register.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class SystemNotRegisteredException extends RegistryOperationException {
     /**

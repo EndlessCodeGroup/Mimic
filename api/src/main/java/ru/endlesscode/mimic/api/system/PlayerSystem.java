@@ -32,7 +32,7 @@ import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
  * </p>
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public interface PlayerSystem {
     /**

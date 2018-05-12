@@ -23,7 +23,7 @@ package ru.endlesscode.mimic.api.system.registry;
  * Thrown when system hook can't be loaded from registry.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class SystemNotFoundException extends RegistryOperationException {
     /**

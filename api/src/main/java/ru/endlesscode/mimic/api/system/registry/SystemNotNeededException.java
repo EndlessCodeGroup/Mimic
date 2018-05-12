@@ -24,7 +24,7 @@ package ru.endlesscode.mimic.api.system.registry;
  * are not met.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class SystemNotNeededException extends RegistryOperationException {
     /**

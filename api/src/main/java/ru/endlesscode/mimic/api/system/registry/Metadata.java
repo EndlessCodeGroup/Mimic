@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * You must annotate with this all factories that you've added.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 @Documented
 @Target(value = ElementType.TYPE)

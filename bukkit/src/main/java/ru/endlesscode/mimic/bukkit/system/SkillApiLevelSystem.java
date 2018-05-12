@@ -24,6 +24,7 @@ import com.sucy.skill.api.enums.ExpSource;
 import com.sucy.skill.api.player.PlayerClass;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.endlesscode.mimic.api.system.registry.Metadata;
 import ru.endlesscode.mimic.api.system.registry.SystemPriority;
 
@@ -45,7 +46,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
      */
     @Override
     public void decreaseLevel(int lvlAmount) {
-        throw new UnsupportedOperationException("Level decrease not supported by Skill API.");
+        throw new UnsupportedOperationException("Level decrease not supported by SkillAPI.");
     }
 
     /**
@@ -131,7 +132,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         return playerClass == null ? -1 : playerClass.getRequiredExp() - getExp();
     }
 
-    private PlayerClass getPlayerClass() {
+    private @Nullable PlayerClass getPlayerClass() {
         Player player = playerRef.get();
         return SkillAPI.getPlayerData(player).getMainClass();
     }
