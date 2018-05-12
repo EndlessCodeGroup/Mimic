@@ -87,6 +87,7 @@ public class SkillApiClassSystem extends BukkitClassSystem {
     /**
      * {@inheritDoc}.
      */
+    @NotNull
     @Override
     public String getName() {
         return "SkillAPI";

@@ -89,6 +89,7 @@ public class PermissionsClassSystem extends BukkitClassSystem {
     /**
      * {@inheritDoc}.
      */
+    @NotNull
     @Override
     public String getName() {
         return "Permission Class System";

@@ -122,6 +122,7 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
     /**
      * {@inheritDoc}.
      */
+    @NotNull
     @Override
     public String getName() {
         return "Vanilla Level System";
