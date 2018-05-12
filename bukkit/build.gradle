@@ -25,7 +25,7 @@ bukkit {
 
     run {
         eula = true
-        dir = "../DevServer"
+        dir = "../../DevServer"
     }
 }
 
