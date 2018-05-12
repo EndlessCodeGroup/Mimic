@@ -1,0 +1,26 @@
+
+def mockitoVersion = "2.8.+"
+def powermockVersion = "1.7.+"
+
+def mockitoGroup = "org.mockito"
+def powermockGroup = "org.powermock"
+
+ext {
+    testingDeps = [
+            "junit4"                : buildDependency("junit", "junit", "4.12"),
+            "mockito2"              : buildDependency(mockitoGroup, "mockito-core", mockitoVersion),
+            "powermock-junit4"      : buildDependency(powermockGroup, "powermock-module-junit4", powermockVersion),
+            "powermock-mockito2"    : buildDependency(powermockGroup, "powermock-api-mockito2", powermockVersion)
+    ]
+
+
+    applyDeps = { deps, block ->
+        deps.each { _, v -> block(v) }
+    }
+}
+
+private static String buildDependency(String group, String name, String version) {
+    return "${group}:${name}:${version}"
+}
+
+

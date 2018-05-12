@@ -1,7 +1,7 @@
 // Shared Gradle configuration for implementation MimicAPI
 
-ext.api = project(":MimicAPI")
-apply from: api.file("gradle/mimic.gradle")
+ext.api = project(":api")
+apply from: rootProject.file("gradle/mimic.gradle")
 
 // Finish configuring MimicAPI first
 evaluationDependsOn api.path

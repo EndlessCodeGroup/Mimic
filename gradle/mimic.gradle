@@ -1,4 +1,4 @@
 // Shared Gradle configuration for Mimic projects
 
-ext.base = api
+ext.base = rootProject
 apply from: base.file('config/config.gradle')
