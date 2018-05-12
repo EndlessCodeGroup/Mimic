@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 @Metadata
 public class WrongFactoryClassSystemImpl extends ClassSystem {

@@ -149,7 +149,7 @@ public abstract class SystemRegistry {
      * @param systemClass System class
      * @return System factory
      * @throws SystemNotFoundException If needed system not found in registry
-     * @since 1.1
+     * @since 0.1
      */
     public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getSystemFactory(
             @NotNull Class<SystemT> systemClass)
@@ -172,7 +172,7 @@ public abstract class SystemRegistry {
      * @param systemClass System class
      * @return Inner factory class from system class
      * @throws IllegalArgumentException  If needed system factory not found in registry
-     * @since 1.1
+     * @since 0.1
      */
     protected <SystemT extends PlayerSystem> @NotNull Class<SystemFactory<SystemT>> getFactoryClass(
             Class<SystemT> systemClass) {

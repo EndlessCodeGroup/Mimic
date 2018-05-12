@@ -25,7 +25,7 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
 
 /**
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class BasicSystemRegistryImpl extends SystemRegistry {
     @Override

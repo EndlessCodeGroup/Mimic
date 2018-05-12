@@ -30,7 +30,7 @@ import java.util.List;
  * Basic implementation of class system.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 @Metadata(
         priority = SystemPriority.HIGH,

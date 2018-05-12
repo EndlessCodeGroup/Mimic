@@ -30,7 +30,7 @@ import java.util.function.Function;
  *
  * @param <T> SystemType
  * @author Osip Fatkullin
- * @since 1.1
+ * @since 0.1
  */
 public class SystemFactory<T extends PlayerSystem> {
     private final Function<Object, ? extends T> constructor;

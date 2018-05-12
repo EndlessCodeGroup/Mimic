@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.api.system.registry.SystemPriority;
  * Basic implementation of LevelSystem independent from player-related object.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 @Metadata(priority = SystemPriority.LOWEST)
 public class BasicLevelSystemImpl extends LevelSystem {
