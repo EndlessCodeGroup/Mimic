@@ -4,12 +4,23 @@ plugins {
     id "ru.endlesscode.bukkitgradle" version "0.7.0"
 }
 
+def minorVersion = 0
+
+version = "${apiProject.version}.$minorVersion"
+description = "API for integration with Bukkit RPG plugins"
+
+ext.pluginName = "BukkitMimic"
+
+archivesBaseName = pluginName
+
 bukkit {
     version = "1.12.2"
 
     meta {
-        main = "ru.endlesscode.mimic.bukkit.BukkitMimic"
+        name = pluginName
+        main = "$group.$name"
         authors = ["OsipXD", "EndlessCodeGroup"]
+        url = "https://github.com/EndlessCodeGroup/BukkitMimic"
     }
 
     run {

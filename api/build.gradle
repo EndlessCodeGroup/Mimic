@@ -4,8 +4,13 @@ plugins {
     id "maven-publish"
 }
 
+version = "0.1"
+description = "Abstraction API for Minecraft RPG plugins"
+
+archivesBaseName = "MimicAPI"
+
 task sourceJar(type: Jar) {
-    classifier = 'sources'
+    classifier = "sources"
     from sourceSets.main.allJava
 }
 
@@ -21,6 +26,6 @@ publishing {
 }
 
 dependencies {
-    testImplementation testingDeps.get('junit')
-    testImplementation testingDeps.get('mockito')
+    testImplementation testingDeps.junit
+    testImplementation testingDeps.mockito
 }
