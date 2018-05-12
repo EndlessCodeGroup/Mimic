@@ -5,7 +5,8 @@ plugins {
 }
 
 bukkit {
-    version = "1.11.2"
+    version = "1.12.2"
+
     meta {
         main = "ru.endlesscode.mimic.bukkit.BukkitMimic"
         authors = ["OsipXD", "EndlessCodeGroup"]
@@ -29,6 +30,7 @@ configurations {
 }
 
 dependencies {
+    compileOnly bukkit()
     applyDeps(bukkitRpgPlugins) { compileOnly it }
     applyDeps(testingDeps) { testImplementation it }
 }
