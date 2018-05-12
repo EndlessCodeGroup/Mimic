@@ -1,27 +1,25 @@
+// Root project build config
+
 plugins {
-    id 'maven-publish'
+    id "base"
 }
 
-ext.api = project
-apply from: 'gradle/mimic.gradle'
-
-task sourceJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allJava
+allprojects {
+    ext.apiProject = project(":api")
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+// Common configurations for all Mimic projects
+subprojects {
+    apply from: rootProject.file("gradle/mimic.gradle")
+}
 
-            artifact sourceJar
-            artifact javadocJar
-        }
+// Configuration for API implementations
+configure(subprojects - apiProject) {
+    // Finish configuring MimicAPI first
+    evaluationDependsOn apiProject.path
+
+    // Use api as dependency
+    dependencies {
+        compile apiProject
     }
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
 }

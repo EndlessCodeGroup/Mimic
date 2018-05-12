@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="BukkitMimic" pattern="src[group:bukkit]:*..*||test[group:bukkit]:*..*" />
+</component>

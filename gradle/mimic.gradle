@@ -1,4 +1,7 @@
 // Shared Gradle configuration for Mimic projects
 
-ext.base = api
-apply from: base.file('config/config.gradle')
+ext.base = rootProject
+apply from: base.file("gradle/dependencies.gradle")
+apply from: base.file("config/config.gradle")
+
+group = "ru.endlesscode.mimic.$project.name"

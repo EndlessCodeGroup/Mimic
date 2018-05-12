@@ -1,0 +1,36 @@
+// Dependencies config
+
+// Versions
+def skillApiVersion = "3.102"
+def heroesVersion = "1.5.5.6"
+
+def junitVersion = "4.12"
+def mockitoVersion = "2.8.+"
+def powermockVersion = "1.7.+"
+
+// Groups
+def powermockGroup = "org.powermock"
+
+ext {
+    testingDeps = [
+            junit               : dep("junit", "junit", junitVersion),
+            mockito             : dep("org.mockito", "mockito-core", mockitoVersion),
+            powermockJunit      : dep(powermockGroup, "powermock-module-junit4", powermockVersion),
+            powermockMockito    : dep(powermockGroup, "powermock-api-mockito2", powermockVersion)
+    ]
+
+    bukkitRpgPlugins = [
+            skillApi    : dep("com.sucy", "SkillAPI", skillApiVersion),
+            heroes      : dep("com.herocraftonline.heroes", "Heroes", heroesVersion)
+    ]
+
+    applyDeps = { deps, block ->
+        deps.each { _, v -> block(v) }
+    }
+}
+
+private static def dep(group, name, version) {
+    return "$group:$name:$version"
+}
+
+
