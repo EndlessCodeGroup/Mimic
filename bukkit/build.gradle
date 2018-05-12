@@ -1,6 +1,7 @@
 // Bukkit MimicAPI implementation build config
 
 plugins {
+    id "com.github.johnrengelman.shadow" version "2.0.4"
     id "ru.endlesscode.bukkitgradle" version "0.7.0"
 }
 
@@ -31,8 +32,13 @@ bukkit {
 
 repositories {
     maven {
-        name "ec-repo"
-        url "https://raw.github.com/EndlessCodeGroup/mvn-repo/master/"
+        name = "ec-repo"
+        url = "https://raw.github.com/EndlessCodeGroup/mvn-repo/master/"
+    }
+
+    maven {
+        name = "aikar-repo"
+        url = "https://repo.aikar.co/content/groups/aikar/"
     }
 }
 
@@ -42,9 +48,22 @@ configurations {
 
 dependencies {
     compileOnly bukkit()
+    implementation libraries.acf
     applyDeps(bukkitRpgPlugins) { compileOnly it }
     applyDeps(testingDeps) { testImplementation it }
 }
+
+compileJava {
+    options.compilerArgs += ["-parameters"]
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+}
+
+shadowJar {
+    relocate "co.aikar.commands", "${group}.shade.acf"
+}
+
+build.dependsOn shadowJar
 
 // Exclude Main plugin class from test coverage
 jacocoTestReport.doFirst {
