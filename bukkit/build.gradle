@@ -1,27 +1,27 @@
 plugins {
-    id 'ru.endlesscode.bukkitgradle' version '0.6.7'
+    id "ru.endlesscode.bukkitgradle" version "0.7.0"
 }
 
 apply from: rootProject.file('gradle/api.gradle')
 apply from: rootProject.file('gradle/dependencies.gradle')
 
 bukkit {
-    version = '1.11.2'
+    version = "1.11.2"
     meta {
-        main = 'ru.endlesscode.mimic.bukkit.BukkitMimic'
-        authors = ['OsipXD', 'EndlessCodeGroup']
+        main = "ru.endlesscode.mimic.bukkit.BukkitMimic"
+        authors = ["OsipXD", "EndlessCodeGroup"]
     }
 
     run {
         eula = true
-        dir = '../DevServer'
+        dir = "../DevServer"
     }
 }
 
 repositories {
     maven {
-        name 'ec-repo'
-        url 'https://raw.github.com/EndlessCodeGroup/mvn-repo/master/'
+        name "ec-repo"
+        url "https://raw.github.com/EndlessCodeGroup/mvn-repo/master/"
     }
 }
 
@@ -38,6 +38,6 @@ dependencies {
 // Exclude Main plugin class from test coverage
 jacocoTestReport.doFirst {
     classDirectories = files(classDirectories.files.collect {
-        fileTree(dir: it, exclude: '**/BukkitMimic.**')
+        fileTree(dir: it, exclude: "**/BukkitMimic.**")
     })
 }
