@@ -1,0 +1,8 @@
+<component name="CopyrightManager">
+  <settings>
+    <module2copyright>
+      <element module="MimicAPI" copyright="GNU LGPL 3.0+" />
+      <element module="BukkitMimic" copyright="BukkitMimic GNU GPL 3.0+" />
+    </module2copyright>
+  </settings>
+</component>

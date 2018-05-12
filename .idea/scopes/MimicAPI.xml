@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="MimicAPI" pattern="src[group:api]:*..*||test[group:api]:*..*" />
+</component>

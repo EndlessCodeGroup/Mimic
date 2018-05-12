@@ -5,6 +5,12 @@
 .idea/
 *.iml
 
+# Keep scopes and copyrights
+!.idea/copyright/
+!.idea/copyright/*
+!.idea/scopes/
+!.idea/scopes/*
+
 ## Ignore all jars
 *.jar
 
