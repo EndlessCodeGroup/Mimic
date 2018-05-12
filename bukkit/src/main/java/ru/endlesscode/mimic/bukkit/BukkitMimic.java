@@ -19,14 +19,19 @@
 
 package ru.endlesscode.mimic.bukkit;
 
-import org.bukkit.plugin.*;
-import org.bukkit.plugin.java.*;
-import ru.endlesscode.mimic.api.system.*;
-import ru.endlesscode.mimic.api.system.registry.*;
-import ru.endlesscode.mimic.bukkit.system.*;
+import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import ru.endlesscode.mimic.api.system.PlayerSystem;
+import ru.endlesscode.mimic.api.system.registry.SystemNotNeededException;
+import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException;
+import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
+import ru.endlesscode.mimic.bukkit.system.SkillApiClassSystem;
+import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
 
-import java.util.*;
-import java.util.logging.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main class of the plugin.

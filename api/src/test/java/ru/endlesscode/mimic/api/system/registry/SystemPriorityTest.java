@@ -19,7 +19,7 @@
 
 package ru.endlesscode.mimic.api.system.registry;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 

@@ -19,7 +19,9 @@
 
 package ru.endlesscode.mimic.bukkit.util;
 
-import java.util.logging.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 /**
  * Utility for logging any messages while testing.

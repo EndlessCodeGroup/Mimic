@@ -19,13 +19,17 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.*;
-import com.sucy.skill.api.player.*;
-import org.bukkit.entity.*;
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.system.registry.*;
+import com.sucy.skill.SkillAPI;
+import com.sucy.skill.api.player.PlayerClass;
+import com.sucy.skill.api.player.PlayerData;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.system.registry.Metadata;
+import ru.endlesscode.mimic.api.system.registry.SystemPriority;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * It's implementation of ClassSystem that uses SkillAPI.

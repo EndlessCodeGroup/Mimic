@@ -19,7 +19,7 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import ru.endlesscode.mimic.api.system.*;
+import ru.endlesscode.mimic.api.system.PlayerSystem;
 
 /**
  * Empty system for tests

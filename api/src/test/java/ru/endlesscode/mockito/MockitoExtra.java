@@ -19,7 +19,7 @@
 
 package ru.endlesscode.mockito;
 
-import org.mockito.stubbing.*;
+import org.mockito.stubbing.Answer;
 
 public class MockitoExtra {
     public static final Answer<Object> MOCKS_ONLY_ABSTRACTS = new MocksOnlyAbstracts();

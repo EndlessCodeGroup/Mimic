@@ -19,8 +19,8 @@
 
 package ru.endlesscode.mockito;
 
-import org.mockito.invocation.*;
-import org.mockito.stubbing.*;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import static java.lang.reflect.Modifier.isAbstract;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;

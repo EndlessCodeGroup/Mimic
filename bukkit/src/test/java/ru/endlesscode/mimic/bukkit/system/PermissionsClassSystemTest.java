@@ -19,12 +19,15 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import org.bukkit.permissions.*;
-import org.junit.*;
-import ru.endlesscode.mimic.api.system.*;
-import ru.endlesscode.mimic.bukkit.*;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.junit.Before;
+import org.junit.Test;
+import ru.endlesscode.mimic.api.system.ClassSystem;
+import ru.endlesscode.mimic.bukkit.BukkitTestBase;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

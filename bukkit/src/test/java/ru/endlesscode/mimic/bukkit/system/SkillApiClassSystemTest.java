@@ -19,13 +19,15 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.powermock.modules.junit4.*;
-import ru.endlesscode.mimic.api.system.*;
+import com.sucy.skill.SkillAPI;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
+import ru.endlesscode.mimic.api.system.ClassSystem;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.powermock.api.mockito.PowerMockito.when;

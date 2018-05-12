@@ -19,8 +19,14 @@
 
 package ru.endlesscode.mimic.api.system.registry;
 
-import org.junit.*;
-import ru.endlesscode.mimic.api.system.*;
+import org.junit.Before;
+import org.junit.Test;
+import ru.endlesscode.mimic.api.system.BasicClassSystemImpl;
+import ru.endlesscode.mimic.api.system.BasicLevelSystemImpl;
+import ru.endlesscode.mimic.api.system.ClassSystem;
+import ru.endlesscode.mimic.api.system.LevelSystem;
+import ru.endlesscode.mimic.api.system.PlayerSystem;
+import ru.endlesscode.mimic.api.system.WrongClassSystemImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

@@ -19,11 +19,11 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import org.bukkit.entity.*;
-import org.junit.*;
-import org.powermock.reflect.*;
-import ru.endlesscode.mimic.api.ref.*;
-import ru.endlesscode.mimic.bukkit.*;
+import org.bukkit.entity.Player;
+import org.junit.Test;
+import org.powermock.reflect.Whitebox;
+import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
+import ru.endlesscode.mimic.bukkit.BukkitTestBase;
 
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;

@@ -19,9 +19,9 @@
 
 package ru.endlesscode.mimic.api.ref;
 
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.lang.ref.*;
+import java.lang.ref.WeakReference;
 
 /**
  * Weak reference that can throw {@code IllegalStateException} if referent

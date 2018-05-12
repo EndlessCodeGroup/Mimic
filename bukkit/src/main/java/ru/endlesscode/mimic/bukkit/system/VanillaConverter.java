@@ -19,8 +19,8 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.system.*;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.system.ExpLevelConverter;
 
 /**
  * Converter for vanilla experience system.

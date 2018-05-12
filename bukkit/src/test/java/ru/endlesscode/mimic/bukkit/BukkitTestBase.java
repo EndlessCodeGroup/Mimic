@@ -19,14 +19,19 @@
 
 package ru.endlesscode.mimic.bukkit;
 
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
-import org.bukkit.plugin.*;
-import org.junit.*;
-import org.powermock.core.*;
-import org.powermock.reflect.*;
-import ru.endlesscode.mimic.bukkit.util.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.SimplePluginManager;
+import org.bukkit.plugin.SimpleServicesManager;
+import org.junit.Before;
+import org.powermock.core.MockGateway;
+import org.powermock.reflect.Whitebox;
+import ru.endlesscode.mimic.bukkit.util.Log;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

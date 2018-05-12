@@ -19,11 +19,19 @@
 
 package ru.endlesscode.mimic.bukkit;
 
-import org.bukkit.plugin.*;
-import org.junit.*;
-import ru.endlesscode.mimic.api.system.*;
-import ru.endlesscode.mimic.api.system.registry.*;
-import ru.endlesscode.mimic.bukkit.system.*;
+import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.ServicesManager;
+import org.junit.Before;
+import org.junit.Test;
+import ru.endlesscode.mimic.api.system.ClassSystem;
+import ru.endlesscode.mimic.api.system.LevelSystem;
+import ru.endlesscode.mimic.api.system.PlayerSystem;
+import ru.endlesscode.mimic.api.system.SystemFactory;
+import ru.endlesscode.mimic.api.system.registry.SystemNotFoundException;
+import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
+import ru.endlesscode.mimic.bukkit.system.TestSystem;
+import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
 
 import static org.junit.Assert.*;
 

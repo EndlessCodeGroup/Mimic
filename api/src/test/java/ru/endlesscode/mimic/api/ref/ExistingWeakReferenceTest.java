@@ -19,7 +19,8 @@
 
 package ru.endlesscode.mimic.api.ref;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 

@@ -19,9 +19,9 @@
 
 package ru.endlesscode.mimic.api.system;
 
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.*;
+import java.util.function.Function;
 
 /**
  * System that provides methods to work with players level systems.

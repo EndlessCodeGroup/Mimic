@@ -19,10 +19,10 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.*;
-import com.sucy.skill.data.*;
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.system.*;
+import com.sucy.skill.SkillAPI;
+import com.sucy.skill.data.Settings;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.system.ExpLevelConverter;
 
 /**
  * Converter for SkillAPI level system.

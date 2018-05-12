@@ -19,10 +19,11 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import org.bukkit.entity.*;
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.ref.*;
-import ru.endlesscode.mimic.api.system.*;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
+import ru.endlesscode.mimic.api.system.ExpLevelConverter;
+import ru.endlesscode.mimic.api.system.LevelSystem;
 
 /**
  * Level system adapted for bukkit.

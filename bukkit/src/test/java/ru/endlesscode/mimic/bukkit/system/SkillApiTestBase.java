@@ -19,15 +19,17 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.*;
-import com.sucy.skill.api.classes.*;
-import com.sucy.skill.api.player.*;
-import com.sucy.skill.data.*;
-import org.junit.*;
-import org.powermock.core.classloader.annotations.*;
-import ru.endlesscode.mimic.bukkit.*;
+import com.sucy.skill.SkillAPI;
+import com.sucy.skill.api.classes.RPGClass;
+import com.sucy.skill.api.player.PlayerClass;
+import com.sucy.skill.api.player.PlayerData;
+import com.sucy.skill.data.Settings;
+import org.junit.Before;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import ru.endlesscode.mimic.bukkit.BukkitTestBase;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.powermock.api.mockito.PowerMockito.*;

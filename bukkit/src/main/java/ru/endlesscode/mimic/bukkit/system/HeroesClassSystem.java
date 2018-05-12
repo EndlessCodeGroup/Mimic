@@ -19,10 +19,10 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import org.bukkit.entity.*;
-import org.jetbrains.annotations.*;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.List;
 
 public class HeroesClassSystem extends BukkitClassSystem {
     /**

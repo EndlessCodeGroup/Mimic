@@ -19,13 +19,14 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.*;
-import com.sucy.skill.api.enums.*;
-import com.sucy.skill.api.player.*;
-import org.junit.*;
-import org.junit.runner.*;
-import org.powermock.modules.junit4.*;
-import ru.endlesscode.mimic.api.system.*;
+import com.sucy.skill.SkillAPI;
+import com.sucy.skill.api.enums.ExpSource;
+import com.sucy.skill.api.player.PlayerClass;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.modules.junit4.PowerMockRunner;
+import ru.endlesscode.mimic.api.system.LevelSystem;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 @RunWith(PowerMockRunner.class)
 public class SkillApiLevelSystemTest extends SkillApiTestBase {
     private LevelSystem levelSystem;
-    private PlayerClass playerClass = null;
+    private PlayerClass playerClass;
 
     @Override
     @Before

@@ -19,9 +19,10 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import org.bukkit.entity.*;
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.system.registry.*;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.system.registry.Metadata;
+import ru.endlesscode.mimic.api.system.registry.SystemPriority;
 
 /**
  * Vanilla experience bar system.

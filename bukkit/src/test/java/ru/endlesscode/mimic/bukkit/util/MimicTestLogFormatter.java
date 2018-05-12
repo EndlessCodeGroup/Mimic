@@ -19,9 +19,12 @@
 
 package ru.endlesscode.mimic.bukkit.util;
 
-import java.io.*;
-import java.text.*;
-import java.util.logging.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
 
 /**
  * Formatter for test logger.

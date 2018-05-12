@@ -19,8 +19,8 @@
 
 package ru.endlesscode.mimic.api.system.registry;
 
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.system.*;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.system.PlayerSystem;
 
 /**
  * Adapter to work with systems {@code Metadata}.

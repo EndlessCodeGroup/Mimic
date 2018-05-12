@@ -19,7 +19,7 @@
 
 package ru.endlesscode.mimic.api.system;
 
-import java.util.function.*;
+import java.util.function.Function;
 
 /**
  * Factory to create subsystem instances.

@@ -19,11 +19,18 @@
 
 package ru.endlesscode.mimic.bukkit;
 
-import com.google.common.annotations.*;
-import org.bukkit.plugin.*;
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.system.*;
-import ru.endlesscode.mimic.api.system.registry.*;
+import com.google.common.annotations.VisibleForTesting;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.ServicesManager;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.system.PlayerSystem;
+import ru.endlesscode.mimic.api.system.SystemFactory;
+import ru.endlesscode.mimic.api.system.registry.MetadataAdapter;
+import ru.endlesscode.mimic.api.system.registry.SystemNotFoundException;
+import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.api.system.registry.SystemRegistry;
 
 /**
  * Implementation of system registry for bukkit.

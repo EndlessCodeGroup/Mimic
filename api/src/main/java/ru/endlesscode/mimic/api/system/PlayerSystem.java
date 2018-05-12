@@ -19,8 +19,8 @@
 
 package ru.endlesscode.mimic.api.system;
 
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.ref.*;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
 
 /**
  * This interface should be implemented by any system that should work

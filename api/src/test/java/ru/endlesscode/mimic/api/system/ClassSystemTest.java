@@ -19,9 +19,11 @@
 
 package ru.endlesscode.mimic.api.system;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

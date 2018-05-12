@@ -19,8 +19,9 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import org.junit.*;
-import ru.endlesscode.mimic.bukkit.*;
+import org.junit.Before;
+import org.junit.Test;
+import ru.endlesscode.mimic.bukkit.BukkitTestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.when;
 public class VanillaLevelSystemTest extends BukkitTestBase {
     private BukkitLevelSystem levelSystem;
 
+    @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();

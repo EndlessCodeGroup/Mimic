@@ -19,13 +19,16 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.google.common.annotations.*;
-import org.bukkit.entity.*;
-import org.bukkit.permissions.*;
-import org.jetbrains.annotations.*;
-import ru.endlesscode.mimic.api.system.registry.*;
+import com.google.common.annotations.VisibleForTesting;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.jetbrains.annotations.NotNull;
+import ru.endlesscode.mimic.api.system.registry.Metadata;
+import ru.endlesscode.mimic.api.system.registry.SystemPriority;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class system based on permissions.
