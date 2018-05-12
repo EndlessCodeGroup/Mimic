@@ -1,9 +1,8 @@
-plugins {
-    id 'maven-publish'
-}
+// API project build config
 
-ext.api = project
-apply from: rootProject.file('gradle/mimic.gradle')
+plugins {
+    id "maven-publish"
+}
 
 task sourceJar(type: Jar) {
     classifier = 'sources'
@@ -22,6 +21,6 @@ publishing {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
+    testImplementation testingDeps.get('junit')
+    testImplementation testingDeps.get('mockito')
 }

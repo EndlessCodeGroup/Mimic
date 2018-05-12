@@ -1,9 +1,8 @@
+// Bukkit MimicAPI implementation build config
+
 plugins {
     id "ru.endlesscode.bukkitgradle" version "0.7.0"
 }
-
-apply from: rootProject.file('gradle/api.gradle')
-apply from: rootProject.file('gradle/dependencies.gradle')
 
 bukkit {
     version = "1.11.2"
@@ -30,8 +29,7 @@ configurations {
 }
 
 dependencies {
-    compileOnly group: 'com.sucy', name: 'SkillAPI', version: '3.102'
-    compileOnly group: 'com.herocraftonline.heroes', name: 'Heroes', version: '1.5.5.6'
+    applyDeps(bukkitRpgPlugins) { compileOnly it }
     applyDeps(testingDeps) { testImplementation it }
 }
 

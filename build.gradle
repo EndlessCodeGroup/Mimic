@@ -1,0 +1,25 @@
+// Root project build config
+
+plugins {
+    id "base"
+}
+
+allprojects {
+    ext.apiProject = project(":api")
+}
+
+// Common configurations for all Mimic projects
+subprojects {
+    apply from: rootProject.file("gradle/mimic.gradle")
+}
+
+// Configuration for API implementations
+configure(subprojects - apiProject) {
+    // Finish configuring MimicAPI first
+    evaluationDependsOn apiProject.path
+
+    // Use api as dependency
+    dependencies {
+        compile apiProject
+    }
+}
