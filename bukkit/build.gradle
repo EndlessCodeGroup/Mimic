@@ -2,7 +2,7 @@
 
 plugins {
     id "com.github.johnrengelman.shadow" version "2.0.4"
-    id "ru.endlesscode.bukkitgradle" version "0.7.0"
+    id "ru.endlesscode.bukkitgradle" version "0.7.1"
 }
 
 def minorVersion = 0
@@ -12,11 +12,8 @@ description = "API for integration with Bukkit RPG plugins"
 
 ext.pluginName = "BukkitMimic"
 
-archivesBaseName = pluginName
-
 bukkit {
     version = "1.12.2"
-    buildtools = "build/buildtools/BuildTools.jar"
 
     meta {
         name = pluginName
@@ -27,7 +24,6 @@ bukkit {
 
     run {
         eula = true
-        dir = "../../DevServer"
     }
 }
 
@@ -55,7 +51,7 @@ dependencies {
 }
 
 compileJava {
-    options.compilerArgs += ["-parameters"]
+    options.compilerArgs += ["-parameters", "-Xlint:unchecked", "-Xlint:deprecation"]
     options.fork = true
     options.forkOptions.executable = 'javac'
 }
