@@ -24,13 +24,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.registry.SystemNotNeededException;
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException;
+import ru.endlesscode.mimic.bukkit.command.MimicCommand;
 import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
 import ru.endlesscode.mimic.bukkit.system.SkillApiClassSystem;
 import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
+import ru.endlesscode.mimic.bukkit.util.Log;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -45,7 +46,7 @@ public class BukkitMimic extends JavaPlugin {
     private BukkitSystemRegistry systemRegistry;
 
     /**
-     * All subsystems.
+     * All default subsystems.
      */
     private final List<Class<? extends PlayerSystem>> defaultSubsystems = Arrays.asList(
             VanillaLevelSystem.class, PermissionsClassSystem.class, SkillApiClassSystem.class
@@ -54,7 +55,8 @@ public class BukkitMimic extends JavaPlugin {
     @Override
     public void onLoad() {
         instance = this;
-        logger = this.getLogger();
+
+        Log.wrap(this.getLogger(), DEBUG);
 
         this.initRegistry();
         this.hookDefaultSystems();
@@ -72,12 +74,12 @@ public class BukkitMimic extends JavaPlugin {
     private <T extends PlayerSystem> void hookSystem(Class<? extends T> system) {
         try {
             this.systemRegistry.registerSubsystem(system);
-            debug(String.format("Subsystem '%s' registered.", system.getSimpleName()));
+            Log.d(String.format("Subsystem '%s' registered.", system.getSimpleName()));
         } catch (SystemNotRegisteredException e) {
             logger.warning(system.getSimpleName() + ": " + e.getMessage());
-            debug(e);
+            Log.d(e);
         } catch (SystemNotNeededException e) {
-            debug(e);
+            Log.d(e);
         }
     }
 

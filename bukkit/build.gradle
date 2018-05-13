@@ -16,6 +16,7 @@ archivesBaseName = pluginName
 
 bukkit {
     version = "1.12.2"
+    buildtools = "build/buildtools/BuildTools.jar"
 
     meta {
         name = pluginName
