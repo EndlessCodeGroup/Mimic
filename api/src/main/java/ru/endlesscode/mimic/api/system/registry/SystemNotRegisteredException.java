@@ -20,8 +20,7 @@
 package ru.endlesscode.mimic.api.system.registry;
 
 /**
- * Thrown when system can't be registered.
- * from register.
+ * Thrown when system can't be registered from register.
  *
  * @author Osip Fatkullin
  * @since 0.1
