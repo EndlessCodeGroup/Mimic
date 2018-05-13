@@ -69,9 +69,8 @@ public class BukkitSystemRegistry extends SystemRegistry {
     /**
      * {@inheritDoc}.
      */
-    @NotNull
     @Override
-    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
+    public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
             @NotNull Class<? extends SystemFactory<SystemT>> factoryClass)
             throws SystemNotFoundException {
         RegisteredServiceProvider<? extends SystemFactory<SystemT>> systemProvider

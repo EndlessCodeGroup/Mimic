@@ -19,6 +19,8 @@
 
 package ru.endlesscode.mimic.api.system;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Function;
 
 /**
@@ -48,9 +50,9 @@ public class SystemFactory<T extends PlayerSystem> {
      * Creates new subsystem object with player initialization.
      *
      * @param playerArg Player object
-     * @return Player system for specified player
+     * @return Player system for specified player. Can't be null
      */
-    public T get(Object playerArg) {
+    public @NotNull T get(Object playerArg) {
         return constructor.apply(playerArg);
     }
 }
