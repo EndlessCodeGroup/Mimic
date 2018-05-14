@@ -35,7 +35,8 @@ import ru.endlesscode.mimic.api.system.registry.SystemPriority;
         priority = SystemPriority.NORMAL,
         classes = {"com.sucy.skill.SkillAPI"})
 public class SkillApiLevelSystem extends BukkitLevelSystem {
-    public static final Factory FACTORY = new Factory(player -> new SkillApiLevelSystem((Player) player));
+    public static final String TAG = "SkillAPI";
+    public static final Factory FACTORY = new Factory(player -> new SkillApiLevelSystem((Player) player), TAG);
 
     private SkillApiLevelSystem(Player player) {
         super(SkillApiConverter.getInstance(), player);
@@ -151,6 +152,6 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
     @NotNull
     @Override
     public String getName() {
-        return "SkillAPI";
+        return TAG;
     }
 }

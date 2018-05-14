@@ -124,8 +124,8 @@ public abstract class ClassSystem implements PlayerSystem {
      * Factory of class systems.
      */
     public static class Factory extends SystemFactory<ClassSystem> {
-        public Factory(Function<Object, ? extends ClassSystem> constructor) {
-            super(constructor);
+        public Factory(Function<Object, ? extends ClassSystem> constructor, String tag) {
+            super(constructor, tag);
         }
     }
 }

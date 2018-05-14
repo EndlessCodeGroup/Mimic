@@ -257,8 +257,8 @@ public abstract class LevelSystem implements PlayerSystem {
      * Factory of level systems.
      */
     public static class Factory extends SystemFactory<LevelSystem> {
-        public Factory(Function<Object, ? extends LevelSystem> constructor) {
-            super(constructor);
+        public Factory(Function<Object, ? extends LevelSystem> constructor, String tag) {
+            super(constructor, tag);
         }
     }
 }

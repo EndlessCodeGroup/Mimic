@@ -29,7 +29,8 @@ import ru.endlesscode.mimic.api.system.registry.SystemPriority;
  */
 @Metadata(priority = SystemPriority.LOWEST)
 public class VanillaLevelSystem extends BukkitLevelSystem {
-    public static final Factory FACTORY = new Factory(playerObj -> new VanillaLevelSystem((Player) playerObj));
+    public static final String TAG = "Vanilla Level System";
+    public static final Factory FACTORY = new Factory(playerObj -> new VanillaLevelSystem((Player) playerObj), TAG);
 
     private VanillaLevelSystem(@NotNull Player player) {
         super(VanillaConverter.getInstance(), player);
@@ -125,6 +126,6 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
     @NotNull
     @Override
     public String getName() {
-        return "Vanilla Level System";
+        return TAG;
     }
 }

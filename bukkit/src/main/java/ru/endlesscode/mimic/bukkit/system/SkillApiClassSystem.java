@@ -38,7 +38,8 @@ import java.util.List;
         priority = SystemPriority.NORMAL,
         classes = {"com.sucy.skill.SkillAPI"})
 public class SkillApiClassSystem extends BukkitClassSystem {
-    public static final Factory FACTORY = new Factory(playerArg -> new SkillApiClassSystem((Player) playerArg));
+    public static final String TAG = "SkillAPI";
+    public static final Factory FACTORY = new Factory(playerArg -> new SkillApiClassSystem((Player) playerArg), TAG);
 
     private SkillApiClassSystem(@NotNull Player player) {
         super(player);
@@ -90,6 +91,6 @@ public class SkillApiClassSystem extends BukkitClassSystem {
     @NotNull
     @Override
     public String getName() {
-        return "SkillAPI";
+        return TAG;
     }
 }
