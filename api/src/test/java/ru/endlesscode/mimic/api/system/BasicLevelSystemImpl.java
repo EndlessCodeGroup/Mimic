@@ -31,7 +31,8 @@ import ru.endlesscode.mimic.api.system.registry.SystemPriority;
  */
 @Metadata(priority = SystemPriority.LOWEST)
 public class BasicLevelSystemImpl extends LevelSystem {
-    public static final LevelSystem.Factory FACTORY = new LevelSystem.Factory(arg -> new BasicLevelSystemImpl());
+    public static final String TAG = "Basic Level System";
+    public static final LevelSystem.Factory FACTORY = new LevelSystem.Factory(arg -> new BasicLevelSystemImpl(), TAG);
 
     private int level;
     private int exp;
@@ -55,7 +56,7 @@ public class BasicLevelSystemImpl extends LevelSystem {
 
     @Override
     public String getName() {
-        return "Basic Level System";
+        return TAG;
     }
 
     @Override

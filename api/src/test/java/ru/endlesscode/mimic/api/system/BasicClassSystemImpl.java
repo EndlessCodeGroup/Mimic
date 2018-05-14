@@ -33,7 +33,8 @@ import java.util.List;
  */
 @Metadata(classes = {"ru.endlesscode.mimic.api.system.ClassSystem"})
 public class BasicClassSystemImpl extends ClassSystem {
-    public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl());
+    public static final String TAG = "";
+    public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl(), TAG);
 
     @NotNull
     @Override
@@ -54,6 +55,6 @@ public class BasicClassSystemImpl extends ClassSystem {
     @NotNull
     @Override
     public String getName() {
-        return "";
+        return TAG;
     }
 }
