@@ -101,7 +101,7 @@ public abstract class SystemRegistry {
         //noinspection unchecked
         Class<SystemFactory<SystemT>> factoryClass = (Class<SystemFactory<SystemT>>) factory.getClass();
 
-        this.registerSystem(factoryClass, factory, meta);
+        this.registerSystem(factoryClass, factory, meta.getPriority());
     }
 
     /**
@@ -132,12 +132,12 @@ public abstract class SystemRegistry {
      * @param <FactoryT>       Factory type
      * @param factoryClass     Class of the factory
      * @param subsystemFactory Concrete subsystem factory
-     * @param meta             Subsystem metadata
+     * @param priority         Subsystem priority
      */
     protected abstract <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerSystem(
             @NotNull Class<FactoryT> factoryClass,
             @NotNull FactoryT subsystemFactory,
-            @NotNull MetadataAdapter meta);
+            @NotNull SystemPriority priority);
 
     /**
      * Gets system factory by system class.

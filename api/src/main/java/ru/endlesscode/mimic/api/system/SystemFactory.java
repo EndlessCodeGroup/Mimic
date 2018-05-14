@@ -36,14 +36,16 @@ import java.util.function.Function;
  */
 public class SystemFactory<T extends PlayerSystem> {
     private final Function<Object, ? extends T> constructor;
+    private final String tag;
 
     /**
      * Creates factory for constructing system.
      *
      * @param constructor Function to create system
      */
-    public SystemFactory(Function<Object, ? extends T> constructor) {
+    public SystemFactory(Function<Object, ? extends T> constructor, @NotNull String tag) {
         this.constructor = constructor;
+        this.tag = tag;
     }
 
     /**
@@ -52,7 +54,16 @@ public class SystemFactory<T extends PlayerSystem> {
      * @param playerArg Player object
      * @return Player system for specified player. Can't be null
      */
-    public @NotNull T get(Object playerArg) {
+    public @NotNull T get(@NotNull Object playerArg) {
         return constructor.apply(playerArg);
+    }
+
+    /**
+     * Returns system tag.
+     *
+     * @return The tag
+     */
+    public @NotNull String getTag() {
+        return tag;
     }
 }
