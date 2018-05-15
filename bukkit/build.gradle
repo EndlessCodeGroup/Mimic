@@ -2,7 +2,7 @@
 
 plugins {
     id "com.github.johnrengelman.shadow" version "2.0.4"
-    id "ru.endlesscode.bukkitgradle" version "0.7.1"
+    id "ru.endlesscode.bukkitgradle" version "0.8.0"
 }
 
 def minorVersion = 0
@@ -23,6 +23,7 @@ bukkit {
     }
 
     run {
+        core = "paper"
         eula = true
     }
 }
@@ -51,7 +52,7 @@ dependencies {
 }
 
 compileJava {
-    options.compilerArgs += ["-parameters", "-Xlint:unchecked", "-Xlint:deprecation"]
+    options.compilerArgs += ["-parameters", "-Xlint"]
     options.fork = true
     options.forkOptions.executable = 'javac'
 }

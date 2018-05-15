@@ -19,11 +19,16 @@
 
 package ru.endlesscode.mimic.bukkit;
 
+import co.aikar.commands.BukkitCommandManager;
+import co.aikar.commands.MessageKeys;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.registry.SystemNotNeededException;
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException;
+import ru.endlesscode.mimic.bukkit.command.CommandUtil;
+import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand;
 import ru.endlesscode.mimic.bukkit.command.MimicCommand;
 import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
 import ru.endlesscode.mimic.bukkit.system.SkillApiClassSystem;
@@ -62,6 +67,11 @@ public class BukkitMimic extends JavaPlugin {
         this.hookDefaultSystems();
     }
 
+    @Override
+    public void onEnable() {
+        registerCommands();
+    }
+
     private void initRegistry() {
         ServicesManager sm = this.getServer().getServicesManager();
         this.systemRegistry = new BukkitSystemRegistry(this, sm);
@@ -79,30 +89,30 @@ public class BukkitMimic extends JavaPlugin {
             logger.warning(system.getSimpleName() + ": " + e.getMessage());
             Log.d(e);
         } catch (SystemNotNeededException e) {
-            Log.d(e);
+            Log.d(String.format("Subsystem '%s' not registered: %s", system.getSimpleName(), e.getMessage()));
         }
     }
 
-    /**
-     * Write a message to log if debug is enabled.
-     *
-     * @param message Debug message
-     */
-    private void debug(String message) {
-        if (DEBUG) {
-            logger.warning("[DEBUG] " + message);
-        }
-    }
+    private void registerCommands() {
+        BukkitCommandManager manager = new BukkitCommandManager(this);
+        //noinspection deprecation
+        manager.enableUnstableAPI("help");
+        manager.getCommandReplacements().addReplacements(
+                "command", "mimic|bmimic|bukkitmimic",
+                "perm", "mimic.admin"
+        );
+        manager.setDefaultExceptionHandler((command, registeredCommand, sender, args, t) -> {
+            if (t instanceof IllegalArgumentException || t instanceof UnsupportedOperationException) {
+                sender.sendError(MessageKeys.ERROR_PREFIX, "{message}", t.getMessage());
+                return false;
+            }
 
-    /**
-     * Write an exception to log if debug is enabled.
-     *
-     * @param throwable Thrown exception
-     */
-    private void debug(Throwable throwable) {
-        if (DEBUG) {
-            logger.log(Level.WARNING, "[DEBUG] Yay! Long-awaited exception!", throwable);
-        }
+            return false;
+        });
+
+        CommandUtil util = new CommandUtil();
+        manager.registerCommand(new MimicCommand(util));
+        manager.registerCommand(new LevelSystemSubcommand(systemRegistry.getSystemFactory(LevelSystem.class), util));
     }
 
     @Override

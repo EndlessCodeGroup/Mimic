@@ -77,9 +77,19 @@ public class Log {
      * @param throwable Thrown exception
      */
     public static void d(Throwable throwable) {
+        d(throwable, false);
+    }
+
+    /**
+     * Write an exception to log if debug is enabled.
+     *
+     * @param throwable Thrown exception
+     * @param quiet Print warning to not debug console if quiet - false
+     */
+    public static void d(Throwable throwable, boolean quiet) {
         if (debug) {
             logger.log(Level.WARNING, "[DEBUG] Yay! Long-awaited exception!", throwable);
-        } else {
+        } else if (!quiet) {
             logger.warning("Error occurred. You can see it in debug mode.");
         }
     }
