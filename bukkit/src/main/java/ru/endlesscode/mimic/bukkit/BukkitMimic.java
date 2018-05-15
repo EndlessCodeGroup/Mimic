@@ -23,10 +23,12 @@ import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.MessageKeys;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.endlesscode.mimic.api.system.ClassSystem;
 import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.registry.SystemNotNeededException;
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException;
+import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand;
 import ru.endlesscode.mimic.bukkit.command.CommandUtil;
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand;
 import ru.endlesscode.mimic.bukkit.command.MimicCommand;
@@ -113,6 +115,7 @@ public class BukkitMimic extends JavaPlugin {
         CommandUtil util = new CommandUtil();
         manager.registerCommand(new MimicCommand(util));
         manager.registerCommand(new LevelSystemSubcommand(systemRegistry.getSystemFactory(LevelSystem.class), util));
+        manager.registerCommand(new ClassSystemSubcommand(systemRegistry.getSystemFactory(ClassSystem.class), util));
     }
 
     @Override

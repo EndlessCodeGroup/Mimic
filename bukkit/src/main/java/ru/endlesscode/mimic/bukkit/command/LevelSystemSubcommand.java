@@ -22,6 +22,7 @@ package ru.endlesscode.mimic.bukkit.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
@@ -32,6 +33,7 @@ import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
 
 @CommandAlias("%command")
+@CommandPermission("%perm")
 @Subcommand("level|lvl|l")
 public class LevelSystemSubcommand extends BaseCommand {
 
@@ -61,7 +63,7 @@ public class LevelSystemSubcommand extends BaseCommand {
     @Subcommand("set|s")
     @Description("Change player's level, exp or total exp")
     @CommandCompletion("+|- lvl|exp|total @players")
-    public void set(@NotNull CommandSender sender, String command, @Default("lvl") ValueType type, @Default String player) {
+    public void set(CommandSender sender, String command, @Default("lvl") ValueType type, @Default String player) {
         Player target = util.getTarget(sender, player);
         LevelSystem ls = systemFactory.get(target);
 
@@ -129,7 +131,8 @@ public class LevelSystemSubcommand extends BaseCommand {
 
     private void setExp(@NotNull LevelSystem system, @NotNull String command) {
         if (!command.matches("[+\\-]?\\d+%?")) {
-            throw new IllegalArgumentException("Experience value should be a number, can start with + or - and end with %.");
+            throw new IllegalArgumentException(
+                    "Experience value should be a number, can start with + or - and end with %.");
         }
 
         boolean percentage = command.endsWith("%");
