@@ -19,6 +19,8 @@
 
 package ru.endlesscode.mimic.bukkit.command;
 
+import co.aikar.commands.InvalidCommandArgument;
+import co.aikar.commands.MessageKeys;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -34,13 +36,16 @@ public class CommandUtil {
     }
 
     @NotNull
-    public Player getTarget(@NotNull CommandSender sender, @NotNull String playerName) {
+    public Player getTarget(@NotNull CommandSender sender, @NotNull String playerName) throws InvalidCommandArgument {
         if (!playerName.isEmpty()) {
             //noinspection deprecation
             Player player = Bukkit.getPlayer(playerName);
 
             if (player == null) {
-                throw new IllegalArgumentException("Error: Player '" + playerName + "' not found");
+                throw new InvalidCommandArgument(
+                        MessageKeys.ERROR_PREFIX,
+                        "{message}", "Player '" + playerName + "' not found"
+                );
             }
 
             return player;
@@ -50,7 +55,10 @@ public class CommandUtil {
             return (Player) sender;
         }
 
-        throw new IllegalArgumentException("Error: You should specify target player");
+        throw new InvalidCommandArgument(
+                MessageKeys.ERROR_PREFIX,
+                "{message}", "You should specify target player"
+        );
     }
 
     @NotNull

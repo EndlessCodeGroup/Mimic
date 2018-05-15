@@ -20,6 +20,7 @@
 package ru.endlesscode.mimic.bukkit.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
@@ -51,7 +52,7 @@ public class ClassSystemSubcommand extends BaseCommand {
     @Subcommand("info|i")
     @Description("Show information about player's class system")
     @CommandCompletion("@players")
-    public void info(@NotNull CommandSender sender, @Default String player) {
+    public void info(@NotNull CommandSender sender, @Default String player) throws InvalidCommandArgument {
         Player target = util.getTarget(sender, player);
         ClassSystem system = systemFactory.get(target);
 
@@ -65,7 +66,8 @@ public class ClassSystemSubcommand extends BaseCommand {
     @Subcommand("has|h")
     @Description("Check that player has given classes")
     @CommandCompletion("@nothing one|all @players")
-    public void has(CommandSender sender, @Split String[] classes, @Default("all") Mode mode, @Default String player) {
+    public void has(CommandSender sender, @Split String[] classes, @Default("all") Mode mode, @Default String player)
+            throws InvalidCommandArgument {
         Player target = util.getTarget(sender, player);
         ClassSystem system = systemFactory.get(target);
 

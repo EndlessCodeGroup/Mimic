@@ -20,7 +20,6 @@
 package ru.endlesscode.mimic.bukkit;
 
 import co.aikar.commands.BukkitCommandManager;
-import co.aikar.commands.MessageKeys;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.endlesscode.mimic.api.system.ClassSystem;
@@ -103,14 +102,6 @@ public class BukkitMimic extends JavaPlugin {
                 "command", "mimic|bmimic|bukkitmimic",
                 "perm", "mimic.admin"
         );
-        manager.setDefaultExceptionHandler((command, registeredCommand, sender, args, t) -> {
-            if (t instanceof IllegalArgumentException || t instanceof UnsupportedOperationException) {
-                sender.sendError(MessageKeys.ERROR_PREFIX, "{message}", t.getMessage());
-                return false;
-            }
-
-            return false;
-        });
 
         CommandUtil util = new CommandUtil();
         manager.registerCommand(new MimicCommand(util));

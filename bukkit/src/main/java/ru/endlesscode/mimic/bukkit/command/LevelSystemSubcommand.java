@@ -20,6 +20,8 @@
 package ru.endlesscode.mimic.bukkit.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.InvalidCommandArgument;
+import co.aikar.commands.MessageKeys;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
@@ -48,7 +50,7 @@ public class LevelSystemSubcommand extends BaseCommand {
     @Subcommand("info|i")
     @Description("Show information about player's level system")
     @CommandCompletion("@players")
-    public void info(@NotNull CommandSender sender, @Default String player) {
+    public void info(@NotNull CommandSender sender, @Default String player) throws InvalidCommandArgument {
         Player target = util.getTarget(sender, player);
         LevelSystem system = systemFactory.get(target);
 
@@ -63,7 +65,8 @@ public class LevelSystemSubcommand extends BaseCommand {
     @Subcommand("set|s")
     @Description("Change player's level, exp or total exp")
     @CommandCompletion("+|- lvl|exp|total @players")
-    public void set(CommandSender sender, String command, @Default("lvl") ValueType type, @Default String player) {
+    public void set(CommandSender sender, String command, @Default("lvl") ValueType type, @Default String player)
+            throws InvalidCommandArgument {
         Player target = util.getTarget(sender, player);
         LevelSystem ls = systemFactory.get(target);
 
@@ -91,18 +94,18 @@ public class LevelSystemSubcommand extends BaseCommand {
     @Subcommand("reach|r")
     @Description("Check that player did reach level")
     @CommandCompletion("@nothing @players")
-    public void reach(@NotNull CommandSender sender, int level, @Default String player) {
+    public void reach(@NotNull CommandSender sender, int level, @Default String player) throws InvalidCommandArgument {
         Player target = util.getTarget(sender, player);
-
         boolean reached = systemFactory.get(target).didReachLevel(level);
+
         util.send(sender, util.msg(
                 "&6Player '%s' did%s reach %d lvl.", target.getName(), reached ? "" : " not", level
         ));
     }
 
-    private void setLevel(@NotNull LevelSystem system, @NotNull String command) {
+    private void setLevel(@NotNull LevelSystem system, @NotNull String command) throws InvalidCommandArgument {
         if (!command.matches("[+\\-]?\\d+")) {
-            throw new IllegalArgumentException("Level should be a number, can start with + or -.");
+            wrongArgument("Level should be a number, can start with + or -.");
         }
 
         int value = parseValue(command);
@@ -120,19 +123,18 @@ public class LevelSystemSubcommand extends BaseCommand {
         }
     }
 
-    private void setTotalExp(@NotNull LevelSystem system, @NotNull String command) {
+    private void setTotalExp(@NotNull LevelSystem system, @NotNull String command) throws InvalidCommandArgument {
         if (!command.matches("\\d+")) {
-            throw new IllegalArgumentException("Total experience should be a number.");
+            wrongArgument("Total experience should be a number.");
         }
 
         int value = parseValue(command);
         system.setTotalExp(value);
     }
 
-    private void setExp(@NotNull LevelSystem system, @NotNull String command) {
+    private void setExp(@NotNull LevelSystem system, @NotNull String command) throws InvalidCommandArgument {
         if (!command.matches("[+\\-]?\\d+%?")) {
-            throw new IllegalArgumentException(
-                    "Experience value should be a number, can start with + or - and end with %.");
+            wrongArgument("Experience value should be a number, can start with + or - and end with %.");
         }
 
         boolean percentage = command.endsWith("%");
@@ -141,13 +143,13 @@ public class LevelSystemSubcommand extends BaseCommand {
 
         if (percentage) {
             if (value > 100) {
-                throw new IllegalArgumentException("Percentage value can't be greater than 100.");
+                wrongArgument("Percentage value can't be greater than 100.");
             }
 
             if (action == Action.SET) {
                 system.setFractionalExp(value / 100.0);
             } else {
-                throw new IllegalArgumentException("Percentage value not supports + and -.");
+                wrongArgument("Percentage value not supports + and -.");
             }
 
             return;
@@ -163,6 +165,10 @@ public class LevelSystemSubcommand extends BaseCommand {
             default:
                 system.setExp(value);
         }
+    }
+
+    private void wrongArgument(String message) throws InvalidCommandArgument {
+        throw new InvalidCommandArgument(MessageKeys.ERROR_PREFIX, "{message}", message);
     }
 
     private int parseValue(String command) {
