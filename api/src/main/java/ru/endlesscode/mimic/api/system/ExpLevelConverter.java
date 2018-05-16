@@ -41,9 +41,6 @@ public interface ExpLevelConverter {
     /**
      * Converts experience to level.
      *
-     * @implNote
-     * Default implementation assumes that minimal possible level is 1.
-     *
      * @param expValue Experience amount
      * @return Level amount
      */
@@ -53,11 +50,16 @@ public interface ExpLevelConverter {
         }
 
         double exp = expValue;
-        double level = 1;
+        double level = 0;
         double requiredExp;
-        for (int i = 1;; i++) {
-            requiredExp = getExpToReachNextLevel(i);
+        for (int i = 0;; i++) {
             level++;
+
+            requiredExp = getExpToReachNextLevel(i);
+            if (requiredExp == -1) {
+                continue;
+            }
+
             exp -= requiredExp;
 
             if (exp <= 0) {
@@ -72,16 +74,16 @@ public interface ExpLevelConverter {
     /**
      * Converts level to exp.
      *
-     * @implNote
-     * Default implementation assumes that minimal possible level is 1.
-     *
      * @param level Player level
      * @return Experience amount to reach given level from 0 exp
      */
     public default double levelToExp(int level) {
         double exp = 0;
-        for (int i = 1; i < level; i++) {
-            exp += getExpToReachNextLevel(i);
+        for (int i = 0; i < level; i++) {
+            double expToReachNext = getExpToReachNextLevel(i);
+            if (expToReachNext != -1) {
+                exp += expToReachNext;
+            }
         }
 
         return exp;
@@ -91,7 +93,7 @@ public interface ExpLevelConverter {
      * Gets how much experience you need to reach next level after specified.
      *
      * @param level Current level
-     * @return Experience from current to next level
+     * @return Experience from current to next level or -1 if level can't be reached
      */
     public default double getExpToReachNextLevel(int level) {
         return getExpToReachLevel(level + 1);
@@ -101,7 +103,7 @@ public interface ExpLevelConverter {
      * Gets how much experience you need to reach specified level.
      *
      * @param level Needed level
-     * @return Experience from previous to needed level
+     * @return Experience from previous to needed level or -1 if level can't be reached
      */
     public double getExpToReachLevel(int level);
 }

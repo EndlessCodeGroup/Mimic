@@ -47,7 +47,18 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
      */
     @Override
     public void decreaseLevel(int lvlAmount) {
-        throw new UnsupportedOperationException("Level decrease not supported by SkillAPI.");
+        PlayerClass playerClass = getPlayerClass();
+
+        if (playerClass != null) {
+            int newLevel = getLevel() - lvlAmount;
+            if (newLevel < 1) {
+                newLevel = 1;
+            }
+            double fractional = getFractionalExp();
+
+            setLevel(newLevel);
+            setFractionalExp(fractional);
+        }
     }
 
     /**

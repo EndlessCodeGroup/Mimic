@@ -45,9 +45,16 @@ public class SkillApiLevelSystemTest extends SkillApiTestBase {
         levelSystem = SkillApiLevelSystem.FACTORY.get(player);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testDecreaseLevelMustBeUnsupported() {
-        levelSystem.decreaseLevel(0);
+    @Test
+    public void testDecreaseLevelMustWork() {
+        prepareMainClass();
+        when(levelSystem.getLevel()).thenReturn(3, 2);
+
+        levelSystem.decreaseLevel(1);
+        verify(playerClass).setLevel(2);
+
+        levelSystem.decreaseLevel(3);
+        verify(playerClass).setLevel(1);
     }
 
     @Test

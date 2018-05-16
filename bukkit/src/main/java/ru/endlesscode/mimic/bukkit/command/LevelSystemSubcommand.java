@@ -37,7 +37,7 @@ import ru.endlesscode.mimic.bukkit.util.Log;
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-@Subcommand("level|lvl|l")
+@Subcommand("level|exp|lvl|l")
 public class LevelSystemSubcommand extends BaseCommand {
 
     private final SystemFactory<LevelSystem> systemFactory;
@@ -58,7 +58,7 @@ public class LevelSystemSubcommand extends BaseCommand {
         util.send(sender,
                 util.msg("&3System: &7%s", system.getName()),
                 util.msg("&3Level: &7%.2f", system.getLevel() + system.getFractionalExp()),
-                util.msg("&3Exp: &7%.1f &8| &3To next level: %.1f", system.getExp(), system.getExpToNextLevel()),
+                util.msg("&3Exp: &7%.1f &8| &3To next level: &7%.1f", system.getExp(), system.getExpToNextLevelRemaining()),
                 util.msg("&3Total exp: &7%.1f", system.getTotalExp())
         );
     }
@@ -66,7 +66,7 @@ public class LevelSystemSubcommand extends BaseCommand {
     @Subcommand("set|s")
     @Description("Change player's level, exp or total exp")
     @CommandCompletion("+|- lvl|exp|total @players")
-    public void set(CommandSender sender, String value, @Default("lvl") ValueType type, @Default String player)
+    public void set(CommandSender sender, String value, @Default("exp") ValueType type, @Default String player)
             throws InvalidCommandArgument {
         try {
             Player target = util.getTarget(sender, player);
