@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
+import ru.endlesscode.mimic.bukkit.util.Log;
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
@@ -67,27 +68,32 @@ public class LevelSystemSubcommand extends BaseCommand {
     @CommandCompletion("+|- lvl|exp|total @players")
     public void set(CommandSender sender, String value, @Default("lvl") ValueType type, @Default String player)
             throws InvalidCommandArgument {
-        Player target = util.getTarget(sender, player);
-        LevelSystem ls = systemFactory.get(target);
+        try {
+            Player target = util.getTarget(sender, player);
+            LevelSystem ls = systemFactory.get(target);
 
-        switch (type) {
-            case LVL:
-                setLevel(ls, value);
-                util.send(sender, util.msg("&6New %s's level is %d", target.getName(), ls.getLevel()));
-                break;
-            case TOTAL:
-                setTotalExp(ls, value);
-                util.send(sender, util.msg(
-                        "&6New %s's total exp is %d (%d lvl)", target.getName(), ls.getTotalExp(), ls.getLevel()
-                ));
-                break;
-            default:
-                setExp(ls, value);
-                int percentage = (int) (ls.getFractionalExp() * 100);
-                util.send(sender, util.msg(
-                        "&6New %s's exp is %d (%d.%d lvl)", target.getName(), ls.getExp(), ls.getLevel(), percentage
-                ));
+            switch (type) {
+                case LVL:
+                    setLevel(ls, value);
+                    util.send(sender, util.msg("&6New %s's level is %d", target.getName(), ls.getLevel()));
+                    break;
+                case TOTAL:
+                    setTotalExp(ls, value);
+                    util.send(sender, util.msg(
+                            "&6New %s's total exp is %d (%d lvl)", target.getName(), ls.getTotalExp(), ls.getLevel()
+                    ));
+                    break;
+                default:
+                    setExp(ls, value);
+                    int percentage = (int) (ls.getFractionalExp() * 100);
+                    util.send(sender, util.msg(
+                            "&6New %s's exp is %d (%d.%d lvl)", target.getName(), ls.getExp(), ls.getLevel(), percentage
+                    ));
 
+            }
+        } catch (UnsupportedOperationException e) {
+            Log.d(e, true);
+            wrongArgument(e.getMessage(), false);
         }
     }
 
@@ -168,7 +174,11 @@ public class LevelSystemSubcommand extends BaseCommand {
     }
 
     private void wrongArgument(String message) throws InvalidCommandArgument {
-        throw new InvalidCommandArgument(MessageKeys.ERROR_PREFIX, "{message}", message);
+        wrongArgument(message, true);
+    }
+
+    private void wrongArgument(String message, boolean showSyntax) throws InvalidCommandArgument {
+        throw new InvalidCommandArgument(MessageKeys.ERROR_PREFIX, showSyntax, "{message}", message);
     }
 
     private int parseValue(String command) {
