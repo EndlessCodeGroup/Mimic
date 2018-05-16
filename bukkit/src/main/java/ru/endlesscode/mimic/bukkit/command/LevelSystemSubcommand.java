@@ -65,24 +65,24 @@ public class LevelSystemSubcommand extends BaseCommand {
     @Subcommand("set|s")
     @Description("Change player's level, exp or total exp")
     @CommandCompletion("+|- lvl|exp|total @players")
-    public void set(CommandSender sender, String command, @Default("lvl") ValueType type, @Default String player)
+    public void set(CommandSender sender, String value, @Default("lvl") ValueType type, @Default String player)
             throws InvalidCommandArgument {
         Player target = util.getTarget(sender, player);
         LevelSystem ls = systemFactory.get(target);
 
         switch (type) {
             case LVL:
-                setLevel(ls, command);
+                setLevel(ls, value);
                 util.send(sender, util.msg("&6New %s's level is %d", target.getName(), ls.getLevel()));
                 break;
             case TOTAL:
-                setTotalExp(ls, command);
+                setTotalExp(ls, value);
                 util.send(sender, util.msg(
                         "&6New %s's total exp is %d (%d lvl)", target.getName(), ls.getTotalExp(), ls.getLevel()
                 ));
                 break;
             default:
-                setExp(ls, command);
+                setExp(ls, value);
                 int percentage = (int) (ls.getFractionalExp() * 100);
                 util.send(sender, util.msg(
                         "&6New %s's exp is %d (%d.%d lvl)", target.getName(), ls.getExp(), percentage

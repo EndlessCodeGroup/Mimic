@@ -33,6 +33,7 @@ import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand;
 import ru.endlesscode.mimic.bukkit.command.MimicCommand;
 import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
 import ru.endlesscode.mimic.bukkit.system.SkillApiClassSystem;
+import ru.endlesscode.mimic.bukkit.system.SkillApiLevelSystem;
 import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
 import ru.endlesscode.mimic.bukkit.util.Log;
 
@@ -55,7 +56,7 @@ public class BukkitMimic extends JavaPlugin {
      * All default subsystems.
      */
     private final List<Class<? extends PlayerSystem>> defaultSubsystems = Arrays.asList(
-            VanillaLevelSystem.class, PermissionsClassSystem.class, SkillApiClassSystem.class
+            VanillaLevelSystem.class, PermissionsClassSystem.class, SkillApiClassSystem.class, SkillApiLevelSystem.class
     );
 
     @Override
