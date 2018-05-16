@@ -15,6 +15,7 @@ def powermockVersion = "1.7.+"
 def powermockGroup = "org.powermock"
 
 ext {
+    kotlinDep = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     bukkitRpgPlugins = [
             skillApi        : dep("com.sucy", "SkillAPI", skillApiVersion),

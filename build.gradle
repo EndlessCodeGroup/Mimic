@@ -1,5 +1,17 @@
 // Root project build config
 
+buildscript {
+    ext.kotlinVersion = '1.2.41'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
 plugins {
     id "base"
 }
@@ -10,6 +22,7 @@ allprojects {
 
 // Common configurations for all Mimic projects
 subprojects {
+    apply plugin: "kotlin"
     apply from: rootProject.file("gradle/mimic.gradle")
 }
 
