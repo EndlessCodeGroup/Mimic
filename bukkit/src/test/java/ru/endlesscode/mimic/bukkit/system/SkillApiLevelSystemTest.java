@@ -154,12 +154,12 @@ public class SkillApiLevelSystemTest extends SkillApiTestBase {
     }
 
     @Test
-    public void testGetExpToNextLevel() {
+    public void testGetExpToNextLevelRemaining() {
         prepareMainClass();
         when(playerClass.getExp()).thenReturn(5.0);
         when(playerClass.getRequiredExp()).thenReturn(10);
 
-        double actual = levelSystem.getExpToNextLevel();
+        double actual = levelSystem.getExpToNextLevelRemaining();
         int expected = 5;
         assertEquals(expected, actual, 0.0001);
     }
@@ -167,7 +167,7 @@ public class SkillApiLevelSystemTest extends SkillApiTestBase {
     @Test
     public void testGetExpToNextLevelMustReturnMinus() {
         double actual = levelSystem.getExpToNextLevel();
-        assertEquals(-1, actual);
+        assertEquals(-1, actual, 0.0001);
     }
 
     private void prepareMainClass() {

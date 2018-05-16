@@ -50,7 +50,7 @@ public class SkillApiTestBase extends BukkitTestBase {
 
     private void mockSettings() {
         Settings settings = mock(Settings.class);
-        // Our formula exp to next level is: currentLvl * 10
+        // Our formula exp to next level is: lvl * 10
         when(settings.getRequiredExp(anyInt())).then(invocation -> (int) invocation.getArgument(0) * 10);
         when(SkillAPI.getSettings()).thenReturn(settings);
     }

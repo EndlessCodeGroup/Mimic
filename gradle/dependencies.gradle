@@ -3,6 +3,7 @@
 // Versions
 def skillApiVersion = "3.102"
 def heroesVersion = "1.5.5.6"
+def battlelevelsVersion = "6.9.1"
 
 def acfVersion = "0.5.0-SNAPSHOT"
 
@@ -16,8 +17,8 @@ def powermockGroup = "org.powermock"
 ext {
 
     bukkitRpgPlugins = [
-            skillApi    : dep("com.sucy", "SkillAPI", skillApiVersion),
-            heroes      : dep("com.herocraftonline.heroes", "Heroes", heroesVersion)
+            skillApi        : dep("com.sucy", "SkillAPI", skillApiVersion),
+            battlelevelsApi : dep("me.robin.battlelevels", "battlelevels-api", battlelevelsVersion)
     ]
 
     libraries = [

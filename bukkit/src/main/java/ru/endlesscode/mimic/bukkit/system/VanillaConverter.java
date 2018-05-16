@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.api.system.ExpLevelConverter;
  *
  * @see <a href="http://minecraft.gamepedia.com/Experience#Leveling_up">Minecraft Wiki: Experience - Leveling Up</a>
  */
-public class VanillaConverter extends ExpLevelConverter {
+public class VanillaConverter implements ExpLevelConverter {
     private static VanillaConverter instance;
 
     private VanillaConverter() {
@@ -42,9 +42,6 @@ public class VanillaConverter extends ExpLevelConverter {
         return instance;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double expToLevel(double exp) {
         double level = 0;
@@ -59,9 +56,6 @@ public class VanillaConverter extends ExpLevelConverter {
         return level;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double levelToExp(int level) {
         int exp = 0;
@@ -76,9 +70,11 @@ public class VanillaConverter extends ExpLevelConverter {
         return exp;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
+    @Override
+    public double getExpToReachLevel(int level) {
+        return getExpToReachNextLevel(level - 1);
+    }
+
     @Override
     public double getExpToReachNextLevel(int level) {
         int exp = -1;

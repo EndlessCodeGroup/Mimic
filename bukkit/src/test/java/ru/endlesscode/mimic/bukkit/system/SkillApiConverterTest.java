@@ -61,8 +61,8 @@ public class SkillApiConverterTest extends SkillApiTestBase {
 
     @Test
     public void testExpToLevelMustReturnFractionalLevel() {
-        double actual = converter.expToLevel(120);
-        double expected = 5.4;
+        double actual = converter.expToLevel(140);
+        double expected = 5.8;
         assertEquals(expected, actual, 0.0001);
     }
 
@@ -81,8 +81,8 @@ public class SkillApiConverterTest extends SkillApiTestBase {
     }
 
     @Test
-    public void testGetExpToReachNextLevelMustReturnMinusOne() {
-        double actual = converter.getExpToReachNextLevel(0);
+    public void testGetExpToReachLevelMustReturnMinusOne() {
+        double actual = converter.getExpToReachLevel(0);
         int expected = -1;
         assertEquals(expected, actual, 0.0001);
     }

@@ -118,7 +118,7 @@ public class LevelSystemTest {
         assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.setFractionalExp(0.5123);
-        assertEquals(5, this.ls.getExp(), DELTA);
+        assertEquals(5.123, this.ls.getExp(), DELTA);
 
         this.ls.setFractionalExp(1);
         assertEquals(9, this.ls.getExp(), DELTA);

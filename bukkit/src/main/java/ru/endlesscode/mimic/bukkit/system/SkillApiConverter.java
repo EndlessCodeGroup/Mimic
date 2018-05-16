@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.api.system.ExpLevelConverter;
 /**
  * Converter for SkillAPI level system.
  */
-public class SkillApiConverter extends ExpLevelConverter {
+public class SkillApiConverter implements ExpLevelConverter {
     private static SkillApiConverter instance;
     private final Settings settings;
 
@@ -44,13 +44,8 @@ public class SkillApiConverter extends ExpLevelConverter {
     }
 
     @Override
-    public double levelToExp(int level) {
-        double exp = 0;
-        for (int i = 1; i < level; i++) {
-            exp += getExpToReachNextLevel(i);
-        }
-
-        return exp;
+    public double getExpToReachLevel(int level) {
+        return getExpToReachNextLevel(level - 1);
     }
 
     @Override
