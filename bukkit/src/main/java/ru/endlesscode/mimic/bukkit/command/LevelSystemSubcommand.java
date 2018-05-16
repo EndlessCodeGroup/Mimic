@@ -85,7 +85,7 @@ public class LevelSystemSubcommand extends BaseCommand {
                 setExp(ls, value);
                 int percentage = (int) (ls.getFractionalExp() * 100);
                 util.send(sender, util.msg(
-                        "&6New %s's exp is %d (%d.%d lvl)", target.getName(), ls.getExp(), percentage
+                        "&6New %s's exp is %d (%d.%d lvl)", target.getName(), ls.getExp(), ls.getLevel(), percentage
                 ));
 
         }
