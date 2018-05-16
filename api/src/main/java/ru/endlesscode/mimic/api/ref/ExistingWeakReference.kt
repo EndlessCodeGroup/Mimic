@@ -17,43 +17,28 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.ref;
+package ru.endlesscode.mimic.api.ref
 
-import org.jetbrains.annotations.NotNull;
-
-import java.lang.ref.WeakReference;
+import java.lang.ref.WeakReference
 
 /**
- * Weak reference that can throw {@code IllegalStateException} if referent
- * objects not exists.
+ * Weak reference that throws [IllegalStateException] if referent objects not exists.
+ *
+ * @param referent object the new weak reference will refer to
+ * @constructor Creates a new weak reference that refers to the given object. The new
+ * reference is not registered with any queue.
  *
  * @author Osip Fatkullin
- * @version 1.0
+ * @since 1.0
  */
-public class ExistingWeakReference<T> extends WeakReference<T> {
-    /**
-     * Creates a new weak reference that refers to the given object.  The new
-     * reference is not registered with any queue. If referent is null {@link #get()}
-     * will throw IllegalStateException.
-     *
-     * @param referent object the new weak reference will refer to
-     */
-    public ExistingWeakReference(T referent) {
-        super(referent);
-    }
+class ExistingWeakReference<T>(referent: T) : WeakReference<T>(referent) {
 
     /**
      * {@inheritDoc}.
      *
      * @throws IllegalStateException If referent object already not exists
      */
-    @Override
-    public @NotNull T get() {
-        T referent = super.get();
-        if (referent == null) {
-            throw new IllegalStateException("Referent object is null");
-        }
-
-        return referent;
+    override fun get(): T {
+        return super.get() ?: throw IllegalStateException("Referent object is null")
     }
 }
