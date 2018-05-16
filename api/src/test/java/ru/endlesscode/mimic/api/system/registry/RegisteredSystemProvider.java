@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.api.system.PlayerSystem;
  *
  * @param <SubsystemT> Service
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class RegisteredSystemProvider<SubsystemT extends PlayerSystem> implements Comparable<RegisteredSystemProvider<?>> {
     private final Class<?> system;

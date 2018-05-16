@@ -34,7 +34,7 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
  * Recommended to use a singleton pattern when implement this class.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public abstract class SystemRegistry {
     /**
@@ -101,7 +101,7 @@ public abstract class SystemRegistry {
         //noinspection unchecked
         Class<SystemFactory<SystemT>> factoryClass = (Class<SystemFactory<SystemT>>) factory.getClass();
 
-        this.registerSystem(factoryClass, factory, meta);
+        this.registerSystem(factoryClass, factory, meta.getPriority());
     }
 
     /**
@@ -132,12 +132,12 @@ public abstract class SystemRegistry {
      * @param <FactoryT>       Factory type
      * @param factoryClass     Class of the factory
      * @param subsystemFactory Concrete subsystem factory
-     * @param meta             Subsystem metadata
+     * @param priority         Subsystem priority
      */
     protected abstract <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerSystem(
             @NotNull Class<FactoryT> factoryClass,
             @NotNull FactoryT subsystemFactory,
-            @NotNull MetadataAdapter meta);
+            @NotNull SystemPriority priority);
 
     /**
      * Gets system factory by system class.
@@ -149,7 +149,7 @@ public abstract class SystemRegistry {
      * @param systemClass System class
      * @return System factory
      * @throws SystemNotFoundException If needed system not found in registry
-     * @since 1.1
+     * @since 0.1
      */
     public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getSystemFactory(
             @NotNull Class<SystemT> systemClass)
@@ -172,7 +172,7 @@ public abstract class SystemRegistry {
      * @param systemClass System class
      * @return Inner factory class from system class
      * @throws IllegalArgumentException  If needed system factory not found in registry
-     * @since 1.1
+     * @since 0.1
      */
     protected <SystemT extends PlayerSystem> @NotNull Class<SystemFactory<SystemT>> getFactoryClass(
             Class<SystemT> systemClass) {

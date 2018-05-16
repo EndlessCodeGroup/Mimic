@@ -19,6 +19,8 @@
 
 package ru.endlesscode.mimic.api.system;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Function;
 
 /**
@@ -30,27 +32,38 @@ import java.util.function.Function;
  *
  * @param <T> SystemType
  * @author Osip Fatkullin
- * @since 1.1
+ * @since 0.1
  */
 public class SystemFactory<T extends PlayerSystem> {
     private final Function<Object, ? extends T> constructor;
+    private final String tag;
 
     /**
      * Creates factory for constructing system.
      *
      * @param constructor Function to create system
      */
-    public SystemFactory(Function<Object, ? extends T> constructor) {
+    public SystemFactory(Function<Object, ? extends T> constructor, @NotNull String tag) {
         this.constructor = constructor;
+        this.tag = tag;
     }
 
     /**
      * Creates new subsystem object with player initialization.
      *
      * @param playerArg Player object
-     * @return Player system for specified player
+     * @return Player system for specified player. Can't be null
      */
-    public T get(Object playerArg) {
+    public @NotNull T get(@NotNull Object playerArg) {
         return constructor.apply(playerArg);
+    }
+
+    /**
+     * Returns system tag.
+     *
+     * @return The tag
+     */
+    public @NotNull String getTag() {
+        return tag;
     }
 }

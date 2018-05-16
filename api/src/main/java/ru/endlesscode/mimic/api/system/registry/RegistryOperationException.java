@@ -23,9 +23,9 @@ package ru.endlesscode.mimic.api.system.registry;
  * Common superclass of exceptions thrown by registry operations in Mimic.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
-public class RegistryOperationException extends Exception {
+public class RegistryOperationException extends RuntimeException {
     /**
      * Constructs extension with no parameters.
      */

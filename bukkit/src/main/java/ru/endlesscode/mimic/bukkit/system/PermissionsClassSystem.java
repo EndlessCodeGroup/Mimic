@@ -40,7 +40,8 @@ import java.util.Set;
  */
 @Metadata(priority = SystemPriority.LOWEST)
 public class PermissionsClassSystem extends BukkitClassSystem {
-    public static final Factory FACTORY = new Factory(playerObj -> new PermissionsClassSystem((Player) playerObj));
+    public static final String TAG = "Permission Class System";
+    public static final Factory FACTORY = new Factory(playerObj -> new PermissionsClassSystem((Player) playerObj), TAG);
 
     @VisibleForTesting
     static final String PERMISSION_PREFIX = "mimic.class.";
@@ -89,8 +90,9 @@ public class PermissionsClassSystem extends BukkitClassSystem {
     /**
      * {@inheritDoc}.
      */
+    @NotNull
     @Override
     public String getName() {
-        return "Permission Class System";
+        return TAG;
     }
 }

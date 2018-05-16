@@ -25,7 +25,7 @@ package ru.endlesscode.mimic.api.system;
  * <p>For each level needed 10XP.</p>
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class BasicConverterImp extends ExpLevelConverter {
     @Override

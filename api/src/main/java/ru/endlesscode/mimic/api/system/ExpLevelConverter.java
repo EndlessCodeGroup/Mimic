@@ -24,7 +24,7 @@ package ru.endlesscode.mimic.api.system;
  * to exp and vice versa.
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public abstract class ExpLevelConverter {
     /**

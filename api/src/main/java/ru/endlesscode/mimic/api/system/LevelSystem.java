@@ -31,7 +31,7 @@ import java.util.function.Function;
  * and override all methods that works not properly for your case.</p>
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public abstract class LevelSystem implements PlayerSystem {
     protected final ExpLevelConverter converter;
@@ -257,8 +257,8 @@ public abstract class LevelSystem implements PlayerSystem {
      * Factory of level systems.
      */
     public static class Factory extends SystemFactory<LevelSystem> {
-        public Factory(Function<Object, ? extends LevelSystem> constructor) {
-            super(constructor);
+        public Factory(Function<Object, ? extends LevelSystem> constructor, String tag) {
+            super(constructor, tag);
         }
     }
 }

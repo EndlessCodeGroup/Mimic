@@ -26,7 +26,7 @@ package ru.endlesscode.mimic.api.system.registry;
  * resolve conflicts.</p>
  *
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public enum SystemPriority {
     LOWEST,

@@ -19,18 +19,26 @@
 
 package ru.endlesscode.mimic.bukkit;
 
+import co.aikar.commands.BukkitCommandManager;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.endlesscode.mimic.api.system.ClassSystem;
+import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.registry.SystemNotNeededException;
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException;
+import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand;
+import ru.endlesscode.mimic.bukkit.command.CommandUtil;
+import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand;
+import ru.endlesscode.mimic.bukkit.command.MimicCommand;
 import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
 import ru.endlesscode.mimic.bukkit.system.SkillApiClassSystem;
+import ru.endlesscode.mimic.bukkit.system.SkillApiLevelSystem;
 import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
+import ru.endlesscode.mimic.bukkit.util.Log;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -45,19 +53,25 @@ public class BukkitMimic extends JavaPlugin {
     private BukkitSystemRegistry systemRegistry;
 
     /**
-     * All subsystems.
+     * All default subsystems.
      */
     private final List<Class<? extends PlayerSystem>> defaultSubsystems = Arrays.asList(
-            VanillaLevelSystem.class, PermissionsClassSystem.class, SkillApiClassSystem.class
+            VanillaLevelSystem.class, PermissionsClassSystem.class, SkillApiClassSystem.class, SkillApiLevelSystem.class
     );
 
     @Override
     public void onLoad() {
         instance = this;
-        logger = this.getLogger();
+
+        Log.wrap(this.getLogger(), DEBUG);
 
         this.initRegistry();
         this.hookDefaultSystems();
+    }
+
+    @Override
+    public void onEnable() {
+        registerCommands();
     }
 
     private void initRegistry() {
@@ -72,35 +86,28 @@ public class BukkitMimic extends JavaPlugin {
     private <T extends PlayerSystem> void hookSystem(Class<? extends T> system) {
         try {
             this.systemRegistry.registerSubsystem(system);
-            debug(String.format("Subsystem '%s' registered.", system.getSimpleName()));
+            Log.d(String.format("Subsystem '%s' registered.", system.getSimpleName()));
         } catch (SystemNotRegisteredException e) {
             logger.warning(system.getSimpleName() + ": " + e.getMessage());
-            debug(e);
+            Log.d(e);
         } catch (SystemNotNeededException e) {
-            debug(e);
+            Log.d(String.format("Subsystem '%s' not registered: %s", system.getSimpleName(), e.getMessage()));
         }
     }
 
-    /**
-     * Write a message to log if debug is enabled.
-     *
-     * @param message Debug message
-     */
-    private void debug(String message) {
-        if (DEBUG) {
-            logger.warning("[DEBUG] " + message);
-        }
-    }
+    private void registerCommands() {
+        BukkitCommandManager manager = new BukkitCommandManager(this);
+        //noinspection deprecation
+        manager.enableUnstableAPI("help");
+        manager.getCommandReplacements().addReplacements(
+                "command", "mimic|bmimic|bukkitmimic",
+                "perm", "mimic.admin"
+        );
 
-    /**
-     * Write an exception to log if debug is enabled.
-     *
-     * @param throwable Thrown exception
-     */
-    private void debug(Throwable throwable) {
-        if (DEBUG) {
-            logger.log(Level.WARNING, "[DEBUG] Yay! Long-awaited exception!", throwable);
-        }
+        CommandUtil util = new CommandUtil();
+        manager.registerCommand(new MimicCommand(util));
+        manager.registerCommand(new LevelSystemSubcommand(systemRegistry.getSystemFactory(LevelSystem.class), util));
+        manager.registerCommand(new ClassSystemSubcommand(systemRegistry.getSystemFactory(ClassSystem.class), util));
     }
 
     @Override

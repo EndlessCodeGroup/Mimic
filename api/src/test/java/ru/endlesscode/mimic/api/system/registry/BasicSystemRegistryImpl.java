@@ -25,13 +25,13 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
 
 /**
  * @author Osip Fatkullin
- * @since 1.0
+ * @since 0.1
  */
 public class BasicSystemRegistryImpl extends SystemRegistry {
     @Override
     public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
             @NotNull Class<? extends SystemFactory<SystemT>> systemFactoryClass) {
-        return new SystemFactory<>(arg -> null);
+        return new SystemFactory<>(arg -> null, "");
     }
 
 
@@ -39,7 +39,7 @@ public class BasicSystemRegistryImpl extends SystemRegistry {
     protected <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerSystem(
             @NotNull Class<FactoryT> factoryClass, @NotNull
             FactoryT subsystemFactory,
-            @NotNull MetadataAdapter meta) {
+            @NotNull SystemPriority priority) {
 
     }
 

@@ -29,7 +29,7 @@ import ru.endlesscode.mimic.api.system.LevelSystem;
  * Level system adapted for bukkit.
  */
 public abstract class BukkitLevelSystem extends LevelSystem {
-    @SuppressWarnings("WeakerAccess")
+
     protected final ExistingWeakReference<Player> playerRef;
 
     /**

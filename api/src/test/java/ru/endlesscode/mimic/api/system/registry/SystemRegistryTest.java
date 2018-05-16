@@ -43,22 +43,22 @@ public class SystemRegistryTest {
     }
 
     @Test
-    public void testAddRightSubsystemByClass() throws Exception {
+    public void testAddRightSubsystemByClass() {
         registry.registerSubsystem(BasicLevelSystemImpl.class);
         verify(registry).registerSystem(
                 eq(LevelSystem.Factory.class),
                 eq(BasicLevelSystemImpl.FACTORY),
-                any(MetadataAdapter.class));
+                any(SystemPriority.class));
 
         registry.registerSubsystem(BasicClassSystemImpl.class);
         verify(registry).registerSystem(
                 eq(ClassSystem.Factory.class),
                 eq(BasicClassSystemImpl.FACTORY),
-                any(MetadataAdapter.class));
+                any(SystemPriority.class));
     }
 
     @Test
-    public void testAddRightSubsystemByInstance() throws Exception {
+    public void testAddRightSubsystemByInstance() {
         registry.registerSubsystem(BasicLevelSystemImpl.class, BasicLevelSystemImpl.FACTORY);
         registry.registerSubsystem(BasicClassSystemImpl.class, BasicClassSystemImpl.FACTORY);
 
@@ -66,27 +66,27 @@ public class SystemRegistryTest {
     }
 
     @Test(expected = SystemNotRegisteredException.class)
-    public void testAddWrongSubsystemByClass() throws Exception {
+    public void testAddWrongSubsystemByClass() {
         registry.registerSubsystem(WrongFactoryClassSystemImpl.class);
 
         fail("Must be thrown exception");
     }
 
     @Test(expected = SystemNotNeededException.class)
-    public void testAddNotNeededSubsystem() throws Exception {
+    public void testAddNotNeededSubsystem() {
         registry.registerSubsystem(WrongClassSystemImpl.class);
 
         fail("Must be thrown exception");
     }
 
     @Test
-    public void testGetSystemFactoryMustBeRight() throws Exception {
+    public void testGetSystemFactoryMustBeRight() {
         registry.getSystemFactory(LevelSystem.class);
         verify(registry).getFactory(LevelSystem.Factory.class);
     }
 
     @Test(expected = SystemNotFoundException.class)
-    public void testGetSystemFactoryMustThrowException() throws Exception {
+    public void testGetSystemFactoryMustThrowException() {
         registry.getSystemFactory(WrongFactoryClassSystemImpl.class);
 
         fail("Must throw exception!");
