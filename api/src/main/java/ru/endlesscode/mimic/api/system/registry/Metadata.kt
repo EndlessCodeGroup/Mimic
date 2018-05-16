@@ -17,13 +17,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system.registry;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package ru.endlesscode.mimic.api.system.registry
 
 /**
  * This annotation provides meta-information about factory to load it.
@@ -32,25 +26,26 @@ import java.lang.annotation.Target;
  * @author Osip Fatkullin
  * @since 0.1
  */
-@Documented
-@Target(value = ElementType.TYPE)
-@Retention(value = RetentionPolicy.RUNTIME)
-public @interface Metadata {
-    /**
-     * Returns priority of factory
-     *
-     * @return Priority of factory
-     */
-    SystemPriority priority() default SystemPriority.NORMAL;
+@MustBeDocumented
+@Target(AnnotationTarget.CLASS)
+@Retention
+annotation class Metadata(
 
-    /**
-     * Returns classes that should exists for all systems working
-     *
-     * @implSpec
-     * Example for SkillAPI:
-     * system = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
-     *
-     * @return array of {@code String} with class names
-     */
-    String[] classes() default {};
-}
+        /**
+         * Returns priority of factory
+         *
+         * @return Priority of factory
+         */
+        val priority: SystemPriority = SystemPriority.NORMAL,
+
+        /**
+         * Returns classes that should exists for all systems working
+         *
+         * @implSpec
+         * Example for SkillAPI:
+         * system = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
+         *
+         * @return array of [String] with class names
+         */
+        val classes: Array<String> = []
+)
