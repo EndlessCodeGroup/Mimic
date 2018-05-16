@@ -33,17 +33,37 @@ public abstract class ExpLevelConverter {
      * @param exp Experience amount
      * @return Amount of full levels
      */
-    public int expToFullLevel(int exp) {
+    public int expToFullLevel(double exp) {
         return (int) expToLevel(exp);
     }
 
     /**
      * Converts experience to level.
      *
-     * @param exp Experience amount
+     * @param expValue Experience amount
      * @return Level amount
      */
-    public abstract double expToLevel(int exp);
+    public double expToLevel(double expValue) {
+        if (expValue < 0) {
+            return 0;
+        }
+
+        double exp = expValue;
+        double level = 1;
+        double requiredExp;
+        for (int i = 1;; i++) {
+            requiredExp = getExpToReachNextLevel(i);
+            level++;
+            exp -= requiredExp;
+
+            if (exp <= 0) {
+                level += exp / requiredExp;
+                break;
+            }
+        }
+
+        return level;
+    }
 
     /**
      * Converts level to exp.
@@ -51,7 +71,7 @@ public abstract class ExpLevelConverter {
      * @param level Player level
      * @return Experience amount to reach given level from 0 exp
      */
-    public abstract int levelToExp(int level);
+    public abstract double levelToExp(int level);
 
     /**
      * Gets how much experience you need to reach specified level.
@@ -59,5 +79,5 @@ public abstract class ExpLevelConverter {
      * @param level Current level
      * @return Experience from current to next level
      */
-    public abstract int getExpToReachNextLevel(int level);
+    public abstract double getExpToReachNextLevel(int level);
 }

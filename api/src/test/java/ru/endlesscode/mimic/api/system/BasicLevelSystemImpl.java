@@ -35,7 +35,7 @@ public class BasicLevelSystemImpl extends LevelSystem {
     public static final LevelSystem.Factory FACTORY = new LevelSystem.Factory(arg -> new BasicLevelSystemImpl(), TAG);
 
     private int level;
-    private int exp;
+    private double exp;
 
     /**
      * Constructor that initialize basic converter.
@@ -70,20 +70,20 @@ public class BasicLevelSystemImpl extends LevelSystem {
     }
 
     @Override
-    public int getExp() {
+    public double getExp() {
         return this.exp;
     }
 
     @Override
-    public void setExp(int newExperience) {
-        int allowedExp = Math.max(0, newExperience);
+    public void setExp(double newExperience) {
+        double allowedExp = Math.max(0, newExperience);
         allowedExp = Math.min(converter.getExpToReachNextLevel(0) - 1, allowedExp);
 
         this.exp = allowedExp;
     }
 
     @Override
-    public int getExpToNextLevel() {
+    public double getExpToNextLevel() {
         return converter.getExpToReachNextLevel(0) - this.exp;
     }
 }

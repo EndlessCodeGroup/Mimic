@@ -68,22 +68,22 @@ public class SkillApiConverterTest extends SkillApiTestBase {
 
     @Test
     public void testLevelToExpMustReturnZero() {
-        int actual = converter.levelToExp(1);
+        double actual = converter.levelToExp(1);
         int expected = 0;
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, 0.0001);
     }
 
     @Test
     public void testLevelToExpMustReturnRightValue() {
-        int actual = converter.levelToExp(5);
+        double actual = converter.levelToExp(5);
         int expected = 100;
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, 0.0001);
     }
 
     @Test
     public void testGetExpToReachNextLevelMustReturnMinusOne() {
-        int actual = converter.getExpToReachNextLevel(0);
+        double actual = converter.getExpToReachNextLevel(0);
         int expected = -1;
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, 0.0001);
     }
 }

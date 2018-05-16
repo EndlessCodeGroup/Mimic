@@ -85,10 +85,10 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
      * {@inheritDoc}.
      */
     @Override
-    public void takeExp(int expAmount) {
+    public void takeExp(double expAmount) {
         PlayerClass playerClass = getPlayerClass();
         if (playerClass != null) {
-            double percent = (double) expAmount / playerClass.getRequiredExp();
+            double percent = expAmount / playerClass.getRequiredExp();
             playerClass.loseExp(percent);
         }
     }
@@ -97,7 +97,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
      * {@inheritDoc}.
      */
     @Override
-    public void giveExp(int expAmount) {
+    public void giveExp(double expAmount) {
         PlayerClass playerClass = getPlayerClass();
         if (playerClass != null) {
             playerClass.giveExp(expAmount, ExpSource.SPECIAL);
@@ -108,16 +108,16 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
      * {@inheritDoc}.
      */
     @Override
-    public int getExp() {
+    public double getExp() {
         PlayerClass playerClass = getPlayerClass();
-        return playerClass == null ? 0 : (int) playerClass.getExp();
+        return playerClass == null ? 0 : playerClass.getExp();
     }
 
     /**
      * {@inheritDoc}.
      */
     @Override
-    public void setExp(int newExperience) {
+    public void setExp(double newExperience) {
         PlayerClass playerClass = getPlayerClass();
         if (playerClass != null) {
             playerClass.setExp(newExperience);
@@ -128,7 +128,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
      * {@inheritDoc}.
      */
     @Override
-    public int getExpToNextLevel() {
+    public double getExpToNextLevel() {
         PlayerClass playerClass = getPlayerClass();
         return playerClass == null ? -1 : playerClass.getRequiredExp() - getExp();
     }

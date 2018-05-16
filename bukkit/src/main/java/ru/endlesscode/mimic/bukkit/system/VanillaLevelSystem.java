@@ -60,26 +60,26 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
      * {@inheritDoc}.
      */
     @Override
-    public int getExp() {
+    public double getExp() {
         int level = getLevel();
-        int expToLevel = converter.getExpToReachNextLevel(level);
+        double expToLevel = converter.getExpToReachNextLevel(level);
 
         Player player = playerRef.get();
-        return (int) (expToLevel * player.getExp());
+        return expToLevel * player.getExp();
     }
 
     /**
      * {@inheritDoc}.
      */
     @Override
-    public void setExp(int newExperience) {
+    public void setExp(double newExperience) {
         int level = getLevel();
-        int expToNextLevel = converter.getExpToReachNextLevel(level);
-        float allowedExperience = Math.max(0, newExperience);
+        double expToNextLevel = converter.getExpToReachNextLevel(level);
+        double allowedExperience = Math.max(0, newExperience);
         allowedExperience = Math.min(allowedExperience, expToNextLevel);
 
         Player player = playerRef.get();
-        player.setExp(allowedExperience / expToNextLevel);
+        player.setExp((float) (allowedExperience / expToNextLevel));
     }
 
     /**
@@ -107,7 +107,7 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
      * {@inheritDoc}.
      */
     @Override
-    public int getExpToNextLevel() {
+    public double getExpToNextLevel() {
         Player player = playerRef.get();
         return player.getExpToLevel() - getExp();
     }

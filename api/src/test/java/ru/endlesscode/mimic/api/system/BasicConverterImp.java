@@ -27,19 +27,19 @@ package ru.endlesscode.mimic.api.system;
  * @author Osip Fatkullin
  * @since 0.1
  */
-public class BasicConverterImp extends ExpLevelConverter {
+public class BasicConverterImp implements ExpLevelConverter {
     @Override
-    public int levelToExp(int level) {
+    public double levelToExp(int level) {
         return level * 10;
     }
 
     @Override
-    public double expToLevel(int exp) {
+    public double expToLevel(double exp) {
         return exp / 10.;
     }
 
     @Override
-    public int getExpToReachNextLevel(int level) {
+    public double getExpToReachLevel(int level) {
         return 10;
     }
 }

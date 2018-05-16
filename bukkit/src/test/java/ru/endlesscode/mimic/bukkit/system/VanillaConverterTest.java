@@ -68,16 +68,16 @@ public class VanillaConverterTest {
 
     @Test
     public void testLevelToExp() {
-        assertEquals(this.exp, this.converter.levelToExp(level));
+        assertEquals(this.exp, this.converter.levelToExp(level), 0.0001);
     }
 
     @Test
     public void getExpToReachNextLevel() {
-        assertEquals(this.expToNext, this.converter.getExpToReachNextLevel(level));
+        assertEquals(this.expToNext, this.converter.getExpToReachNextLevel(level), 0.0001);
     }
 
     @Test
     public void getExpToReachNextLevelMustReturnMinusOne() {
-        assertEquals(-1, this.converter.getExpToReachNextLevel(-1));
+        assertEquals(-1, this.converter.getExpToReachNextLevel(-1), 0.0001);
     }
 }

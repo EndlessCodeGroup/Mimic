@@ -57,9 +57,9 @@ public class LevelSystemSubcommand extends BaseCommand {
 
         util.send(sender,
                 util.msg("&3System: &7%s", system.getName()),
-                util.msg("&3Level: &7%d&8.%d", system.getLevel(), (int) (system.getFractionalExp() * 100)),
-                util.msg("&3Exp: &7%d &8| &3To next level: &7%d", system.getExp(), system.getExpToNextLevel()),
-                util.msg("&3Total exp: &7%d", system.getTotalExp())
+                util.msg("&3Level: &7%.2f", system.getLevel() + system.getFractionalExp()),
+                util.msg("&3Exp: &7%.1f &8| &3To next level: %.1f", system.getExp(), system.getExpToNextLevel()),
+                util.msg("&3Total exp: &7%.1f", system.getTotalExp())
         );
     }
 
@@ -80,14 +80,13 @@ public class LevelSystemSubcommand extends BaseCommand {
                 case TOTAL:
                     setTotalExp(ls, value);
                     util.send(sender, util.msg(
-                            "&6New %s's total exp is %d (%d lvl)", target.getName(), ls.getTotalExp(), ls.getLevel()
+                            "&6New %s's total exp is %.1f (%d lvl)", target.getName(), ls.getTotalExp(), ls.getLevel()
                     ));
                     break;
                 default:
                     setExp(ls, value);
-                    int percentage = (int) (ls.getFractionalExp() * 100);
                     util.send(sender, util.msg(
-                            "&6New %s's exp is %d (%d.%d lvl)", target.getName(), ls.getExp(), ls.getLevel(), percentage
+                            "&6New %s's exp is %.1f (%.2f lvl)", target.getName(), ls.getExp(), ls.getLevel() + ls.getFractionalExp()
                     ));
 
             }

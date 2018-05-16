@@ -124,9 +124,9 @@ public abstract class LevelSystem implements PlayerSystem {
      *
      * @param expAmount Exp amount to take away
      */
-    public void takeExp(int expAmount) {
-        int currentTotalExp = this.getTotalExp();
-        int allowedAmount = Math.min(expAmount, currentTotalExp);
+    public void takeExp(double expAmount) {
+        double currentTotalExp = this.getTotalExp();
+        double allowedAmount = Math.min(expAmount, currentTotalExp);
         this.giveExp(-allowedAmount);
     }
 
@@ -139,8 +139,8 @@ public abstract class LevelSystem implements PlayerSystem {
      *
      * @param expAmount Exp amount to give
      */
-    public void giveExp(int expAmount) {
-        int totalExp = this.getTotalExp();
+    public void giveExp(double expAmount) {
+        double totalExp = this.getTotalExp();
         this.setTotalExp(totalExp + expAmount);
     }
 
@@ -149,8 +149,8 @@ public abstract class LevelSystem implements PlayerSystem {
      *
      * @return Total experience points or 0 if player has no exp
      */
-    public int getTotalExp() {
-        int levelExp = this.converter.levelToExp(this.getLevel());
+    public double getTotalExp() {
+        double levelExp = this.converter.levelToExp(this.getLevel());
         return levelExp + this.getExp();
     }
 
@@ -159,16 +159,16 @@ public abstract class LevelSystem implements PlayerSystem {
      *
      * @param newTotalExperience New total experience
      */
-    public void setTotalExp(int newTotalExperience) {
-        int allowedTotalExperience = Math.max(0, newTotalExperience);
+    public void setTotalExp(double newTotalExperience) {
+        double allowedTotalExperience = Math.max(0, newTotalExperience);
 
         double level = this.converter.expToLevel(allowedTotalExperience);
         int fullLevel = this.converter.expToFullLevel(allowedTotalExperience);
-        int expToNextLevel = this.converter.getExpToReachNextLevel(fullLevel);
+        double expToNextLevel = this.converter.getExpToReachNextLevel(fullLevel);
         double experiencePercent = level - fullLevel;
 
         this.setLevel(fullLevel);
-        this.setExp((int) (expToNextLevel * experiencePercent));
+        this.setExp(expToNextLevel * experiencePercent);
     }
 
     /**
@@ -177,7 +177,7 @@ public abstract class LevelSystem implements PlayerSystem {
      * @param requiredExp Required total experience amount
      * @return {@code true} if player player has required total experience
      */
-    public boolean hasExp(int requiredExp) {
+    public boolean hasExp(double requiredExp) {
         return requiredExp <= this.getTotalExp();
     }
 
@@ -190,14 +190,14 @@ public abstract class LevelSystem implements PlayerSystem {
      * @return Current fractional XP.
      */
     public double getFractionalExp() {
-        int exp = this.getExp();
+        double exp = this.getExp();
 
         if (exp == 0) {
             return 0;
         }
 
         int level = this.getLevel();
-        return (double) exp / converter.getExpToReachNextLevel(level);
+        return exp / converter.getExpToReachNextLevel(level);
     }
 
     /**
@@ -210,7 +210,7 @@ public abstract class LevelSystem implements PlayerSystem {
      */
     public void setFractionalExp(double fractionalExp) {
         int level = getLevel();
-        this.setExp((int) (converter.getExpToReachNextLevel(level) * fractionalExp));
+        this.setExp(converter.getExpToReachNextLevel(level) * fractionalExp);
     }
 
     /**
@@ -223,16 +223,16 @@ public abstract class LevelSystem implements PlayerSystem {
      * @return Current level experience points or 0 if player has no exp
      * @throws IllegalStateException If player-related object not exists
      */
-    public abstract int getExp();
+    public abstract double getExp();
 
     /**
      * Sets player's current level experience points.
      *
      * @apiNote
      * Be careful with this method! To change experience value better to use
-     * {@link #giveExp(int)} and {@link #takeExp(int)}. This method changes
+     * {@link #giveExp(double)} and {@link #takeExp(double)}. This method changes
      * experience on current level, to set total player experience use
-     * {@link #setTotalExp(int)}. New experience value shouldn't be less than 0
+     * {@link #setTotalExp(double)}. New experience value shouldn't be less than 0
      * and bigger than maximal possible XP on current level.
      *
      * @implNote
@@ -243,7 +243,7 @@ public abstract class LevelSystem implements PlayerSystem {
      * @param newExperience New level experience points
      * @throws IllegalStateException If player-related object not exists
      */
-    public abstract void setExp(int newExperience);
+    public abstract void setExp(double newExperience);
 
     /**
      * Get the total amount of experience required for the player to reach level.
@@ -251,7 +251,7 @@ public abstract class LevelSystem implements PlayerSystem {
      * @return Experience required to level up or -1 if level-up is impossible
      * @throws IllegalStateException If player-related object not exists
      */
-    public abstract int getExpToNextLevel();
+    public abstract double getExpToNextLevel();
 
     /**
      * Factory of level systems.

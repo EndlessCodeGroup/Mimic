@@ -46,7 +46,7 @@ public class VanillaConverter extends ExpLevelConverter {
      * {@inheritDoc}.
      */
     @Override
-    public double expToLevel(int exp) {
+    public double expToLevel(double exp) {
         double level = 0;
         if (exp >= 1628) {
             level = (Math.sqrt(72 * exp - 54215) + 325) / 18;
@@ -63,7 +63,7 @@ public class VanillaConverter extends ExpLevelConverter {
      * {@inheritDoc}.
      */
     @Override
-    public int levelToExp(int level) {
+    public double levelToExp(int level) {
         int exp = 0;
         if (level >= 32) {
             exp = (int) (4.5 * level * level - 162.5 * level + 2220);
@@ -80,7 +80,7 @@ public class VanillaConverter extends ExpLevelConverter {
      * {@inheritDoc}.
      */
     @Override
-    public int getExpToReachNextLevel(int level) {
+    public double getExpToReachNextLevel(int level) {
         int exp = -1;
         if (level >= 31) {
             exp = 9 * level - 158;

@@ -25,6 +25,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class LevelSystemTest {
+    private static final double DELTA = 0.0001;
+    
     private LevelSystem ls;
 
     @Before
@@ -52,13 +54,13 @@ public class LevelSystemTest {
     @Test
     public void testExpGetSet() {
         this.ls.setExp(9);
-        assertEquals(9, ls.getExp());
+        assertEquals(9, ls.getExp(), DELTA);
 
         this.ls.setExp(10);
-        assertEquals(9, ls.getExp());
+        assertEquals(9, ls.getExp(), DELTA);
 
         this.ls.setExp(0);
-        assertEquals(0, ls.getExp());
+        assertEquals(0, ls.getExp(), DELTA);
     }
 
     @Test
@@ -92,79 +94,79 @@ public class LevelSystemTest {
     @Test
     public void testGetFractionalExp() {
         this.ls.setExp(-5);
-        assertEquals(0., this.ls.getFractionalExp(), 0.001);
+        assertEquals(0., this.ls.getFractionalExp(), DELTA);
 
         this.ls.setExp(0);
-        assertEquals(0., this.ls.getFractionalExp(), 0.001);
+        assertEquals(0., this.ls.getFractionalExp(), DELTA);
 
         this.ls.setExp(5);
-        assertEquals(.5, this.ls.getFractionalExp(), 0.001);
+        assertEquals(.5, this.ls.getFractionalExp(), DELTA);
 
         this.ls.setExp(9);
-        assertEquals(.9, this.ls.getFractionalExp(), 0.001);
+        assertEquals(.9, this.ls.getFractionalExp(), DELTA);
 
         this.ls.setExp(15);
-        assertEquals(.9, this.ls.getFractionalExp(), 0.001);
+        assertEquals(.9, this.ls.getFractionalExp(), DELTA);
     }
 
     @Test
     public void testSetFractionalExp() {
         this.ls.setFractionalExp(-1);
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.setFractionalExp(0);
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.setFractionalExp(0.5123);
-        assertEquals(5, this.ls.getExp());
+        assertEquals(5, this.ls.getExp(), DELTA);
 
         this.ls.setFractionalExp(1);
-        assertEquals(9, this.ls.getExp());
+        assertEquals(9, this.ls.getExp(), DELTA);
 
         this.ls.setFractionalExp(2);
-        assertEquals(9, this.ls.getExp());
+        assertEquals(9, this.ls.getExp(), DELTA);
     }
 
     @Test
     public void testGetTotalExp() {
         this.ls.setLevel(0);
         this.ls.setExp(0);
-        assertEquals(0, this.ls.getTotalExp());
+        assertEquals(0, this.ls.getTotalExp(), DELTA);
 
         this.ls.setLevel(5);
         this.ls.setExp(0);
-        assertEquals(50, this.ls.getTotalExp());
+        assertEquals(50, this.ls.getTotalExp(), DELTA);
 
         this.ls.setLevel(0);
         this.ls.setExp(5);
-        assertEquals(5, this.ls.getTotalExp());
+        assertEquals(5, this.ls.getTotalExp(), DELTA);
 
         this.ls.setLevel(4);
         this.ls.setExp(9);
-        assertEquals(49, this.ls.getTotalExp());
+        assertEquals(49, this.ls.getTotalExp(), DELTA);
     }
 
     @Test
     public void testSetTotalExp() {
         this.ls.setTotalExp(-10);
         assertEquals(0, this.ls.getLevel());
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.setTotalExp(0);
         assertEquals(0, this.ls.getLevel());
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.setTotalExp(50);
         assertEquals(5, this.ls.getLevel());
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.setTotalExp(5);
         assertEquals(0, this.ls.getLevel());
-        assertEquals(5, this.ls.getExp());
+        assertEquals(5, this.ls.getExp(), DELTA);
 
         this.ls.setTotalExp(49);
         assertEquals(4, this.ls.getLevel());
-        assertEquals(9, this.ls.getExp());
+        assertEquals(9, this.ls.getExp(), DELTA);
     }
 
     @Test
@@ -184,15 +186,15 @@ public class LevelSystemTest {
 
         this.ls.giveExp(3);
         assertEquals(10, this.ls.getLevel());
-        assertEquals(9, this.ls.getExp());
+        assertEquals(9, this.ls.getExp(), DELTA);
 
         this.ls.giveExp(1);
         assertEquals(11, this.ls.getLevel());
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.giveExp(15);
         assertEquals(12, this.ls.getLevel());
-        assertEquals(5, this.ls.getExp());
+        assertEquals(5, this.ls.getExp(), DELTA);
     }
 
     @Test
@@ -202,18 +204,18 @@ public class LevelSystemTest {
 
         this.ls.takeExp(6);
         assertEquals(10, this.ls.getLevel());
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
 
         this.ls.takeExp(1);
         assertEquals(9, this.ls.getLevel());
-        assertEquals(9, this.ls.getExp());
+        assertEquals(9, this.ls.getExp(), DELTA);
 
         this.ls.takeExp(16);
         assertEquals(8, this.ls.getLevel());
-        assertEquals(3, this.ls.getExp());
+        assertEquals(3, this.ls.getExp(), DELTA);
 
         this.ls.takeExp(100);
         assertEquals(0, this.ls.getLevel());
-        assertEquals(0, this.ls.getExp());
+        assertEquals(0, this.ls.getExp(), DELTA);
     }
 }
