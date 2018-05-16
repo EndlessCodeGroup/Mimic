@@ -130,7 +130,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
     @Override
     public double getExpToNextLevel() {
         PlayerClass playerClass = getPlayerClass();
-        return playerClass == null ? -1 : playerClass.getRequiredExp() - getExp();
+        return playerClass == null ? -1 : playerClass.getRequiredExp();
     }
 
     private @Nullable PlayerClass getPlayerClass() {

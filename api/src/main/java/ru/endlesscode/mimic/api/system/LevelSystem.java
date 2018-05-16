@@ -254,6 +254,16 @@ public abstract class LevelSystem implements PlayerSystem {
     public abstract double getExpToNextLevel();
 
     /**
+     * Get remaining experience for the player to reach level.
+     *
+     * @return Experience required to level up or -1 if level-up is impossible
+     * @throws IllegalStateException If player-related object not exists
+     */
+    public double getExpToNextLevelRemaining() {
+        return getExpToNextLevel() - getExp();
+    }
+
+    /**
      * Factory of level systems.
      */
     public static class Factory extends SystemFactory<LevelSystem> {

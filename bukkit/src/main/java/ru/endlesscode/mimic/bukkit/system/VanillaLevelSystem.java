@@ -109,7 +109,7 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
     @Override
     public double getExpToNextLevel() {
         Player player = playerRef.get();
-        return player.getExpToLevel() - getExp();
+        return player.getExpToLevel();
     }
 
     /**

@@ -43,9 +43,6 @@ public class SkillApiConverter extends ExpLevelConverter {
         return instance;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double levelToExp(int level) {
         double exp = 0;
@@ -56,9 +53,6 @@ public class SkillApiConverter extends ExpLevelConverter {
         return exp;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double getExpToReachNextLevel(int level) {
         return level <= 0 ? -1 : settings.getRequiredExp(level);
