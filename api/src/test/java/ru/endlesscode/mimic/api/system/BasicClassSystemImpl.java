@@ -32,7 +32,7 @@ import java.util.List;
  * @since 0.1
  */
 @Metadata(classes = {"ru.endlesscode.mimic.api.system.ClassSystem"})
-public class BasicClassSystemImpl extends ClassSystem {
+public class BasicClassSystemImpl implements ClassSystem {
     public static final String TAG = "";
     public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl(), TAG);
 

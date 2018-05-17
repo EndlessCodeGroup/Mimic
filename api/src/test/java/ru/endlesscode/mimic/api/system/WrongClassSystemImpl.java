@@ -35,7 +35,7 @@ import java.util.List;
 @Metadata(
         priority = SystemPriority.HIGH,
         classes = {"ru.endlesscode.mimic.api.WrongClass"})
-public class WrongClassSystemImpl extends ClassSystem {
+public class WrongClassSystemImpl implements ClassSystem {
     private final List<String> classes = new ArrayList<>();
 
     @NotNull
@@ -54,6 +54,7 @@ public class WrongClassSystemImpl extends ClassSystem {
         return this;
     }
 
+    @NotNull
     @Override
     public String getName() {
         return "Wrong Class System";

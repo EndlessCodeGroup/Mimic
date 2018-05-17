@@ -30,52 +30,27 @@ import java.util.List;
  * @since 0.1
  */
 @Metadata
-public class WrongFactoryClassSystemImpl extends ClassSystem {
+public class WrongFactoryClassSystemImpl implements ClassSystem {
     private WrongFactoryClassSystemImpl() {
         // Wrong constructor
     }
 
-    /**
-     * Checks if this system is found and enabled
-     *
-     * @return {@code true} if works, otherwise {@code false}
-     */
     @Override
     public boolean isEnabled() {
         return false;
     }
 
-    /**
-     * Returns player-related object
-     *
-     * @return Player-related object
-     */
     @Override
     public @NotNull Object getHandler() {
         return this;
     }
 
-    /**
-     * Returns the name of system.
-     *
-     * @return name of system
-     * @implNote Usually used name of the plugin that implements system.
-     */
+    @NotNull
     @Override
     public String getName() {
         return "System Without Constructor";
     }
 
-    /**
-     * Gets {@code Lost} of player system
-     *
-     * @return {@code List} of player system names
-     * @throws IllegalStateException If player-related object not exists.
-     * @apiNote This method actual for systems which support many system for one player.
-     * If system not support - it just return {@code List} with one element.
-     * @implSpec Method shouldn't return {@code null}, but can return empty {@code List}.
-     * Also must not contain null objects.
-     */
     @Override
     public @NotNull List<String> getClasses() {
         return new ArrayList<>();
