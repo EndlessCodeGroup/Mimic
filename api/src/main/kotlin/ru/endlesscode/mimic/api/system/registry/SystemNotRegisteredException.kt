@@ -17,52 +17,42 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system.registry;
+package ru.endlesscode.mimic.api.system.registry
 
 /**
- * Thrown when system hook can't be loaded from registry.
+ * Thrown when system can't be registered from register.
  *
  * @author Osip Fatkullin
  * @since 0.1
  */
-public class SystemNotFoundException extends RegistryOperationException {
+class SystemNotRegisteredException : RegistryOperationException {
+
     /**
      * Constructs extension with no parameters.
      */
-    public SystemNotFoundException() {
-        super();
-    }
+    constructor() : super()
 
     /**
      * Constructs extension with specified cause.
      *
-     * @param cause The cause (which is saved for later retrieval by the
-     *              {@link #getCause()} method). (A {@code null} value is
-     *              permitted, and indicates that the cause is nonexistent or
-     *              unknown)
+     * @param cause the cause (which is saved for later retrieval by the #getCause method).
+     * (A `null` value is permitted, and indicates that the cause is nonexistent or unknown)
      */
-    public SystemNotFoundException(Throwable cause) {
-        super(cause);
-    }
+    constructor(cause: Throwable) : super(cause)
 
     /**
      * Constructs exception with detail message.
      *
-     * @param message The detail message
+     * @param message the detail message
      */
-    public SystemNotFoundException(String message) {
-        super(message);
-    }
+    constructor(message: String) : super(message)
 
     /**
      * Constructs exception with specified detail message and cause.
      *
-     * @param message The detail message
-     * @param cause   The cause (which is saved for later retrieval by the
-     *                {@link #getCause()} method). (A {@code null} value is
-     *                permitted, and indicates that the cause is nonexistent or
+     * @param message the detail message
+     * @param cause the cause (which is saved for later retrieval by the #getCause method).
+     * (A `null` value is permitted, and indicates that the cause is nonexistent or unknown)
      */
-    public SystemNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    constructor(message: String, cause: Throwable) : super(message, cause)
 }

@@ -17,36 +17,23 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.system
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Function;
+import java.util.function.Function
 
 /**
  * Factory to create subsystem instances.
  *
  * @implSpec
- * This interface must be implemented for each Player System
- * (not subsystem).
+ * This interface must be implemented for each Player System (not subsystem).
  *
- * @param <T> SystemType
+ * @param T           System type
+ * @param constructor Function to create system
+ * @param tag         The tag
  * @author Osip Fatkullin
  * @since 0.1
- */
-public class SystemFactory<T extends PlayerSystem> {
-    private final Function<Object, ? extends T> constructor;
-    private final String tag;
-
-    /**
-     * Creates factory for constructing system.
-     *
-     * @param constructor Function to create system
-     */
-    public SystemFactory(Function<Object, ? extends T> constructor, @NotNull String tag) {
-        this.constructor = constructor;
-        this.tag = tag;
-    }
+</T> */
+open class SystemFactory<T : PlayerSystem>(private val constructor: Function<Any, out T>, val tag: String) {
 
     /**
      * Creates new subsystem object with player initialization.
@@ -54,16 +41,7 @@ public class SystemFactory<T extends PlayerSystem> {
      * @param playerArg Player object
      * @return Player system for specified player. Can't be null
      */
-    public @NotNull T get(@NotNull Object playerArg) {
-        return constructor.apply(playerArg);
-    }
-
-    /**
-     * Returns system tag.
-     *
-     * @return The tag
-     */
-    public @NotNull String getTag() {
-        return tag;
+    operator fun get(playerArg: Any): T {
+        return constructor.apply(playerArg)
     }
 }

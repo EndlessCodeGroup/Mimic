@@ -17,17 +17,28 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.system.registry
 
-import org.junit.Test;
+/**
+ * Subsystem priorities.
+ *
+ * Ssubsystem with higher priority will be loaded first. Use priorities to resolve conflicts.
+ *
+ * @author Osip Fatkullin
+ * @since 0.1
+ */
+enum class SubsystemPriority {
+    LOWEST,
+    LOW,
+    NORMAL,
+    HIGH,
+    HIGHEST;
 
-import static org.junit.Assert.assertEquals;
+    companion object {
 
-public class SystemFactoryTest {
-    @Test
-    public void testGet() {
-        ClassSystem classSystem = new BasicClassSystemImpl();
-        SystemFactory<ClassSystem> factory = new SystemFactory<>(arg -> classSystem, "");
-        assertEquals(classSystem, factory.get(""));
+        @JvmStatic
+        fun fromString(string: String): SubsystemPriority {
+            return SubsystemPriority.valueOf(string.toUpperCase())
+        }
     }
 }

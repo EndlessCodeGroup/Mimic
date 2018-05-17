@@ -26,6 +26,7 @@ publishing {
 }
 
 dependencies {
+    implementation kotlinDep
     testImplementation testingDeps.junit
     testImplementation testingDeps.mockito
 }

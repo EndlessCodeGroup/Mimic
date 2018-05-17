@@ -170,13 +170,13 @@ public class LevelSystemTest {
     }
 
     @Test
-    public void testHasExp() {
+    public void testHasExpTotal() {
         this.ls.setLevel(1);
         this.ls.setExp(5);
 
-        assertTrue(this.ls.hasExp(15));
-        assertTrue(this.ls.hasExp(0));
-        assertFalse(this.ls.hasExp(16));
+        assertTrue(this.ls.hasExpTotal(15));
+        assertTrue(this.ls.hasExpTotal(0));
+        assertFalse(this.ls.hasExpTotal(16));
     }
 
     @Test

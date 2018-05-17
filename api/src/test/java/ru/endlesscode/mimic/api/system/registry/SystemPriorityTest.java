@@ -26,15 +26,15 @@ import static org.junit.Assert.assertEquals;
 public class SystemPriorityTest {
     @Test
     public void testValueOf() {
-        assertEquals(SystemPriority.HIGHEST, SystemPriority.fromString("HIGHEST"));
-        assertEquals(SystemPriority.HIGHEST, SystemPriority.fromString("Highest"));
-        assertEquals(SystemPriority.HIGH, SystemPriority.fromString("HIGH"));
-        assertEquals(SystemPriority.HIGH, SystemPriority.fromString("High"));
-        assertEquals(SystemPriority.NORMAL, SystemPriority.fromString("NORMAL"));
-        assertEquals(SystemPriority.NORMAL, SystemPriority.fromString("Normal"));
-        assertEquals(SystemPriority.LOW, SystemPriority.fromString("LOW"));
-        assertEquals(SystemPriority.LOW, SystemPriority.fromString("Low"));
-        assertEquals(SystemPriority.LOWEST, SystemPriority.fromString("LOWEST"));
-        assertEquals(SystemPriority.LOWEST, SystemPriority.fromString("Lowest"));
+        assertEquals(SubsystemPriority.HIGHEST, SubsystemPriority.fromString("HIGHEST"));
+        assertEquals(SubsystemPriority.HIGHEST, SubsystemPriority.fromString("Highest"));
+        assertEquals(SubsystemPriority.HIGH, SubsystemPriority.fromString("HIGH"));
+        assertEquals(SubsystemPriority.HIGH, SubsystemPriority.fromString("High"));
+        assertEquals(SubsystemPriority.NORMAL, SubsystemPriority.fromString("NORMAL"));
+        assertEquals(SubsystemPriority.NORMAL, SubsystemPriority.fromString("Normal"));
+        assertEquals(SubsystemPriority.LOW, SubsystemPriority.fromString("LOW"));
+        assertEquals(SubsystemPriority.LOW, SubsystemPriority.fromString("Low"));
+        assertEquals(SubsystemPriority.LOWEST, SubsystemPriority.fromString("LOWEST"));
+        assertEquals(SubsystemPriority.LOWEST, SubsystemPriority.fromString("Lowest"));
     }
 }

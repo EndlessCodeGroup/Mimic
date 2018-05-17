@@ -27,25 +27,25 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
  * @author Osip Fatkullin
  * @since 0.1
  */
-public class BasicSystemRegistryImpl extends SystemRegistry {
+public class BasicSystemRegistryImpl implements SystemRegistry {
+
     @Override
     public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
             @NotNull Class<? extends SystemFactory<SystemT>> systemFactoryClass) {
         return new SystemFactory<>(arg -> null, "");
     }
 
-
     @Override
-    protected <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerSystem(
-            @NotNull Class<FactoryT> factoryClass, @NotNull
-            FactoryT subsystemFactory,
-            @NotNull SystemPriority priority) {
-
-    }
+    public <SystemT extends PlayerSystem, FactoryT extends SystemFactory<? extends SystemT>> void registerSystem(
+            @NotNull Class<FactoryT> factoryClass,
+            @NotNull FactoryT subsystemFactory,
+            @NotNull SubsystemPriority priority) {}
 
     @Override
     public void unregisterAllSubsystems() {}
 
     @Override
-    public <SubsystemT extends PlayerSystem> void unregisterFactory(@NotNull SystemFactory<? extends SubsystemT> factory) {}
+    public <SubsystemT extends PlayerSystem> void unregisterFactory(
+            @NotNull SystemFactory<? extends SubsystemT> factory
+    ) {}
 }

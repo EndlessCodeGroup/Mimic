@@ -20,7 +20,7 @@
 package ru.endlesscode.mimic.api.system;
 
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Metadata;
+import ru.endlesscode.mimic.api.system.registry.Subsystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ import java.util.List;
  * @author Osip Fatkullin
  * @since 0.1
  */
-@Metadata(classes = {"ru.endlesscode.mimic.api.system.ClassSystem"})
-public class BasicClassSystemImpl extends ClassSystem {
+@Subsystem(classes = {"ru.endlesscode.mimic.api.system.ClassSystem"})
+public class BasicClassSystemImpl implements ClassSystem {
     public static final String TAG = "";
     public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl(), TAG);
 

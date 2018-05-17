@@ -17,17 +17,30 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.ref
 
-import org.junit.Test;
+import org.jetbrains.annotations.NotNull
+import java.lang.ref.WeakReference
 
-import static org.junit.Assert.assertEquals;
+/**
+ * Weak reference that throws [IllegalStateException] if referent objects not exists.
+ *
+ * @param referent object the new weak reference will refer to
+ * @constructor Creates a new weak reference that refers to the given object. The new
+ * reference is not registered with any queue.
+ *
+ * @author Osip Fatkullin
+ * @since 1.0
+ */
+class ExistingWeakReference<T>(referent: T) : WeakReference<T>(referent) {
 
-public class SystemFactoryTest {
-    @Test
-    public void testGet() {
-        ClassSystem classSystem = new BasicClassSystemImpl();
-        SystemFactory<ClassSystem> factory = new SystemFactory<>(arg -> classSystem, "");
-        assertEquals(classSystem, factory.get(""));
+    /**
+     * {@inheritDoc}.
+     *
+     * @throws IllegalStateException If referent object not exists
+     */
+    @NotNull
+    override fun get(): T {
+        return super.get() ?: error("Referent object is null.")
     }
 }
