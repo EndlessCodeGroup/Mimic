@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.api.system.ClassSystem;
 /**
  * Class system adapted for bukkit.
  */
-public abstract class BukkitClassSystem extends ClassSystem {
+public abstract class BukkitClassSystem implements ClassSystem {
 
     protected final ExistingWeakReference<Player> playerRef;
 
