@@ -28,6 +28,6 @@ public class SystemFactoryTest {
     public void testGet() {
         ClassSystem classSystem = new BasicClassSystemImpl();
         SystemFactory<ClassSystem> factory = new SystemFactory<>(arg -> classSystem, "");
-        assertEquals(classSystem, factory.get(null));
+        assertEquals(classSystem, factory.get(""));
     }
 }
