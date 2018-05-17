@@ -46,7 +46,7 @@ class MetadataAdapter<SubsystemT : PlayerSystem> private constructor(private val
          * @throws IllegalArgumentException If [Metadata] not exists
          */
         @JvmStatic
-        fun <SubsystemT : PlayerSystem> getNotNullMeta(theClass: Class<SubsystemT>): MetadataAdapter<SubsystemT> {
+        fun <SubsystemT : PlayerSystem> getNotNullMeta(theClass: Class<out SubsystemT>): MetadataAdapter<SubsystemT> {
 
             val meta = requireNotNull(theClass.getAnnotation(Metadata::class.java)) {
                 "Class not contains metadata."

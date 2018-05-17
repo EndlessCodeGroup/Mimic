@@ -17,25 +17,28 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system.registry;
+package ru.endlesscode.mimic.api.system.registry
 
 /**
  * System priorities.
  *
- * <p>System with higher priority will be loaded first. Use priorities to
- * resolve conflicts.</p>
+ * System with higher priority will be loaded first. Use priorities to resolve conflicts.
  *
  * @author Osip Fatkullin
  * @since 0.1
  */
-public enum SystemPriority {
+enum class SystemPriority {
     LOWEST,
     LOW,
     NORMAL,
     HIGH,
     HIGHEST;
 
-    public static SystemPriority fromString(String string) {
-        return SystemPriority.valueOf(string.toUpperCase());
+    companion object {
+
+        @JvmStatic
+        fun fromString(string: String): SystemPriority {
+            return SystemPriority.valueOf(string.toUpperCase())
+        }
     }
 }
