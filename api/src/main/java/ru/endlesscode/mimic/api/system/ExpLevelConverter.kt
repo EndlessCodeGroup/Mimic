@@ -17,7 +17,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.system
 
 /**
  * This interface contains all methods needed to convert levels
@@ -26,7 +26,7 @@ package ru.endlesscode.mimic.api.system;
  * @author Osip Fatkullin
  * @since 0.1
  */
-public interface ExpLevelConverter {
+interface ExpLevelConverter {
 
     /**
      * Converts experience to full level.
@@ -34,8 +34,9 @@ public interface ExpLevelConverter {
      * @param exp Experience amount
      * @return Amount of full levels
      */
-    public default int expToFullLevel(double exp) {
-        return (int) expToLevel(exp);
+    @JvmDefault
+    fun expToFullLevel(exp: Double): Int {
+        return expToLevel(exp).toInt()
     }
 
     /**
@@ -44,31 +45,39 @@ public interface ExpLevelConverter {
      * @param expValue Experience amount
      * @return Level amount
      */
-    public default double expToLevel(double expValue) {
+    @JvmDefault
+    fun expToLevel(expValue: Double): Double {
         if (expValue < 0) {
-            return 0;
+            return 0.0
         }
 
-        double exp = expValue;
-        double level = 0;
-        double requiredExp;
-        for (int i = 0;; i++) {
-            level++;
+        var exp = expValue
+        var level = 0.0
+        var requiredExp: Double
+        var i = 0
+        while (true) {
+            level++
 
-            requiredExp = getExpToReachNextLevel(i);
-            if (requiredExp == -1) {
-                continue;
+            requiredExp = getExpToReachNextLevel(i)
+            if (requiredExp == -1.0) {
+                if (i == 0) {
+                    i++
+                    continue
+                }
+
+                break
             }
 
-            exp -= requiredExp;
+            exp -= requiredExp
 
             if (exp <= 0) {
-                level += exp / requiredExp;
-                break;
+                level += exp / requiredExp
+                break
             }
+            i++
         }
 
-        return level;
+        return level
     }
 
     /**
@@ -77,16 +86,17 @@ public interface ExpLevelConverter {
      * @param level Player level
      * @return Experience amount to reach given level from 0 exp
      */
-    public default double levelToExp(int level) {
-        double exp = 0;
-        for (int i = 0; i < level; i++) {
-            double expToReachNext = getExpToReachNextLevel(i);
-            if (expToReachNext != -1) {
-                exp += expToReachNext;
+    @JvmDefault
+    fun levelToExp(level: Int): Double {
+        var exp = 0.0
+        for (i in 0 until level) {
+            val expToReachNext = getExpToReachNextLevel(i)
+            if (expToReachNext != -1.0) {
+                exp += expToReachNext
             }
         }
 
-        return exp;
+        return exp
     }
 
     /**
@@ -95,8 +105,9 @@ public interface ExpLevelConverter {
      * @param level Current level
      * @return Experience from current to next level or -1 if level can't be reached
      */
-    public default double getExpToReachNextLevel(int level) {
-        return getExpToReachLevel(level + 1);
+    @JvmDefault
+    fun getExpToReachNextLevel(level: Int): Double {
+        return getExpToReachLevel(level + 1)
     }
 
     /**
@@ -105,5 +116,5 @@ public interface ExpLevelConverter {
      * @param level Needed level
      * @return Experience from previous to needed level or -1 if level can't be reached
      */
-    public double getExpToReachLevel(int level);
+    fun getExpToReachLevel(level: Int): Double
 }
