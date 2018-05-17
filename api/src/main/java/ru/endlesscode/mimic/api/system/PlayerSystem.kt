@@ -17,37 +17,34 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.system
 
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
+import ru.endlesscode.mimic.api.ref.ExistingWeakReference
 
 /**
- * This interface should be implemented by any system that should work
- * with Mimic.
+ * This interface should be implemented by any system that should work with Mimic.
  *
- * <p>Implementation should contain something player-related object to
- * get data from. For this object recommended use
- * {@link ExistingWeakReference}
- * </p>
+ * Implementation should contain something player-related object to get data from.
+ * For this object recommended use [ExistingWeakReference]
  *
  * @author Osip Fatkullin
  * @since 0.1
  */
-public interface PlayerSystem {
+interface PlayerSystem {
+
     /**
      * Returns player-related object.
      *
      * @return Player-related object
      */
-    public @NotNull Object getHandler();
+    val handler: Any
 
     /**
      * Checks if this system is found and enabled.
      *
-     * @return {@code true} if works, otherwise {@code false}
+     * @return true if works, otherwise false
      */
-    public boolean isEnabled();
+    val isEnabled: Boolean
 
     /**
      * Returns the name of system.
@@ -57,5 +54,5 @@ public interface PlayerSystem {
      *
      * @return name of system
      */
-    public @NotNull String getName();
+    val name: String
 }
