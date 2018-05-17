@@ -30,9 +30,11 @@ import ru.endlesscode.mimic.api.system.registry.SystemPriority;
  * @since 0.1
  */
 @Metadata(priority = SystemPriority.LOWEST)
-public class BasicLevelSystemImpl extends LevelSystem {
+public class BasicLevelSystemImpl implements LevelSystem {
     public static final String TAG = "Basic Level System";
     public static final LevelSystem.Factory FACTORY = new LevelSystem.Factory(arg -> new BasicLevelSystemImpl(), TAG);
+
+    private final ExpLevelConverter converter;
 
     private int level;
     private double exp;
@@ -41,7 +43,13 @@ public class BasicLevelSystemImpl extends LevelSystem {
      * Constructor that initialize basic converter.
      */
     public BasicLevelSystemImpl() {
-        super(new BasicConverterImp());
+        this.converter = new BasicConverterImp();
+    }
+
+    @NotNull
+    @Override
+    public ExpLevelConverter getConverter() {
+        return converter;
     }
 
     @Override
@@ -77,13 +85,13 @@ public class BasicLevelSystemImpl extends LevelSystem {
     @Override
     public void setExp(double newExperience) {
         double allowedExp = Math.max(0, newExperience);
-        allowedExp = Math.min(converter.getExpToReachNextLevel(0) - 1, allowedExp);
+        allowedExp = Math.min(getConverter().getExpToReachNextLevel(0) - 1, allowedExp);
 
         this.exp = allowedExp;
     }
 
     @Override
     public double getExpToNextLevel() {
-        return converter.getExpToReachNextLevel(0) - this.exp;
+        return getConverter().getExpToReachNextLevel(0) - this.exp;
     }
 }
