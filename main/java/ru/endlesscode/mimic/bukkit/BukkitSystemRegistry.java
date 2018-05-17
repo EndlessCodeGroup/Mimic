@@ -35,23 +35,27 @@ import ru.endlesscode.mimic.api.system.registry.SystemRegistry;
  * Implementation of system registry for bukkit.
  * Using {@link org.bukkit.plugin.ServicesManager}
  */
-public class BukkitSystemRegistry extends SystemRegistry {
+public class BukkitSystemRegistry implements SystemRegistry {
     private final Plugin plugin;
     private final ServicesManager servicesManager;
+
+    @VisibleForTesting
+    static @NotNull ServicePriority servicePriorityFromSystem(@NotNull SystemPriority priority) {
+        int priorityIndex = priority.ordinal();
+        return ServicePriority.values()[priorityIndex];
+    }
 
     BukkitSystemRegistry(Plugin plugin, ServicesManager servicesManager) {
         this.plugin = plugin;
         this.servicesManager = servicesManager;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
-    protected <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerSystem(
+    public <SystemT extends PlayerSystem, FactoryT extends SystemFactory<? extends SystemT>> void registerSystem(
             @NotNull Class<FactoryT> factoryClass,
             @NotNull FactoryT subsystemFactory,
-            @NotNull SystemPriority priority) {
+            @NotNull SystemPriority priority
+    ) {
         ServicePriority servicePriority = servicePriorityFromSystem(priority);
         this.servicesManager.register(factoryClass, subsystemFactory, this.plugin, servicePriority);
     }
@@ -59,19 +63,10 @@ public class BukkitSystemRegistry extends SystemRegistry {
     /**
      * {@inheritDoc}.
      */
-    @VisibleForTesting
-    static @NotNull ServicePriority servicePriorityFromSystem(@NotNull SystemPriority priority) {
-        int priorityIndex = priority.ordinal();
-        return ServicePriority.values()[priorityIndex];
-    }
-
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
-            @NotNull Class<? extends SystemFactory<SystemT>> factoryClass)
-            throws SystemNotFoundException {
+            @NotNull Class<? extends SystemFactory<SystemT>> factoryClass
+    ) {
         RegisteredServiceProvider<? extends SystemFactory<SystemT>> systemProvider
                 = this.servicesManager.getRegistration(factoryClass);
         if (systemProvider == null) {
@@ -93,8 +88,7 @@ public class BukkitSystemRegistry extends SystemRegistry {
      * {@inheritDoc}.
      */
     @Override
-    public <SubsystemT extends PlayerSystem> void unregisterFactory(
-            @NotNull SystemFactory<? extends SubsystemT> factory) {
+    public <SystemT extends PlayerSystem> void unregisterFactory(@NotNull SystemFactory<? extends SystemT> factory) {
         servicesManager.unregister(factory);
     }
 }
