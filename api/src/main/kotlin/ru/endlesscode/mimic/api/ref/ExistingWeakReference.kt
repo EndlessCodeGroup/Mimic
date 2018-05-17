@@ -19,6 +19,7 @@
 
 package ru.endlesscode.mimic.api.ref
 
+import org.jetbrains.annotations.NotNull
 import java.lang.ref.WeakReference
 
 /**
@@ -36,9 +37,10 @@ class ExistingWeakReference<T>(referent: T) : WeakReference<T>(referent) {
     /**
      * {@inheritDoc}.
      *
-     * @throws IllegalStateException If referent object already not exists
+     * @throws IllegalStateException If referent object not exists
      */
+    @NotNull
     override fun get(): T {
-        return super.get() ?: throw IllegalStateException("Referent object is null")
+        return super.get() ?: error("Referent object is null.")
     }
 }

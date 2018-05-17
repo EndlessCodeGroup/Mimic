@@ -22,37 +22,36 @@ package ru.endlesscode.mimic.api.system.registry
 import ru.endlesscode.mimic.api.system.PlayerSystem
 
 /**
- * Adapter to work with systems `Metadata`.
+ * Adapter to work with systems [Subsystem].
  *
- * @see Metadata
+ * @see Subsystem
  *
  * @param SubsystemT Subsystem type
  * @param meta The metadata
  * @author Osip Fatkullin
  * @since 0.1
  */
-class MetadataAdapter<SubsystemT : PlayerSystem> private constructor(private val meta: Metadata) {
+class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(private val meta: Subsystem) {
 
     companion object {
 
         /**
          * Gets metadata from class annotation. If annotation not exists - throws exception.
          *
-         * @see Metadata
+         * @see Subsystem
          *
          * @param SubsystemT subsystem type
          * @param theClass subsystem class
-         * @return [MetadataAdapter] if metadata exists, otherwise throws exception
-         * @throws IllegalArgumentException If [Metadata] not exists
+         * @return [SubsystemMetaAdapter] if metadata exists, otherwise throws exception
+         * @throws IllegalArgumentException If [Subsystem] not exists
          */
         @JvmStatic
-        fun <SubsystemT : PlayerSystem> getNotNullMeta(theClass: Class<out SubsystemT>): MetadataAdapter<SubsystemT> {
-
-            val meta = requireNotNull(theClass.getAnnotation(Metadata::class.java)) {
-                "Class not contains metadata."
+        fun <SubsystemT : PlayerSystem> getNotNullMeta(theClass: Class<out SubsystemT>): SubsystemMetaAdapter<SubsystemT> {
+            val meta = requireNotNull(theClass.getAnnotation(Subsystem::class.java)) {
+                "Class not contains subsystem annotations."
             }
 
-            return MetadataAdapter(meta)
+            return SubsystemMetaAdapter(meta)
         }
     }
 
@@ -61,7 +60,7 @@ class MetadataAdapter<SubsystemT : PlayerSystem> private constructor(private val
      *
      * @return System priority
      */
-    val priority: SystemPriority get() = meta.priority
+    val priority: SubsystemPriority get() = meta.priority
 
     /**
      * Checks existence of all required classes.
@@ -72,10 +71,7 @@ class MetadataAdapter<SubsystemT : PlayerSystem> private constructor(private val
         val classNames = meta.classes
 
         return try {
-            for (className in classNames) {
-                Class.forName(className)
-            }
-
+            classNames.forEach { Class.forName(it) }
             true
         } catch (e: ClassNotFoundException) {
             false

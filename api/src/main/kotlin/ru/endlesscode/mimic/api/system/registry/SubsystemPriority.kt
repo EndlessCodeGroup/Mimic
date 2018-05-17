@@ -20,32 +20,25 @@
 package ru.endlesscode.mimic.api.system.registry
 
 /**
- * This annotation provides meta-information about factory to load it.
- * You must annotate with this all factories that you've added.
+ * Subsystem priorities.
+ *
+ * Ssubsystem with higher priority will be loaded first. Use priorities to resolve conflicts.
  *
  * @author Osip Fatkullin
  * @since 0.1
  */
-@MustBeDocumented
-@Target(AnnotationTarget.CLASS)
-@Retention
-annotation class Metadata(
+enum class SubsystemPriority {
+    LOWEST,
+    LOW,
+    NORMAL,
+    HIGH,
+    HIGHEST;
 
-        /**
-         * Returns priority of factory
-         *
-         * @return Priority of factory
-         */
-        val priority: SystemPriority = SystemPriority.NORMAL,
+    companion object {
 
-        /**
-         * Returns classes that should exists for all systems working
-         *
-         * @implSpec
-         * Example for SkillAPI:
-         * system = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
-         *
-         * @return array of [String] with class names
-         */
-        val classes: Array<String> = []
-)
+        @JvmStatic
+        fun fromString(string: String): SubsystemPriority {
+            return SubsystemPriority.valueOf(string.toUpperCase())
+        }
+    }
+}

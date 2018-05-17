@@ -28,21 +28,21 @@ import ru.endlesscode.mimic.api.system.WrongClassSystemImpl;
 
 import static org.junit.Assert.*;
 
-public class MetadataAdapterTest {
-    private MetadataAdapter<BasicLevelSystemImpl> levelSystemMeta;
-    private MetadataAdapter<BasicClassSystemImpl> classSystemMeta;
-    private MetadataAdapter<WrongClassSystemImpl> wrongSystemMeta;
+public class SubsystemAdapterTest {
+    private SubsystemMetaAdapter<BasicLevelSystemImpl> levelSystemMeta;
+    private SubsystemMetaAdapter<BasicClassSystemImpl> classSystemMeta;
+    private SubsystemMetaAdapter<WrongClassSystemImpl> wrongSystemMeta;
 
     @Before
     public void setUp() {
-        levelSystemMeta = MetadataAdapter.getNotNullMeta(BasicLevelSystemImpl.class);
-        classSystemMeta = MetadataAdapter.getNotNullMeta(BasicClassSystemImpl.class);
-        wrongSystemMeta = MetadataAdapter.getNotNullMeta(WrongClassSystemImpl.class);
+        levelSystemMeta = SubsystemMetaAdapter.getNotNullMeta(BasicLevelSystemImpl.class);
+        classSystemMeta = SubsystemMetaAdapter.getNotNullMeta(BasicClassSystemImpl.class);
+        wrongSystemMeta = SubsystemMetaAdapter.getNotNullMeta(WrongClassSystemImpl.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGettingMetaFromWrongClassMustThrowException() {
-        MetadataAdapter.getNotNullMeta(PlayerSystem.class);
+        SubsystemMetaAdapter.getNotNullMeta(PlayerSystem.class);
     }
 
     @Test
@@ -61,8 +61,8 @@ public class MetadataAdapterTest {
 
     @Test
     public void testGettingPriority() {
-        assertEquals(SystemPriority.LOWEST, levelSystemMeta.getPriority());
-        assertEquals(SystemPriority.NORMAL, classSystemMeta.getPriority());
-        assertEquals(SystemPriority.HIGH, wrongSystemMeta.getPriority());
+        assertEquals(SubsystemPriority.LOWEST, levelSystemMeta.getPriority());
+        assertEquals(SubsystemPriority.NORMAL, classSystemMeta.getPriority());
+        assertEquals(SubsystemPriority.HIGH, wrongSystemMeta.getPriority());
     }
 }

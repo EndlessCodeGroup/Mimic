@@ -29,7 +29,7 @@ import java.util.List;
  * @author Osip Fatkullin
  * @since 0.1
  */
-@Metadata
+@Subsystem
 public class WrongFactoryClassSystemImpl implements ClassSystem {
     private WrongFactoryClassSystemImpl() {
         // Wrong constructor

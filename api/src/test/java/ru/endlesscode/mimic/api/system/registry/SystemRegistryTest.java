@@ -48,13 +48,13 @@ public class SystemRegistryTest {
         verify(registry).registerSystem(
                 eq(LevelSystem.Factory.class),
                 eq(BasicLevelSystemImpl.FACTORY),
-                any(SystemPriority.class));
+                any(SubsystemPriority.class));
 
         registry.registerSubsystem(BasicClassSystemImpl.class);
         verify(registry).registerSystem(
                 eq(ClassSystem.Factory.class),
                 eq(BasicClassSystemImpl.FACTORY),
-                any(SystemPriority.class));
+                any(SubsystemPriority.class));
     }
 
     @Test

@@ -32,9 +32,9 @@ import ru.endlesscode.mimic.api.system.PlayerSystem;
 public class RegisteredSystemProvider<SubsystemT extends PlayerSystem> implements Comparable<RegisteredSystemProvider<?>> {
     private final Class<?> system;
     private final SubsystemT provider;
-    private final SystemPriority priority;
+    private final SubsystemPriority priority;
 
-    public RegisteredSystemProvider(Class<?> system, SubsystemT provider, SystemPriority priority) {
+    public RegisteredSystemProvider(Class<?> system, SubsystemT provider, SubsystemPriority priority) {
         this.system = system;
         this.provider = provider;
         this.priority = priority;
@@ -48,7 +48,7 @@ public class RegisteredSystemProvider<SubsystemT extends PlayerSystem> implement
         return provider;
     }
 
-    public SystemPriority getPriority() {
+    public SubsystemPriority getPriority() {
         return priority;
     }
 

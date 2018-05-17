@@ -39,7 +39,7 @@ public class BasicSystemRegistryImpl implements SystemRegistry {
     public <SystemT extends PlayerSystem, FactoryT extends SystemFactory<? extends SystemT>> void registerSystem(
             @NotNull Class<FactoryT> factoryClass,
             @NotNull FactoryT subsystemFactory,
-            @NotNull SystemPriority priority) {}
+            @NotNull SubsystemPriority priority) {}
 
     @Override
     public void unregisterAllSubsystems() {}

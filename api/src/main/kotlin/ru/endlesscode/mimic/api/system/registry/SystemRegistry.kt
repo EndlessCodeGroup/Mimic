@@ -94,7 +94,7 @@ interface SystemRegistry {
             subsystemClass: Class<out SystemT>,
             givenFactory: SystemFactory<out SystemT>?
     ) {
-        val meta = MetadataAdapter.getNotNullMeta(subsystemClass)
+        val meta = SubsystemMetaAdapter.getNotNullMeta(subsystemClass)
         if (!meta.requiredClassesExists()) {
             throw SystemNotNeededException("Required classes for '${subsystemClass.simpleName}' not found.")
         }
@@ -137,7 +137,7 @@ interface SystemRegistry {
     fun <SystemT : PlayerSystem, FactoryT : SystemFactory<out SystemT>> registerSystem(
             factoryClass: Class<FactoryT>,
             subsystemFactory: FactoryT,
-            priority: SystemPriority
+            priority: SubsystemPriority
     )
 
     /**

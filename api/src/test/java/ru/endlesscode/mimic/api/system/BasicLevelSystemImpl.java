@@ -20,8 +20,8 @@
 package ru.endlesscode.mimic.api.system;
 
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Metadata;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.api.system.registry.Subsystem;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
 /**
  * Basic implementation of LevelSystem independent from player-related object.
@@ -29,7 +29,7 @@ import ru.endlesscode.mimic.api.system.registry.SystemPriority;
  * @author Osip Fatkullin
  * @since 0.1
  */
-@Metadata(priority = SystemPriority.LOWEST)
+@Subsystem(priority = SubsystemPriority.LOWEST)
 public class BasicLevelSystemImpl implements LevelSystem {
     public static final String TAG = "Basic Level System";
     public static final LevelSystem.Factory FACTORY = new LevelSystem.Factory(arg -> new BasicLevelSystemImpl(), TAG);

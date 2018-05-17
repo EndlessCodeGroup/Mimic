@@ -20,8 +20,8 @@
 package ru.endlesscode.mimic.api.system;
 
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Metadata;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.api.system.registry.Subsystem;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,8 @@ import java.util.List;
  * @author Osip Fatkullin
  * @since 0.1
  */
-@Metadata(
-        priority = SystemPriority.HIGH,
+@Subsystem(
+        priority = SubsystemPriority.HIGH,
         classes = {"ru.endlesscode.mimic.api.WrongClass"})
 public class WrongClassSystemImpl implements ClassSystem {
     private final List<String> classes = new ArrayList<>();
