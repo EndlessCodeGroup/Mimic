@@ -28,9 +28,10 @@ import ru.endlesscode.mimic.api.system.LevelSystem;
 /**
  * Level system adapted for bukkit.
  */
-public abstract class BukkitLevelSystem extends LevelSystem {
+public abstract class BukkitLevelSystem implements LevelSystem {
 
     protected final ExistingWeakReference<Player> playerRef;
+    private final ExpLevelConverter converter;
 
     /**
      * Constructor that initialize converter.
@@ -39,9 +40,15 @@ public abstract class BukkitLevelSystem extends LevelSystem {
      * @param player    The player
      */
     BukkitLevelSystem(@NotNull ExpLevelConverter converter, Player player) {
-        super(converter);
+        this.converter = converter;
 
         this.playerRef = new ExistingWeakReference<>(player);
+    }
+
+    @NotNull
+    @Override
+    public ExpLevelConverter getConverter() {
+        return converter;
     }
 
     /**

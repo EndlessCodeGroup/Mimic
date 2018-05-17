@@ -21,13 +21,13 @@ package ru.endlesscode.mimic.bukkit.system;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Metadata;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.api.system.registry.Subsystem;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
 /**
  * Vanilla experience bar system.
  */
-@Metadata(priority = SystemPriority.LOWEST)
+@Subsystem(priority = SubsystemPriority.LOWEST)
 public class VanillaLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "Vanilla Level System";
     public static final Factory FACTORY = new Factory(playerObj -> new VanillaLevelSystem((Player) playerObj), TAG);
@@ -62,7 +62,7 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
     @Override
     public double getExp() {
         int level = getLevel();
-        double expToLevel = converter.getExpToReachNextLevel(level);
+        double expToLevel = getConverter().getExpToReachNextLevel(level);
 
         Player player = playerRef.get();
         return expToLevel * player.getExp();
@@ -74,7 +74,7 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
     @Override
     public void setExp(double newExperience) {
         int level = getLevel();
-        double expToNextLevel = converter.getExpToReachNextLevel(level);
+        double expToNextLevel = getConverter().getExpToReachNextLevel(level);
         double allowedExperience = Math.max(0, newExperience);
         allowedExperience = Math.min(allowedExperience, expToNextLevel);
 

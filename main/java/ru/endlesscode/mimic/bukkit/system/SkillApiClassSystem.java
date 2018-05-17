@@ -24,8 +24,8 @@ import com.sucy.skill.api.player.PlayerClass;
 import com.sucy.skill.api.player.PlayerData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Metadata;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.api.system.registry.Subsystem;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,8 +34,8 @@ import java.util.List;
 /**
  * It's implementation of ClassSystem that uses SkillAPI.
  */
-@Metadata(
-        priority = SystemPriority.NORMAL,
+@Subsystem(
+        priority = SubsystemPriority.NORMAL,
         classes = {"com.sucy.skill.SkillAPI"})
 public class SkillApiClassSystem extends BukkitClassSystem {
     public static final String TAG = "SkillAPI";

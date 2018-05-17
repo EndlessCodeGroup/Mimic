@@ -27,8 +27,8 @@ import ru.endlesscode.mimic.api.system.ClassSystem;
 import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 import ru.endlesscode.mimic.api.system.registry.SystemNotFoundException;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
 import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
 import ru.endlesscode.mimic.bukkit.system.TestSystem;
 import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
@@ -67,11 +67,11 @@ public class BukkitSystemRegistryTest extends BukkitTestBase {
 
     @Test
     public void testGetServicePriorityFromSystem() {
-        assertEquals(ServicePriority.Lowest, BukkitSystemRegistry.servicePriorityFromSystem(SystemPriority.LOWEST));
-        assertEquals(ServicePriority.Low, BukkitSystemRegistry.servicePriorityFromSystem(SystemPriority.LOW));
-        assertEquals(ServicePriority.Normal, BukkitSystemRegistry.servicePriorityFromSystem(SystemPriority.NORMAL));
-        assertEquals(ServicePriority.High, BukkitSystemRegistry.servicePriorityFromSystem(SystemPriority.HIGH));
-        assertEquals(ServicePriority.Highest, BukkitSystemRegistry.servicePriorityFromSystem(SystemPriority.HIGHEST));
+        assertEquals(ServicePriority.Lowest, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.LOWEST));
+        assertEquals(ServicePriority.Low, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.LOW));
+        assertEquals(ServicePriority.Normal, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.NORMAL));
+        assertEquals(ServicePriority.High, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.HIGH));
+        assertEquals(ServicePriority.Highest, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.HIGHEST));
     }
 
     @Test

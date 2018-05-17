@@ -27,8 +27,8 @@ import org.bukkit.plugin.ServicesManager;
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 import ru.endlesscode.mimic.api.system.registry.SystemNotFoundException;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
 import ru.endlesscode.mimic.api.system.registry.SystemRegistry;
 
 /**
@@ -40,7 +40,7 @@ public class BukkitSystemRegistry implements SystemRegistry {
     private final ServicesManager servicesManager;
 
     @VisibleForTesting
-    static @NotNull ServicePriority servicePriorityFromSystem(@NotNull SystemPriority priority) {
+    static @NotNull ServicePriority servicePriorityFromSystem(@NotNull SubsystemPriority priority) {
         int priorityIndex = priority.ordinal();
         return ServicePriority.values()[priorityIndex];
     }
@@ -54,7 +54,7 @@ public class BukkitSystemRegistry implements SystemRegistry {
     public <SystemT extends PlayerSystem, FactoryT extends SystemFactory<? extends SystemT>> void registerSystem(
             @NotNull Class<FactoryT> factoryClass,
             @NotNull FactoryT subsystemFactory,
-            @NotNull SystemPriority priority
+            @NotNull SubsystemPriority priority
     ) {
         ServicePriority servicePriority = servicePriorityFromSystem(priority);
         this.servicesManager.register(factoryClass, subsystemFactory, this.plugin, servicePriority);

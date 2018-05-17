@@ -22,8 +22,8 @@ package ru.endlesscode.mimic.bukkit.system;
 import me.robin.battlelevels.api.BattleLevelsAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Metadata;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.api.system.registry.Subsystem;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
 import java.util.UUID;
 
@@ -31,8 +31,8 @@ import java.util.UUID;
 /**
  * It's implementation of LevelSystem that uses BattleLevels.
  */
-@Metadata(
-        priority = SystemPriority.NORMAL,
+@Subsystem(
+        priority = SubsystemPriority.NORMAL,
         classes = {"me.robin.battlelevels.api.BattleLevelsAPI"})
 public class BattleLevelsLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "BattleLevels";

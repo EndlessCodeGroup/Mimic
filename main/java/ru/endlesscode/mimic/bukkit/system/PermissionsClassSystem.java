@@ -23,8 +23,8 @@ import com.google.common.annotations.VisibleForTesting;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Metadata;
-import ru.endlesscode.mimic.api.system.registry.SystemPriority;
+import ru.endlesscode.mimic.api.system.registry.Subsystem;
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ import java.util.Set;
  *      - mimic.class.ClassTwo
  * First of classes will be primary.
  */
-@Metadata(priority = SystemPriority.LOWEST)
+@Subsystem(priority = SubsystemPriority.LOWEST)
 public class PermissionsClassSystem extends BukkitClassSystem {
     public static final String TAG = "Permission Class System";
     public static final Factory FACTORY = new Factory(playerObj -> new PermissionsClassSystem((Player) playerObj), TAG);
