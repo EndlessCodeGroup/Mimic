@@ -1,6 +1,0 @@
-[submodule "config"]
-	path = config
-	url = https://github.com/EndlessCodeGroup/CommonConfigs.git
-[submodule "bukkit"]
-	path = bukkit
-	url = https://github.com/EndlessCodeGroup/BukkitMimic.git
