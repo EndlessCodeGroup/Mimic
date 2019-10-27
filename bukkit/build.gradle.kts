@@ -35,10 +35,8 @@ dependencies {
     compileOnly(bukkit)
     implementation(deps.acf)
 
-    compileOnly(
-        deps.skillApi,
-        deps.battleLevelsApi
-    )
+    compileOnly(deps.skillApi)
+    compileOnly(deps.battleLevelsApi)
 }
 
 tasks.shadowJar {
