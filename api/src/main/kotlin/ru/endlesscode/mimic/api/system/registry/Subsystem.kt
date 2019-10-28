@@ -31,21 +31,14 @@ package ru.endlesscode.mimic.api.system.registry
 @MustBeDocumented
 annotation class Subsystem(
 
-        /**
-         * Returns priority of subsystem
-         *
-         * @return Priority of subsystem
-         */
-        val priority: SubsystemPriority = SubsystemPriority.NORMAL,
+    /** Priority of subsystem. */
+    val priority: SubsystemPriority = SubsystemPriority.NORMAL,
 
-        /**
-         * Returns classes that should exists for subsystem working
-         *
-         * @implSpec
-         * Example for SkillAPI:
-         * system = {"com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"}
-         *
-         * @return array of string with class names
-         */
-        val classes: Array<String> = []
+    /**
+     * Classes that should exists for subsystem working.
+     *
+     * Example for SkillAPI:
+     * system = ["com.sucy.skill.SkillAPI", "com.sucy.skill.api.player.PlayerData"]
+     */
+    val classes: Array<String> = []
 )

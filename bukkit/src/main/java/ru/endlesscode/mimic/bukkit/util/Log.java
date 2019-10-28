@@ -65,9 +65,9 @@ public class Log {
      *
      * @param message Debug message
      */
-    public static void d(String message) {
+    public static void d(String message, Object... args) {
         if (debug) {
-            logger.warning("[DEBUG] " + message);
+            logger.warning("[DEBUG] " + String.format(message, args));
         }
     }
 

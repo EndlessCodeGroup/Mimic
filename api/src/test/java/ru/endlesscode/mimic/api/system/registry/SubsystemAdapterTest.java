@@ -35,14 +35,14 @@ public class SubsystemAdapterTest {
 
     @Before
     public void setUp() {
-        levelSystemMeta = SubsystemMetaAdapter.getNotNullMeta(BasicLevelSystemImpl.class);
-        classSystemMeta = SubsystemMetaAdapter.getNotNullMeta(BasicClassSystemImpl.class);
-        wrongSystemMeta = SubsystemMetaAdapter.getNotNullMeta(WrongClassSystemImpl.class);
+        levelSystemMeta = SubsystemMetaAdapter.fromClass(BasicLevelSystemImpl.class);
+        classSystemMeta = SubsystemMetaAdapter.fromClass(BasicClassSystemImpl.class);
+        wrongSystemMeta = SubsystemMetaAdapter.fromClass(WrongClassSystemImpl.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGettingMetaFromWrongClassMustThrowException() {
-        SubsystemMetaAdapter.getNotNullMeta(PlayerSystem.class);
+        SubsystemMetaAdapter.fromClass(PlayerSystem.class);
     }
 
     @Test

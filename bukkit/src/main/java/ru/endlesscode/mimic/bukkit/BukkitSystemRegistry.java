@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.api.system.registry.SystemNotFoundException;
 import ru.endlesscode.mimic.api.system.registry.SystemRegistry;
 
 /**
@@ -64,16 +63,17 @@ public class BukkitSystemRegistry implements SystemRegistry {
      * {@inheritDoc}.
      */
     @Override
-    public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
+    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
             @NotNull Class<? extends SystemFactory<SystemT>> factoryClass
     ) {
         RegisteredServiceProvider<? extends SystemFactory<SystemT>> systemProvider
                 = this.servicesManager.getRegistration(factoryClass);
-        if (systemProvider == null) {
-            throw new SystemNotFoundException(String.format("No one system '%s' found", factoryClass.getName()));
-        }
 
-        return systemProvider.getProvider();
+        if (systemProvider != null) {
+            return systemProvider.getProvider();
+        } else {
+            return null;
+        }
     }
 
     /**

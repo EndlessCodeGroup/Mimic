@@ -38,38 +38,37 @@ import ru.endlesscode.mimic.api.system.SystemFactory
 interface SystemRegistry {
 
     /**
-     * Registers hook of subsystem that given as class. Use registering
-     * with instance instead, if you can. Because this method is a slower.
+     * Registers hook of subsystem that given as class. Use registering with instance instead,
+     * if you can. Because this method is slightly slower.
      *
      * @param SystemT        System type
      * @param subsystemClass Class of the subsystem
+     * @return `true` if subsystem registered, or `false` if registration not needed
      * @throws SystemNotRegisteredException If registering failed
-     * @throws SystemNotNeededException     If registering not needed
      */
     @JvmDefault
-    fun <SystemT : PlayerSystem> registerSubsystem(subsystemClass: Class<out SystemT>) {
-        this.registerSubsystem(subsystemClass, null)
+    fun <SystemT : PlayerSystem> registerSubsystem(subsystemClass: Class<out SystemT>): Boolean {
+        return this.registerSubsystem(subsystemClass, null)
     }
 
     /**
      * Adds hook of subsystem if subsystem is can be added.
      *
-     * @implNote
      * If registering fails, will be thrown exception.
      *
      * @param SystemT        System type
      * @param subsystemClass Class of the subsystem
      * @param systemFactory  Subsystem factory (can be null)
+     * @return `true` if subsystem registered, or `false` if registration not needed
      * @throws SystemNotRegisteredException If registering failed
-     * @throws SystemNotNeededException     If registering not needed
      */
     @JvmDefault
     fun <SystemT : PlayerSystem> registerSubsystem(
-            subsystemClass: Class<out SystemT>,
-            systemFactory: SystemFactory<out SystemT>? = null
-    ) {
+        subsystemClass: Class<out SystemT>,
+        systemFactory: SystemFactory<out SystemT>? = null
+    ): Boolean {
         try {
-            this.tryToRegisterSubsystem(subsystemClass, systemFactory)
+            return this.tryToRegisterSubsystem(subsystemClass, systemFactory)
         } catch (e: IllegalArgumentException) {
             throw SystemNotRegisteredException("System didn't registered.", e)
         } catch (e: ClassCastException) {
@@ -78,35 +77,34 @@ interface SystemRegistry {
     }
 
     /**
-     * Tries to register given factory. If hook failed throws exception.
+     * Tries to register given factory.
      *
-     * @implNote
      * If [givenFactory] is null, it gets from class. You can override
      * [getSubsystemFactory] to change factory getting algorithm.
      *
      * @param SystemT        System type
      * @param subsystemClass Class of the subsystem
      * @param givenFactory   Instance of the subsystem factory (can be null)
-     * @throws SystemNotNeededException If some requirements aren't met
+     * @return `true` if subsystem registered, or `false` if registration not needed
      */
     @JvmDefault
     fun <SystemT : PlayerSystem> tryToRegisterSubsystem(
-            subsystemClass: Class<out SystemT>,
-            givenFactory: SystemFactory<out SystemT>?
-    ) {
-        val meta = SubsystemMetaAdapter.getNotNullMeta(subsystemClass)
-        if (!meta.requiredClassesExists()) {
-            throw SystemNotNeededException("Required classes for '${subsystemClass.simpleName}' not found.")
+        subsystemClass: Class<out SystemT>,
+        givenFactory: SystemFactory<out SystemT>?
+    ): Boolean {
+        val meta = SubsystemMetaAdapter.fromClass(subsystemClass)
+        return if (meta.requiredClassesExists()) {
+            val factory = givenFactory ?: this.getSubsystemFactory(subsystemClass)
+            this.registerSystem(factory.javaClass, factory, meta.priority)
+            true
+        } else {
+            false
         }
-
-        val factory = givenFactory ?: this.getSubsystemFactory(subsystemClass)
-        this.registerSystem(factory.javaClass, factory, meta.priority)
     }
 
     /**
      * Gets and returns factory from given class.
      *
-     * @implSpec
      * Should not return null. Throw [IllegalArgumentException] instead.
      * In every subsystem needed to create factory
      *
@@ -119,7 +117,7 @@ interface SystemRegistry {
     fun <SystemT : PlayerSystem> getSubsystemFactory(subsystemClass: Class<out SystemT>): SystemFactory<out SystemT> {
         try {
             @Suppress("UNCHECKED_CAST")
-            return  subsystemClass.getField("FACTORY").get(null) as SystemFactory<out SystemT>
+            return subsystemClass.getField("FACTORY").get(null) as SystemFactory<out SystemT>
         } catch (e: ReflectiveOperationException) {
             throw IllegalArgumentException("Factory not found in given class", e)
         }
@@ -135,9 +133,9 @@ interface SystemRegistry {
      * @param priority         Subsystem priority
      */
     fun <SystemT : PlayerSystem, FactoryT : SystemFactory<out SystemT>> registerSystem(
-            factoryClass: Class<FactoryT>,
-            subsystemFactory: FactoryT,
-            priority: SubsystemPriority
+        factoryClass: Class<FactoryT>,
+        subsystemFactory: FactoryT,
+        priority: SubsystemPriority
     )
 
     /**
@@ -147,30 +145,23 @@ interface SystemRegistry {
      *
      * @param SystemT     System type
      * @param systemClass System class
-     * @return System factory
-     * @throws SystemNotFoundException If needed system not found in registry
+     * @return System factory or `null` if system factory not found in registry.
      */
     @JvmDefault
-    fun <SystemT : PlayerSystem> getSystemFactory(systemClass: Class<SystemT>): SystemFactory<SystemT> {
-        try {
-            val factoryClass = getFactoryClass(systemClass)
-            return getFactory(factoryClass)
-        } catch (e: IllegalArgumentException) {
-            throw SystemNotFoundException("Wrong system class.", e)
-        }
-
+    fun <SystemT : PlayerSystem> getSystemFactory(systemClass: Class<SystemT>): SystemFactory<SystemT>? {
+        val factoryClass = getFactoryClass(systemClass)
+        return getFactory(factoryClass)
     }
 
     /**
      * Gets inner factory class from given system class.
      *
-     * @implNote
      * Each Player System must contains inner factory class.
      *
      * @param SystemT   System type
      * @param systemClass System class
      * @return Inner factory class from system class
-     * @throws IllegalArgumentException  If needed system factory not found in registry
+     * @throws IllegalArgumentException If needed system factory not found in registry
      * @since 0.1
      */
     @JvmDefault
@@ -187,20 +178,15 @@ interface SystemRegistry {
     /**
      * Gets system factory by factory class.
      *
-     * @implSpec
-     * Never return null. Throw exception instead.
-     *
      * @param SystemT      System type
      * @param factoryClass Factory class
-     * @return System factory
-     * @throws SystemNotFoundException If factory for needed system not found in registry
+     * @return System factory or `null` if system factory not found.
      */
-    fun <SystemT : PlayerSystem> getFactory(factoryClass: Class<out SystemFactory<SystemT>>): SystemFactory<SystemT>
+    fun <SystemT : PlayerSystem> getFactory(factoryClass: Class<out SystemFactory<SystemT>>): SystemFactory<SystemT>?
 
     /**
      * Unregisters all subsystems.
      *
-     * @apiNote
      * Use it before plugin disabling
      */
     fun unregisterAllSubsystems()

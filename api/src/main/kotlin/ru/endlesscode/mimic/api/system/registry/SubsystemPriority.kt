@@ -35,10 +35,9 @@ enum class SubsystemPriority {
     HIGHEST;
 
     companion object {
-
         @JvmStatic
         fun fromString(string: String): SubsystemPriority {
-            return SubsystemPriority.valueOf(string.toUpperCase())
+            return valueOf(string.toUpperCase())
         }
     }
 }

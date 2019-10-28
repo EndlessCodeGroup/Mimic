@@ -28,8 +28,7 @@ import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.WrongClassSystemImpl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -72,11 +71,9 @@ public class SystemRegistryTest {
         fail("Must be thrown exception");
     }
 
-    @Test(expected = SystemNotNeededException.class)
+    @Test
     public void testAddNotNeededSubsystem() {
-        registry.registerSubsystem(WrongClassSystemImpl.class);
-
-        fail("Must be thrown exception");
+        assertFalse(registry.registerSubsystem(WrongClassSystemImpl.class));
     }
 
     @Test
@@ -85,11 +82,9 @@ public class SystemRegistryTest {
         verify(registry).getFactory(LevelSystem.Factory.class);
     }
 
-    @Test(expected = SystemNotFoundException.class)
+    @Test
     public void testGetSystemFactoryMustThrowException() {
-        registry.getSystemFactory(WrongFactoryClassSystemImpl.class);
-
-        fail("Must throw exception!");
+        assertNull(registry.getSystemFactory(WrongFactoryClassSystemImpl.class));
     }
 
     @Test

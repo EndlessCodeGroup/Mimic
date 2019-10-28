@@ -27,7 +27,7 @@ bukkit {
 }
 
 repositories {
-    maven(url = "https://raw.github.com/EndlessCodeGroup/mvn-repo/master/")
+    maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
     maven(url = "https://repo.aikar.co/content/groups/aikar/")
 }
 
@@ -37,6 +37,8 @@ dependencies {
 
     compileOnly(deps.skillApi)
     compileOnly(deps.battleLevelsApi)
+
+    testImplementation(bukkit)
 }
 
 tasks.shadowJar {

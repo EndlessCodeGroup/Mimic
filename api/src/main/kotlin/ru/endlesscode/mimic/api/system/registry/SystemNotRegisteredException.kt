@@ -25,34 +25,4 @@ package ru.endlesscode.mimic.api.system.registry
  * @author Osip Fatkullin
  * @since 0.1
  */
-class SystemNotRegisteredException : RegistryOperationException {
-
-    /**
-     * Constructs extension with no parameters.
-     */
-    constructor() : super()
-
-    /**
-     * Constructs extension with specified cause.
-     *
-     * @param cause the cause (which is saved for later retrieval by the #getCause method).
-     * (A `null` value is permitted, and indicates that the cause is nonexistent or unknown)
-     */
-    constructor(cause: Throwable) : super(cause)
-
-    /**
-     * Constructs exception with detail message.
-     *
-     * @param message the detail message
-     */
-    constructor(message: String) : super(message)
-
-    /**
-     * Constructs exception with specified detail message and cause.
-     *
-     * @param message the detail message
-     * @param cause the cause (which is saved for later retrieval by the #getCause method).
-     * (A `null` value is permitted, and indicates that the cause is nonexistent or unknown)
-     */
-    constructor(message: String, cause: Throwable) : super(message, cause)
-}
+class SystemNotRegisteredException(message: String, cause: Throwable) : RuntimeException(message, cause)

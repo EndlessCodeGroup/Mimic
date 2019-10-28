@@ -28,7 +28,6 @@ import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.api.system.registry.SystemNotFoundException;
 import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
 import ru.endlesscode.mimic.bukkit.system.TestSystem;
 import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
@@ -60,9 +59,9 @@ public class BukkitSystemRegistryTest extends BukkitTestBase {
         assertNotNull("System must be initialized", classSystemFactory);
     }
 
-    @Test(expected = SystemNotFoundException.class)
-    public void testGetNotRegisteredSystemMustThrowException() throws Exception {
-        this.systemRegistry.getSystemFactory(TestSystem.class);
+    @Test
+    public void testGetNotRegisteredSystemMustReturnNull() throws Exception {
+        checkSystemNotExists(TestSystem.class);
     }
 
     @Test
@@ -81,8 +80,8 @@ public class BukkitSystemRegistryTest extends BukkitTestBase {
 
         this.systemRegistry.unregisterAllSubsystems();
 
-        checkSystemExistence(LevelSystem.class);
-        checkSystemExistence(ClassSystem.class);
+        checkSystemNotExists(LevelSystem.class);
+        checkSystemNotExists(ClassSystem.class);
     }
 
     @Test
@@ -90,23 +89,17 @@ public class BukkitSystemRegistryTest extends BukkitTestBase {
         this.systemRegistry.registerSubsystem(PermissionsClassSystem.class);
         this.systemRegistry.unregisterFactory(PermissionsClassSystem.FACTORY);
 
-        checkSystemExistence(ClassSystem.class);
+        checkSystemNotExists(ClassSystem.class);
     }
 
     @Test
     public void testUnregisterNotExistingFactoryMustBeSuccessful() {
         this.systemRegistry.unregisterFactory(PermissionsClassSystem.FACTORY);
 
-        checkSystemExistence(ClassSystem.class);
+        checkSystemNotExists(ClassSystem.class);
     }
 
-    private <SystemT extends PlayerSystem> void checkSystemExistence(Class<SystemT> systemClass) {
-        try {
-            this.systemRegistry.getSystemFactory(systemClass);
-        } catch (SystemNotFoundException ignored) {
-            return;
-        }
-
-        fail("System must be not registered");
+    private <SystemT extends PlayerSystem> void checkSystemNotExists(Class<SystemT> systemClass) {
+        assertNull(this.systemRegistry.getSystemFactory(systemClass));
     }
 }

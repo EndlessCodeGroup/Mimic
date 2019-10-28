@@ -25,7 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.endlesscode.mimic.api.system.ClassSystem;
 import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
-import ru.endlesscode.mimic.api.system.registry.SystemNotNeededException;
+import ru.endlesscode.mimic.api.system.SystemFactory;
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException;
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand;
 import ru.endlesscode.mimic.bukkit.command.CommandUtil;
@@ -90,13 +90,14 @@ public class BukkitMimic extends JavaPlugin {
 
     private <T extends PlayerSystem> void hookSystem(Class<? extends T> system) {
         try {
-            this.systemRegistry.registerSubsystem(system);
-            Log.d(String.format("Subsystem '%s' registered.", system.getSimpleName()));
+            if (this.systemRegistry.registerSubsystem(system)) {
+                Log.d("Subsystem '%s' registered.", system.getSimpleName());
+            } else {
+                Log.d("Subsystem '%s' not needed. Skipped.", system.getSimpleName());
+            }
         } catch (SystemNotRegisteredException e) {
             logger.warning(system.getSimpleName() + ": " + e.getMessage());
             Log.d(e);
-        } catch (SystemNotNeededException e) {
-            Log.d(String.format("Subsystem '%s' not registered: %s", system.getSimpleName(), e.getMessage()));
         }
     }
 
@@ -111,8 +112,16 @@ public class BukkitMimic extends JavaPlugin {
 
         CommandUtil util = new CommandUtil();
         manager.registerCommand(new MimicCommand(util));
-        manager.registerCommand(new LevelSystemSubcommand(systemRegistry.getSystemFactory(LevelSystem.class), util));
-        manager.registerCommand(new ClassSystemSubcommand(systemRegistry.getSystemFactory(ClassSystem.class), util));
+
+        SystemFactory<LevelSystem> levelSystemFactory = systemRegistry.getSystemFactory(LevelSystem.class);
+        if (levelSystemFactory != null) {
+            manager.registerCommand(new LevelSystemSubcommand(levelSystemFactory, util));
+        }
+
+        SystemFactory<ClassSystem> classSystemFactory = systemRegistry.getSystemFactory(ClassSystem.class);
+        if (classSystemFactory != null) {
+            manager.registerCommand(new ClassSystemSubcommand(classSystemFactory, util));
+        }
     }
 
     @Override
