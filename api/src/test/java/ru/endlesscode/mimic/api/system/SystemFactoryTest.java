@@ -27,7 +27,7 @@ public class SystemFactoryTest {
     @Test
     public void testGet() {
         ClassSystem classSystem = new BasicClassSystemImpl();
-        SystemFactory<ClassSystem> factory = new SystemFactory<>(arg -> classSystem, "");
+        SystemFactory<ClassSystem> factory = new SystemFactory<>("", arg -> classSystem);
         assertEquals(classSystem, factory.get(""));
     }
 }

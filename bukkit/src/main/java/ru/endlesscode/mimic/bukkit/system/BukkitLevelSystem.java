@@ -34,7 +34,7 @@ public abstract class BukkitLevelSystem implements LevelSystem {
     private final ExpLevelConverter converter;
 
     /**
-     * Constructor that initialize converter.
+     * Constructor that initializes converter.
      *
      * @param converter Converter
      * @param player    The player

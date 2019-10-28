@@ -58,7 +58,7 @@ public class LevelSystemSubcommand extends BaseCommand {
         util.send(sender,
                 util.msg("&3System: &7%s", system.getName()),
                 util.msg("&3Level: &7%.2f", system.getLevel() + system.getFractionalExp()),
-                util.msg("&3Exp: &7%.1f &8| &3To next level: &7%.1f", system.getExp(), system.getExpToNextLevelRemaining()),
+                util.msg("&3Exp: &7%.1f &8| &3To next level: &7%.1f", system.getExp(), system.getExpToNextLevel()),
                 util.msg("&3Total exp: &7%.1f", system.getTotalExp())
         );
     }

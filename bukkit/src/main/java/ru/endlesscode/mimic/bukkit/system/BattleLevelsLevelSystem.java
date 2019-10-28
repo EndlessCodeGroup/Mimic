@@ -28,15 +28,13 @@ import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 import java.util.UUID;
 
 
-/**
- * It's implementation of LevelSystem that uses BattleLevels.
- */
+/** It's implementation of LevelSystem that uses BattleLevels. */
 @Subsystem(
         priority = SubsystemPriority.NORMAL,
         classes = {"me.robin.battlelevels.api.BattleLevelsAPI"})
 public class BattleLevelsLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "BattleLevels";
-    public static final Factory FACTORY = new Factory(playerObj -> new BattleLevelsLevelSystem((Player) playerObj), TAG);
+    public static final Factory FACTORY = new Factory(TAG, playerObj -> new BattleLevelsLevelSystem((Player) playerObj));
 
     private BattleLevelsLevelSystem(@NotNull Player player) {
         super(BattleLevelsConverter.getInstance(), player);
@@ -95,12 +93,12 @@ public class BattleLevelsLevelSystem extends BukkitLevelSystem {
     }
 
     @Override
-    public double getExpToNextLevel() {
+    public double getTotalExpToNextLevel() {
         return BattleLevelsAPI.getNeededForNext(getPlayerUniqueId());
     }
 
     @Override
-    public double getExpToNextLevelRemaining() {
+    public double getExpToNextLevel() {
         return BattleLevelsAPI.getNeededForNextRemaining(getPlayerUniqueId());
     }
 

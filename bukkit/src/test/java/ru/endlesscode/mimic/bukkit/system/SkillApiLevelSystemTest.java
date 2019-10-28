@@ -24,15 +24,12 @@ import com.sucy.skill.api.enums.ExpSource;
 import com.sucy.skill.api.player.PlayerClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
 import ru.endlesscode.mimic.api.system.LevelSystem;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
 public class SkillApiLevelSystemTest extends SkillApiTestBase {
     private LevelSystem levelSystem;
     private PlayerClass playerClass;
@@ -166,14 +163,14 @@ public class SkillApiLevelSystemTest extends SkillApiTestBase {
         when(playerClass.getExp()).thenReturn(5.0);
         when(playerClass.getRequiredExp()).thenReturn(10);
 
-        double actual = levelSystem.getExpToNextLevelRemaining();
+        double actual = levelSystem.getExpToNextLevel();
         int expected = 5;
         assertEquals(expected, actual, 0.0001);
     }
 
     @Test
     public void testGetExpToNextLevelMustReturnMinus() {
-        double actual = levelSystem.getExpToNextLevel();
+        double actual = levelSystem.getTotalExpToNextLevel();
         assertEquals(-1, actual, 0.0001);
     }
 

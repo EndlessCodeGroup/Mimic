@@ -32,7 +32,7 @@ import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 @Subsystem(priority = SubsystemPriority.LOWEST)
 public class BasicLevelSystemImpl implements LevelSystem {
     public static final String TAG = "Basic Level System";
-    public static final LevelSystem.Factory FACTORY = new LevelSystem.Factory(arg -> new BasicLevelSystemImpl(), TAG);
+    public static final LevelSystem.Factory FACTORY = new LevelSystem.Factory(TAG, arg -> new BasicLevelSystemImpl());
 
     private final ExpLevelConverter converter;
 
@@ -91,7 +91,7 @@ public class BasicLevelSystemImpl implements LevelSystem {
     }
 
     @Override
-    public double getExpToNextLevel() {
+    public double getTotalExpToNextLevel() {
         return getConverter().getExpToReachNextLevel(0) - this.exp;
     }
 }

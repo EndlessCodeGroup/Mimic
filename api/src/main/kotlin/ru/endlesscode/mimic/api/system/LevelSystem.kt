@@ -33,29 +33,21 @@ import java.util.function.Function
  */
 interface LevelSystem : PlayerSystem {
 
-    /**
-     * Gives assigned converter.
-     *
-     * @implSpec
-     * Must return not null object.
-     *
-     * @return The converter
-     */
+    /** Assigned converter. */
     val converter: ExpLevelConverter
 
     /**
-     * Current level of player.
+     * Current level of the player.
      *
-     * @apiNote
      * Level can not be lesser than zero.
      *
      * @throws IllegalStateException If player-related object not exists
      */
     var level: Int
 
-
     /**
      * Player's total experience points.
+     *
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
@@ -65,7 +57,7 @@ interface LevelSystem : PlayerSystem {
             return levelExp + this.exp
         }
         set(newTotalExperience) {
-            val allowedTotalExperience = Math.max(0.0, newTotalExperience)
+            val allowedTotalExperience = newTotalExperience.coerceAtLeast(0.0)
 
             val level = this.converter.expToLevel(allowedTotalExperience)
             val fullLevel = this.converter.expToFullLevel(allowedTotalExperience)
@@ -79,8 +71,7 @@ interface LevelSystem : PlayerSystem {
     /**
      * Current fractional XP.
      *
-     * @apiNote
-     * This is a percentage value. 0 is "no progress" and 1 is "next level".
+     * This is a percentage value. 0 means "no progress" and 1 is "next level".
      *
      * @throws IllegalStateException If player-related object not exists
      */
@@ -104,7 +95,6 @@ interface LevelSystem : PlayerSystem {
     /**
      * Player's current level experience points.
      *
-     * @apiNote
      * This field contains experience on current level, to get total player
      * experience use [totalExp].
      * Be careful with this field! To change experience value better to use
@@ -112,9 +102,9 @@ interface LevelSystem : PlayerSystem {
      * New experience value shouldn't be less than 0 and bigger than maximal
      * possible XP on current level.
      *
-     * @implNote
+     * For implementation:
      * You should add argument value validation to your implementation because
-     * new value may be bigger than maximal possible experience on current level,
+     * new value can be bigger than maximal possible experience on current level,
      * and you must trim it to the limit.
      *
      * @return Current level experience points or 0 if player has no exp
@@ -128,7 +118,7 @@ interface LevelSystem : PlayerSystem {
      * @return Experience required to level up or -1 if level-up is impossible
      * @throws IllegalStateException If player-related object not exists
      */
-    val expToNextLevel: Double
+    val totalExpToNextLevel: Double
 
     /**
      * Remaining experience for the player to reach next level.
@@ -137,12 +127,12 @@ interface LevelSystem : PlayerSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    val expToNextLevelRemaining: Double get() = expToNextLevel - exp
+    val expToNextLevel: Double
+        get() = totalExpToNextLevel - exp
 
     /**
      * Decreases the player level by a specified amount.
      *
-     * @apiNote
      * Never use negative amount to increase player level, use [increaseLevel] instead.
      *
      * @param lvlAmount Amount of levels to take away
@@ -158,7 +148,6 @@ interface LevelSystem : PlayerSystem {
     /**
      * Increases the player level by a specified amount.
      *
-     * @apiNote
      * Never use negative amount to decrease player level, use [decreaseLevel] instead.
      *
      * @param lvlAmount Amount of additional levels
@@ -173,36 +162,30 @@ interface LevelSystem : PlayerSystem {
     /**
      * Checks player reached required experience level.
      *
-     * @apiNote
-     * Required level shouldn't be less than 0.
-     *
-     * @param requiredLevel Required experience level
+     * @param requiredLevel Required experience level. Negative value will be interpreted as 0.
      * @return true if player player did reach required level
      */
     @JvmDefault
-    fun didReachLevel(requiredLevel: Int): Boolean {
-        require(requiredLevel >= 0) { "Required level can't be less than 0." }
-        return requiredLevel <= this.level
-    }
+    fun didReachLevel(requiredLevel: Int): Boolean = requiredLevel.coerceAtLeast(0) <= this.level
 
     /**
      * Takes away player the amount of experience specified.
+     *
+     * This method affects to total experience, which means that it can
+     * change both level and experience.
      *
      * @param expAmount Exp amount to take away
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
     fun takeExp(expAmount: Double) {
-        val currentTotalExp = this.totalExp
-        val allowedAmount = Math.min(expAmount, currentTotalExp)
-        this.giveExp(-allowedAmount)
+        totalExp -= expAmount.coerceAtMost(totalExp)
     }
 
     /**
      * Gives player the amount of experience specified.
      *
-     * @apiNote
-     * This method relates to total experience, which means that it can
+     * This method affects to total experience, which means that it can
      * change both level and experience.
      *
      * @param expAmount Exp amount to give
@@ -210,38 +193,29 @@ interface LevelSystem : PlayerSystem {
      */
     @JvmDefault
     fun giveExp(expAmount: Double) {
-        val totalExp = this.totalExp
-        this.totalExp = totalExp + expAmount
+        totalExp += expAmount
     }
 
     /**
      * Checks player has required experience on current level.
      *
-     * @param requiredExp Required experience amount
+     * @param requiredExp Required experience amount. Negative value will be interpreted as 0
      * @return true if player player has required experience
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    fun hasExp(requiredExp: Double): Boolean {
-        require(requiredExp >= 0) { "Required exp can't be less than 0." }
-        return requiredExp <= this.exp
-    }
+    fun hasExp(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.exp
 
     /**
      * Checks player has required total experience.
-     *
-     * @param requiredExp Required total experience amount
+     * @param requiredExp Required total experience amount. Negative value will be interpreted as 0.
      * @return true if player player has required total experience
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    fun hasExpTotal(requiredExp: Double): Boolean {
-        require(requiredExp >= 0) { "Required total exp can't be less than 0." }
-        return requiredExp <= this.totalExp
-    }
+    fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
 
-    /**
-     * Factory of level systems.
-     */
-    class Factory(constructor: Function<Any, out LevelSystem>, tag: String) : SystemFactory<LevelSystem>(constructor, tag)
+    /** Factory of level systems. */
+    class Factory(tag: String, constructor: Function<Any, out LevelSystem>)
+        : SystemFactory<LevelSystem>(tag, constructor)
 }

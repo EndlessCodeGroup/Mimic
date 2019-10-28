@@ -25,11 +25,9 @@ import ru.endlesscode.mimic.api.system.SystemFactory
 /**
  * This is class responsible for accounting all system hooks.
  *
- * @apiNote
  * Systems - it is classes that directly extends PlayerSystem. Subsystems - it
  * is concrete implementations of systems.
  *
- * @implNote
  * Recommended to use a singleton pattern when implement this class.
  *
  * @author Osip Fatkullin

@@ -34,7 +34,7 @@ import java.util.List;
 @Subsystem(classes = {"ru.endlesscode.mimic.api.system.ClassSystem"})
 public class BasicClassSystemImpl implements ClassSystem {
     public static final String TAG = "";
-    public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(arg -> new BasicClassSystemImpl(), TAG);
+    public static final ClassSystem.Factory FACTORY = new ClassSystem.Factory(TAG, arg -> new BasicClassSystemImpl());
 
     @NotNull
     @Override

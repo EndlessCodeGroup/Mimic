@@ -112,7 +112,7 @@ public class VanillaLevelSystemTest extends BukkitTestBase {
     public void testGetExpToNextLevelMustCallVanillaMethod() {
         when(this.player.getExpToLevel()).thenReturn(7);
 
-        assertEquals(7, this.levelSystem.getExpToNextLevel(), 0.0001);
+        assertEquals(7, this.levelSystem.getTotalExpToNextLevel(), 0.0001);
     }
 
     @Test

@@ -122,7 +122,7 @@ public class ClassSystemTest {
     @Test
     public void testGetPrimaryClassReturnEmpty() {
         prepareClasses();
-        assertEquals("", cs.getPrimaryClass());
+        assertNull(cs.getPrimaryClass());
 
         prepareClasses("");
         assertEquals("", cs.getPrimaryClass());

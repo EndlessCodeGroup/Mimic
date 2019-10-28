@@ -82,9 +82,9 @@ public class SystemRegistryTest {
         verify(registry).getFactory(LevelSystem.Factory.class);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testGetSystemFactoryMustThrowException() {
-        assertNull(registry.getSystemFactory(WrongFactoryClassSystemImpl.class));
+        registry.getSystemFactory(WrongFactoryClassSystemImpl.class);
     }
 
     @Test

@@ -24,7 +24,6 @@ import java.util.function.Function
 /**
  * Factory to create subsystem instances.
  *
- * @implSpec
  * This interface must be implemented for each Player System (not subsystem).
  *
  * @param T           System type
@@ -33,7 +32,7 @@ import java.util.function.Function
  * @author Osip Fatkullin
  * @since 0.1
 </T> */
-open class SystemFactory<T : PlayerSystem>(private val constructor: Function<Any, out T>, val tag: String) {
+open class SystemFactory<T : PlayerSystem>(val tag: String, private val constructor: Function<Any, out T>) {
 
     /**
      * Creates new subsystem object with player initialization.

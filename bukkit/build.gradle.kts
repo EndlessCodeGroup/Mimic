@@ -39,6 +39,7 @@ dependencies {
     compileOnly(deps.battleLevelsApi)
 
     testImplementation(bukkit)
+    testImplementation(deps.skillApi)
 }
 
 tasks.shadowJar {

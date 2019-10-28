@@ -36,7 +36,7 @@ import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
         classes = {"com.sucy.skill.SkillAPI"})
 public class SkillApiLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "SkillAPI";
-    public static final Factory FACTORY = new Factory(player -> new SkillApiLevelSystem((Player) player), TAG);
+    public static final Factory FACTORY = new Factory(TAG, player -> new SkillApiLevelSystem((Player) player));
 
     private SkillApiLevelSystem(Player player) {
         super(SkillApiConverter.getInstance(), player);
@@ -139,7 +139,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
      * {@inheritDoc}.
      */
     @Override
-    public double getExpToNextLevel() {
+    public double getTotalExpToNextLevel() {
         PlayerClass playerClass = getPlayerClass();
         return playerClass == null ? -1 : playerClass.getRequiredExp();
     }

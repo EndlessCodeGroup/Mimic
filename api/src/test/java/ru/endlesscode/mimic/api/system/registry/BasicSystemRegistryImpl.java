@@ -30,9 +30,9 @@ import ru.endlesscode.mimic.api.system.SystemFactory;
 public class BasicSystemRegistryImpl implements SystemRegistry {
 
     @Override
-    public <SystemT extends PlayerSystem> @NotNull SystemFactory<SystemT> getFactory(
+    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
             @NotNull Class<? extends SystemFactory<SystemT>> systemFactoryClass) {
-        return new SystemFactory<>(arg -> null, "");
+        return new SystemFactory<>("", arg -> null);
     }
 
     @Override
