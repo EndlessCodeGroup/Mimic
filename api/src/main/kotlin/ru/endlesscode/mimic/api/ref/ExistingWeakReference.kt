@@ -32,11 +32,9 @@ import java.lang.ref.WeakReference
  * @author Osip Fatkullin
  * @since 1.0
  */
-class ExistingWeakReference<T>(referent: T) : WeakReference<T>(referent) {
+class ExistingWeakReference<T : Any>(referent: T) : WeakReference<T>(referent) {
 
     /**
-     * {@inheritDoc}.
-     *
      * @throws IllegalStateException If referent object not exists
      */
     @NotNull

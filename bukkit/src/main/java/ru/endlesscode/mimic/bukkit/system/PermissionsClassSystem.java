@@ -50,18 +50,12 @@ public class PermissionsClassSystem extends BukkitClassSystem {
         super(player);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public boolean hasRequiredClass(@NotNull String requiredClass) {
         Player player = this.playerRef.get();
         return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase());
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public @NotNull List<String> getClasses() {
         List<String> matchedPermissions = new ArrayList<>();
@@ -79,17 +73,11 @@ public class PermissionsClassSystem extends BukkitClassSystem {
         return matchedPermissions;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public boolean isEnabled() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @NotNull
     @Override
     public String getName() {

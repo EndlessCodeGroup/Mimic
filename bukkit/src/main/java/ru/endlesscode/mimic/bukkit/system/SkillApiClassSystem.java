@@ -45,9 +45,6 @@ public class SkillApiClassSystem extends BukkitClassSystem {
         super(player);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public @NotNull List<String> getClasses() {
         PlayerData playerData = getPlayerData();
@@ -61,9 +58,6 @@ public class SkillApiClassSystem extends BukkitClassSystem {
         return classNames;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public @NotNull String getPrimaryClass() {
         PlayerData playerData = getPlayerData();
@@ -77,17 +71,11 @@ public class SkillApiClassSystem extends BukkitClassSystem {
         return SkillAPI.getPlayerData(player);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public boolean isEnabled() {
         return SkillAPI.isLoaded();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @NotNull
     @Override
     public String getName() {

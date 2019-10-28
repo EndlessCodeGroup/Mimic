@@ -24,9 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.registry.Subsystem;
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
-/**
- * Vanilla experience bar system.
- */
+/** Vanilla experience bar system. */
 @Subsystem(priority = SubsystemPriority.LOWEST)
 public class VanillaLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "Vanilla Level System";
@@ -36,18 +34,12 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
         super(VanillaConverter.getInstance(), player);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public int getLevel() {
         Player player = playerRef.get();
         return player.getLevel();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void setLevel(int newLevel) {
         int allowedLevel = Math.max(0, newLevel);
@@ -56,9 +48,6 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
         player.setLevel(allowedLevel);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double getExp() {
         int level = getLevel();
@@ -68,9 +57,6 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
         return expToLevel * player.getExp();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void setExp(double newExperience) {
         int level = getLevel();
@@ -82,17 +68,11 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
         player.setExp((float) (allowedExperience / expToNextLevel));
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     public double getFractionalExp() {
         Player player = playerRef.get();
         return player.getExp();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void setFractionalExp(double fractionalExp) {
         Player player = playerRef.get();
@@ -103,26 +83,17 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
         player.setExp(allowedExp);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double getTotalExpToNextLevel() {
         Player player = playerRef.get();
         return player.getExpToLevel();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public boolean isEnabled() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @NotNull
     @Override
     public String getName() {

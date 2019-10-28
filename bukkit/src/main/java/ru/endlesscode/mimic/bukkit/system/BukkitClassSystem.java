@@ -40,9 +40,6 @@ public abstract class BukkitClassSystem implements ClassSystem {
         playerRef = new ExistingWeakReference<>(player);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public @NotNull Player getHandler() {
         return this.playerRef.get();

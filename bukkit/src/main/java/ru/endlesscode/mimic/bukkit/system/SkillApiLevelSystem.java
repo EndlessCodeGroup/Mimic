@@ -42,9 +42,6 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         super(SkillApiConverter.getInstance(), player);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void decreaseLevel(int lvlAmount) {
         PlayerClass playerClass = getPlayerClass();
@@ -61,9 +58,6 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void increaseLevel(int lvlAmount) {
         PlayerClass playerClass = getPlayerClass();
@@ -72,18 +66,12 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public int getLevel() {
         PlayerClass playerClass = getPlayerClass();
         return playerClass == null ? 0 : playerClass.getLevel();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void setLevel(int newLevel) {
         PlayerClass playerClass = getPlayerClass();
@@ -92,9 +80,6 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void takeExp(double expAmount) {
         PlayerClass playerClass = getPlayerClass();
@@ -104,9 +89,6 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void giveExp(double expAmount) {
         PlayerClass playerClass = getPlayerClass();
@@ -115,18 +97,12 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double getExp() {
         PlayerClass playerClass = getPlayerClass();
         return playerClass == null ? 0 : playerClass.getExp();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void setExp(double newExperience) {
         PlayerClass playerClass = getPlayerClass();
@@ -135,9 +111,6 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public double getTotalExpToNextLevel() {
         PlayerClass playerClass = getPlayerClass();
@@ -149,17 +122,11 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
         return SkillAPI.getPlayerData(player).getMainClass();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public boolean isEnabled() {
         return SkillAPI.isLoaded();
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @NotNull
     @Override
     public String getName() {

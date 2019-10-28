@@ -59,9 +59,6 @@ public class BukkitSystemRegistry implements SystemRegistry {
         this.servicesManager.register(factoryClass, subsystemFactory, this.plugin, servicePriority);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
             @NotNull Class<? extends SystemFactory<SystemT>> factoryClass
@@ -76,17 +73,11 @@ public class BukkitSystemRegistry implements SystemRegistry {
         }
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public void unregisterAllSubsystems() {
         servicesManager.unregisterAll(this.plugin);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
     public <SystemT extends PlayerSystem> void unregisterFactory(@NotNull SystemFactory<? extends SystemT> factory) {
         servicesManager.unregister(factory);
