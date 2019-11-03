@@ -19,8 +19,6 @@
 
 package ru.endlesscode.mimic.api.system
 
-import java.util.function.Function
-
 /**
  * System that provides methods to work with players class systems.
  *
@@ -82,6 +80,6 @@ interface ClassSystem : PlayerSystem {
     fun hasRequiredClass(requiredClass: String): Boolean = requiredClass in this.classes
 
     /** Factory of class systems. */
-    class Factory(tag: String, constructor: Function<Any, out ClassSystem>)
+    class Factory(tag: String, constructor: (Any) -> ClassSystem)
         : SystemFactory<ClassSystem>(tag, constructor)
 }

@@ -19,8 +19,6 @@
 
 package ru.endlesscode.mimic.api.system
 
-import java.util.function.Function
-
 /**
  * Factory to create subsystem instances.
  *
@@ -32,7 +30,7 @@ import java.util.function.Function
  * @author Osip Fatkullin
  * @since 0.1
 </T> */
-open class SystemFactory<T : PlayerSystem>(val tag: String, private val constructor: Function<Any, out T>) {
+open class SystemFactory<T : PlayerSystem>(val tag: String, private val constructor: (Any) -> T) {
 
     /**
      * Creates new subsystem object with player initialization.
@@ -41,6 +39,6 @@ open class SystemFactory<T : PlayerSystem>(val tag: String, private val construc
      * @return Player system for specified player. Can't be null
      */
     operator fun get(playerArg: Any): T {
-        return constructor.apply(playerArg)
+        return constructor(playerArg)
     }
 }

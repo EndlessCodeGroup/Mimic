@@ -19,8 +19,6 @@
 
 package ru.endlesscode.mimic.api.system
 
-import java.util.function.Function
-
 /**
  * System that provides methods to work with players level systems.
  * You can check or change values of level and experience.
@@ -216,6 +214,6 @@ interface LevelSystem : PlayerSystem {
     fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
 
     /** Factory of level systems. */
-    class Factory(tag: String, constructor: Function<Any, out LevelSystem>)
+    class Factory(tag: String, constructor: (Any) -> LevelSystem)
         : SystemFactory<LevelSystem>(tag, constructor)
 }
