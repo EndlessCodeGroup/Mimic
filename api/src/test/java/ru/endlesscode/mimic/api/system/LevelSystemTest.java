@@ -39,7 +39,6 @@ public class LevelSystemTest {
         ExpLevelConverter converter = ls.getConverter();
 
         assertNotNull(converter);
-        assertTrue(converter instanceof BasicConverterImp);
     }
 
     @Test

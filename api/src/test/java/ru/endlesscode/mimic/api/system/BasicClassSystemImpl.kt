@@ -17,29 +17,29 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.system
+
+import ru.endlesscode.mimic.api.system.ClassSystem.Factory
+import ru.endlesscode.mimic.api.system.registry.Subsystem
 
 /**
- * Basic implementation of ExpLevelConverter.
- *
- * <p>For each level needed 10XP.</p>
+ * Basic implementation of class system.
  *
  * @author Osip Fatkullin
  * @since 0.1
  */
-public class BasicConverterImp implements ExpLevelConverter {
-    @Override
-    public double levelToExp(int level) {
-        return level * 10;
-    }
+@Subsystem(classes = ["ru.endlesscode.mimic.api.system.ClassSystem"])
+class BasicClassSystemImpl : ClassSystem {
 
-    @Override
-    public double expToLevel(double exp) {
-        return exp / 10.;
-    }
+    override val isEnabled: Boolean get() = false
+    override val name = TAG
 
-    @Override
-    public double getExpToReachLevel(int level) {
-        return 10;
+    override val classes: List<String> get() = emptyList()
+
+    companion object {
+        private const val TAG = ""
+
+        @JvmField
+        val FACTORY = Factory(TAG) { BasicClassSystemImpl() }
     }
 }

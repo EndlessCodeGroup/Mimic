@@ -51,9 +51,6 @@ public class ClassSystemTest {
     public void testHasClassMustReturnFalse() {
         prepareClasses();
         assertFalse(cs.hasClass());
-
-        prepareClasses("");
-        assertFalse(cs.hasClass());
     }
 
     @Test

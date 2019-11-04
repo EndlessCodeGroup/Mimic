@@ -17,39 +17,20 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system.registry;
+package ru.endlesscode.mimic.api.system
 
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.ClassSystem;
+import ru.endlesscode.mimic.api.system.registry.Subsystem
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
 
-import java.util.ArrayList;
-import java.util.List;
+/** Wrong implementation of class system, that requires not existing class. */
+@Subsystem(
+    priority = SubsystemPriority.HIGH,
+    classes = ["ru.endlesscode.mimic.api.WrongClass"]
+)
+class WrongClassSystemImpl : ClassSystem {
 
-/**
- * @author Osip Fatkullin
- * @since 0.1
- */
-@Subsystem
-public class WrongFactoryClassSystemImpl implements ClassSystem {
-    private WrongFactoryClassSystemImpl() {
-        // Wrong constructor
-    }
+    override val isEnabled = false
+    override val name = "Wrong Class System"
 
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public String getName() {
-        return "System Without Constructor";
-    }
-
-    @Override
-    public @NotNull List<String> getClasses() {
-        return new ArrayList<>();
-    }
-
-    public static abstract class WrongInnerClass {}
+    override val classes: List<String> = emptyList()
 }
