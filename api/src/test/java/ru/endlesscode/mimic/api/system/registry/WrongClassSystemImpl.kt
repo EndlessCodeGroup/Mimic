@@ -17,17 +17,19 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.system.registry
 
-import org.junit.Test;
+import ru.endlesscode.mimic.api.system.ClassSystem
 
-import static org.junit.Assert.assertEquals;
+/** Wrong implementation of class system, that requires not existing class. */
+@Subsystem(
+    priority = SubsystemPriority.HIGH,
+    classes = ["ru.endlesscode.mimic.api.WrongClass"]
+)
+class WrongClassSystemImpl : ClassSystem {
 
-public class SystemFactoryTest {
-    @Test
-    public void testGet() {
-        ClassSystem classSystem = new BasicClassSystemImpl();
-        SystemFactory<ClassSystem> factory = new SystemFactory<>("", arg -> classSystem);
-        assertEquals(classSystem, factory.get(""));
-    }
+    override val isEnabled = false
+    override val name = "Wrong Class System"
+
+    override val classes: List<String> = emptyList()
 }

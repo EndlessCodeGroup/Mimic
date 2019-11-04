@@ -17,10 +17,10 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system
+package ru.endlesscode.mimic.api.system.registry
 
+import ru.endlesscode.mimic.api.system.ClassSystem
 import ru.endlesscode.mimic.api.system.ClassSystem.Factory
-import ru.endlesscode.mimic.api.system.registry.Subsystem
 
 /**
  * Basic implementation of class system.
