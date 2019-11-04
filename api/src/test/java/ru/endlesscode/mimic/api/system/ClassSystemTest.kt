@@ -17,121 +17,149 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system;
+package ru.endlesscode.mimic.api.system
 
-import org.junit.Before;
-import org.junit.Test;
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
+import ru.endlesscode.mockito.MOCKS_ONLY_ABSTRACTS
+import kotlin.test.*
 
-import java.util.Arrays;
-import java.util.List;
+class ClassSystemTest {
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static ru.endlesscode.mockito.MockitoExtra.MOCKS_ONLY_ABSTRACTS;
+    // SUT
+    private lateinit var classSystem: ClassSystem
 
-public class ClassSystemTest {
-    private ClassSystem cs;
-
-    @Before
-    public void setUp() {
-        this.cs = mock(ClassSystem.class, MOCKS_ONLY_ABSTRACTS);
+    @BeforeTest
+    fun setUp() {
+        classSystem = mock(defaultAnswer = MOCKS_ONLY_ABSTRACTS)
     }
 
     @Test
-    public void testHasClassMustReturnTrue() {
-        prepareClasses("SomeClass");
-        assertTrue(cs.hasClass());
+    fun `when hasClass - and there are class - should return true`() {
+        // Given
+        prepareClasses("SomeClass", "AnotherClass")
 
-        prepareClasses("SomeClass", "AnotherClass");
-        assertTrue(cs.hasClass());
+        // When
+        val hasClass = classSystem.hasClass()
+
+        // Then
+        assertTrue(hasClass)
     }
 
     @Test
-    public void testHasClassMustReturnFalse() {
-        prepareClasses();
-        assertFalse(cs.hasClass());
+    fun `when hasClass - and there no classes - should return false`() {
+        // Given
+        prepareClasses()
+
+        // When
+        val hasClass = classSystem.hasClass()
+
+        // Then
+        assertFalse(hasClass)
     }
 
     @Test
-    public void testHasRequiredClassMustReturnTrue() {
-        prepareClasses("First", "Second", "Third");
+    fun `when hasRequiredClass - and there are right class - should return true`() {
+        // Given
+        prepareClasses("First", "Second", "Third")
 
-        assertTrue(cs.hasRequiredClass("First"));
-        assertTrue(cs.hasRequiredClass("Second"));
-        assertTrue(cs.hasRequiredClass("Third"));
+        // When
+        val hasRequiredClass = classSystem.hasRequiredClass("First")
+
+        // Then
+        assertTrue(hasRequiredClass)
     }
 
     @Test
-    public void testHasRequiredClassMustReturnFalse() {
-        prepareClasses("First", "Second", "Third");
+    fun `when hasRequiredClass - and there no right class - should return false`() {
+        // Given
+        prepareClasses("First", "Second", "Third")
 
-        assertFalse(cs.hasRequiredClass("SomeClass"));
-        assertFalse(cs.hasRequiredClass("FirstClass"));
-        assertFalse(cs.hasRequiredClass("Sec"));
+        // When
+        val hasRequiredClass = classSystem.hasRequiredClass("UnknownClass")
+
+        // Then
+        assertFalse(hasRequiredClass)
     }
 
     @Test
-    public void testHasOneOfRequiredClassesMustReturnTrue() {
-        List<String> requiredClasses = Arrays.asList("First", "Second", "Third");
+    fun `when hasOneOfRequiredClasses - and there are right class - should return true`() {
+        // Given
+        val requiredClasses = listOf("First", "Second", "Third")
+        prepareClasses("First", "AnotherOne")
 
-        prepareClasses("First");
-        assertTrue(cs.hasOneOfRequiredClasses(requiredClasses));
+        // When
+        val hasOneOfRequired = classSystem.hasOneOfRequiredClasses(requiredClasses)
 
-        prepareClasses("Second");
-        assertTrue(cs.hasOneOfRequiredClasses(requiredClasses));
-
-        prepareClasses("Third");
-        assertTrue(cs.hasOneOfRequiredClasses(requiredClasses));
+        // Then
+        assertTrue(hasOneOfRequired)
     }
 
     @Test
-    public void testHasOneOfRequiredClassesMustReturnFalse() {
-        List<String> requiredClasses = Arrays.asList("First", "Second", "Third");
+    fun `when hasOneOfRequiredClasses - and there no right classes - should return false`() {
+        // Given
+        val requiredClasses = listOf("First", "Second", "Third")
+        prepareClasses("AnotherOne")
 
-        prepareClasses();
-        assertFalse(cs.hasOneOfRequiredClasses(requiredClasses));
+        // When
+        val hasOneOfRequired = classSystem.hasOneOfRequiredClasses(requiredClasses)
 
-        prepareClasses("Fourth");
-        assertFalse(cs.hasOneOfRequiredClasses(requiredClasses));
+        // Then
+        assertFalse(hasOneOfRequired)
     }
 
     @Test
-    public void testHasAllRequiredClassesMustReturnTrue() {
-        List<String> requiredClasses = Arrays.asList("First", "Second");
+    fun `when hasAllRequiredClasses - and there are all classes - should return true`() {
+        // Given
+        val requiredClasses = listOf("First", "Second")
+        prepareClasses("First", "Second", "Third")
 
-        prepareClasses("First", "Second", "Third");
-        assertTrue(cs.hasAllRequiredClasses(requiredClasses));
+        // When
+        val hasAllClasses = classSystem.hasAllRequiredClasses(requiredClasses)
+
+        // Then
+        assertTrue(hasAllClasses)
     }
 
     @Test
-    public void testHasAllRequiredClassesMustReturnFalse() {
-        List<String> requiredClasses = Arrays.asList("First", "Second");
+    fun `when hasAllRequiredClasses - and there are not all classes - should return false`() {
+        // Given
+        val requiredClasses = listOf("First", "Second")
+        prepareClasses("First", "Third")
 
+        // When
+        val hasAllClasses = classSystem.hasAllRequiredClasses(requiredClasses)
 
-        prepareClasses();
-        assertFalse(cs.hasAllRequiredClasses(requiredClasses));
-
-        prepareClasses("First", "Third");
-        assertFalse(cs.hasAllRequiredClasses(requiredClasses));
+        // Then
+        assertFalse(hasAllClasses)
     }
 
     @Test
-    public void testGetPrimaryClassReturnEmpty() {
-        prepareClasses();
-        assertNull(cs.getPrimaryClass());
+    fun `when get primaryClass - and there no classes - should return null`() {
+        // Given
+        prepareClasses()
 
-        prepareClasses("");
-        assertEquals("", cs.getPrimaryClass());
+        // When
+        val primaryClass = classSystem.primaryClass
+
+        // Then
+        assertNull(primaryClass)
     }
 
     @Test
-    public void testGetPrimaryClassReturnProperlyClass() {
-        prepareClasses("PrimaryClass", "SecondaryClass");
-        assertEquals("PrimaryClass", cs.getPrimaryClass());
+    fun `when get primaryClass - and there are classes - should return first class`() {
+        // Given
+        val expectedClass = "PrimaryClass"
+        prepareClasses(expectedClass, "SecondaryClass")
+
+        // When
+        val primaryClass = classSystem.primaryClass
+
+        // Then
+        assertEquals(expectedClass, primaryClass)
     }
 
-    private void prepareClasses(String... classes) {
-        when(cs.getClasses()).thenReturn(Arrays.asList(classes));
+    private fun prepareClasses(vararg classes: String) {
+        whenever(classSystem.classes).thenReturn(classes.toList())
     }
 }

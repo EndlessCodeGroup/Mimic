@@ -26,7 +26,7 @@ import org.mockito.stubbing.Answer
 import java.lang.reflect.Modifier.isAbstract
 
 class MocksOnlyAbstracts : Answer<Any> {
-    override fun answer(invocation: InvocationOnMock): Any {
+    override fun answer(invocation: InvocationOnMock): Any? {
         val methodModifiers = invocation.method.modifiers
         val answer =
             if (isAbstract(methodModifiers)) RETURNS_DEFAULTS else CALLS_REAL_METHODS
