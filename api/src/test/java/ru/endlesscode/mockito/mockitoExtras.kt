@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
+@file:JvmName("MockitoExtra")
 
-package ru.endlesscode.mockito;
+package ru.endlesscode.mockito
 
-import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Answer
 
-public class MockitoExtra {
-    public static final Answer<Object> MOCKS_ONLY_ABSTRACTS = new MocksOnlyAbstracts();
-}
+@JvmField
+val MOCKS_ONLY_ABSTRACTS: Answer<Any> = MocksOnlyAbstracts()

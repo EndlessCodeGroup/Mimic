@@ -17,21 +17,20 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mockito;
+package ru.endlesscode.mockito
 
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.mockito.Mockito.CALLS_REAL_METHODS
+import org.mockito.Mockito.RETURNS_DEFAULTS
+import org.mockito.invocation.InvocationOnMock
+import org.mockito.stubbing.Answer
+import java.lang.reflect.Modifier.isAbstract
 
-import static java.lang.reflect.Modifier.isAbstract;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.RETURNS_DEFAULTS;
+class MocksOnlyAbstracts : Answer<Any> {
+    override fun answer(invocation: InvocationOnMock): Any {
+        val methodModifiers = invocation.method.modifiers
+        val answer =
+            if (isAbstract(methodModifiers)) RETURNS_DEFAULTS else CALLS_REAL_METHODS
 
-public class MocksOnlyAbstracts implements Answer<Object> {
-    @Override
-    public Object answer(InvocationOnMock invocation) throws Throwable {
-        int methodModifiers = invocation.getMethod().getModifiers();
-        Answer<Object> answer = isAbstract(methodModifiers) ? RETURNS_DEFAULTS : CALLS_REAL_METHODS;
-
-        return answer.answer(invocation);
+        return answer.answer(invocation)
     }
 }
