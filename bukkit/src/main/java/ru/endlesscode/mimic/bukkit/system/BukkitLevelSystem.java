@@ -51,8 +51,7 @@ public abstract class BukkitLevelSystem implements LevelSystem {
         return converter;
     }
 
-    @Override
-    public @NotNull Player getHandler() {
+    public @NotNull Player getPlayer() {
         return playerRef.get();
     }
 }

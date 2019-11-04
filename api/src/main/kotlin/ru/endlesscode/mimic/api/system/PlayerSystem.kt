@@ -32,9 +32,6 @@ import ru.endlesscode.mimic.api.ref.ExistingWeakReference
  */
 interface PlayerSystem {
 
-    /** Returns player-related object. */
-    val handler: Any
-
     /** Returns `true` if the system is found and enabled. */
     val isEnabled: Boolean
 
