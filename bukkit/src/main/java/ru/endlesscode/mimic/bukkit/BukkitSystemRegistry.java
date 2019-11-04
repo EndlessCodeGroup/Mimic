@@ -21,7 +21,6 @@ package ru.endlesscode.mimic.bukkit;
 
 import com.google.common.annotations.VisibleForTesting;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
 import org.jetbrains.annotations.NotNull;
@@ -63,14 +62,7 @@ public class BukkitSystemRegistry implements SystemRegistry {
     public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
             @NotNull Class<? extends SystemFactory<SystemT>> factoryClass
     ) {
-        RegisteredServiceProvider<? extends SystemFactory<SystemT>> systemProvider
-                = this.servicesManager.getRegistration(factoryClass);
-
-        if (systemProvider != null) {
-            return systemProvider.getProvider();
-        } else {
-            return null;
-        }
+        return this.servicesManager.load(factoryClass);
     }
 
     @Override

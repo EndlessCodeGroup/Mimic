@@ -41,10 +41,7 @@ interface ClassSystem : PlayerSystem {
      */
     @JvmDefault
     val primaryClass: String?
-        get() {
-            val classes = this.classes
-            return if (classes.isEmpty()) null else classes[0]
-        }
+        get() = this.classes.firstOrNull()
 
     /**
      * List of player classes.

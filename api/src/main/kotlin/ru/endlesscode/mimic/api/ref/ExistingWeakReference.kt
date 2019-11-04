@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.api.ref
 
-import org.jetbrains.annotations.NotNull
 import java.lang.ref.WeakReference
 
 /**
@@ -34,11 +33,6 @@ import java.lang.ref.WeakReference
  */
 class ExistingWeakReference<T : Any>(referent: T) : WeakReference<T>(referent) {
 
-    /**
-     * @throws IllegalStateException If referent object not exists
-     */
-    @NotNull
-    override fun get(): T {
-        return super.get() ?: error("Referent object is null.")
-    }
+    /** Throws [IllegalStateException] if reference object has been cleared. */
+    override fun get(): T = super.get() ?: error("Referent object is null.")
 }

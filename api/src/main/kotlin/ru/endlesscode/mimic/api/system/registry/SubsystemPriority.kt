@@ -22,7 +22,7 @@ package ru.endlesscode.mimic.api.system.registry
 /**
  * Subsystem priorities.
  *
- * Ssubsystem with higher priority will be loaded first. Use priorities to resolve conflicts.
+ * Subsystem with higher priority will be loaded first. Use priorities to resolve conflicts.
  *
  * @author Osip Fatkullin
  * @since 0.1

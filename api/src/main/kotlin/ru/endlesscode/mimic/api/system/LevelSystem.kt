@@ -60,10 +60,10 @@ interface LevelSystem : PlayerSystem {
             val level = this.converter.expToLevel(allowedTotalExperience)
             val fullLevel = this.converter.expToFullLevel(allowedTotalExperience)
             val expToNextLevel = this.converter.getExpToReachNextLevel(fullLevel)
-            val experiencePercent = level - fullLevel
+            val levelPercent = level - fullLevel
 
             this.level = fullLevel
-            this.exp = expToNextLevel * experiencePercent
+            this.exp = expToNextLevel * levelPercent
         }
 
     /**
@@ -77,17 +77,10 @@ interface LevelSystem : PlayerSystem {
     var fractionalExp: Double
         get() {
             val exp = this.exp
-
-            if (exp == 0.0) {
-                return 0.0
-            }
-
-            val level = this.level
-            return exp / converter.getExpToReachNextLevel(level)
+            return if (exp == 0.0) 0.0 else exp / converter.getExpToReachNextLevel(this.level)
         }
         set(fractionalExp) {
-            val level = level
-            this.exp = converter.getExpToReachNextLevel(level) * fractionalExp
+            this.exp = converter.getExpToReachNextLevel(this.level) * fractionalExp
         }
 
     /**
@@ -139,8 +132,7 @@ interface LevelSystem : PlayerSystem {
     @JvmDefault
     fun decreaseLevel(lvlAmount: Int) {
         val currentLevel = this.level
-        val allowedAmount = Math.min(lvlAmount, currentLevel)
-        this.increaseLevel(-allowedAmount)
+        this.level = currentLevel - lvlAmount.coerceAtMost(currentLevel)
     }
 
     /**
@@ -153,8 +145,7 @@ interface LevelSystem : PlayerSystem {
      */
     @JvmDefault
     fun increaseLevel(lvlAmount: Int) {
-        val currentLevel = this.level
-        this.level = currentLevel + lvlAmount
+        this.level += lvlAmount
     }
 
     /**
@@ -177,7 +168,8 @@ interface LevelSystem : PlayerSystem {
      */
     @JvmDefault
     fun takeExp(expAmount: Double) {
-        totalExp -= expAmount.coerceAtMost(totalExp)
+        val currentTotalExp = this.totalExp
+        this.totalExp = currentTotalExp - expAmount.coerceAtMost(currentTotalExp)
     }
 
     /**
