@@ -19,10 +19,13 @@
 
 package ru.endlesscode.mimic.bukkit.util;
 
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Log {
+
+    private static final String DEBUG_TAG = "[DEBUG]";
 
     private static Logger logger;
     private static boolean debug;
@@ -32,32 +35,32 @@ public class Log {
     }
 
     /**
-     * Wraps given logger with disabled debug mode.
-     *
-     * @param logger The logger
+     * Initializes Log with the given logger with disabled debug mode.
      */
-    public static void wrap(Logger logger) {
-        wrap(logger, false);
+    public static void init(Logger logger) {
+        init(logger, false);
     }
 
     /**
-     * Wraps given logger. Also changes debug mode.
-     *
-     * @param logger The logger
-     * @param debug Debug mode
+     * Initializes Log with the given logger and specified debug mode.
      */
-    public static void wrap(Logger logger, boolean debug) {
+    public static void init(Logger logger, boolean debug) {
         Log.logger = logger;
         Log.debug = debug;
     }
 
     /**
      * Write info message to log.
-     *
-     * @param message The message
      */
     public static void i(String message) {
         logger.info(message);
+    }
+
+    /**
+     * Writes warning message to log.
+     */
+    public static void w(String message, Object... args) {
+        logger.warning(MessageFormat.format(message, args));
     }
 
     /**
@@ -67,7 +70,7 @@ public class Log {
      */
     public static void d(String message, Object... args) {
         if (debug) {
-            logger.warning("[DEBUG] " + String.format(message, args));
+            logger.fine(DEBUG_TAG + " " + MessageFormat.format(message, args));
         }
     }
 
@@ -88,7 +91,7 @@ public class Log {
      */
     public static void d(Throwable throwable, boolean quiet) {
         if (debug) {
-            logger.log(Level.WARNING, "[DEBUG] Yay! Long-awaited exception!", throwable);
+            logger.log(Level.FINE, DEBUG_TAG + " Yay! Long-awaited exception!", throwable);
         } else if (!quiet) {
             logger.warning("Error occurred. You can see it in debug mode.");
         }

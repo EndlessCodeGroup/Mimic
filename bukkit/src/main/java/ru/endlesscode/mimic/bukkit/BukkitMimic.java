@@ -40,7 +40,6 @@ import ru.endlesscode.mimic.bukkit.util.Log;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Main class of the plugin.
@@ -49,7 +48,6 @@ public class BukkitMimic extends JavaPlugin {
     private static final boolean DEBUG = true;
 
     private static BukkitMimic instance;
-    private static Logger logger;
 
     private BukkitSystemRegistry systemRegistry;
 
@@ -68,7 +66,7 @@ public class BukkitMimic extends JavaPlugin {
     public void onLoad() {
         instance = this;
 
-        Log.wrap(this.getLogger(), DEBUG);
+        Log.init(this.getLogger(), DEBUG);
 
         this.initRegistry();
         this.hookDefaultSystems();
@@ -91,12 +89,12 @@ public class BukkitMimic extends JavaPlugin {
     private <T extends PlayerSystem> void hookSystem(Class<? extends T> system) {
         try {
             if (this.systemRegistry.registerSubsystem(system)) {
-                Log.d("Subsystem '%s' registered.", system.getSimpleName());
+                Log.d("Subsystem ''{0}'' registered.", system.getSimpleName());
             } else {
-                Log.d("Subsystem '%s' not needed. Skipped.", system.getSimpleName());
+                Log.d("Subsystem ''{0}'' not needed. Skipped.", system.getSimpleName());
             }
         } catch (SystemNotRegisteredException e) {
-            logger.warning(system.getSimpleName() + ": " + e.getMessage());
+            Log.w("{0}: {1}",system.getSimpleName(), e.getMessage());
             Log.d(e);
         }
     }
@@ -131,10 +129,8 @@ public class BukkitMimic extends JavaPlugin {
 
     /**
      * Returns system registry.
-     *
-     * @return Mimic system registry
      */
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({"unused"})
     public static BukkitSystemRegistry getSystemRegistry() {
         return instance.systemRegistry;
     }
