@@ -37,7 +37,7 @@ class ClassSystemTest {
     @Test
     fun `when hasClass - and there are class - should return true`() {
         // Given
-        prepareClasses("SomeClass", "AnotherClass")
+        classSystem.prepareClasses("SomeClass", "AnotherClass")
 
         // When
         val hasClass = classSystem.hasClass()
@@ -49,7 +49,7 @@ class ClassSystemTest {
     @Test
     fun `when hasClass - and there no classes - should return false`() {
         // Given
-        prepareClasses()
+        classSystem.prepareClasses()
 
         // When
         val hasClass = classSystem.hasClass()
@@ -61,7 +61,7 @@ class ClassSystemTest {
     @Test
     fun `when hasRequiredClass - and there are right class - should return true`() {
         // Given
-        prepareClasses("First", "Second", "Third")
+        classSystem.prepareClasses("First", "Second", "Third")
 
         // When
         val hasRequiredClass = classSystem.hasRequiredClass("First")
@@ -73,7 +73,7 @@ class ClassSystemTest {
     @Test
     fun `when hasRequiredClass - and there no right class - should return false`() {
         // Given
-        prepareClasses("First", "Second", "Third")
+        classSystem.prepareClasses("First", "Second", "Third")
 
         // When
         val hasRequiredClass = classSystem.hasRequiredClass("UnknownClass")
@@ -86,7 +86,7 @@ class ClassSystemTest {
     fun `when hasOneOfRequiredClasses - and there are right class - should return true`() {
         // Given
         val requiredClasses = listOf("First", "Second", "Third")
-        prepareClasses("First", "AnotherOne")
+        classSystem.prepareClasses("First", "AnotherOne")
 
         // When
         val hasOneOfRequired = classSystem.hasOneOfRequiredClasses(requiredClasses)
@@ -99,7 +99,7 @@ class ClassSystemTest {
     fun `when hasOneOfRequiredClasses - and there no right classes - should return false`() {
         // Given
         val requiredClasses = listOf("First", "Second", "Third")
-        prepareClasses("AnotherOne")
+        classSystem.prepareClasses("AnotherOne")
 
         // When
         val hasOneOfRequired = classSystem.hasOneOfRequiredClasses(requiredClasses)
@@ -112,7 +112,7 @@ class ClassSystemTest {
     fun `when hasAllRequiredClasses - and there are all classes - should return true`() {
         // Given
         val requiredClasses = listOf("First", "Second")
-        prepareClasses("First", "Second", "Third")
+        classSystem.prepareClasses("First", "Second", "Third")
 
         // When
         val hasAllClasses = classSystem.hasAllRequiredClasses(requiredClasses)
@@ -125,7 +125,7 @@ class ClassSystemTest {
     fun `when hasAllRequiredClasses - and there are not all classes - should return false`() {
         // Given
         val requiredClasses = listOf("First", "Second")
-        prepareClasses("First", "Third")
+        classSystem.prepareClasses("First", "Third")
 
         // When
         val hasAllClasses = classSystem.hasAllRequiredClasses(requiredClasses)
@@ -137,7 +137,7 @@ class ClassSystemTest {
     @Test
     fun `when get primaryClass - and there no classes - should return null`() {
         // Given
-        prepareClasses()
+        classSystem.prepareClasses()
 
         // When
         val primaryClass = classSystem.primaryClass
@@ -150,7 +150,7 @@ class ClassSystemTest {
     fun `when get primaryClass - and there are classes - should return first class`() {
         // Given
         val expectedClass = "PrimaryClass"
-        prepareClasses(expectedClass, "SecondaryClass")
+        classSystem.prepareClasses(expectedClass, "SecondaryClass")
 
         // When
         val primaryClass = classSystem.primaryClass
@@ -159,7 +159,7 @@ class ClassSystemTest {
         assertEquals(expectedClass, primaryClass)
     }
 
-    private fun prepareClasses(vararg classes: String) {
-        whenever(classSystem.classes).thenReturn(classes.toList())
+    private fun ClassSystem.prepareClasses(vararg classes: String) {
+        whenever(this.classes).thenReturn(classes.toList())
     }
 }

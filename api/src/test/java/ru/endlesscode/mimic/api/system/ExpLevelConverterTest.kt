@@ -1,11 +1,7 @@
 package ru.endlesscode.mimic.api.system
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import ru.endlesscode.mockito.MOCKS_ONLY_ABSTRACTS
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,16 +15,14 @@ class ExpLevelConverterTest(
 ) {
 
     companion object {
-        private const val EXP_IN_LEVEL = 10.0
-
         @JvmStatic
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
             data(exp = 0.0, level = 0.0),
             data(exp = 10.0, level = 1.0),
-            data(exp = 15.0, level = 1.5),
+            data(exp = 15.0, level = 1.25),
             data(exp = -10.0, level = 0.0, levelToExp = 0.0),
-            data(exp = 99.9, level = 9.99)
+            data(exp = 105.0, level = 4.1)
         )
 
         private fun data(
@@ -46,9 +40,7 @@ class ExpLevelConverterTest(
 
     @BeforeTest
     fun setUp() {
-        converter = mock(defaultAnswer = MOCKS_ONLY_ABSTRACTS) {
-            on(it.getExpToReachLevel(any())) doReturn EXP_IN_LEVEL
-        }
+        converter = mockExpLevelConverter()
     }
 
     @Test
