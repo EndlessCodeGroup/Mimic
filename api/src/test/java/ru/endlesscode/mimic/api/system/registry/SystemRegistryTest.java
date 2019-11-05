@@ -21,7 +21,6 @@ package ru.endlesscode.mimic.api.system.registry;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.endlesscode.mimic.api.system.BasicLevelSystemImpl;
 import ru.endlesscode.mimic.api.system.ClassSystem;
 import ru.endlesscode.mimic.api.system.LevelSystem;
 import ru.endlesscode.mimic.api.system.PlayerSystem;

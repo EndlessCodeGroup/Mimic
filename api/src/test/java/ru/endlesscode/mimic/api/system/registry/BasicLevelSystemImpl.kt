@@ -17,11 +17,11 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system
+package ru.endlesscode.mimic.api.system.registry
 
+import ru.endlesscode.mimic.api.system.ExpLevelConverter
+import ru.endlesscode.mimic.api.system.LevelSystem
 import ru.endlesscode.mimic.api.system.LevelSystem.Factory
-import ru.endlesscode.mimic.api.system.registry.Subsystem
-import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
 
 /**
  * Dummy implementation of LevelSystem for tests.
@@ -40,7 +40,8 @@ class BasicLevelSystemImpl : LevelSystem {
     override val isEnabled = true
     override val name = TAG
 
-    override val converter: ExpLevelConverter = Converter()
+    override val converter: ExpLevelConverter =
+        Converter()
 
     override var level = 0
         set(newLevel) {
@@ -62,6 +63,7 @@ class BasicLevelSystemImpl : LevelSystem {
 
         override fun expToLevel(exp: Double): Double = exp / EXP_IN_LEVEL
 
-        override fun getExpToReachLevel(level: Int): Double = EXP_IN_LEVEL
+        override fun getExpToReachLevel(level: Int): Double =
+            EXP_IN_LEVEL
     }
 }

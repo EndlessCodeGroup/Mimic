@@ -19,6 +19,13 @@
 
 package ru.endlesscode.mockito
 
+import org.mockito.AdditionalMatchers
 import org.mockito.stubbing.Answer
 
+const val DEFAULT_DOUBLE_EQ_DELTA = 0.0001
+
 val MOCKS_ONLY_ABSTRACTS: Answer<Any> = MocksOnlyAbstracts()
+
+fun doubleEq(value: Double, delta: Double = DEFAULT_DOUBLE_EQ_DELTA): Double {
+    return AdditionalMatchers.eq(value, delta)
+}
