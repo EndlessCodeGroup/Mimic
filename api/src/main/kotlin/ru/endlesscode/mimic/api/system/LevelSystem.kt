@@ -54,8 +54,8 @@ interface LevelSystem : PlayerSystem {
             val levelExp = this.converter.levelToExp(this.level)
             return levelExp + this.exp
         }
-        set(newTotalExperience) {
-            val allowedTotalExperience = newTotalExperience.coerceAtLeast(0.0)
+        set(value) {
+            val allowedTotalExperience = value.coerceAtLeast(0.0)
 
             val level = this.converter.expToLevel(allowedTotalExperience)
             val fullLevel = this.converter.expToFullLevel(allowedTotalExperience)
@@ -76,11 +76,18 @@ interface LevelSystem : PlayerSystem {
     @JvmDefault
     var fractionalExp: Double
         get() {
-            val exp = this.exp
-            return if (exp == 0.0) 0.0 else exp / converter.getExpToReachNextLevel(this.level)
+            val expToNextLevel = converter.getExpToReachNextLevel(this.level)
+            val exp = this.exp.coerceAtMost(expToNextLevel - 1)
+            return if (exp <= 0.0) 0.0 else exp / expToNextLevel
         }
-        set(fractionalExp) {
-            this.exp = converter.getExpToReachNextLevel(this.level) * fractionalExp
+        set(value) {
+            val allowedExp = value.coerceAtLeast(0.0)
+            if (value < 1.0) {
+                this.exp = converter.getExpToReachNextLevel(this.level) * allowedExp
+            } else {
+                this.increaseLevel(1)
+                this.exp = 0.0
+            }
         }
 
     /**
@@ -162,9 +169,11 @@ interface LevelSystem : PlayerSystem {
      *
      * This method affects to total experience, which means that it can
      * change both level and experience.
+     * Never use negative amount to increase exp, use [giveExp] instead.
      *
      * @param expAmount Exp amount to take away
      * @throws IllegalStateException If player-related object not exists
+     * @see giveExp
      */
     @JvmDefault
     fun takeExp(expAmount: Double) {
@@ -177,9 +186,11 @@ interface LevelSystem : PlayerSystem {
      *
      * This method affects to total experience, which means that it can
      * change both level and experience.
+     * Never use negative amount to decrease exp, use [takeExp] instead.
      *
      * @param expAmount Exp amount to give
      * @throws IllegalStateException If player-related object not exists
+     * @see takeExp
      */
     @JvmDefault
     fun giveExp(expAmount: Double) {
@@ -206,6 +217,5 @@ interface LevelSystem : PlayerSystem {
     fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
 
     /** Factory of level systems. */
-    class Factory(tag: String, constructor: (Any) -> LevelSystem)
-        : SystemFactory<LevelSystem>(tag, constructor)
+    class Factory(tag: String, constructor: (Any) -> LevelSystem) : SystemFactory<LevelSystem>(tag, constructor)
 }
