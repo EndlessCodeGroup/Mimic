@@ -17,11 +17,13 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system
 
-import ru.endlesscode.mimic.api.system.PlayerSystem;
+import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.SystemFactory
 
-/**
- * Empty system for tests
- */
-public abstract class TestSystem implements PlayerSystem {}
+/** Empty system for tests. */
+abstract class TestSystem : PlayerSystem {
+    @Suppress("unused")
+    class Factory : SystemFactory<TestSystem>("TAG", { error("Should not be called") })
+}
