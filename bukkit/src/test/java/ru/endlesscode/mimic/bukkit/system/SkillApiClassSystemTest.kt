@@ -17,75 +17,64 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system
 
-import com.sucy.skill.SkillAPI;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
-import ru.endlesscode.mimic.api.system.ClassSystem;
+import com.nhaarman.mockitokotlin2.verify
+import ru.endlesscode.mimic.api.system.ClassSystem
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-import java.util.Arrays;
-import java.util.List;
+class SkillApiClassSystemTest : SkillApiTestBase() {
 
-import static org.junit.Assert.*;
-import static org.powermock.api.mockito.PowerMockito.when;
+    private lateinit var classSystem: ClassSystem
 
-@RunWith(PowerMockRunner.class)
-public class SkillApiClassSystemTest extends SkillApiTestBase {
-    private ClassSystem classSystem;
-
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        this.classSystem = SkillApiClassSystem.FACTORY.get(this.player);
+    @BeforeTest
+    @Throws(Exception::class)
+    override fun setUp() {
+        super.setUp()
+        classSystem = SkillApiClassSystem(player, skillApi)
     }
 
     @Test
-    public void testGetClassesMustReturnRightClasses() {
-        String[] expectedClasses = new String[]{"Mage", "Cleric"};
-        prepareClasses(expectedClasses);
-
-        List<String> actualClasses = classSystem.getClasses();
-        assertEquals(Arrays.asList(expectedClasses), actualClasses);
+    fun testGetClassesMustReturnRightClasses() {
+        val expectedClasses = arrayOf("Mage", "Cleric")
+        prepareClasses(*expectedClasses)
+        val actualClasses: List<String?> = classSystem.classes
+        assertEquals(expectedClasses.toList(), actualClasses)
     }
 
     @Test
-    public void testGetClassesMustReturnEmptyList() {
-        prepareClasses();
-
-        List<String> actualClasses = classSystem.getClasses();
-        assertTrue(actualClasses.isEmpty());
+    fun testGetClassesMustReturnEmptyList() {
+        prepareClasses()
+        val actualClasses = classSystem.classes
+        assertTrue(actualClasses.isEmpty())
     }
 
     @Test
-    public void testGetPrimaryClassReturnsRightClass() {
-        prepareClasses("Primary", "Secondary", "Third");
-
-        String actualPrimaryClass = classSystem.getPrimaryClass();
-        assertEquals("Primary", actualPrimaryClass);
+    fun testGetPrimaryClassReturnsRightClass() {
+        prepareClasses("Primary", "Secondary", "Third")
+        val actualPrimaryClass = classSystem.primaryClass
+        assertEquals("Primary", actualPrimaryClass)
     }
 
     @Test
-    public void testGetPrimaryClassReturnsEmptyString() {
-        prepareClasses();
-
-        String actualPrimaryClass = classSystem.getPrimaryClass();
-        assertEquals("", actualPrimaryClass);
+    fun testGetPrimaryClassReturnsEmptyString() {
+        prepareClasses()
+        val actualPrimaryClass = classSystem.primaryClass
+        assertEquals("", actualPrimaryClass)
     }
 
     @Test
-    public void testIsEnabledReturnsStatusOfSkillApi() {
-        when(SkillAPI.isLoaded()).thenReturn(true).thenReturn(false);
+    fun testIsEnabledReturnsStatusOfSkillApi() {
+        classSystem.isEnabled
 
-        assertTrue(this.classSystem.isEnabled());
-        assertFalse(this.classSystem.isEnabled());
+        verify(skillApi).isLoaded
     }
 
     @Test
-    public void testGetNameAlwaysReturnSkillAPI() {
-        assertEquals("SkillAPI", this.classSystem.getName());
+    fun testGetNameAlwaysReturnSkillAPI() {
+        assertEquals("SkillAPI", classSystem.name)
     }
 }
