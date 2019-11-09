@@ -27,14 +27,14 @@ import static org.junit.Assert.*;
 
 public class SubsystemAdapterTest {
     private SubsystemMetaAdapter<CorrectLevelSystem> levelSystemMeta;
-    private SubsystemMetaAdapter<BasicClassSystemImpl> classSystemMeta;
-    private SubsystemMetaAdapter<WrongClassSystemImpl> wrongSystemMeta;
+    private SubsystemMetaAdapter<CorrectClassSystem> classSystemMeta;
+    private SubsystemMetaAdapter<NotNeededClassSystem> wrongSystemMeta;
 
     @Before
     public void setUp() {
         levelSystemMeta = SubsystemMetaAdapter.fromClass(CorrectLevelSystem.class);
-        classSystemMeta = SubsystemMetaAdapter.fromClass(BasicClassSystemImpl.class);
-        wrongSystemMeta = SubsystemMetaAdapter.fromClass(WrongClassSystemImpl.class);
+        classSystemMeta = SubsystemMetaAdapter.fromClass(CorrectClassSystem.class);
+        wrongSystemMeta = SubsystemMetaAdapter.fromClass(NotNeededClassSystem.class);
     }
 
     @Test(expected = IllegalArgumentException.class)

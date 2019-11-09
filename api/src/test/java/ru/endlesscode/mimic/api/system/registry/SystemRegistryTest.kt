@@ -29,11 +29,12 @@ import ru.endlesscode.mimic.api.system.LevelSystem.Factory
 import ru.endlesscode.mockito.MOCKS_ONLY_ABSTRACTS
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
-import kotlin.test.fail
 
 class SystemRegistryTest {
 
+    // SUT
     private lateinit var registry: SystemRegistry
 
     @BeforeTest
@@ -42,18 +43,24 @@ class SystemRegistryTest {
     }
 
     @Test
-    fun testAddRightSubsystemByClass() {
-        registry.registerSubsystem<BasicClassSystemImpl>()
+    fun `when register correct subsystem by class - should register right factory`() {
+        // When
+        registry.registerSubsystem<CorrectClassSystem>()
+
+        // Then
         verify(registry).registerFactory(
             eq(ClassSystem.Factory::class.java),
-            eq(BasicClassSystemImpl.FACTORY),
+            eq(CorrectClassSystem.FACTORY),
             any()
         )
     }
 
     @Test
-    fun testAddRightSubsystemByInstance() {
+    fun `when register correct subsystem by factory - should register the factory`() {
+        // When
         registry.registerSubsystem(CorrectLevelSystem.FACTORY)
+
+        // Then
         verify(registry).registerFactory(
             eq(Factory::class.java),
             eq(CorrectLevelSystem.FACTORY),
@@ -61,32 +68,35 @@ class SystemRegistryTest {
         )
     }
 
-    @Test(expected = SystemNotRegisteredException::class)
-    fun testAddWrongSubsystemByClass() {
-        registry.registerSubsystem<WrongFactoryClassSystemImpl>()
-        fail("Must be thrown exception")
-    }
-
-    @Test(expected = SystemNotRegisteredException::class)
-    fun testAddWrongSubsystemBsyClass() {
-        registry.registerSubsystem<LevelSystem>()
-        fail("Must be thrown exception")
+    @Test
+    fun `when register system instead of subsystem - should throw an exception`() {
+        assertFailsWith<SystemNotRegisteredException> {
+            registry.registerSubsystem<LevelSystem>()
+        }
     }
 
     @Test
-    fun testAddNotNeededSubsystem() {
-        assertFalse(registry.registerSubsystem<WrongClassSystemImpl>())
-    }
+    fun `when register not needed subsystem - should not register it`() {
+        // When
+        val registered = registry.registerSubsystem<NotNeededClassSystem>()
 
-    @Test(expected = IllegalArgumentException::class)
-    fun testGetSystemFactoryMustThrowException() {
-        registry.getSystemFactory(WrongFactoryClassSystemImpl::class.java)
+        // Then
+        assertFalse(registered)
     }
 
     @Test
-    fun testUnregisterSubsystem() {
+    fun `when get system factory - and pass wrong player system - should throw an exception`() {
+        assertFailsWith<IllegalArgumentException> {
+            registry.getSystemFactory(MissingFactoryPlayerSystem::class.java)
+        }
+    }
+
+    @Test
+    fun `when unregister subsystem - should unregister right factory`() {
+        // When
         registry.unregisterSubsystem<CorrectLevelSystem>()
-        verify(registry)
-            .unregisterFactory(CorrectLevelSystem.FACTORY)
+
+        // Then
+        verify(registry).unregisterFactory(CorrectLevelSystem.FACTORY)
     }
 }

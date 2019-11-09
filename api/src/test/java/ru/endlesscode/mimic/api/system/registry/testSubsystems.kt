@@ -2,6 +2,7 @@ package ru.endlesscode.mimic.api.system.registry
 
 import ru.endlesscode.mimic.api.system.ClassSystem
 import ru.endlesscode.mimic.api.system.LevelSystem
+import ru.endlesscode.mimic.api.system.PlayerSystem
 import kotlin.test.fail
 
 
@@ -16,10 +17,10 @@ abstract class CorrectLevelSystem : LevelSystem {
 
 /** Basic implementation of class system. */
 @Subsystem(classes = ["ru.endlesscode.mimic.api.system.ClassSystem"])
-abstract class BasicClassSystemImpl : ClassSystem {
+abstract class CorrectClassSystem : ClassSystem {
     companion object {
         @JvmField
-        val FACTORY = ClassSystem.Factory<BasicClassSystemImpl>("TAG") { fail() }
+        val FACTORY = ClassSystem.Factory<CorrectClassSystem>("TAG") { fail() }
     }
 }
 
@@ -28,4 +29,10 @@ abstract class BasicClassSystemImpl : ClassSystem {
     priority = SubsystemPriority.HIGH,
     classes = ["ru.endlesscode.mimic.api.WrongClass"]
 )
-abstract class WrongClassSystemImpl : ClassSystem
+abstract class NotNeededClassSystem : ClassSystem
+
+/** Wring player system, that hasn't factory inner class. */
+abstract class MissingFactoryPlayerSystem private constructor() : PlayerSystem {
+    @Suppress("unused")
+    abstract class NotFactoryInnerClass
+}
