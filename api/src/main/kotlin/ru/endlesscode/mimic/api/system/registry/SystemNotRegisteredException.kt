@@ -19,10 +19,5 @@
 
 package ru.endlesscode.mimic.api.system.registry
 
-/**
- * Thrown when system can't be registered from register.
- *
- * @author Osip Fatkullin
- * @since 0.1
- */
+/** Thrown when system can't be registered from register. */
 class SystemNotRegisteredException(message: String, cause: Throwable) : RuntimeException(message, cause)

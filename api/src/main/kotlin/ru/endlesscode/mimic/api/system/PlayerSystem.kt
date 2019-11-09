@@ -26,9 +26,6 @@ import ru.endlesscode.mimic.api.ref.ExistingWeakReference
  *
  * Implementation should contain something player-related object to get data from.
  * For this object recommended use [ExistingWeakReference]
- *
- * @author Osip Fatkullin
- * @since 0.1
  */
 interface PlayerSystem {
 

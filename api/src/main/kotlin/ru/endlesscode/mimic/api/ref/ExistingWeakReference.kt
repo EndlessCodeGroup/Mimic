@@ -27,9 +27,6 @@ import java.lang.ref.WeakReference
  * @param referent object the new weak reference will refer to
  * @constructor Creates a new weak reference that refers to the given object. The new
  * reference is not registered with any queue.
- *
- * @author Osip Fatkullin
- * @since 1.0
  */
 class ExistingWeakReference<T : Any>(referent: T) : WeakReference<T>(referent) {
 

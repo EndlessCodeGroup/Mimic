@@ -127,9 +127,7 @@ public class BukkitMimic extends JavaPlugin {
         this.systemRegistry.unregisterAllSubsystems();
     }
 
-    /**
-     * Returns system registry.
-     */
+    /** Returns system registry. */
     @SuppressWarnings({"unused"})
     public static BukkitSystemRegistry getSystemRegistry() {
         return instance.systemRegistry;

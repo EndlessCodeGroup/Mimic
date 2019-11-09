@@ -19,12 +19,7 @@
 
 package ru.endlesscode.mimic.api.system
 
-/**
- * This interface contains all methods needed to convert levels to exp and vice versa.
- *
- * @author Osip Fatkullin
- * @since 0.1
- */
+/** Entity that contains all methods needed to convert levels to exp and vice versa. */
 interface ExpLevelConverter {
 
     /** Converts [exp] to full level, dropping fractional part. */

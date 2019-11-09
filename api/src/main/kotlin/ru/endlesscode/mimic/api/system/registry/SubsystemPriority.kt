@@ -23,9 +23,6 @@ package ru.endlesscode.mimic.api.system.registry
  * Subsystem priorities.
  *
  * Subsystem with higher priority will be loaded first. Use priorities to resolve conflicts.
- *
- * @author Osip Fatkullin
- * @since 0.1
  */
 enum class SubsystemPriority {
     LOWEST,

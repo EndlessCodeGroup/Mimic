@@ -23,9 +23,7 @@ import ru.endlesscode.mimic.api.system.ExpLevelConverter
 import ru.endlesscode.mimic.api.system.LevelSystem
 import ru.endlesscode.mimic.api.system.LevelSystem.Factory
 
-/**
- * Dummy implementation of LevelSystem for tests.
- */
+/** Dummy implementation of LevelSystem for tests. */
 @Subsystem(priority = SubsystemPriority.LOWEST)
 class BasicLevelSystemImpl : LevelSystem {
 

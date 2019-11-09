@@ -27,9 +27,7 @@ package ru.endlesscode.mimic.api.system
  * @param T           System type
  * @param constructor Function to create system
  * @param tag         The tag
- * @author Osip Fatkullin
- * @since 0.1
-</T> */
+ */
 open class SystemFactory<T : PlayerSystem>(val tag: String, private val constructor: (Any) -> T) {
 
     /**

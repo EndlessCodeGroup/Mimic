@@ -23,10 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.PlayerSystem;
 import ru.endlesscode.mimic.api.system.SystemFactory;
 
-/**
- * @author Osip Fatkullin
- * @since 0.1
- */
 public class BasicSystemRegistryImpl implements SystemRegistry {
 
     @Override

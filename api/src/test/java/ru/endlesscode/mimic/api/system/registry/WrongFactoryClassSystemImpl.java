@@ -25,10 +25,6 @@ import ru.endlesscode.mimic.api.system.ClassSystem;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Osip Fatkullin
- * @since 0.1
- */
 @Subsystem
 public class WrongFactoryClassSystemImpl implements ClassSystem {
     private WrongFactoryClassSystemImpl() {

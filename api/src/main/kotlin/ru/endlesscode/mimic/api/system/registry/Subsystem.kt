@@ -22,9 +22,6 @@ package ru.endlesscode.mimic.api.system.registry
 /**
  * This annotation provides meta-information about subsystem to load it.
  * You must annotate with this all subsystems that you've added.
- *
- * @author Osip Fatkullin
- * @since 0.1
  */
 @Target(AnnotationTarget.CLASS)
 @Retention

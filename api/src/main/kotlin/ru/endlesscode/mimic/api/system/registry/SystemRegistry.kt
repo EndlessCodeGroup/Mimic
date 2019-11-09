@@ -29,9 +29,6 @@ import ru.endlesscode.mimic.api.system.SystemFactory
  * is concrete implementations of systems.
  *
  * Recommended to use a singleton pattern when implement this class.
- *
- * @author Osip Fatkullin
- * @since 0.1
  */
 interface SystemRegistry {
 

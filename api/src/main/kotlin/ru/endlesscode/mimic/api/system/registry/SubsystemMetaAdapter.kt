@@ -24,12 +24,9 @@ import ru.endlesscode.mimic.api.system.PlayerSystem
 /**
  * Adapter to work with systems [Subsystem].
  *
- * @see Subsystem
- *
  * @param SubsystemT Subsystem type
  * @param meta The metadata
- * @author Osip Fatkullin
- * @since 0.1
+ * @see Subsystem
  */
 class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(private val meta: Subsystem) {
 

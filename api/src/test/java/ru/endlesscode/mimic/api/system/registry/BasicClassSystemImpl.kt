@@ -22,12 +22,7 @@ package ru.endlesscode.mimic.api.system.registry
 import ru.endlesscode.mimic.api.system.ClassSystem
 import ru.endlesscode.mimic.api.system.ClassSystem.Factory
 
-/**
- * Basic implementation of class system.
- *
- * @author Osip Fatkullin
- * @since 0.1
- */
+/** Basic implementation of class system. */
 @Subsystem(classes = ["ru.endlesscode.mimic.api.system.ClassSystem"])
 class BasicClassSystemImpl : ClassSystem {
 

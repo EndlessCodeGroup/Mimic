@@ -25,9 +25,6 @@ package ru.endlesscode.mimic.api.system
  *
  * Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.
- *
- * @author Osip Fatkullin
- * @since 0.1
  */
 interface LevelSystem : PlayerSystem {
 

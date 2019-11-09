@@ -26,8 +26,6 @@ package ru.endlesscode.mimic.api.system
  * and override all methods that works not properly for your case.
  *
  * @see [PlayerSystem] To read more about implementation.
- * @author Osip Fatkullin
- * @since 0.1
  */
 interface ClassSystem : PlayerSystem {
 
