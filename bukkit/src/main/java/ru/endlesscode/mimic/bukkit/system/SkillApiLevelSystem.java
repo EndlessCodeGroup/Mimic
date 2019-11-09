@@ -118,8 +118,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
     }
 
     private @Nullable PlayerClass getPlayerClass() {
-        Player player = playerRef.get();
-        return SkillAPI.getPlayerData(player).getMainClass();
+        return SkillAPI.getPlayerData(getPlayer()).getMainClass();
     }
 
     @Override

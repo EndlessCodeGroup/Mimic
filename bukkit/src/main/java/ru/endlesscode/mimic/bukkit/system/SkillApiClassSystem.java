@@ -67,8 +67,7 @@ public class SkillApiClassSystem extends BukkitClassSystem {
     }
 
     private PlayerData getPlayerData() {
-        Player player = playerRef.get();
-        return SkillAPI.getPlayerData(player);
+        return SkillAPI.getPlayerData(getPlayer());
     }
 
     @Override

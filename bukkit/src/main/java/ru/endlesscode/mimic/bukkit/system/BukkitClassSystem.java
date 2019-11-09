@@ -29,7 +29,7 @@ import ru.endlesscode.mimic.api.system.ClassSystem;
  */
 public abstract class BukkitClassSystem implements ClassSystem {
 
-    protected final ExistingWeakReference<Player> playerRef;
+    private final ExistingWeakReference<Player> playerRef;
 
     /**
      * Constructor that initialize player.

@@ -113,6 +113,6 @@ public class BattleLevelsLevelSystem extends BukkitLevelSystem {
     }
 
     private UUID getPlayerUniqueId() {
-        return playerRef.get().getUniqueId();
+        return getPlayer().getUniqueId();
     }
 }

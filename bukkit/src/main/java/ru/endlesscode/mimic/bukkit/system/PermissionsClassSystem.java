@@ -32,10 +32,10 @@ import java.util.Set;
 
 /**
  * Class system based on permissions.
- *
- * <p>To set user classes just give him permission like these:
- *      - mimic.class.ClassOne
- *      - mimic.class.ClassTwo
+ * <p>
+ * To set user classes just give him permission like these:
+ * - mimic.class.ClassOne
+ * - mimic.class.ClassTwo
  * First of classes will be primary.
  */
 @Subsystem(priority = SubsystemPriority.LOWEST)
@@ -52,15 +52,14 @@ public class PermissionsClassSystem extends BukkitClassSystem {
 
     @Override
     public boolean hasRequiredClass(@NotNull String requiredClass) {
-        Player player = this.playerRef.get();
-        return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase());
+        return getPlayer().hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase());
     }
 
     @Override
-    public @NotNull List<String> getClasses() {
+    public @NotNull
+    List<String> getClasses() {
         List<String> matchedPermissions = new ArrayList<>();
-        Player player = this.playerRef.get();
-        Set<PermissionAttachmentInfo> perms = player.getEffectivePermissions();
+        Set<PermissionAttachmentInfo> perms = getPlayer().getEffectivePermissions();
         for (PermissionAttachmentInfo perm : perms) {
             boolean positive = perm.getValue();
             String permission = perm.getPermission();

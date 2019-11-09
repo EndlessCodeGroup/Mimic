@@ -25,12 +25,10 @@ import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
 import ru.endlesscode.mimic.api.system.ExpLevelConverter;
 import ru.endlesscode.mimic.api.system.LevelSystem;
 
-/**
- * Level system adapted for bukkit.
- */
+/** Level system adapted for bukkit. */
 public abstract class BukkitLevelSystem implements LevelSystem {
 
-    protected final ExistingWeakReference<Player> playerRef;
+    private final ExistingWeakReference<Player> playerRef;
     private final ExpLevelConverter converter;
 
     /**

@@ -36,16 +36,14 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
 
     @Override
     public int getLevel() {
-        Player player = playerRef.get();
-        return player.getLevel();
+        return getPlayer().getLevel();
     }
 
     @Override
     public void setLevel(int newLevel) {
         int allowedLevel = Math.max(0, newLevel);
 
-        Player player = playerRef.get();
-        player.setLevel(allowedLevel);
+        getPlayer().setLevel(allowedLevel);
     }
 
     @Override
@@ -53,8 +51,7 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
         int level = getLevel();
         double expToLevel = getConverter().getExpToReachNextLevel(level);
 
-        Player player = playerRef.get();
-        return expToLevel * player.getExp();
+        return expToLevel * getPlayer().getExp();
     }
 
     @Override
@@ -64,29 +61,25 @@ public class VanillaLevelSystem extends BukkitLevelSystem {
         double allowedExperience = Math.max(0, newExperience);
         allowedExperience = Math.min(allowedExperience, expToNextLevel);
 
-        Player player = playerRef.get();
-        player.setExp((float) (allowedExperience / expToNextLevel));
+        getPlayer().setExp((float) (allowedExperience / expToNextLevel));
     }
 
     public double getFractionalExp() {
-        Player player = playerRef.get();
-        return player.getExp();
+        return getPlayer().getExp();
     }
 
     @Override
     public void setFractionalExp(double fractionalExp) {
-        Player player = playerRef.get();
 
         float allowedExp = Math.min(1, (float) fractionalExp);
         allowedExp = Math.max(0, allowedExp);
 
-        player.setExp(allowedExp);
+        getPlayer().setExp(allowedExp);
     }
 
     @Override
     public double getTotalExpToNextLevel() {
-        Player player = playerRef.get();
-        return player.getExpToLevel();
+        return getPlayer().getExpToLevel();
     }
 
     @Override
