@@ -17,24 +17,42 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system.registry;
+package ru.endlesscode.mimic.api.system.registry
 
-import org.junit.Test;
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-import static org.junit.Assert.assertEquals;
+@RunWith(Parameterized::class)
+class SubsystemPriorityTest(
+    private val priority: SubsystemPriority,
+    private val stringValue: String
+) {
 
-public class SystemPriorityTest {
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data() = listOf(
+            arrayOf(SubsystemPriority.HIGHEST, "HIGHEST"),
+            arrayOf(SubsystemPriority.HIGHEST, "Highest"),
+            arrayOf(SubsystemPriority.HIGH, "HIGH"),
+            arrayOf(SubsystemPriority.HIGH, "High"),
+            arrayOf(SubsystemPriority.NORMAL, "NORMAL"),
+            arrayOf(SubsystemPriority.NORMAL, "Normal"),
+            arrayOf(SubsystemPriority.LOW, "LOW"),
+            arrayOf(SubsystemPriority.LOW, "Low"),
+            arrayOf(SubsystemPriority.LOWEST, "LOWEST"),
+            arrayOf(SubsystemPriority.LOWEST, "Lowest")
+        )
+    }
+
     @Test
-    public void testValueOf() {
-        assertEquals(SubsystemPriority.HIGHEST, SubsystemPriority.fromString("HIGHEST"));
-        assertEquals(SubsystemPriority.HIGHEST, SubsystemPriority.fromString("Highest"));
-        assertEquals(SubsystemPriority.HIGH, SubsystemPriority.fromString("HIGH"));
-        assertEquals(SubsystemPriority.HIGH, SubsystemPriority.fromString("High"));
-        assertEquals(SubsystemPriority.NORMAL, SubsystemPriority.fromString("NORMAL"));
-        assertEquals(SubsystemPriority.NORMAL, SubsystemPriority.fromString("Normal"));
-        assertEquals(SubsystemPriority.LOW, SubsystemPriority.fromString("LOW"));
-        assertEquals(SubsystemPriority.LOW, SubsystemPriority.fromString("Low"));
-        assertEquals(SubsystemPriority.LOWEST, SubsystemPriority.fromString("LOWEST"));
-        assertEquals(SubsystemPriority.LOWEST, SubsystemPriority.fromString("Lowest"));
+    fun testFromString() {
+        // When
+        val priority = SubsystemPriority.fromString(stringValue)
+
+        // Then
+        assertEquals(this.priority, priority)
     }
 }
