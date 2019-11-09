@@ -33,7 +33,7 @@ import ru.endlesscode.mimic.api.system.registry.SystemRegistry;
  * Implementation of system registry for bukkit.
  * Using {@link org.bukkit.plugin.ServicesManager}
  */
-public class BukkitSystemRegistry implements SystemRegistry {
+public class BukkitSystemRegistry extends SystemRegistry {
     private final Plugin plugin;
     private final ServicesManager servicesManager;
 
@@ -49,7 +49,7 @@ public class BukkitSystemRegistry implements SystemRegistry {
     }
 
     @Override
-    public <SystemT extends PlayerSystem, FactoryT extends SystemFactory<? extends SystemT>> void registerSystem(
+    public <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerFactory(
             @NotNull Class<FactoryT> factoryClass,
             @NotNull FactoryT subsystemFactory,
             @NotNull SubsystemPriority priority

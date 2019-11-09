@@ -39,7 +39,7 @@ import java.util.List;
         classes = {"com.sucy.skill.SkillAPI"})
 public class SkillApiClassSystem extends BukkitClassSystem {
     public static final String TAG = "SkillAPI";
-    public static final Factory FACTORY = new Factory(TAG, playerArg -> new SkillApiClassSystem((Player) playerArg));
+    public static final Factory<SkillApiClassSystem> FACTORY = new Factory<>(TAG, playerArg -> new SkillApiClassSystem((Player) playerArg));
 
     private SkillApiClassSystem(@NotNull Player player) {
         super(player);

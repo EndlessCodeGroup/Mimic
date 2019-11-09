@@ -17,97 +17,76 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system.registry;
+package ru.endlesscode.mimic.api.system.registry
 
-import org.junit.Before;
-import org.junit.Test;
-import ru.endlesscode.mimic.api.system.ClassSystem;
-import ru.endlesscode.mimic.api.system.LevelSystem;
-import ru.endlesscode.mimic.api.system.PlayerSystem;
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import ru.endlesscode.mimic.api.system.ClassSystem
+import ru.endlesscode.mimic.api.system.LevelSystem
+import ru.endlesscode.mimic.api.system.LevelSystem.Factory
+import ru.endlesscode.mockito.MOCKS_ONLY_ABSTRACTS
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.fail
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+class SystemRegistryTest {
 
-public class SystemRegistryTest {
-    private SystemRegistry registry;
+    private lateinit var registry: SystemRegistry
 
-    @Before
-    public void setUp() {
-        this.registry = spy(new BasicSystemRegistryImpl());
+    @BeforeTest
+    fun setUp() {
+        registry = mock(defaultAnswer = MOCKS_ONLY_ABSTRACTS)
     }
 
     @Test
-    public void testAddRightSubsystemByClass() {
-        registry.registerSubsystem(BasicLevelSystemImpl.class);
-        verify(registry).registerSystem(
-                eq(LevelSystem.Factory.class),
-                eq(BasicLevelSystemImpl.FACTORY),
-                any(SubsystemPriority.class));
-
-        registry.registerSubsystem(BasicClassSystemImpl.class);
-        verify(registry).registerSystem(
-                eq(ClassSystem.Factory.class),
-                eq(BasicClassSystemImpl.FACTORY),
-                any(SubsystemPriority.class));
+    fun testAddRightSubsystemByClass() {
+        registry.registerSubsystem<BasicClassSystemImpl>()
+        verify(registry).registerFactory(
+            eq(ClassSystem.Factory::class.java),
+            eq(BasicClassSystemImpl.FACTORY),
+            any()
+        )
     }
 
     @Test
-    public void testAddRightSubsystemByInstance() {
-        registry.registerSubsystem(BasicLevelSystemImpl.class, BasicLevelSystemImpl.FACTORY);
-        registry.registerSubsystem(BasicClassSystemImpl.class, BasicClassSystemImpl.FACTORY);
-
-        verify(registry, never()).getSubsystemFactory(any());
+    fun testAddRightSubsystemByInstance() {
+        registry.registerSubsystem(CorrectLevelSystem.FACTORY)
+        verify(registry).registerFactory(
+            eq(Factory::class.java),
+            eq(CorrectLevelSystem.FACTORY),
+            any()
+        )
     }
 
-    @Test(expected = SystemNotRegisteredException.class)
-    public void testAddWrongSubsystemByClass() {
-        registry.registerSubsystem(WrongFactoryClassSystemImpl.class);
-
-        fail("Must be thrown exception");
+    @Test(expected = SystemNotRegisteredException::class)
+    fun testAddWrongSubsystemByClass() {
+        registry.registerSubsystem<WrongFactoryClassSystemImpl>()
+        fail("Must be thrown exception")
     }
 
-    @Test
-    public void testAddNotNeededSubsystem() {
-        assertFalse(registry.registerSubsystem(WrongClassSystemImpl.class));
-    }
-
-    @Test
-    public void testGetSystemFactoryMustBeRight() {
-        registry.getSystemFactory(LevelSystem.class);
-        verify(registry).getFactory(LevelSystem.Factory.class);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetSystemFactoryMustThrowException() {
-        registry.getSystemFactory(WrongFactoryClassSystemImpl.class);
+    @Test(expected = SystemNotRegisteredException::class)
+    fun testAddWrongSubsystemBsyClass() {
+        registry.registerSubsystem<LevelSystem>()
+        fail("Must be thrown exception")
     }
 
     @Test
-    public void testGetFactoryClassMustBeRight() {
-        Class<?> factoryClass = registry.getFactoryClass(LevelSystem.class);
-        assertEquals(LevelSystem.Factory.class, factoryClass);
+    fun testAddNotNeededSubsystem() {
+        assertFalse(registry.registerSubsystem<WrongClassSystemImpl>())
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetFactoryClassWithoutInnerClasses() {
-        registry.getFactoryClass(PlayerSystem.class);
-
-        fail("Must throw exception!");
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetFactoryClassWithWrongInnerClass() {
-        registry.getFactoryClass(WrongFactoryClassSystemImpl.class);
-
-        fail("Must throw exception!");
+    @Test(expected = IllegalArgumentException::class)
+    fun testGetSystemFactoryMustThrowException() {
+        registry.getSystemFactory(WrongFactoryClassSystemImpl::class.java)
     }
 
     @Test
-    public void testUnregisterSubsystem() {
-        registry.unregisterSubsystem(BasicLevelSystemImpl.class);
-
-        verify(registry).unregisterFactory(BasicLevelSystemImpl.FACTORY);
+    fun testUnregisterSubsystem() {
+        registry.unregisterSubsystem<CorrectLevelSystem>()
+        verify(registry)
+            .unregisterFactory(CorrectLevelSystem.FACTORY)
     }
 }

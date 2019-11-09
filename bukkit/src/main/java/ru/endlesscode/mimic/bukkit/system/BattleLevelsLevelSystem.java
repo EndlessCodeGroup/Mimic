@@ -34,7 +34,7 @@ import java.util.UUID;
         classes = {"me.robin.battlelevels.api.BattleLevelsAPI"})
 public class BattleLevelsLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "BattleLevels";
-    public static final Factory FACTORY = new Factory(TAG, playerObj -> new BattleLevelsLevelSystem((Player) playerObj));
+    public static final Factory<BattleLevelsLevelSystem> FACTORY = new Factory<>(TAG, playerObj -> new BattleLevelsLevelSystem((Player) playerObj));
 
     private BattleLevelsLevelSystem(@NotNull Player player) {
         super(BattleLevelsConverter.getInstance(), player);

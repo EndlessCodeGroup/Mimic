@@ -26,13 +26,13 @@ import ru.endlesscode.mimic.api.system.PlayerSystem;
 import static org.junit.Assert.*;
 
 public class SubsystemAdapterTest {
-    private SubsystemMetaAdapter<BasicLevelSystemImpl> levelSystemMeta;
+    private SubsystemMetaAdapter<CorrectLevelSystem> levelSystemMeta;
     private SubsystemMetaAdapter<BasicClassSystemImpl> classSystemMeta;
     private SubsystemMetaAdapter<WrongClassSystemImpl> wrongSystemMeta;
 
     @Before
     public void setUp() {
-        levelSystemMeta = SubsystemMetaAdapter.fromClass(BasicLevelSystemImpl.class);
+        levelSystemMeta = SubsystemMetaAdapter.fromClass(CorrectLevelSystem.class);
         classSystemMeta = SubsystemMetaAdapter.fromClass(BasicClassSystemImpl.class);
         wrongSystemMeta = SubsystemMetaAdapter.fromClass(WrongClassSystemImpl.class);
     }
