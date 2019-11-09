@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.SkillAPI;
 import com.sucy.skill.api.player.PlayerClass;
 import com.sucy.skill.api.player.PlayerData;
 import org.bukkit.entity.Player;
@@ -41,8 +40,15 @@ public class SkillApiClassSystem extends BukkitClassSystem {
     public static final String TAG = "SkillAPI";
     public static final Factory<SkillApiClassSystem> FACTORY = new Factory<>(TAG, playerArg -> new SkillApiClassSystem((Player) playerArg));
 
+    private final SkillApiWrapper skillApi;
+
     private SkillApiClassSystem(@NotNull Player player) {
+        this(player, new SkillApiWrapper());
+    }
+
+    SkillApiClassSystem(@NotNull Player player, SkillApiWrapper skillApi) {
         super(player);
+        this.skillApi = skillApi;
     }
 
     @Override
@@ -67,12 +73,12 @@ public class SkillApiClassSystem extends BukkitClassSystem {
     }
 
     private PlayerData getPlayerData() {
-        return SkillAPI.getPlayerData(getPlayer());
+        return skillApi.getPlayerData(getPlayer());
     }
 
     @Override
     public boolean isEnabled() {
-        return SkillAPI.isLoaded();
+        return skillApi.isLoaded();
     }
 
     @NotNull

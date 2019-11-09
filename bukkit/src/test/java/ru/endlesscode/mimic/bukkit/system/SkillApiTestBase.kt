@@ -17,66 +17,53 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system
 
-import com.sucy.skill.SkillAPI;
-import com.sucy.skill.api.classes.RPGClass;
-import com.sucy.skill.api.player.PlayerClass;
-import com.sucy.skill.api.player.PlayerData;
-import com.sucy.skill.data.Settings;
-import org.junit.Before;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import ru.endlesscode.mimic.bukkit.BukkitTestBase;
+import com.nhaarman.mockitokotlin2.*
+import com.sucy.skill.api.classes.RPGClass
+import com.sucy.skill.api.player.PlayerClass
+import com.sucy.skill.api.player.PlayerData
+import com.sucy.skill.data.Settings
+import ru.endlesscode.mimic.bukkit.BukkitTestBase
+import kotlin.test.BeforeTest
 
-import java.util.ArrayList;
-import java.util.List;
+open class SkillApiTestBase : BukkitTestBase() {
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.powermock.api.mockito.PowerMockito.*;
+    protected lateinit var data: PlayerData
+    internal lateinit var skillApi: SkillApiWrapper
 
-@PrepareForTest({SkillAPI.class, PlayerData.class, PlayerClass.class})
-public class SkillApiTestBase extends BukkitTestBase {
-    protected PlayerData data;
+    @BeforeTest
+    override fun setUp() {
+        super.setUp()
 
-    @Override
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        mockStatic(SkillAPI.class);
-        mockSettings();
-        mockPlayerData();
+        data = mock()
+        skillApi = mock {
+            val settingsMock = mockSettings()
+            on { settings } doReturn settingsMock
+            on { getPlayerData(player) } doReturn data
+        }
     }
 
-    private void mockSettings() {
-        Settings settings = mock(Settings.class);
+    private fun mockSettings(): Settings = mock {
         // Our formula exp to next level is: lvl * 10
-        when(settings.getRequiredExp(anyInt())).then(invocation -> (int) invocation.getArgument(0) * 10);
-        when(SkillAPI.getSettings()).thenReturn(settings);
+        on { getRequiredExp(any()) } doAnswer { invocation ->
+            invocation.getArgument<Int>(0) * 10
+        }
     }
 
-    private void mockPlayerData() {
-        data = mock(PlayerData.class);
-        when(SkillAPI.getPlayerData(this.player)).thenReturn(data);
+    protected fun prepareClasses(vararg classNames: String) {
+        val playerClasses = classNames.map(::mockNamedPlayerClass)
+        whenever(data.classes) doReturn playerClasses
+        whenever(data.mainClass) doReturn if (playerClasses.isEmpty()) null else playerClasses[0]
     }
 
-    protected void prepareClasses(String... classNames) {
-        List<PlayerClass> playerClasses = new ArrayList<>();
-        for (String className : classNames) {
-            PlayerClass playerClass = mockNamedPlayerClass(className);
-            playerClasses.add(playerClass);
+    private fun mockNamedPlayerClass(className: String): PlayerClass {
+        val rpgClass = mock<RPGClass> {
+            on { name } doReturn className
         }
 
-        when(data.getClasses()).thenReturn(playerClasses);
-        when(data.getMainClass()).thenReturn(playerClasses.isEmpty() ? null : playerClasses.get(0));
-    }
-
-    private PlayerClass mockNamedPlayerClass(String className) {
-        PlayerClass playerClass = mock(PlayerClass.class);
-        RPGClass rpgClass = mock(RPGClass.class);
-        when(rpgClass.getName()).thenReturn(className);
-        when(playerClass.getData()).thenReturn(rpgClass);
-
-        return playerClass;
+        return mock {
+            on { data } doReturn rpgClass
+        }
     }
 }
