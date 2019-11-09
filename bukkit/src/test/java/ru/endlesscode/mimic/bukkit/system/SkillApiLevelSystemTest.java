@@ -36,7 +36,7 @@ public class SkillApiLevelSystemTest extends SkillApiTestBase {
 
     @Override
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
 
         levelSystem = SkillApiLevelSystem.FACTORY.get(player);

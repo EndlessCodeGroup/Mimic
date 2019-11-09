@@ -33,7 +33,7 @@ public class VanillaLevelSystemTest extends BukkitTestBase {
 
     @Before
     @Override
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
 
         this.levelSystem = (VanillaLevelSystem) VanillaLevelSystem.FACTORY.get(this.player);

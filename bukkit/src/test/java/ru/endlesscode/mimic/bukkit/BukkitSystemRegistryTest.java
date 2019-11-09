@@ -38,7 +38,7 @@ public class BukkitSystemRegistryTest extends BukkitTestBase {
     private BukkitSystemRegistry systemRegistry;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
 
         ServicesManager servicesManager = this.server.getServicesManager();

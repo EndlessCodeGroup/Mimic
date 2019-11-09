@@ -17,68 +17,61 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit;
+package ru.endlesscode.mimic.bukkit
 
-import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.ServicesManager;
-import org.bukkit.plugin.SimplePluginManager;
-import org.bukkit.plugin.SimpleServicesManager;
-import org.junit.Before;
-import org.powermock.core.MockGateway;
-import org.powermock.reflect.Whitebox;
-import ru.endlesscode.mimic.bukkit.util.Log;
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import org.bukkit.Bukkit
+import org.bukkit.Server
+import org.bukkit.command.SimpleCommandMap
+import org.bukkit.entity.Player
+import org.bukkit.plugin.*
+import ru.endlesscode.mimic.bukkit.util.Log
+import kotlin.test.BeforeTest
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+/** Base for all Bukkit-related tests. */
+open class BukkitTestBase {
+    protected lateinit var server: Server
+    protected lateinit var plugin: Plugin
+    protected lateinit var player: Player
 
-/**
- * Base for all Bukkit-related tests.
- */
-public class BukkitTestBase {
-    protected Server server;
-    protected Plugin plugin;
-    protected Player player;
-
-    @Before
-    public void setUp() throws Exception {
-        MockGateway.MOCK_STANDARD_METHODS = false;
-
-        mockServer();
-        mockPlugin();
-        mockPlayer();
-        mockBukkit();
+    @BeforeTest
+    open fun setUp() {
+        mockServer()
+        mockPlugin()
+        mockPlayer()
+        mockBukkit()
     }
 
-    private void mockServer() {
-        this.server = mock(Server.class);
-        when(this.server.getName()).thenReturn("TestBukkit");
-        when(this.server.getVersion()).thenReturn("1.0");
-        when(this.server.getBukkitVersion()).thenReturn("1.9.4");
-        when(this.server.getLogger()).thenReturn(Log.TEST_LOGGER);
+    private fun mockServer() {
+        server = mock { server ->
+            on { name } doReturn "TestBukkit"
+            on { version } doReturn "1.0"
+            on { bukkitVersion } doReturn "1.9.4"
+            on { logger } doReturn Log.TEST_LOGGER
 
-        ServicesManager servicesManager = new SimpleServicesManager();
-        when(this.server.getServicesManager()).thenReturn(servicesManager);
+            val servicesManager: ServicesManager = SimpleServicesManager()
+            on(server.servicesManager) doReturn servicesManager
 
-        SimpleCommandMap commandMap = new SimpleCommandMap(this.server);
-        PluginManager pluginManager = new SimplePluginManager(this.server, commandMap);
-        when(this.server.getPluginManager()).thenReturn(pluginManager);
+            val commandMap = SimpleCommandMap(server)
+            val pluginManager: PluginManager = SimplePluginManager(server, commandMap)
+            on(server.pluginManager) doReturn pluginManager
+        }
     }
 
-    private void mockPlugin() {
-        this.plugin = mock(Plugin.class);
-        when(this.plugin.getServer()).thenReturn(this.server);
+    private fun mockPlugin() {
+        plugin = mock {
+            on { server } doReturn server
+        }
     }
 
-    private void mockPlayer() {
-        this.player = mock(Player.class);
+    private fun mockPlayer() {
+        player = mock()
     }
 
-    private void mockBukkit() {
-        Whitebox.setInternalState(Bukkit.class, "server", this.server);
+    private fun mockBukkit() {
+        val serverField = Bukkit::class.java.getDeclaredField("server")
+        serverField.isAccessible = true
+        serverField.set(null, server)
     }
 }

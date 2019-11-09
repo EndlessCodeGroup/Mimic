@@ -37,7 +37,7 @@ public class PermissionsClassSystemTest extends BukkitTestBase {
     private ClassSystem classSystem;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
 
         this.classSystem = PermissionsClassSystem.FACTORY.get(this.player);

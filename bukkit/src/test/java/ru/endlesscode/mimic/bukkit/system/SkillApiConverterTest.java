@@ -21,18 +21,15 @@ package ru.endlesscode.mimic.bukkit.system;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(PowerMockRunner.class)
 public class SkillApiConverterTest extends SkillApiTestBase {
     private SkillApiConverter converter;
 
     @Override
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         super.setUp();
 
         this.converter = SkillApiConverter.getInstance();
