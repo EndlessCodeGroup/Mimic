@@ -17,49 +17,47 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.api.system.registry;
+package ru.endlesscode.mimic.api.system.registry
 
-import org.junit.Before;
-import org.junit.Test;
-import ru.endlesscode.mimic.api.system.PlayerSystem;
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
+import ru.endlesscode.mimic.api.system.PlayerSystem
+import kotlin.reflect.KClass
 
-import static org.junit.Assert.*;
+@RunWith(Parameterized::class)
+class SubsystemMetaAdapterTest(
+    private val subsystemClass: KClass<out PlayerSystem>,
+    private val requiredClassesExists: Boolean,
+    private val priority: SubsystemPriority
+) {
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data(): Collection<Array<Any>> = listOf(
+            arrayOf(CorrectLevelSystem::class, true, SubsystemPriority.LOWEST),
+            arrayOf(CorrectClassSystem::class, true, SubsystemPriority.NORMAL),
+            arrayOf(NotNeededClassSystem::class, false, SubsystemPriority.HIGH)
+        )
+    }
 
-public class SubsystemAdapterTest {
-    private SubsystemMetaAdapter<CorrectLevelSystem> levelSystemMeta;
-    private SubsystemMetaAdapter<CorrectClassSystem> classSystemMeta;
-    private SubsystemMetaAdapter<NotNeededClassSystem> wrongSystemMeta;
+    // SUT
+    private lateinit var adapter: SubsystemMetaAdapter<*>
 
     @Before
-    public void setUp() {
-        levelSystemMeta = SubsystemMetaAdapter.fromClass(CorrectLevelSystem.class);
-        classSystemMeta = SubsystemMetaAdapter.fromClass(CorrectClassSystem.class);
-        wrongSystemMeta = SubsystemMetaAdapter.fromClass(NotNeededClassSystem.class);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testGettingMetaFromWrongClassMustThrowException() {
-        SubsystemMetaAdapter.fromClass(PlayerSystem.class);
+    fun setUp() {
+        adapter = SubsystemMetaAdapter.fromClass(subsystemClass.java)
     }
 
     @Test
-    public void testGettingMetaFromRightClassMustReturnResult() {
-        assertNotNull(levelSystemMeta);
-        assertNotNull(classSystemMeta);
-        assertNotNull(wrongSystemMeta);
+    fun `check required classes exists`() {
+        assertEquals(requiredClassesExists, adapter.requiredClassesExists())
     }
 
     @Test
-    public void testCheckingClassExistence() {
-        assertTrue(levelSystemMeta.requiredClassesExists());
-        assertTrue(classSystemMeta.requiredClassesExists());
-        assertFalse(wrongSystemMeta.requiredClassesExists());
-    }
-
-    @Test
-    public void testGettingPriority() {
-        assertEquals(SubsystemPriority.LOWEST, levelSystemMeta.getPriority());
-        assertEquals(SubsystemPriority.NORMAL, classSystemMeta.getPriority());
-        assertEquals(SubsystemPriority.HIGH, wrongSystemMeta.getPriority());
+    fun `check priority`() {
+        assertEquals(priority, adapter.priority)
     }
 }
