@@ -23,10 +23,9 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.bukkit.Bukkit
 import org.bukkit.Server
-import org.bukkit.command.SimpleCommandMap
 import org.bukkit.entity.Player
-import org.bukkit.plugin.*
-import ru.endlesscode.mimic.bukkit.util.Log
+import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.SimpleServicesManager
 import kotlin.test.BeforeTest
 
 /** Base for all Bukkit-related tests. */
@@ -37,36 +36,20 @@ open class BukkitTestBase {
 
     @BeforeTest
     open fun setUp() {
-        mockServer()
-        mockPlugin()
-        mockPlayer()
+        server = mockServer()
+        plugin = mockPlugin()
+        player = mock()
+
         mockBukkit()
     }
 
-    private fun mockServer() {
-        server = mock { server ->
-            on { name } doReturn "TestBukkit"
-            on { version } doReturn "1.0"
-            on { bukkitVersion } doReturn "1.9.4"
-            on { logger } doReturn Log.TEST_LOGGER
-
-            val servicesManager: ServicesManager = SimpleServicesManager()
-            on(server.servicesManager) doReturn servicesManager
-
-            val commandMap = SimpleCommandMap(server)
-            val pluginManager: PluginManager = SimplePluginManager(server, commandMap)
-            on(server.pluginManager) doReturn pluginManager
-        }
+    private fun mockServer(): Server = mock {
+        on { pluginManager } doReturn mock()
+        on { servicesManager } doReturn SimpleServicesManager()
     }
 
-    private fun mockPlugin() {
-        plugin = mock {
-            on { server } doReturn server
-        }
-    }
-
-    private fun mockPlayer() {
-        player = mock()
+    private fun mockPlugin(): Plugin = mock {
+        on { server } doReturn server
     }
 
     private fun mockBukkit() {
