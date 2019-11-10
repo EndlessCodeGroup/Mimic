@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.SkillAPI;
 import com.sucy.skill.api.enums.ExpSource;
 import com.sucy.skill.api.player.PlayerClass;
 import org.bukkit.entity.Player;
@@ -38,8 +37,15 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "SkillAPI";
     public static final Factory<SkillApiLevelSystem> FACTORY = new Factory<>(TAG, player -> new SkillApiLevelSystem((Player) player));
 
+    private SkillApiWrapper skillApi;
+
     private SkillApiLevelSystem(Player player) {
-        super(SkillApiConverter.getInstance(), player);
+        this(player, new SkillApiWrapper());
+    }
+
+    SkillApiLevelSystem(Player player, SkillApiWrapper skillApi) {
+        super(SkillApiConverter.getInstance(skillApi), player);
+        this.skillApi = skillApi;
     }
 
     @Override
@@ -118,12 +124,12 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
     }
 
     private @Nullable PlayerClass getPlayerClass() {
-        return SkillAPI.getPlayerData(getPlayer()).getMainClass();
+        return skillApi.getPlayerData(getPlayer()).getMainClass();
     }
 
     @Override
     public boolean isEnabled() {
-        return SkillAPI.isLoaded();
+        return skillApi.isLoaded();
     }
 
     @NotNull

@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.SkillAPI;
 import com.sucy.skill.data.Settings;
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.ExpLevelConverter;
@@ -31,13 +30,13 @@ public class SkillApiConverter implements ExpLevelConverter {
     private static SkillApiConverter instance;
     private final Settings settings;
 
-    private SkillApiConverter() {
-        this.settings = SkillAPI.getSettings();
+    private SkillApiConverter(@NotNull SkillApiWrapper skillApi) {
+        this.settings = skillApi.getSettings();
     }
 
-    static @NotNull SkillApiConverter getInstance() {
+    static @NotNull SkillApiConverter getInstance(SkillApiWrapper skillApi) {
         if (instance == null) {
-            instance = new SkillApiConverter();
+            instance = new SkillApiConverter(skillApi);
         }
 
         return instance;

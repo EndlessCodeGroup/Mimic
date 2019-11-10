@@ -17,70 +17,70 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import kotlin.test.BeforeTest
 
-import static org.junit.Assert.assertEquals;
+class SkillApiConverterTest : SkillApiTestBase() {
 
-public class SkillApiConverterTest extends SkillApiTestBase {
-    private SkillApiConverter converter;
+    // SUT
+    private lateinit var converter: SkillApiConverter
 
-    @Override
-    @Before
-    public void setUp() {
-        super.setUp();
+    @BeforeTest
+    override fun setUp() {
+        super.setUp()
 
-        this.converter = SkillApiConverter.getInstance();
+        converter = SkillApiConverter.getInstance(skillApi)
     }
 
     @Test
-    public void testExpToLevelWithZeroMustReturnOne() {
-        double actual = converter.expToLevel(0);
-        double expected = 1;
-        assertEquals(expected, actual, 0.0001);
+    fun testExpToLevelWithZeroMustReturnOne() {
+        val actual = converter.expToLevel(0.0)
+        val expected = 1.0
+        assertEquals(expected, actual, 0.0001)
     }
 
     @Test
-    public void testExpToLevelWithNegativeMustReturnZero() {
-        double actual = converter.expToLevel(-1);
-        double expected = 0;
-        assertEquals(expected, actual, 0.0001);
+    fun testExpToLevelWithNegativeMustReturnZero() {
+        val actual = converter.expToLevel(-1.0)
+        val expected = 0.0
+        assertEquals(expected, actual, 0.0001)
     }
 
     @Test
-    public void testExpToLevelMustReturnFullLevel() {
-        double actual = converter.expToLevel(100);
-        double expected = 5;
-        assertEquals(expected, actual, 0.0001);
+    fun testExpToLevelMustReturnFullLevel() {
+        val actual = converter.expToLevel(100.0)
+        val expected = 5.0
+        assertEquals(expected, actual, 0.0001)
     }
 
     @Test
-    public void testExpToLevelMustReturnFractionalLevel() {
-        double actual = converter.expToLevel(140);
-        double expected = 5.8;
-        assertEquals(expected, actual, 0.0001);
+    fun testExpToLevelMustReturnFractionalLevel() {
+        val actual = converter.expToLevel(140.0)
+        val expected = 5.8
+        assertEquals(expected, actual, 0.0001)
     }
 
     @Test
-    public void testLevelToExpMustReturnZero() {
-        double actual = converter.levelToExp(1);
-        int expected = 0;
-        assertEquals(expected, actual, 0.0001);
+    fun testLevelToExpMustReturnZero() {
+        val actual = converter.levelToExp(1)
+        val expected = 0
+        assertEquals(expected.toDouble(), actual, 0.0001)
     }
 
     @Test
-    public void testLevelToExpMustReturnRightValue() {
-        double actual = converter.levelToExp(5);
-        int expected = 100;
-        assertEquals(expected, actual, 0.0001);
+    fun testLevelToExpMustReturnRightValue() {
+        val actual = converter.levelToExp(5)
+        val expected = 100
+        assertEquals(expected.toDouble(), actual, 0.0001)
     }
 
     @Test
-    public void testGetExpToReachLevelMustReturnMinusOne() {
-        double actual = converter.getExpToReachLevel(0);
-        int expected = -1;
-        assertEquals(expected, actual, 0.0001);
+    fun testGetExpToReachLevelMustReturnMinusOne() {
+        val actual = converter.getExpToReachLevel(0)
+        val expected = -1
+        assertEquals(expected.toDouble(), actual, 0.0001)
     }
 }

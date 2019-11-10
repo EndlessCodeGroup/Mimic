@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.sucy.skill.SkillAPI;
 import com.sucy.skill.api.enums.ExpSource;
 import com.sucy.skill.api.player.PlayerClass;
 import org.junit.Before;
@@ -39,7 +38,7 @@ public class SkillApiLevelSystemTest extends SkillApiTestBase {
     public void setUp() {
         super.setUp();
 
-        levelSystem = SkillApiLevelSystem.FACTORY.get(player);
+        levelSystem = new SkillApiLevelSystem(player, skillApi);
     }
 
     @Test
@@ -181,7 +180,7 @@ public class SkillApiLevelSystemTest extends SkillApiTestBase {
 
     @Test
     public void testIsEnabledReturnsStatusOfSkillApi() {
-        when(SkillAPI.isLoaded()).thenReturn(true).thenReturn(false);
+        when(skillApi.isLoaded()).thenReturn(true).thenReturn(false);
 
         assertTrue(this.levelSystem.isEnabled());
         assertFalse(this.levelSystem.isEnabled());
