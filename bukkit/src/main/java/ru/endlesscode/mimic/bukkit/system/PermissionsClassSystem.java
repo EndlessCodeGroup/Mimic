@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.bukkit.system;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +42,6 @@ public class PermissionsClassSystem extends BukkitClassSystem {
     public static final String TAG = "Permission Class System";
     public static final Factory<PermissionsClassSystem> FACTORY = new Factory<>(TAG, playerObj -> new PermissionsClassSystem((Player) playerObj));
 
-    @VisibleForTesting
     static final String PERMISSION_PREFIX = "mimic.class.";
 
     private PermissionsClassSystem(@NotNull Player player) {

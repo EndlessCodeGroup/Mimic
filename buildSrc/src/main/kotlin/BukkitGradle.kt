@@ -17,6 +17,7 @@
  */
 
 import groovy.lang.Closure
+import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.delegateClosureOf
 import ru.endlesscode.bukkitgradle.extension.Bukkit
@@ -25,8 +26,8 @@ import ru.endlesscode.bukkitgradle.meta.PluginMeta
 
 // Utils to make BukkitGradle kotlin-friendly
 
-val DependencyHandlerScope.bukkit: Any
-    get() = (extensions.extraProperties["bukkit"] as Closure<*>).call()
+val DependencyHandlerScope.bukkit: ExternalModuleDependency
+    get() = (extensions.extraProperties["bukkit"] as Closure<*>).call() as ExternalModuleDependency
 
 fun Bukkit.meta(configure: PluginMeta.() -> Unit) {
     meta(delegateClosureOf(configure))

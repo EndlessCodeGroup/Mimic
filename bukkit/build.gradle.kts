@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly(bukkit)
+    compileOnly(bukkit) { isTransitive = false }
     implementation(deps.acf)
 
     compileOnly(deps.skillApi)
