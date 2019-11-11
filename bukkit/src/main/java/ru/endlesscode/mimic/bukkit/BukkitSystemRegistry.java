@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.bukkit;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
@@ -37,12 +36,6 @@ public class BukkitSystemRegistry extends SystemRegistry {
     private final Plugin plugin;
     private final ServicesManager servicesManager;
 
-    @VisibleForTesting
-    static @NotNull ServicePriority servicePriorityFromSystem(@NotNull SubsystemPriority priority) {
-        int priorityIndex = priority.ordinal();
-        return ServicePriority.values()[priorityIndex];
-    }
-
     BukkitSystemRegistry(Plugin plugin, ServicesManager servicesManager) {
         this.plugin = plugin;
         this.servicesManager = servicesManager;
@@ -54,7 +47,7 @@ public class BukkitSystemRegistry extends SystemRegistry {
             @NotNull FactoryT subsystemFactory,
             @NotNull SubsystemPriority priority
     ) {
-        ServicePriority servicePriority = servicePriorityFromSystem(priority);
+        ServicePriority servicePriority = SubsystemPriorityKt.toServicePriority(priority);
         this.servicesManager.register(factoryClass, subsystemFactory, this.plugin, servicePriority);
     }
 

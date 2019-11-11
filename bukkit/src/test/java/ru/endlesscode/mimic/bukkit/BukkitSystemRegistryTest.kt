@@ -17,89 +17,86 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit;
+package ru.endlesscode.mimic.bukkit
 
-import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.ServicesManager;
-import org.junit.Before;
-import org.junit.Test;
-import ru.endlesscode.mimic.api.system.ClassSystem;
-import ru.endlesscode.mimic.api.system.LevelSystem;
-import ru.endlesscode.mimic.api.system.PlayerSystem;
-import ru.endlesscode.mimic.api.system.SystemFactory;
-import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem;
-import ru.endlesscode.mimic.bukkit.system.TestSystem;
-import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem;
+import ru.endlesscode.mimic.api.system.ClassSystem
+import ru.endlesscode.mimic.api.system.LevelSystem
+import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.registry.getSystemFactory
+import ru.endlesscode.mimic.api.system.registry.registerSubsystem
+import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem
+import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem
+import kotlin.test.*
 
-import static org.junit.Assert.*;
+class BukkitSystemRegistryTest : BukkitTestBase() {
 
-public class BukkitSystemRegistryTest extends BukkitTestBase {
-    private BukkitSystemRegistry systemRegistry;
+    // SUT
+    private lateinit var systemRegistry: BukkitSystemRegistry
 
-    @Before
-    public void setUp() {
-        super.setUp();
+    @BeforeTest
+    override fun setUp() {
+        super.setUp()
 
-        ServicesManager servicesManager = this.server.getServicesManager();
-        servicesManager.unregisterAll(plugin);
-
-        this.systemRegistry = new BukkitSystemRegistry(plugin, servicesManager);
+        systemRegistry = BukkitSystemRegistry(plugin, server.servicesManager)
     }
 
     @Test
-    public void testRegisterRightSubsystemMustBeSuccessful() throws Exception {
-        this.systemRegistry.registerSubsystem(VanillaLevelSystem.class, VanillaLevelSystem.FACTORY);
-        this.systemRegistry.registerSubsystem(PermissionsClassSystem.class, PermissionsClassSystem.FACTORY);
+    fun `when register correct subsystem - should register it`() {
+        // When
+        val registered = systemRegistry.registerSubsystem(PermissionsClassSystem.FACTORY)
 
-        SystemFactory<LevelSystem> levelSystemFactory = this.systemRegistry.getSystemFactory(LevelSystem.class);
-        SystemFactory<ClassSystem> classSystemFactory = this.systemRegistry.getSystemFactory(ClassSystem.class);
-
-        assertNotNull("System must be initialized", levelSystemFactory);
-        assertNotNull("System must be initialized", classSystemFactory);
+        // Then
+        assertTrue(registered)
+        assertNotNull(systemRegistry.getSystemFactory<ClassSystem>())
     }
 
     @Test
-    public void testGetNotRegisteredSystemMustReturnNull() throws Exception {
-        checkSystemNotExists(TestSystem.class);
+    fun `when no system registered - should return null for any system`() {
+        // Then
+        checkSystemNotExists<LevelSystem>()
     }
 
     @Test
-    public void testGetServicePriorityFromSystem() {
-        assertEquals(ServicePriority.Lowest, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.LOWEST));
-        assertEquals(ServicePriority.Low, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.LOW));
-        assertEquals(ServicePriority.Normal, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.NORMAL));
-        assertEquals(ServicePriority.High, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.HIGH));
-        assertEquals(ServicePriority.Highest, BukkitSystemRegistry.servicePriorityFromSystem(SubsystemPriority.HIGHEST));
+    fun `when unregister all subsystems - should return null for all previously registered subsystems`() {
+        // Given
+        systemRegistry.registerSubsystem(VanillaLevelSystem.FACTORY)
+        systemRegistry.registerSubsystem(PermissionsClassSystem.FACTORY)
+
+        // When
+        systemRegistry.unregisterAllSubsystems()
+
+        // Then
+        checkSystemNotExists<LevelSystem>()
+        checkSystemNotExists<ClassSystem>()
     }
 
     @Test
-    public void testUnregisterAllSubsystemsMustBeSuccessful() throws Exception {
-        this.systemRegistry.registerSubsystem(VanillaLevelSystem.class, VanillaLevelSystem.FACTORY);
-        this.systemRegistry.registerSubsystem(PermissionsClassSystem.class, PermissionsClassSystem.FACTORY);
+    fun `when unregister factory - should unregister subsystem`() {
+        // Given
+        systemRegistry.registerSubsystem<PermissionsClassSystem>()
 
-        this.systemRegistry.unregisterAllSubsystems();
+        // When
+        systemRegistry.unregisterFactory(PermissionsClassSystem.FACTORY)
 
-        checkSystemNotExists(LevelSystem.class);
-        checkSystemNotExists(ClassSystem.class);
+        // Then
+        checkSystemNotExists<ClassSystem>()
     }
 
     @Test
-    public void testUnregisterExistingFactoryMustBeSuccessful() throws Exception {
-        this.systemRegistry.registerSubsystem(PermissionsClassSystem.class);
-        this.systemRegistry.unregisterFactory(PermissionsClassSystem.FACTORY);
+    fun `when unregister not registered subsystem - should not throw exception`() {
+        // When
+        systemRegistry.unregisterFactory(PermissionsClassSystem.FACTORY)
 
-        checkSystemNotExists(ClassSystem.class);
+        // Then
+        checkSystemNotExists<ClassSystem>()
     }
 
-    @Test
-    public void testUnregisterNotExistingFactoryMustBeSuccessful() {
-        this.systemRegistry.unregisterFactory(PermissionsClassSystem.FACTORY);
-
-        checkSystemNotExists(ClassSystem.class);
+    @AfterTest
+    fun tearDown() {
+        server.servicesManager.unregisterAll(plugin)
     }
 
-    private <SystemT extends PlayerSystem> void checkSystemNotExists(Class<SystemT> systemClass) {
-        assertNull(this.systemRegistry.getSystemFactory(systemClass));
+    private inline fun <reified SystemT : PlayerSystem> checkSystemNotExists() {
+        assertNull(systemRegistry.getSystemFactory<SystemT>())
     }
 }
