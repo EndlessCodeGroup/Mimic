@@ -17,15 +17,12 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mockito
+package ru.endlesscode.test
 
-import org.mockito.AdditionalMatchers
-import org.mockito.stubbing.Answer
+import kotlin.math.abs
 
 const val EPSILON = 0.0000001
 
-val MOCKS_ONLY_ABSTRACTS: Answer<Any> = MocksOnlyAbstracts()
-
-fun doubleEq(value: Double, delta: Double = EPSILON): Double {
-    return AdditionalMatchers.eq(value, delta)
+fun assertEqualsDoubles(expected: Double, actual: Double, delta: Double = EPSILON): Boolean {
+    return abs(expected - actual) < delta
 }

@@ -23,6 +23,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import ru.endlesscode.mimic.bukkit.BukkitTestBase
+import ru.endlesscode.test.assertEqualsDoubles
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -113,7 +114,7 @@ class VanillaLevelSystemTest : BukkitTestBase() {
         val exp = levelSystem.fractionalExp
 
         // Then
-        assertEquals(0.4, exp)
+        assertEqualsDoubles(0.4, exp)
     }
 
     @Test

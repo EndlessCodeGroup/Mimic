@@ -17,94 +17,102 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system
 
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.junit.Before;
-import org.junit.Test;
-import ru.endlesscode.mimic.api.system.ClassSystem;
-import ru.endlesscode.mimic.bukkit.BukkitTestBase;
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
+import org.bukkit.permissions.PermissionAttachmentInfo
+import ru.endlesscode.mimic.api.system.ClassSystem
+import ru.endlesscode.mimic.bukkit.BukkitTestBase
+import java.util.HashSet
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+class PermissionsClassSystemTest : BukkitTestBase() {
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+    // SUT
+    private lateinit var classSystem: ClassSystem
 
-public class PermissionsClassSystemTest extends BukkitTestBase {
-    private ClassSystem classSystem;
-
-    @Before
-    public void setUp() {
-        super.setUp();
-
-        this.classSystem = PermissionsClassSystem.FACTORY.get(this.player);
+    @BeforeTest
+    override fun setUp() {
+        super.setUp()
+        classSystem = PermissionsClassSystem.FACTORY[player]
     }
 
     @Test
-    public void testHasRequiredClassMustReturnTrue() {
-        this.addClasses("first", "second", "third");
+    fun `when check existing has class - should return true`() {
+        // Given
+        addClasses("first", "second", "third")
 
-        assertTrue(this.classSystem.hasRequiredClass("first"));
-        assertTrue(this.classSystem.hasRequiredClass("First"));
-        assertTrue(this.classSystem.hasRequiredClass("second"));
-        assertTrue(this.classSystem.hasRequiredClass("Second"));
-        assertTrue(this.classSystem.hasRequiredClass("third"));
-        assertTrue(this.classSystem.hasRequiredClass("Third"));
+        // When
+        val hasClass = classSystem.hasRequiredClass("second")
+
+        // Then
+        assertTrue(hasClass)
     }
 
     @Test
-    public void testHasRequiredClassMustReturnFalse() {
-        this.addClasses("first", "second");
+    fun `when check has existing class in mixed case - should return true`() {
+        // Given
+        addClasses("first", "second", "third")
 
-        assertFalse(this.classSystem.hasRequiredClass("third"));
-        assertFalse(this.classSystem.hasRequiredClass("FirstClass"));
-        assertFalse(this.classSystem.hasRequiredClass("Sec"));
-        assertFalse(this.classSystem.hasRequiredClass(""));
+        // When
+        val hasClass = classSystem.hasRequiredClass("Second")
+
+        // Then
+        assertTrue(hasClass)
     }
 
-    private void addClasses(String... classes) {
-        for (String theClass : classes) {
-            when(this.player.hasPermission(PermissionsClassSystem.PERMISSION_PREFIX + theClass)).thenReturn(true);
+    @Test
+    fun `when check has not existing class - should return false`() {
+        // Given
+        addClasses("first", "second")
+
+        // When
+        val hasClass = classSystem.hasRequiredClass("FirstClass")
+
+        // Then
+        assertFalse(hasClass)
+    }
+
+    @Test
+    fun `when get classes - should return right list of classes`() {
+        // Given
+        val perms = listOf(
+            createClassPermissionMock("first", true),
+            createClassPermissionMock("second", false),
+            createClassPermissionMock("third", true),
+            createPermissionMock("mimic.other.permission", true)
+        )
+        whenever(player.effectivePermissions) doReturn HashSet(perms)
+
+        // When
+        val expected = listOf("first", "third")
+        val actual = classSystem.classes
+
+        // Then
+        assertTrue(actual.containsAll(expected) && expected.containsAll(actual))
+    }
+
+    private fun addClasses(vararg classes: String) {
+        for (theClass in classes) {
+            whenever(player.hasPermission(classPermission(theClass))) doReturn true
         }
     }
 
-    @Test
-    public void testGetClassesReturnList() {
-        List<PermissionAttachmentInfo> perms = Arrays.asList(
-                createClassPermissionMock("first", true),
-                createClassPermissionMock("second", false),
-                createClassPermissionMock("third", true),
-                createPermissionMock("mimic.other.permission", true));
-        when(this.player.getEffectivePermissions()).thenReturn(new HashSet<>(perms));
-
-        List<String> expected = Arrays.asList("first", "third");
-        List<String> actual = this.classSystem.getClasses();
-        assertTrue(expected.containsAll(actual) && actual.containsAll(expected));
+    private fun createClassPermissionMock(theClass: String, value: Boolean): PermissionAttachmentInfo {
+        return createPermissionMock(classPermission(theClass), value)
     }
 
-    private PermissionAttachmentInfo createClassPermissionMock(String theClass, boolean value) {
-        String classPermission = PermissionsClassSystem.PERMISSION_PREFIX + theClass;
-        return createPermissionMock(classPermission, value);
-    }
+    private fun classPermission(theClass: String) = PermissionsClassSystem.PERMISSION_PREFIX + theClass
 
-    private PermissionAttachmentInfo createPermissionMock(String permission, boolean value) {
-        PermissionAttachmentInfo perm = mock(PermissionAttachmentInfo.class);
-        when(perm.getPermission()).thenReturn(permission);
-        when(perm.getValue()).thenReturn(value);
-
-        return perm;
-    }
-
-    @Test
-    public void testIsEnabledAlwaysReturnTrue() {
-        assertTrue(this.classSystem.isEnabled());
-    }
-
-    @Test
-    public void testNameAlwaysReturnPermissionClassSystem() {
-        assertEquals("Permission Class System", this.classSystem.getName());
+    private fun createPermissionMock(permission: String, value: Boolean): PermissionAttachmentInfo {
+        return mock {
+            on { it.permission } doReturn permission
+            on { it.value } doReturn value
+        }
     }
 }
