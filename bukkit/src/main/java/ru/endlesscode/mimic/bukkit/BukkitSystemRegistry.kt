@@ -17,54 +17,41 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit;
+package ru.endlesscode.mimic.bukkit
 
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.ServicesManager;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.PlayerSystem;
-import ru.endlesscode.mimic.api.system.SystemFactory;
-import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.api.system.registry.SystemRegistry;
+import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.ServicesManager
+import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.SystemFactory
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
+import ru.endlesscode.mimic.api.system.registry.SystemRegistry
 
-/**
- * Implementation of system registry for bukkit.
- * Using {@link org.bukkit.plugin.ServicesManager}
- */
-public class BukkitSystemRegistry extends SystemRegistry {
-    private final Plugin plugin;
-    private final ServicesManager servicesManager;
+/** Implementation of system registry for bukkit. Using [ServicesManager] */
+class BukkitSystemRegistry internal constructor(
+    private val plugin: Plugin,
+    private val servicesManager: ServicesManager
+) : SystemRegistry() {
 
-    BukkitSystemRegistry(Plugin plugin, ServicesManager servicesManager) {
-        this.plugin = plugin;
-        this.servicesManager = servicesManager;
-    }
-
-    @Override
-    public <FactoryT extends SystemFactory<? extends PlayerSystem>> void registerFactory(
-            @NotNull Class<FactoryT> factoryClass,
-            @NotNull FactoryT subsystemFactory,
-            @NotNull SubsystemPriority priority
+    override fun <FactoryT : SystemFactory<out PlayerSystem>> registerFactory(
+        factoryClass: Class<FactoryT>,
+        subsystemFactory: FactoryT,
+        priority: SubsystemPriority
     ) {
-        ServicePriority servicePriority = SubsystemPriorityKt.toServicePriority(priority);
-        this.servicesManager.register(factoryClass, subsystemFactory, this.plugin, servicePriority);
+        val servicePriority = priority.toServicePriority()
+        servicesManager.register(factoryClass, subsystemFactory, plugin, servicePriority)
     }
 
-    @Override
-    public <SystemT extends PlayerSystem> SystemFactory<SystemT> getFactory(
-            @NotNull Class<? extends SystemFactory<SystemT>> factoryClass
-    ) {
-        return this.servicesManager.load(factoryClass);
+    override fun <SystemT : PlayerSystem> getFactory(
+        factoryClass: Class<out SystemFactory<SystemT>>
+    ): SystemFactory<SystemT>? {
+        return servicesManager.load(factoryClass)
     }
 
-    @Override
-    public void unregisterAllSubsystems() {
-        servicesManager.unregisterAll(this.plugin);
+    override fun unregisterAllSubsystems() {
+        servicesManager.unregisterAll(plugin)
     }
 
-    @Override
-    public <SystemT extends PlayerSystem> void unregisterFactory(@NotNull SystemFactory<? extends SystemT> factory) {
-        servicesManager.unregister(factory);
+    override fun <SystemT : PlayerSystem> unregisterFactory(factory: SystemFactory<out SystemT>) {
+        servicesManager.unregister(factory)
     }
 }
