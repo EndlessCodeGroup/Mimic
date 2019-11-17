@@ -17,177 +17,158 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system
 
-import com.sucy.skill.api.enums.ExpSource;
-import com.sucy.skill.api.player.PlayerClass;
-import org.junit.Before;
-import org.junit.Test;
-import ru.endlesscode.mimic.api.system.LevelSystem;
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.doReturnConsecutively
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import com.sucy.skill.api.enums.ExpSource
+import com.sucy.skill.api.player.PlayerClass
+import ru.endlesscode.mimic.api.system.LevelSystem
+import kotlin.test.*
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+class SkillApiLevelSystemTest : SkillApiTestBase() {
 
-public class SkillApiLevelSystemTest extends SkillApiTestBase {
-    private LevelSystem levelSystem;
-    private PlayerClass playerClass;
+    // SUT
+    private lateinit var levelSystem: LevelSystem
 
-    @Override
-    @Before
-    public void setUp() {
-        super.setUp();
+    private lateinit var playerClass: PlayerClass
 
-        levelSystem = new SkillApiLevelSystem(player, skillApi);
+    @BeforeTest
+    override fun setUp() {
+        super.setUp()
+        levelSystem = SkillApiLevelSystem(player, skillApi)
     }
 
     @Test
-    public void testDecreaseLevelMustWork() {
-        prepareMainClass();
-        when(levelSystem.getLevel()).thenReturn(3, 2);
+    fun `when decrease level - should set right level`() {
+        // Given
+        prepareMainClass()
+        whenever(levelSystem.level) doReturn 3
 
-        levelSystem.decreaseLevel(1);
-        verify(playerClass).setLevel(2);
+        // When
+        levelSystem.decreaseLevel(1)
 
-        levelSystem.decreaseLevel(3);
-        verify(playerClass).setLevel(1);
+        // Then
+        verify(playerClass).level = 2
     }
 
     @Test
-    public void testIncreaseLevelMustCallPlayerClass() {
-        prepareMainClass();
+    fun `when increase level - should call giveLevels`() {
+        // Given
+        prepareMainClass()
+        val lvlAmount = 10
 
-        int lvlAmount = 10;
-        levelSystem.increaseLevel(lvlAmount);
-        verify(playerClass).giveLevels(lvlAmount);
+        // When
+        levelSystem.increaseLevel(lvlAmount)
+
+        // Then
+        verify(playerClass).giveLevels(lvlAmount)
     }
 
     @Test
-    public void testIncreaseLevelMustNotThrowNpe() {
-        levelSystem.increaseLevel(1);
-        // NPE wasn't thrown
+    fun `when get level - should get class level`() {
+        // Given
+        prepareMainClass()
+
+        // When
+        levelSystem.level
+
+        // Then
+        verify(playerClass).level
     }
 
     @Test
-    public void testGetLevelMustCallPlayerClass() {
-        prepareMainClass();
+    fun `when set level - should change level of class`() {
+        // Given
+        prepareMainClass()
+        val newLevel = 10
 
-        levelSystem.getLevel();
-        //noinspection ResultOfMethodCallIgnored
-        verify(playerClass).getLevel();
+        // When
+        levelSystem.level = newLevel
+
+        // Then
+        verify(playerClass).level = newLevel
     }
 
     @Test
-    public void testGetLevelMustReturnZero() {
-        int actual = levelSystem.getLevel();
-        assertEquals(0, actual);
+    fun `when take exp - should call loseExp with percents`() {
+        // Given
+        prepareMainClass()
+        whenever(playerClass.requiredExp) doReturn 10
+
+        // When
+        levelSystem.takeExp(5.0)
+
+        // Then
+        verify(playerClass).loseExp(0.5)
     }
 
     @Test
-    public void testSetLevelMustCallPlayerClass() {
-        prepareMainClass();
+    fun `when give exp - should call give exp with right exp and special source`() {
+        // Given
+        prepareMainClass()
+        val expAmount = 50.0
 
-        int newLevel = 10;
-        levelSystem.setLevel(newLevel);
-        verify(playerClass).setLevel(newLevel);
+        // When
+        levelSystem.giveExp(expAmount)
+
+        // Then
+        verify(playerClass).giveExp(expAmount, ExpSource.SPECIAL)
     }
 
     @Test
-    public void testSetLevelMustNotThrowNpe() {
-        levelSystem.setLevel(1);
-        // NPE wasn't thrown
+    fun `when get exp - should return exp of class`() {
+        // Given
+        prepareMainClass()
+
+        // When
+        levelSystem.exp
+
+        // Then
+        verify(playerClass).exp
     }
 
     @Test
-    public void testTakeExpMustCallPlayerClass() {
-        prepareMainClass();
-        when(playerClass.getRequiredExp()).thenReturn(10);
+    fun `when set exp - should set class exp`() {
+        // Given
+        prepareMainClass()
+        val expAmount = 10.0
 
-        int expAmount = 5;
-        levelSystem.takeExp(expAmount);
-        verify(playerClass).loseExp(0.5);
+        // When
+        levelSystem.exp = expAmount
+
+        // Then
+        verify(playerClass).exp = expAmount
     }
 
     @Test
-    public void testTakeExpMustNotThrowNpe() {
-        levelSystem.takeExp(5);
-        // NPE wasn't thrown
+    fun `when get exp to next level - should return right exp`() {
+        // Given
+        prepareMainClass()
+        whenever(playerClass.exp) doReturn 7.0
+        whenever(playerClass.requiredExp) doReturn 10
+
+        // When
+        val actual = levelSystem.expToNextLevel
+
+        // Then
+        assertEquals(3.0, actual)
     }
 
     @Test
-    public void testGiveExpMustCallPlayerClass() {
-        prepareMainClass();
-        int expAmount = 50;
-        levelSystem.giveExp(expAmount);
-        verify(playerClass).giveExp(expAmount, ExpSource.SPECIAL);
+    fun `when check system loaded - should check SkillAPI is enabled`() {
+        // When
+        whenever(skillApi.isLoaded) doReturnConsecutively listOf(true, false)
+
+        // Then
+        assertTrue(levelSystem.isEnabled)
+        assertFalse(levelSystem.isEnabled)
     }
 
-    @Test
-    public void testGiveExpMustNotThrowNpe() {
-        levelSystem.giveExp(1);
-        // NPE wasn't thrown
-    }
-
-    @Test
-    public void testGetExpMustCallPlayerClass() {
-        prepareMainClass();
-        levelSystem.getExp();
-        //noinspection ResultOfMethodCallIgnored
-        verify(playerClass).getExp();
-    }
-
-    @Test
-    public void testGetExpMustReturnZero() {
-        double actual = levelSystem.getExp();
-        assertEquals(0, actual, 0.0001);
-    }
-
-    @Test
-    public void testSetExpMustCallPlayerClass() {
-        prepareMainClass();
-        int expAmount = 10;
-        levelSystem.setExp(expAmount);
-        verify(playerClass).setExp(expAmount);
-    }
-
-    @Test
-    public void testSetExpMustNotThrowNpe() {
-        levelSystem.setExp(1);
-        // NPE wasn't thrown
-    }
-
-    @Test
-    public void testGetExpToNextLevelRemaining() {
-        prepareMainClass();
-        when(playerClass.getExp()).thenReturn(5.0);
-        when(playerClass.getRequiredExp()).thenReturn(10);
-
-        double actual = levelSystem.getExpToNextLevel();
-        int expected = 5;
-        assertEquals(expected, actual, 0.0001);
-    }
-
-    @Test
-    public void testGetExpToNextLevelMustReturnMinus() {
-        double actual = levelSystem.getTotalExpToNextLevel();
-        assertEquals(-1, actual, 0.0001);
-    }
-
-    private void prepareMainClass() {
-        prepareClasses("Primary");
-        playerClass = data.getMainClass();
-    }
-
-    @Test
-    public void testIsEnabledReturnsStatusOfSkillApi() {
-        when(skillApi.isLoaded()).thenReturn(true).thenReturn(false);
-
-        assertTrue(this.levelSystem.isEnabled());
-        assertFalse(this.levelSystem.isEnabled());
-    }
-
-    @Test
-    public void testGetNameAlwaysReturnSkillAPI() {
-        assertEquals("SkillAPI", this.levelSystem.getName());
+    private fun prepareMainClass() {
+        prepareClasses("Primary")
+        playerClass = data.mainClass
     }
 }
