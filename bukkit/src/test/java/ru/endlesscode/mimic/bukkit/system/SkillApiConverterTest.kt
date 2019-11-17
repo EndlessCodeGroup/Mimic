@@ -19,11 +19,28 @@
 
 package ru.endlesscode.mimic.bukkit.system
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-class SkillApiConverterTest : SkillApiTestBase() {
+@RunWith(Parameterized::class)
+class SkillApiConverterTest(
+    private val exp: Double,
+    private val level: Double
+) : SkillApiTestBase() {
+
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data(): List<Array<Double>> = listOf(
+            arrayOf(0.0, 1.0),
+            arrayOf(-1.0, 0.0),
+            arrayOf(100.0, 5.0),
+            arrayOf(140.0, 5.8)
+        )
+    }
 
     // SUT
     private lateinit var converter: SkillApiConverter
@@ -36,51 +53,11 @@ class SkillApiConverterTest : SkillApiTestBase() {
     }
 
     @Test
-    fun testExpToLevelWithZeroMustReturnOne() {
-        val actual = converter.expToLevel(0.0)
-        val expected = 1.0
-        assertEquals(expected, actual, 0.0001)
-    }
+    fun testExpToLevel() {
+        // When
+        val actual = converter.expToLevel(this.exp)
 
-    @Test
-    fun testExpToLevelWithNegativeMustReturnZero() {
-        val actual = converter.expToLevel(-1.0)
-        val expected = 0.0
-        assertEquals(expected, actual, 0.0001)
-    }
-
-    @Test
-    fun testExpToLevelMustReturnFullLevel() {
-        val actual = converter.expToLevel(100.0)
-        val expected = 5.0
-        assertEquals(expected, actual, 0.0001)
-    }
-
-    @Test
-    fun testExpToLevelMustReturnFractionalLevel() {
-        val actual = converter.expToLevel(140.0)
-        val expected = 5.8
-        assertEquals(expected, actual, 0.0001)
-    }
-
-    @Test
-    fun testLevelToExpMustReturnZero() {
-        val actual = converter.levelToExp(1)
-        val expected = 0
-        assertEquals(expected.toDouble(), actual, 0.0001)
-    }
-
-    @Test
-    fun testLevelToExpMustReturnRightValue() {
-        val actual = converter.levelToExp(5)
-        val expected = 100
-        assertEquals(expected.toDouble(), actual, 0.0001)
-    }
-
-    @Test
-    fun testGetExpToReachLevelMustReturnMinusOne() {
-        val actual = converter.getExpToReachLevel(0)
-        val expected = -1
-        assertEquals(expected.toDouble(), actual, 0.0001)
+        // Then
+        assertEquals(this.level, actual)
     }
 }

@@ -17,67 +17,69 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-import java.util.Arrays;
-import java.util.Collection;
+@RunWith(Parameterized::class)
+class VanillaConverterTest(
+    private val exp: Int,
+    private val level: Int,
+    private val expToNext: Int
+) {
 
-import static org.junit.Assert.assertEquals;
-
-@RunWith(Parameterized.class)
-public class VanillaConverterTest {
-    private final int exp;
-    private final int level;
-    private final int expToNext;
-
-    private VanillaConverter converter;
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                {0, 0, 7},
-                {7, 1, 9},
-                {315, 15, 37},
-                {352, 16, 42},
-                {1395, 30, 112},
-                {1507, 31, 121},
-                {2727, 39, 193}
-        });
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data(): List<Array<Int>> {
+            return listOf(
+                arrayOf(0, 0, 7),
+                arrayOf(7, 1, 9),
+                arrayOf(315, 15, 37),
+                arrayOf(352, 16, 42),
+                arrayOf(1395, 30, 112),
+                arrayOf(1507, 31, 121),
+                arrayOf(2727, 39, 193)
+            )
+        }
     }
 
-    public VanillaConverterTest(int exp, int level, int expToNext) {
-        this.exp = exp;
-        this.level = level;
-        this.expToNext = expToNext;
-    }
+    // SUT
+    private lateinit var converter: VanillaConverter
 
-    @Before
-    public void setUp() {
-        this.converter = VanillaConverter.getInstance();
+    @BeforeTest
+    fun setUp() {
+        converter = VanillaConverter.getInstance()
     }
 
     @Test
-    public void testExpToLevel() {
-        assertEquals(this.level, this.converter.expToFullLevel(exp));
+    fun testExpToFullLevel() {
+        // When
+        val fullLevel = converter.expToFullLevel(exp.toDouble())
+
+        // Then
+        assertEquals(level, fullLevel)
     }
 
     @Test
-    public void testLevelToExp() {
-        assertEquals(this.exp, this.converter.levelToExp(level), 0.0001);
+    fun testLevelToExp() {
+        // When
+        val exp = converter.levelToExp(level)
+
+        // Then
+        assertEquals(this.exp.toDouble(), exp)
     }
 
     @Test
-    public void getExpToReachNextLevel() {
-        assertEquals(this.expToNext, this.converter.getExpToReachNextLevel(level), 0.0001);
-    }
+    fun testGetExpToReachNextLevel() {
+        // When
+        val expToNext = converter.getExpToReachNextLevel(level)
 
-    @Test
-    public void getExpToReachNextLevelMustReturnMinusOne() {
-        assertEquals(-1, this.converter.getExpToReachNextLevel(-1), 0.0001);
+        // Then
+        assertEquals(this.expToNext.toDouble(), expToNext)
     }
 }

@@ -21,10 +21,7 @@ package ru.endlesscode.mimic.bukkit.system
 
 import com.nhaarman.mockitokotlin2.verify
 import ru.endlesscode.mimic.api.system.ClassSystem
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class SkillApiClassSystemTest : SkillApiTestBase() {
 
@@ -38,43 +35,60 @@ class SkillApiClassSystemTest : SkillApiTestBase() {
     }
 
     @Test
-    fun testGetClassesMustReturnRightClasses() {
-        val expectedClasses = arrayOf("Mage", "Cleric")
-        prepareClasses(*expectedClasses)
-        val actualClasses: List<String?> = classSystem.classes
-        assertEquals(expectedClasses.toList(), actualClasses)
+    fun `when get classes - should return right classes`() {
+        // Given
+        val expectedClasses = listOf("Mage", "Cleric")
+        prepareClasses(expectedClasses)
+
+        // When
+        val actualClasses = classSystem.classes
+
+        // Then
+        assertEquals(expectedClasses, actualClasses)
     }
 
     @Test
-    fun testGetClassesMustReturnEmptyList() {
+    fun `when get classes - and there no classes - should return empty list`() {
+        // Given
         prepareClasses()
+
+        // When
         val actualClasses = classSystem.classes
+
+        // Then
         assertTrue(actualClasses.isEmpty())
     }
 
     @Test
-    fun testGetPrimaryClassReturnsRightClass() {
+    fun `when get primary class - should return right class`() {
+        // Given
         prepareClasses("Primary", "Secondary", "Third")
+
+        // When
         val actualPrimaryClass = classSystem.primaryClass
+
+        // Then
         assertEquals("Primary", actualPrimaryClass)
     }
 
     @Test
-    fun testGetPrimaryClassReturnsEmptyString() {
+    fun `when get primary class - and there no classes - should return null`() {
+        // Given
         prepareClasses()
+
+        // When
         val actualPrimaryClass = classSystem.primaryClass
-        assertEquals("", actualPrimaryClass)
+
+        // Then
+        assertNull(actualPrimaryClass)
     }
 
     @Test
-    fun testIsEnabledReturnsStatusOfSkillApi() {
+    fun `when check is system enabled - should check is SkillAPI enabled`() {
+        // When
         classSystem.isEnabled
 
+        // Then
         verify(skillApi).isLoaded
-    }
-
-    @Test
-    fun testGetNameAlwaysReturnSkillAPI() {
-        assertEquals("SkillAPI", classSystem.name)
     }
 }

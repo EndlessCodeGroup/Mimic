@@ -23,6 +23,7 @@ import com.sucy.skill.api.player.PlayerClass;
 import com.sucy.skill.api.player.PlayerData;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.endlesscode.mimic.api.system.registry.Subsystem;
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 
@@ -65,11 +66,11 @@ public class SkillApiClassSystem extends BukkitClassSystem {
     }
 
     @Override
-    public @NotNull String getPrimaryClass() {
+    public @Nullable String getPrimaryClass() {
         PlayerData playerData = getPlayerData();
         PlayerClass playerClass = playerData.getMainClass();
 
-        return playerClass == null ? "" : playerClass.getData().getName();
+        return playerClass == null ? null : playerClass.getData().getName();
     }
 
     private PlayerData getPlayerData() {

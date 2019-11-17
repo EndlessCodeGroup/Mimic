@@ -52,9 +52,13 @@ open class SkillApiTestBase : BukkitTestBase() {
     }
 
     protected fun prepareClasses(vararg classNames: String) {
+        prepareClasses(classNames.toList())
+    }
+
+    protected fun prepareClasses(classNames: List<String>) {
         val playerClasses = classNames.map(::mockNamedPlayerClass)
         whenever(data.classes) doReturn playerClasses
-        whenever(data.mainClass) doReturn if (playerClasses.isEmpty()) null else playerClasses[0]
+        whenever(data.mainClass) doReturn playerClasses.firstOrNull()
     }
 
     private fun mockNamedPlayerClass(className: String): PlayerClass {
