@@ -17,50 +17,39 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.util;
+package ru.endlesscode.mimic.bukkit.util
 
-import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.MessageFormat
+import java.util.logging.Level
+import java.util.logging.Logger
 
-public class Log {
+internal object Log {
 
-    private static final String DEBUG_TAG = "[DEBUG]";
+    private const val DEBUG_TAG = "[DEBUG]"
 
-    private static Logger logger;
-    private static boolean debug;
-
-    private Log() {
-        // Can't be instantiated
-    }
-
-    /**
-     * Initializes Log with the given logger with disabled debug mode.
-     */
-    public static void init(Logger logger) {
-        init(logger, false);
-    }
+    private var logger: Logger? = null
+    private var debug = false
 
     /**
      * Initializes Log with the given logger and specified debug mode.
      */
-    public static void init(Logger logger, boolean debug) {
-        Log.logger = logger;
-        Log.debug = debug;
+    fun init(logger: Logger, debug: Boolean = false) {
+        Log.logger = logger
+        Log.debug = debug
     }
 
     /**
      * Write info message to log.
      */
-    public static void i(String message) {
-        logger.info(message);
+    fun i(message: String) {
+        logger?.info(message)
     }
 
     /**
      * Writes warning message to log.
      */
-    public static void w(String message, Object... args) {
-        logger.warning(MessageFormat.format(message, args));
+    fun w(message: String, vararg args: Any?) {
+        logger?.warning(MessageFormat.format(message, *args))
     }
 
     /**
@@ -68,9 +57,9 @@ public class Log {
      *
      * @param message Debug message
      */
-    public static void d(String message, Object... args) {
+    fun d(message: String, vararg args: Any?) {
         if (debug) {
-            logger.fine(DEBUG_TAG + " " + MessageFormat.format(message, args));
+            logger?.fine("$DEBUG_TAG ${MessageFormat.format(message, *args)}")
         }
     }
 
@@ -79,8 +68,8 @@ public class Log {
      *
      * @param throwable Thrown exception
      */
-    public static void d(Throwable throwable) {
-        d(throwable, false);
+    fun d(throwable: Throwable) {
+        d(throwable, false)
     }
 
     /**
@@ -89,11 +78,12 @@ public class Log {
      * @param throwable Thrown exception
      * @param quiet Print warning to not debug console if quiet - false
      */
-    public static void d(Throwable throwable, boolean quiet) {
+    @JvmStatic
+    fun d(throwable: Throwable, quiet: Boolean) {
         if (debug) {
-            logger.log(Level.FINE, DEBUG_TAG + " Yay! Long-awaited exception!", throwable);
+            logger?.log(Level.FINE, "$DEBUG_TAG Yay! Long-awaited exception!", throwable)
         } else if (!quiet) {
-            logger.warning("Error occurred. You can see it in debug mode.");
+            logger?.warning("Error occurred. Enable debug mode to see it.")
         }
     }
 }

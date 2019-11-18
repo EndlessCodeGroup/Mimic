@@ -11,7 +11,7 @@ version = "${apiProject.version}.$minorVersion"
 description = "API for integration with Bukkit RPG plugins"
 
 bukkit {
-    version = "1.12.2"
+    version = "1.14.4"
 
     meta {
         setName("BukkitMimic")
@@ -21,7 +21,7 @@ bukkit {
     }
 
     run {
-        setCore("paper")
+        setCore("bukkit")
         eula = true
     }
 }
