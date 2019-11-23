@@ -78,7 +78,6 @@ internal object Log {
      * @param throwable Thrown exception
      * @param quiet Print warning to not debug console if quiet - false
      */
-    @JvmStatic
     fun d(throwable: Throwable, quiet: Boolean) {
         if (debug) {
             logger?.log(Level.FINE, "$DEBUG_TAG Yay! Long-awaited exception!", throwable)
