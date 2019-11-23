@@ -25,6 +25,7 @@ import co.aikar.commands.InvalidCommandArgument
 import co.aikar.commands.MessageKeys
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import ru.endlesscode.mimic.api.system.LevelSystem
 import ru.endlesscode.mimic.api.system.SystemFactory
 import ru.endlesscode.mimic.bukkit.util.Log
@@ -51,9 +52,8 @@ internal class LevelSystemSubcommand(
     @Description("Show information about player's level system")
     @Syntax("[player]")
     @CommandCompletion("@players")
-    fun info(sender: CommandSender, @Default player: String) {
-        val target = util.getTarget(sender, player)
-        val system = systemFactory.get(target)
+    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
+        val system = systemFactory.get(player)
         util.send(
             sender,
             util.msg("&3System: &7%s", system.name),
@@ -71,28 +71,27 @@ internal class LevelSystemSubcommand(
         sender: CommandSender,
         value: String,
         @Default("exp") type: ValueType,
-        @Default player: String
+        @Optional @Flags("other,defaultself") player: Player
     ) {
         try {
-            val target = util.getTarget(sender, player)
-            val ls = systemFactory.get(target)
+            val ls = systemFactory.get(player)
             when (type) {
                 ValueType.LVL -> {
                     setLevel(ls, value)
-                    util.send(sender, util.msg("&6New %s's level is %d", target.name, ls.level))
+                    util.send(sender, util.msg("&6New %s's level is %d", player.name, ls.level))
                 }
                 ValueType.TOTAL -> {
                     setTotalExp(ls, value)
                     util.send(
                         sender,
-                        util.msg("&6New %s's total exp is %.1f (%d lvl)", target.name, ls.totalExp, ls.level)
+                        util.msg("&6New %s's total exp is %.1f (%d lvl)", player.name, ls.totalExp, ls.level)
                     )
                 }
                 ValueType.EXP -> {
                     setExp(ls, value)
                     util.send(
                         sender,
-                        util.msg("&6New %s's exp is %.1f (%.2f lvl)", target.name, ls.exp, ls.level + ls.fractionalExp)
+                        util.msg("&6New %s's exp is %.1f (%.2f lvl)", player.name, ls.exp, ls.level + ls.fractionalExp)
                     )
                 }
             }
@@ -110,29 +109,29 @@ internal class LevelSystemSubcommand(
         sender: CommandSender,
         value: Int,
         @Default("lvl") type: ValueType,
-        @Default player: String
+        @Optional @Flags("other,defaultself") player: Player
     ) {
-        val target = util.getTarget(sender, player)
+        val system = systemFactory.get(player)
         when (type) {
             ValueType.LVL -> {
-                val reached = systemFactory.get(target).didReachLevel(value)
+                val reached = system.didReachLevel(value)
                 util.send(
                     sender,
-                    util.msg("&6%s did%s reach %d lvl.", target.name, if (reached) "" else " not", value)
+                    util.msg("&6%s did%s reach %d lvl.", player.name, if (reached) "" else " not", value)
                 )
             }
             ValueType.EXP -> {
-                val has = systemFactory.get(target).hasExp(value.toDouble())
+                val has = system.hasExp(value.toDouble())
                 util.send(
                     sender,
-                    util.msg("&6%s has%s %d exp.", target.name, if (has) "" else " not", value)
+                    util.msg("&6%s has%s %d exp.", player.name, if (has) "" else " not", value)
                 )
             }
             ValueType.TOTAL -> {
-                val has = systemFactory.get(target).hasExpTotal(value.toDouble())
+                val has = system.hasExpTotal(value.toDouble())
                 util.send(
                     sender,
-                    util.msg("&6%s has%s %d total exp.", target.name, if (has) "" else " not", value)
+                    util.msg("&6%s has%s %d total exp.", player.name, if (has) "" else " not", value)
                 )
             }
         }

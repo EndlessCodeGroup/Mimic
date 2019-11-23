@@ -22,6 +22,7 @@ import co.aikar.commands.AbstractCommandManager
 import co.aikar.commands.Command
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import ru.endlesscode.mimic.api.system.ClassSystem
 import ru.endlesscode.mimic.api.system.SystemFactory
 
@@ -41,9 +42,8 @@ internal class ClassSystemSubcommand(
     @Description("Show information about player's class system")
     @Syntax("[player]")
     @CommandCompletion("@players")
-    fun info(sender: CommandSender, @Default player: String) {
-        val target = util.getTarget(sender, player)
-        val system = systemFactory.get(target)
+    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
+        val system = systemFactory.get(player)
         util.send(
             sender,
             util.msg("&3System: &7%s", system.name),
@@ -60,16 +60,15 @@ internal class ClassSystemSubcommand(
         sender: CommandSender,
         @Split classes: Array<String>,
         @Default("all") mode: Mode,
-        @Default player: String
+        @Optional @Flags("other,defaultself") player: Player
     ) {
-        val target = util.getTarget(sender, player)
-        val system = systemFactory.get(target)
+        val system = systemFactory.get(player)
         val has = if (mode == Mode.ALL) {
             system.hasAllRequiredClasses(classes.asList())
         } else {
             system.hasOneOfRequiredClasses(classes.asList())
         }
-        util.send(sender, util.msg("&6Player '%s' has%s given classes.", target.name, if (has) "" else " not"))
+        util.send(sender, util.msg("&6Player '%s' has%s given classes.", player.name, if (has) "" else " not"))
     }
 
     @Suppress("UNUSED")
