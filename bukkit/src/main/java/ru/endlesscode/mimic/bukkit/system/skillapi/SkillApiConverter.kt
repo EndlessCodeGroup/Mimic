@@ -16,39 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system.skillapi
 
-package ru.endlesscode.mimic.bukkit.system.skillapi;
+import com.sucy.skill.data.Settings
+import ru.endlesscode.mimic.api.system.ExpLevelConverter
 
-import com.sucy.skill.data.Settings;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.ExpLevelConverter;
+/** Converter for SkillAPI level system. */
+class SkillApiConverter internal constructor(skillApi: SkillApiWrapper) : ExpLevelConverter {
 
-/**
- * Converter for SkillAPI level system.
- */
-public class SkillApiConverter implements ExpLevelConverter {
-    private static SkillApiConverter instance;
-    private final Settings settings;
+    companion object {
+        private var internalInstance: SkillApiConverter? = null
 
-    private SkillApiConverter(@NotNull SkillApiWrapper skillApi) {
-        this.settings = skillApi.getSettings();
-    }
+        @JvmStatic
+        val instance: SkillApiConverter
+            get() = getInstance()
 
-    static @NotNull SkillApiConverter getInstance(SkillApiWrapper skillApi) {
-        if (instance == null) {
-            instance = new SkillApiConverter(skillApi);
+        internal fun getInstance(skillApi: SkillApiWrapper? = null): SkillApiConverter {
+            return internalInstance
+                ?: SkillApiConverter(skillApi ?: SkillApiWrapper()).also { internalInstance = it }
         }
-
-        return instance;
     }
 
-    @Override
-    public double getExpToReachLevel(int level) {
-        return getExpToReachNextLevel(level - 1);
+    private val settings: Settings = skillApi.settings
+
+    override fun getExpToReachLevel(level: Int): Double {
+        return getExpToReachNextLevel(level - 1)
     }
 
-    @Override
-    public double getExpToReachNextLevel(int level) {
-        return level <= 0 ? -1 : settings.getRequiredExp(level);
+    override fun getExpToReachNextLevel(level: Int): Double {
+        return if (level <= 0) -1.0 else settings.getRequiredExp(level).toDouble()
     }
 }

@@ -16,76 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system.skillapi
 
-package ru.endlesscode.mimic.bukkit.system.skillapi;
-
-import com.sucy.skill.api.player.PlayerClass;
-import com.sucy.skill.api.player.PlayerData;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import ru.endlesscode.mimic.api.system.registry.Subsystem;
-import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.bukkit.system.BukkitClassSystem;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.sucy.skill.api.player.PlayerData
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.api.system.registry.Subsystem
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
+import ru.endlesscode.mimic.bukkit.system.BukkitClassSystem
 
 /**
  * It's implementation of ClassSystem that uses SkillAPI.
  */
-@Subsystem(
-        priority = SubsystemPriority.NORMAL,
-        classes = {"com.sucy.skill.SkillAPI"})
-public class SkillApiClassSystem extends BukkitClassSystem {
-    public static final String TAG = "SkillAPI";
-    public static final Factory<SkillApiClassSystem> FACTORY = new Factory<>(TAG, SkillApiClassSystem::new);
+@Subsystem(priority = SubsystemPriority.NORMAL, classes = ["com.sucy.skill.SkillAPI"])
+class SkillApiClassSystem internal constructor(
+    player: Player,
+    private val skillApi: SkillApiWrapper
+) : BukkitClassSystem(player) {
 
-    private final SkillApiWrapper skillApi;
+    companion object {
+        const val TAG = "SkillAPI"
 
-    private SkillApiClassSystem(@NotNull Player player) {
-        this(player, new SkillApiWrapper());
+        @JvmField
+        val FACTORY = Factory(TAG, ::SkillApiClassSystem)
     }
 
-    SkillApiClassSystem(@NotNull Player player, SkillApiWrapper skillApi) {
-        super(player);
-        this.skillApi = skillApi;
-    }
+    private constructor(player: Player) : this(player, SkillApiWrapper())
 
-    @Override
-    public @NotNull List<String> getClasses() {
-        PlayerData playerData = getPlayerData();
-        Collection<PlayerClass> classes = playerData.getClasses();
+    override val name: String = TAG
+    override val isEnabled: Boolean
+        get() = skillApi.isLoaded
 
-        List<String> classNames = new ArrayList<>(classes.size());
-        for (PlayerClass playerClass : classes) {
-            classNames.add(playerClass.getData().getName());
-        }
+    override val classes: List<String>
+        get() = playerData.classes.map { it.data.name }
 
-        return classNames;
-    }
+    override val primaryClass: String?
+        get() = playerData.mainClass?.data?.name
 
-    @Override
-    public @Nullable String getPrimaryClass() {
-        PlayerData playerData = getPlayerData();
-        PlayerClass playerClass = playerData.getMainClass();
-
-        return playerClass == null ? null : playerClass.getData().getName();
-    }
-
-    private PlayerData getPlayerData() {
-        return skillApi.getPlayerData(getPlayer());
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return skillApi.isLoaded();
-    }
-
-    @NotNull
-    @Override
-    public String getName() {
-        return TAG;
-    }
+    private val playerData: PlayerData
+        get() = skillApi.getPlayerData(player)
 }
