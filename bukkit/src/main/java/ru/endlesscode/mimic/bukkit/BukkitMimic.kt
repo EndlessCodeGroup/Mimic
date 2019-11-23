@@ -59,7 +59,7 @@ class BukkitMimic : JavaPlugin() {
         BattleLevelsLevelSystem::class.java
     )
 
-    @get:JvmName("_getSystemRegistry")
+    @get:JvmName("_getSystemRegistry") // Conflicts with static getSystemRegistry
     private val systemRegistry by lazy { BukkitSystemRegistry(this, server.servicesManager) }
 
     override fun onLoad() {
@@ -79,12 +79,12 @@ class BukkitMimic : JavaPlugin() {
     private fun <T : PlayerSystem> hookSystem(system: Class<out T>) {
         try {
             if (systemRegistry.registerSubsystem(system)) {
-                Log.d("Subsystem ''{0}'' registered.", system.simpleName)
+                Log.d("Subsystem '${system.simpleName}' registered.")
             } else {
-                Log.d("Subsystem ''{0}'' not needed. Skipped.", system.simpleName)
+                Log.d("Subsystem '${system.simpleName}' not needed. Skipped.")
             }
         } catch (e: SystemNotRegisteredException) {
-            Log.w("{0}: {1}", system.simpleName, e.message)
+            Log.w("[${system.simpleName}] ${e.message}")
             Log.d(e)
         }
     }

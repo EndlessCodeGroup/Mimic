@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.bukkit.util
 
-import java.text.MessageFormat
 import java.util.logging.Level
 import java.util.logging.Logger
 
@@ -34,8 +33,8 @@ internal object Log {
      * Initializes Log with the given logger and specified debug mode.
      */
     fun init(logger: Logger, debug: Boolean = false) {
-        Log.logger = logger
-        Log.debug = debug
+        this.logger = logger
+        this.debug = debug
     }
 
     /**
@@ -48,8 +47,8 @@ internal object Log {
     /**
      * Writes warning message to log.
      */
-    fun w(message: String, vararg args: Any?) {
-        logger?.warning(MessageFormat.format(message, *args))
+    fun w(message: String) {
+        logger?.warning(message)
     }
 
     /**
@@ -57,9 +56,9 @@ internal object Log {
      *
      * @param message Debug message
      */
-    fun d(message: String, vararg args: Any?) {
+    fun d(message: String) {
         if (debug) {
-            logger?.fine("$DEBUG_TAG ${MessageFormat.format(message, *args)}")
+            logger?.info("$DEBUG_TAG $message")
         }
     }
 
