@@ -36,7 +36,7 @@ class VanillaLevelSystemTest : BukkitTestBase() {
     @BeforeTest
     override fun setUp() {
         super.setUp()
-        levelSystem = VanillaLevelSystem.FACTORY[player]
+        levelSystem = VanillaLevelSystem.FACTORY.get(player)
     }
 
     @Test

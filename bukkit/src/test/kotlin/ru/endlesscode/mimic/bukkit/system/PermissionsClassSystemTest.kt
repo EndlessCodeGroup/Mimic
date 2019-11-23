@@ -39,7 +39,7 @@ class PermissionsClassSystemTest : BukkitTestBase() {
     @BeforeTest
     override fun setUp() {
         super.setUp()
-        classSystem = PermissionsClassSystem.FACTORY[player]
+        classSystem = PermissionsClassSystem.FACTORY.get(player)
     }
 
     @Test

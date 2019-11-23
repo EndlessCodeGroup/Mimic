@@ -36,7 +36,7 @@ open class SystemFactory<T : PlayerSystem>(val tag: String, private val construc
      * @param playerArg Player object
      * @return Player system for specified player. Can't be null
      */
-    operator fun get(playerArg: Any): T {
+    fun get(playerArg: Any): T {
         return constructor(playerArg)
     }
 }
