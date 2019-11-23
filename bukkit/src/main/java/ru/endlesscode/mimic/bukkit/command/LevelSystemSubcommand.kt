@@ -19,7 +19,8 @@
 
 package ru.endlesscode.mimic.bukkit.command
 
-import co.aikar.commands.BaseCommand
+import co.aikar.commands.AbstractCommandManager
+import co.aikar.commands.Command
 import co.aikar.commands.InvalidCommandArgument
 import co.aikar.commands.MessageKeys
 import co.aikar.commands.annotation.*
@@ -34,12 +35,16 @@ import ru.endlesscode.mimic.bukkit.util.Log
 internal class LevelSystemSubcommand(
     private val systemFactory: SystemFactory<LevelSystem>,
     private val util: CommandUtil
-) : BaseCommand() {
+) : Command() {
 
     companion object {
         private val NUMBER get() = Regex("\\d+")
         private val SIGN_NUMBER get() = Regex("[-+]?\\d+")
         private val SIGN_NUMBER_PERCENT get() = Regex("[-+]?\\d+%?")
+    }
+
+    override fun afterRegister(manager: AbstractCommandManager) {
+        manager.getCommandCompletions().registerEnumCompletion<ValueType>("type")
     }
 
     @Subcommand("info|i")
@@ -61,7 +66,7 @@ internal class LevelSystemSubcommand(
     @Subcommand("set|s")
     @Description("Change player's level, exp or total exp")
     @Syntax("<value> [lvl|exp|total] [player]")
-    @CommandCompletion("+|- lvl|exp|total @players")
+    @CommandCompletion("+|- @type @players")
     fun set(
         sender: CommandSender,
         value: String,
@@ -100,7 +105,7 @@ internal class LevelSystemSubcommand(
     @Subcommand("has|h|reach|r")
     @Description("Check that player did reach level or has exp")
     @Syntax("<value> [lvl|exp|total] [player]")
-    @CommandCompletion("@nothing lvl|exp|total @players")
+    @CommandCompletion("@nothing @type @players")
     fun has(
         sender: CommandSender,
         value: Int,
@@ -183,7 +188,7 @@ internal class LevelSystemSubcommand(
     private fun parseValue(command: String): Int = command.replace(Regex("\\D+"), "").toInt()
 
     @Suppress("UNUSED")
-    internal enum class ValueType { EXP, TOTAL, LVL }
+    internal enum class ValueType { LVL, EXP, TOTAL }
 
     private enum class Action {
         SET, GIVE, TAKE;
