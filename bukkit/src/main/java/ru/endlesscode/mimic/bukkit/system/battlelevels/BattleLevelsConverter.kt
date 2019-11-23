@@ -16,33 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system.battlelevels
 
-package ru.endlesscode.mimic.bukkit.system.battlelevels;
+import me.robin.battlelevels.api.BattleLevelsAPI
+import ru.endlesscode.mimic.api.system.ExpLevelConverter
 
-import me.robin.battlelevels.api.BattleLevelsAPI;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.ExpLevelConverter;
+/** Converter for BattleLevels level system. */
+class BattleLevelsConverter private constructor() : ExpLevelConverter {
 
-/**
- * Converter for BattleLevels level system.
- */
-public class BattleLevelsConverter implements ExpLevelConverter {
-    private static BattleLevelsConverter instance;
-
-    private BattleLevelsConverter() {
-        // Deny access to constructor from other classes
+    companion object {
+        @JvmStatic
+        val instance: BattleLevelsConverter by lazy { BattleLevelsConverter() }
     }
 
-    static @NotNull BattleLevelsConverter getInstance() {
-        if (instance == null) {
-            instance = new BattleLevelsConverter();
-        }
-
-        return instance;
-    }
-
-    @Override
-    public double getExpToReachLevel(int level) {
-        return BattleLevelsAPI.getNeededFor(level);
-    }
+    override fun getExpToReachLevel(level: Int): Double = BattleLevelsAPI.getNeededFor(level)
 }

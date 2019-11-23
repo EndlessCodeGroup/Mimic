@@ -16,104 +16,75 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system.battlelevels
 
-package ru.endlesscode.mimic.bukkit.system.battlelevels;
+import me.robin.battlelevels.api.BattleLevelsAPI
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.api.system.registry.Subsystem
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
+import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
+import ru.endlesscode.mimic.bukkit.system.battlelevels.BattleLevelsConverter.Companion.instance
+import java.util.UUID
+import kotlin.math.abs
 
-import me.robin.battlelevels.api.BattleLevelsAPI;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Subsystem;
-import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem;
+/** It's implementation of LevelSystem that uses BattleLevels.  */
+@Subsystem(priority = SubsystemPriority.NORMAL, classes = ["me.robin.battlelevels.api.BattleLevelsAPI"])
+class BattleLevelsLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
 
-import java.util.UUID;
+    companion object {
+        const val TAG = "BattleLevels"
 
-
-/** It's implementation of LevelSystem that uses BattleLevels. */
-@Subsystem(
-        priority = SubsystemPriority.NORMAL,
-        classes = {"me.robin.battlelevels.api.BattleLevelsAPI"})
-public class BattleLevelsLevelSystem extends BukkitLevelSystem {
-    public static final String TAG = "BattleLevels";
-    public static final Factory<BattleLevelsLevelSystem> FACTORY = new Factory<>(TAG, BattleLevelsLevelSystem::new);
-
-    private BattleLevelsLevelSystem(@NotNull Player player) {
-        super(BattleLevelsConverter.getInstance(), player);
+        @JvmField
+        val FACTORY = Factory(TAG, ::BattleLevelsLevelSystem)
     }
 
-    @Override
-    public int getLevel() {
-        return BattleLevelsAPI.getLevel(getPlayerUniqueId());
-    }
+    override val name: String = TAG
+    override val isEnabled: Boolean = true
 
-    @Override
-    public void setLevel(int newLevel) {
-        int delta = getLevel() - newLevel;
-
-        if (delta < 0) {
-            takeLevel(Math.abs(delta));
-        } else if (delta > 0) {
-            giveLevel(delta);
+    override var level: Int
+        get() = BattleLevelsAPI.getLevel(playerUniqueId)
+        set(newLevel) {
+            val delta = level - newLevel
+            if (delta < 0) {
+                takeLevel(abs(delta))
+            } else if (delta > 0) {
+                giveLevel(delta)
+            }
         }
-    }
 
-    @Override
-    public void giveLevel(int lvlAmount) {
-        BattleLevelsAPI.addLevel(getPlayerUniqueId(), lvlAmount);
-    }
-
-    @Override
-    public void takeLevel(int lvlAmount) {
-        BattleLevelsAPI.removeLevel(getPlayerUniqueId(), lvlAmount);
-    }
-
-    @Override
-    public double getExp() {
-        return BattleLevelsAPI.getScore(getPlayerUniqueId());
-    }
-
-    @Override
-    public void setExp(double newExperience) {
-        double delta = getExp() - newExperience;
-
-        if (delta < 0) {
-            takeExp(Math.abs(delta));
-        } else if (delta > 0) {
-            giveExp(delta);
+    override var exp: Double
+        get() = BattleLevelsAPI.getScore(playerUniqueId)
+        set(newExperience) {
+            val delta = exp - newExperience
+            if (delta < 0) {
+                takeExp(abs(delta))
+            } else if (delta > 0) {
+                giveExp(delta)
+            }
         }
+
+    override val totalExpToNextLevel: Double
+        get() = BattleLevelsAPI.getNeededForNext(playerUniqueId)
+
+    override val expToNextLevel: Double
+        get() = BattleLevelsAPI.getNeededForNextRemaining(playerUniqueId)
+
+    private val playerUniqueId: UUID
+        get() = player.uniqueId
+
+    override fun giveLevel(lvlAmount: Int) {
+        BattleLevelsAPI.addLevel(playerUniqueId, lvlAmount)
     }
 
-    @Override
-    public void giveExp(double expAmount) {
-        BattleLevelsAPI.removeScore(getPlayerUniqueId(), expAmount);
+    override fun takeLevel(lvlAmount: Int) {
+        BattleLevelsAPI.removeLevel(playerUniqueId, lvlAmount)
     }
 
-    @Override
-    public void takeExp(double expAmount) {
-        BattleLevelsAPI.removeScore(getPlayerUniqueId(), expAmount);
+    override fun giveExp(expAmount: Double) {
+        BattleLevelsAPI.removeScore(playerUniqueId, expAmount)
     }
 
-    @Override
-    public double getTotalExpToNextLevel() {
-        return BattleLevelsAPI.getNeededForNext(getPlayerUniqueId());
-    }
-
-    @Override
-    public double getExpToNextLevel() {
-        return BattleLevelsAPI.getNeededForNextRemaining(getPlayerUniqueId());
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return TAG;
-    }
-
-    private UUID getPlayerUniqueId() {
-        return getPlayer().getUniqueId();
+    override fun takeExp(expAmount: Double) {
+        BattleLevelsAPI.removeScore(playerUniqueId, expAmount)
     }
 }
