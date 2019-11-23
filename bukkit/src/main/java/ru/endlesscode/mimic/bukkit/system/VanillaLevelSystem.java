@@ -28,7 +28,7 @@ import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
 @Subsystem(priority = SubsystemPriority.LOWEST)
 public class VanillaLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "Vanilla Level System";
-    public static final Factory<VanillaLevelSystem> FACTORY = new Factory<>(TAG, playerObj -> new VanillaLevelSystem((Player) playerObj));
+    public static final Factory<VanillaLevelSystem> FACTORY = new Factory<>(TAG, VanillaLevelSystem::new);
 
     private VanillaLevelSystem(@NotNull Player player) {
         super(VanillaConverter.getInstance(), player);

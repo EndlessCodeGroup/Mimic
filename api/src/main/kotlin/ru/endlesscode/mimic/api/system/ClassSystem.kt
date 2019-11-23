@@ -75,6 +75,6 @@ interface ClassSystem : PlayerSystem {
     fun hasRequiredClass(requiredClass: String): Boolean = requiredClass in this.classes
 
     /** Factory of class systems. */
-    class Factory<SubsystemT : ClassSystem>(tag: String, constructor: (Any) -> SubsystemT) :
+    open class Factory<SubsystemT : ClassSystem>(tag: String, constructor: (Any) -> SubsystemT) :
         SystemFactory<SubsystemT>(tag, constructor)
 }

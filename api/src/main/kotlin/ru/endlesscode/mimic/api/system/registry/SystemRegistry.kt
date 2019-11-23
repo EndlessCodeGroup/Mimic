@@ -56,24 +56,24 @@ abstract class SystemRegistry {
         }
     }
 
-    private fun tryToRegisterSubsystem(
-        subsystemClass: Class<out PlayerSystem>,
-        givenFactory: SystemFactory<out PlayerSystem>?
+    private fun <SubsystemT : PlayerSystem> tryToRegisterSubsystem(
+        subsystemClass: Class<SubsystemT>,
+        givenFactory: SystemFactory<SubsystemT>?
     ): Boolean {
         val meta = SubsystemMetaAdapter.fromClass(subsystemClass)
         return if (meta.requiredClassesExists()) {
             val factory = givenFactory ?: subsystemClass.getSubsystemFactory()
-            this.registerFactory(factory.javaClass, factory, meta.priority)
+            this.registerFactory(factory.javaClass.getRootFactoryClass(), factory, meta.priority)
             true
         } else {
             false
         }
     }
 
-    private fun Class<out PlayerSystem>.getSubsystemFactory(): SystemFactory<out PlayerSystem> {
+    private fun <SubsystemT : PlayerSystem> Class<SubsystemT>.getSubsystemFactory(): SystemFactory<SubsystemT> {
         try {
             @Suppress("UNCHECKED_CAST")
-            return getField("FACTORY").get(null) as SystemFactory<out PlayerSystem>
+            return getField("FACTORY").get(null) as SystemFactory<SubsystemT>
         } catch (e: ReflectiveOperationException) {
             throw IllegalArgumentException("Factory not found in given class", e)
         }
@@ -87,7 +87,7 @@ abstract class SystemRegistry {
      * @param subsystemFactory Concrete subsystem factory
      * @param priority         Subsystem priority
      */
-    abstract fun <FactoryT : SystemFactory<out PlayerSystem>> registerFactory(
+    abstract fun <FactoryT : SystemFactory<*>> registerFactory(
         factoryClass: Class<FactoryT>,
         subsystemFactory: FactoryT,
         priority: SubsystemPriority
@@ -108,8 +108,17 @@ abstract class SystemRegistry {
     }
 
     private fun <SystemT : PlayerSystem> Class<SystemT>.getFactoryClass(): Class<SystemFactory<SystemT>> {
-        val factoryClass = requireNotNull(declaredClasses.find { it.superclass == SystemFactory::class.java }) {
-            "Given class not contains any System Factory"
+        val factoryClass = declaredClasses.find(SystemFactory::class.java::isAssignableFrom)
+        requireNotNull(factoryClass) { "Given class not contains any System Factory" }
+
+        @Suppress("UNCHECKED_CAST")
+        return (factoryClass as Class<out SystemFactory<SystemT>>).getRootFactoryClass()
+    }
+
+    private fun <SystemT : PlayerSystem> Class<out SystemFactory<SystemT>>.getRootFactoryClass(): Class<SystemFactory<SystemT>> {
+        var factoryClass: Class<*> = this
+        while (factoryClass.superclass != SystemFactory::class.java) {
+            factoryClass = factoryClass.superclass
         }
 
         @Suppress("UNCHECKED_CAST")

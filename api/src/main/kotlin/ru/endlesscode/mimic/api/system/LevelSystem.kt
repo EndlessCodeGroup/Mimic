@@ -214,6 +214,6 @@ interface LevelSystem : PlayerSystem {
     fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
 
     /** Factory of level systems. */
-    class Factory<SubsystemT : LevelSystem>(tag: String, constructor: (Any) -> SubsystemT) :
+    open class Factory<SubsystemT : LevelSystem>(tag: String, constructor: (Any) -> SubsystemT) :
         SystemFactory<SubsystemT>(tag, constructor)
 }

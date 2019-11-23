@@ -32,4 +32,8 @@ abstract class BukkitLevelSystem internal constructor(
     val player: Player get() = playerRef.get()
 
     private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
+
+    /** Factory of Bukkit level systems. */
+    class Factory<SubsystemT : BukkitLevelSystem>(tag: String, constructor: (Player) -> SubsystemT) :
+        LevelSystem.Factory<SubsystemT>(tag, { constructor(it as Player) })
 }

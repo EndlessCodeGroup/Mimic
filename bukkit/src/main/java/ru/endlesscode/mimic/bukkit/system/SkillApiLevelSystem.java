@@ -35,7 +35,7 @@ import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
         classes = {"com.sucy.skill.SkillAPI"})
 public class SkillApiLevelSystem extends BukkitLevelSystem {
     public static final String TAG = "SkillAPI";
-    public static final Factory<SkillApiLevelSystem> FACTORY = new Factory<>(TAG, player -> new SkillApiLevelSystem((Player) player));
+    public static final Factory<SkillApiLevelSystem> FACTORY = new Factory<>(TAG, SkillApiLevelSystem::new);
 
     private SkillApiWrapper skillApi;
 

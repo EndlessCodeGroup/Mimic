@@ -40,7 +40,7 @@ import java.util.Set;
 @Subsystem(priority = SubsystemPriority.LOWEST)
 public class PermissionsClassSystem extends BukkitClassSystem {
     public static final String TAG = "Permission Class System";
-    public static final Factory<PermissionsClassSystem> FACTORY = new Factory<>(TAG, playerObj -> new PermissionsClassSystem((Player) playerObj));
+    public static final Factory<PermissionsClassSystem> FACTORY = new Factory<>(TAG, PermissionsClassSystem::new);
 
     static final String PERMISSION_PREFIX = "mimic.class.";
 

@@ -32,7 +32,7 @@ class BukkitSystemRegistry internal constructor(
     private val servicesManager: ServicesManager
 ) : SystemRegistry() {
 
-    override fun <FactoryT : SystemFactory<out PlayerSystem>> registerFactory(
+    override fun <FactoryT : SystemFactory<*>> registerFactory(
         factoryClass: Class<FactoryT>,
         subsystemFactory: FactoryT,
         priority: SubsystemPriority
