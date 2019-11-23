@@ -16,69 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system.vanilla
 
-package ru.endlesscode.mimic.bukkit.system.vanilla;
-
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Subsystem;
-import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.bukkit.system.BukkitClassSystem;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.api.system.registry.Subsystem
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
+import ru.endlesscode.mimic.bukkit.system.BukkitClassSystem
 
 /**
  * Class system based on permissions.
- * <p>
+ *
  * To set user classes just give him permission like these:
  * - mimic.class.ClassOne
  * - mimic.class.ClassTwo
- * First of classes will be primary.
+ * First class will be used as primary.
  */
 @Subsystem(priority = SubsystemPriority.LOWEST)
-public class PermissionsClassSystem extends BukkitClassSystem {
-    public static final String TAG = "Permission Class System";
-    public static final Factory<PermissionsClassSystem> FACTORY = new Factory<>(TAG, PermissionsClassSystem::new);
+class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
 
-    static final String PERMISSION_PREFIX = "mimic.class.";
+    companion object {
+        const val TAG = "Permission Class System"
+        const val PERMISSION_PREFIX = "mimic.class."
 
-    private PermissionsClassSystem(@NotNull Player player) {
-        super(player);
+        @JvmField
+        val FACTORY = Factory(TAG, ::PermissionsClassSystem)
     }
 
-    @Override
-    public boolean hasRequiredClass(@NotNull String requiredClass) {
-        return getPlayer().hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase());
+    override val name: String = TAG
+    override val isEnabled: Boolean = true
+
+    override fun hasRequiredClass(requiredClass: String): Boolean {
+        return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase())
     }
 
-    @Override
-    public @NotNull
-    List<String> getClasses() {
-        List<String> matchedPermissions = new ArrayList<>();
-        Set<PermissionAttachmentInfo> perms = getPlayer().getEffectivePermissions();
-        for (PermissionAttachmentInfo perm : perms) {
-            boolean positive = perm.getValue();
-            String permission = perm.getPermission();
-            if (positive && permission.startsWith(PERMISSION_PREFIX)) {
-                String theClass = permission.substring(PERMISSION_PREFIX.length());
-                matchedPermissions.add(theClass);
-            }
+    override val classes: List<String>
+        get() {
+            return player.effectivePermissions.asSequence()
+                .filter { it.value && it.permission.startsWith(PERMISSION_PREFIX) }
+                .map { it.permission.substring(PERMISSION_PREFIX.length) }
+                .toList()
         }
-
-        return matchedPermissions;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public String getName() {
-        return TAG;
-    }
 }

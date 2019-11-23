@@ -16,81 +16,51 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system.vanilla
 
-package ru.endlesscode.mimic.bukkit.system.vanilla;
-
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.registry.Subsystem;
-import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
-import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem;
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.api.system.registry.Subsystem
+import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
+import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
+import ru.endlesscode.mimic.bukkit.system.vanilla.VanillaConverter.Companion.instance
 
 /** Vanilla experience bar system. */
 @Subsystem(priority = SubsystemPriority.LOWEST)
-public class VanillaLevelSystem extends BukkitLevelSystem {
-    public static final String TAG = "Vanilla Level System";
-    public static final Factory<VanillaLevelSystem> FACTORY = new Factory<>(TAG, VanillaLevelSystem::new);
+class VanillaLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
 
-    private VanillaLevelSystem(@NotNull Player player) {
-        super(VanillaConverter.getInstance(), player);
+    companion object {
+        const val TAG = "Vanilla Level System"
+
+        @JvmField
+        val FACTORY = Factory(TAG, ::VanillaLevelSystem)
     }
 
-    @Override
-    public int getLevel() {
-        return getPlayer().getLevel();
-    }
+    override val name: String = TAG
+    override val isEnabled: Boolean = true
 
-    @Override
-    public void setLevel(int newLevel) {
-        int allowedLevel = Math.max(0, newLevel);
+    override var level: Int
+        get() = player.level
+        set(value) {
+            player.level = value.coerceAtLeast(0)
+        }
 
-        getPlayer().setLevel(allowedLevel);
-    }
+    override var exp: Double
+        get() {
+            val expToNextLevel = converter.getExpToReachNextLevel(level)
+            return expToNextLevel * player.exp
+        }
+        set(value) {
+            val expToNextLevel = converter.getExpToReachNextLevel(level)
+            val allowedExperience = value.coerceIn(0.0, expToNextLevel)
+            player.exp = (allowedExperience / expToNextLevel).toFloat()
+        }
 
-    @Override
-    public double getExp() {
-        int level = getLevel();
-        double expToLevel = getConverter().getExpToReachNextLevel(level);
+    override var fractionalExp: Double
+        get() = player.exp.toDouble()
+        set(value) {
+            player.exp = value.coerceIn(0.0, 1.0).toFloat()
+        }
 
-        return expToLevel * getPlayer().getExp();
-    }
-
-    @Override
-    public void setExp(double newExperience) {
-        int level = getLevel();
-        double expToNextLevel = getConverter().getExpToReachNextLevel(level);
-        double allowedExperience = Math.max(0, newExperience);
-        allowedExperience = Math.min(allowedExperience, expToNextLevel);
-
-        getPlayer().setExp((float) (allowedExperience / expToNextLevel));
-    }
-
-    public double getFractionalExp() {
-        return getPlayer().getExp();
-    }
-
-    @Override
-    public void setFractionalExp(double fractionalExp) {
-
-        float allowedExp = Math.min(1, (float) fractionalExp);
-        allowedExp = Math.max(0, allowedExp);
-
-        getPlayer().setExp(allowedExp);
-    }
-
-    @Override
-    public double getTotalExpToNextLevel() {
-        return getPlayer().getExpToLevel();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @NotNull
-    @Override
-    public String getName() {
-        return TAG;
-    }
+    override val totalExpToNextLevel: Double
+        get() = player.expToLevel.toDouble()
 }
