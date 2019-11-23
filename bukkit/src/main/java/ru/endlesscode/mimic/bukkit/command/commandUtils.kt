@@ -16,58 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.command
 
-package ru.endlesscode.mimic.bukkit.command;
+import org.bukkit.ChatColor
+import org.bukkit.command.CommandSender
 
-import co.aikar.commands.InvalidCommandArgument;
-import co.aikar.commands.MessageKeys;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
-public class CommandUtil {
-
-    public void send(@NotNull CommandSender target, String... messages) {
-        for (String message : messages) {
-            target.sendMessage(colored(message));
-        }
-    }
-
-    @NotNull
-    public Player getTarget(@NotNull CommandSender sender, @NotNull String playerName) throws InvalidCommandArgument {
-        if (!playerName.isEmpty()) {
-            //noinspection deprecation
-            Player player = Bukkit.getPlayer(playerName);
-
-            if (player == null) {
-                throw new InvalidCommandArgument(
-                        MessageKeys.ERROR_PREFIX,
-                        "{message}", "Player '" + playerName + "' not found"
-                );
-            }
-
-            return player;
-        }
-
-        if (sender instanceof Player) {
-            return (Player) sender;
-        }
-
-        throw new InvalidCommandArgument(
-                MessageKeys.ERROR_PREFIX,
-                "{message}", "You should specify target player"
-        );
-    }
-
-    @NotNull
-    public String msg(@NotNull String text, Object... args) {
-        return String.format(text, args);
-    }
-
-    @NotNull
-    public String colored(@NotNull String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+internal fun CommandSender.send(vararg messages: String) {
+    for (message in messages) {
+        sendMessage(message.colored())
     }
 }
+
+private fun String.colored(): String = ChatColor.translateAlternateColorCodes('&', this)

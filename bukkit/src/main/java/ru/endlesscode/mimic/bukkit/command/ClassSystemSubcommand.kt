@@ -30,8 +30,7 @@ import ru.endlesscode.mimic.api.system.SystemFactory
 @CommandPermission("%perm")
 @Subcommand("class|c")
 internal class ClassSystemSubcommand(
-    private val systemFactory: SystemFactory<ClassSystem>,
-    private val util: CommandUtil
+    private val systemFactory: SystemFactory<ClassSystem>
 ) : Command() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
@@ -44,11 +43,10 @@ internal class ClassSystemSubcommand(
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
         val system = systemFactory.get(player)
-        util.send(
-            sender,
-            util.msg("&3System: &7%s", system.name),
-            util.msg("&3Classes: &7%s", system.classes),
-            util.msg("&3Primary: &7%s", system.primaryClass)
+        sender.send(
+            "&3System: &7${system.name}",
+            "&3Classes: &7${system.classes}",
+            "&3Primary: &7${system.primaryClass}"
         )
     }
 
@@ -68,7 +66,7 @@ internal class ClassSystemSubcommand(
         } else {
             system.hasOneOfRequiredClasses(classes.asList())
         }
-        util.send(sender, util.msg("&6Player '%s' has%s given classes.", player.name, if (has) "" else " not"))
+        sender.send("&6Player '${player.name}' has%s given classes.".format(if (has) "" else " not"))
     }
 
     @Suppress("UNUSED")

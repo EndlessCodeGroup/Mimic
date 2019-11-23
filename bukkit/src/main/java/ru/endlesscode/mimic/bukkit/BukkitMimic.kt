@@ -27,7 +27,6 @@ import ru.endlesscode.mimic.api.system.PlayerSystem
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException
 import ru.endlesscode.mimic.api.system.registry.getSystemFactory
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
-import ru.endlesscode.mimic.bukkit.command.CommandUtil
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MimicCommand
 import ru.endlesscode.mimic.bukkit.system.*
@@ -95,14 +94,13 @@ class BukkitMimic : JavaPlugin() {
             "perm", "mimic.admin"
         )
 
-        val util = CommandUtil()
         manager.registerCommand(MimicCommand())
 
         systemRegistry.getSystemFactory<LevelSystem>()?.let {
-            manager.registerCommand(LevelSystemSubcommand(it, util))
+            manager.registerCommand(LevelSystemSubcommand(it))
         }
         systemRegistry.getSystemFactory<ClassSystem>()?.let {
-            manager.registerCommand(ClassSystemSubcommand(it, util))
+            manager.registerCommand(ClassSystemSubcommand(it))
         }
     }
 

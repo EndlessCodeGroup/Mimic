@@ -34,8 +34,7 @@ import ru.endlesscode.mimic.bukkit.util.Log
 @CommandPermission("%perm")
 @Subcommand("level|lvl|l|experience|exp|xp")
 internal class LevelSystemSubcommand(
-    private val systemFactory: SystemFactory<LevelSystem>,
-    private val util: CommandUtil
+    private val systemFactory: SystemFactory<LevelSystem>
 ) : Command() {
 
     companion object {
@@ -54,12 +53,11 @@ internal class LevelSystemSubcommand(
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
         val system = systemFactory.get(player)
-        util.send(
-            sender,
-            util.msg("&3System: &7%s", system.name),
-            util.msg("&3Level: &7%.2f", system.level + system.fractionalExp),
-            util.msg("&3Exp: &7%.1f &8| &3To next level: &7%.1f", system.exp, system.expToNextLevel),
-            util.msg("&3Total exp: &7%.1f", system.totalExp)
+        sender.send(
+            "&3System: &7${system.name}",
+            "&3Level: &7%.2f".format(system.level + system.fractionalExp),
+            "&3Exp: &7%.1f &8| &3To next level: &7%.1f".format(system.exp, system.expToNextLevel),
+            "&3Total exp: &7%.1f".format(system.totalExp)
         )
     }
 
@@ -78,21 +76,16 @@ internal class LevelSystemSubcommand(
             when (type) {
                 ValueType.LVL -> {
                     setLevel(ls, value)
-                    util.send(sender, util.msg("&6New %s's level is %d", player.name, ls.level))
+                    sender.send("&6New ${player.name}'s level is ${ls.level}")
                 }
                 ValueType.TOTAL -> {
                     setTotalExp(ls, value)
-                    util.send(
-                        sender,
-                        util.msg("&6New %s's total exp is %.1f (%d lvl)", player.name, ls.totalExp, ls.level)
-                    )
+                    sender.send("&6New ${player.name}'s total exp is %.1f (${ls.level} lvl)".format(ls.totalExp))
                 }
                 ValueType.EXP -> {
                     setExp(ls, value)
-                    util.send(
-                        sender,
-                        util.msg("&6New %s's exp is %.1f (%.2f lvl)", player.name, ls.exp, ls.level + ls.fractionalExp)
-                    )
+                    val level = ls.level + ls.fractionalExp
+                    sender.send("&6New ${player.name}'s exp is %.1f (%.2f lvl)".format(ls.exp, level))
                 }
             }
         } catch (e: UnsupportedOperationException) {
@@ -112,30 +105,23 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         val system = systemFactory.get(player)
+        val has: Boolean
+        val message: String
         when (type) {
             ValueType.LVL -> {
-                val reached = system.didReachLevel(value)
-                util.send(
-                    sender,
-                    util.msg("&6%s did%s reach %d lvl.", player.name, if (reached) "" else " not", value)
-                )
+                has = system.didReachLevel(value)
+                message = "&6%s did%s reach %d lvl."
             }
             ValueType.EXP -> {
-                val has = system.hasExp(value.toDouble())
-                util.send(
-                    sender,
-                    util.msg("&6%s has%s %d exp.", player.name, if (has) "" else " not", value)
-                )
+                has = system.hasExp(value.toDouble())
+                message = "&6%s has%s %d exp."
             }
             ValueType.TOTAL -> {
-                val has = system.hasExpTotal(value.toDouble())
-                util.send(
-                    sender,
-                    util.msg("&6%s has%s %d total exp.", player.name, if (has) "" else " not", value)
-                )
+                has = system.hasExpTotal(value.toDouble())
+                message = "&6%s has%s %d total exp."
             }
         }
-
+        sender.send(message.format(player.name, if (has) "" else " not", value))
     }
 
     private fun setLevel(system: LevelSystem, command: String) {
