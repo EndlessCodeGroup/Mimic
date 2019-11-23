@@ -16,76 +16,51 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system.vanilla
 
-package ru.endlesscode.mimic.bukkit.system.vanilla;
-
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.ExpLevelConverter;
+import ru.endlesscode.mimic.api.system.ExpLevelConverter
+import kotlin.math.sqrt
 
 /**
  * Converter for vanilla experience system.
  *
- * @see <a href="http://minecraft.gamepedia.com/Experience#Leveling_up">Minecraft Wiki: Experience - Leveling Up</a>
+ * @see [Minecraft Wiki: Experience - Leveling Up](https://minecraft.gamepedia.com/Experience#Leveling_up)
  */
-public class VanillaConverter implements ExpLevelConverter {
-    private static VanillaConverter instance;
+class VanillaConverter private constructor() : ExpLevelConverter {
 
-    private VanillaConverter() {
-        // Deny access to constructor from other classes
+    companion object {
+        @JvmStatic
+        val instance: VanillaConverter by lazy { VanillaConverter() }
     }
 
-    static @NotNull VanillaConverter getInstance() {
-        if (instance == null) {
-            instance = new VanillaConverter();
-        }
-
-        return instance;
+    override fun expToLevel(exp: Double): Double = when {
+        exp >= 1628 -> (sqrt(72 * exp - 54215) + 325) / 18
+        exp >= 394 -> sqrt(40 * exp - 7839) / 10 + 8.1
+        exp > 0 -> sqrt(exp + 9) - 3
+        else -> 0.0
     }
 
-    @Override
-    public double expToLevel(double exp) {
-        double level = 0;
-        if (exp >= 1628) {
-            level = (Math.sqrt(72 * exp - 54215) + 325) / 18;
-        } else if (exp >= 394) {
-            level = Math.sqrt(40 * exp - 7839) / 10 + 8.1;
-        } else if (exp > 0) {
-            level = Math.sqrt(exp + 9) - 3;
-        }
-
-        return level;
+    // Total experience =
+    //      4.5 × level^2 – 162.5 × level + 2220 (at levels 32+)
+    //      2.5 × level^2 – 40.5 × level + 360 (at levels 17–31)
+    //      level^2 + 6 × level (at levels 0–16)
+    override fun levelToExp(level: Int): Double = when {
+        level >= 32 -> 4.5 * level * level - 162.5 * level + 2220
+        level >= 17 -> 2.5 * level * level - 40.5 * level + 360
+        level > 0 -> level * level + 6.0 * level
+        else -> 0.0
     }
 
-    @Override
-    public double levelToExp(int level) {
-        int exp = 0;
-        if (level >= 32) {
-            exp = (int) (4.5 * level * level - 162.5 * level + 2220);
-        } else if (level >= 17) {
-            exp = (int) (2.5 * level * level - 40.5 * level + 360);
-        } else if (level > 0) {
-            exp = level * level + 6 * level;
-        }
+    override fun getExpToReachLevel(level: Int): Double = getExpToReachNextLevel(level - 1)
 
-        return exp;
-    }
-
-    @Override
-    public double getExpToReachLevel(int level) {
-        return getExpToReachNextLevel(level - 1);
-    }
-
-    @Override
-    public double getExpToReachNextLevel(int level) {
-        int exp = -1;
-        if (level >= 31) {
-            exp = 9 * level - 158;
-        } else if (level >= 16) {
-            exp = 5 * level - 38;
-        } else if (level >= 0) {
-            exp = 2 * level + 7;
-        }
-
-        return exp;
+    // Experience required =
+    //      9 × current_level – 158 (for levels 31+)
+    //      5 × current_level – 38 (for levels 16–30)
+    //      2 × current_level + 7 (for levels 0–15)
+    override fun getExpToReachNextLevel(level: Int): Double = when {
+        level >= 31 -> 9.0 * level - 158
+        level >= 16 -> 5.0 * level - 38
+        level >= 0 -> 2.0 * level + 7
+        else -> -1.0
     }
 }

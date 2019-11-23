@@ -53,7 +53,7 @@ class VanillaConverterTest(
 
     @BeforeTest
     fun setUp() {
-        converter = VanillaConverter.getInstance()
+        converter = VanillaConverter.instance
     }
 
     @Test
