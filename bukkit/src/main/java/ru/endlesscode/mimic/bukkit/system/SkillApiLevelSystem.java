@@ -49,7 +49,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
     }
 
     @Override
-    public void decreaseLevel(int lvlAmount) {
+    public void takeLevel(int lvlAmount) {
         PlayerClass playerClass = getPlayerClass();
 
         if (playerClass != null) {
@@ -65,7 +65,7 @@ public class SkillApiLevelSystem extends BukkitLevelSystem {
     }
 
     @Override
-    public void increaseLevel(int lvlAmount) {
+    public void giveLevel(int lvlAmount) {
         PlayerClass playerClass = getPlayerClass();
         if (playerClass != null) {
             playerClass.giveLevels(lvlAmount);

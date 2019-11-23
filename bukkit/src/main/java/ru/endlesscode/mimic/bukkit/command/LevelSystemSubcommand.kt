@@ -104,14 +104,13 @@ internal class LevelSystemSubcommand(
     fun reach(
         sender: CommandSender,
         level: Int,
-        @Default player: String?
+        @Default player: String
     ) {
-        val target = util.getTarget(sender, player!!)
+        val target = util.getTarget(sender, player)
         val reached = systemFactory.get(target).didReachLevel(level)
         util.send(
-            sender, util.msg(
-                "&6Player '%s' did%s reach %d lvl.", target.name, if (reached) "" else " not", level
-            )
+            sender,
+            util.msg("&6Player '%s' did%s reach %d lvl.", target.name, if (reached) "" else " not", level)
         )
     }
 
@@ -119,8 +118,8 @@ internal class LevelSystemSubcommand(
         checkArgument(command matches SIGN_NUMBER) { "Level should be a number, can start with + or -." }
         val value = parseValue(command)
         when (Action.of(command)) {
-            Action.PLUS -> system.increaseLevel(value)
-            Action.MINUS -> system.decreaseLevel(value)
+            Action.GIVE -> system.giveLevel(value)
+            Action.TAKE -> system.takeLevel(value)
             else -> system.level = value
         }
     }
@@ -136,18 +135,17 @@ internal class LevelSystemSubcommand(
             "Experience value should be a number, can start with + or - and end with %."
         }
         val percentage = command.endsWith('%')
-        val value = parseValue(command)
+        val value = parseValue(command).toDouble()
         val action = Action.of(command)
-        if (percentage) {
-            checkArgument(value <= 100) { "Percentage value can't be greater than 100." }
-            checkArgument(action == Action.SET) { "Percentage value not supports + and -." }
-            system.fractionalExp = value / 100.0
-            return
-        }
-        when (action) {
-            Action.PLUS -> system.giveExp(value.toDouble())
-            Action.MINUS -> system.takeExp(value.toDouble())
-            else -> system.exp = value.toDouble()
+        when {
+            percentage -> {
+                checkArgument(value <= 100) { "Percentage value can't be greater than 100." }
+                checkArgument(action == Action.SET) { "Percentage value not supports + and -." }
+                system.fractionalExp = value / 100
+            }
+            action == Action.GIVE -> system.giveExp(value)
+            action == Action.TAKE -> system.takeExp(value)
+            else -> system.exp = value
         }
     }
 
@@ -162,20 +160,19 @@ internal class LevelSystemSubcommand(
         throw InvalidCommandArgument(MessageKeys.ERROR_PREFIX, showSyntax, "{message}", message)
     }
 
-    private fun parseValue(command: String): Int {
-        return command.replace(Regex("\\D+"), "").toInt()
-    }
+    private fun parseValue(command: String): Int = command.replace(Regex("\\D+"), "").toInt()
 
+    @Suppress("UNUSED")
     internal enum class ValueType { EXP, TOTAL, LVL }
 
     private enum class Action {
-        SET, PLUS, MINUS;
+        SET, GIVE, TAKE;
 
         companion object {
             internal fun of(command: String): Action {
                 return when (command.first()) {
-                    '+' -> PLUS
-                    '-' -> MINUS
+                    '+' -> GIVE
+                    '-' -> TAKE
                     else -> SET
                 }
             }

@@ -50,19 +50,19 @@ public class BattleLevelsLevelSystem extends BukkitLevelSystem {
         int delta = getLevel() - newLevel;
 
         if (delta < 0) {
-            decreaseLevel(Math.abs(delta));
+            takeLevel(Math.abs(delta));
         } else if (delta > 0) {
-            increaseLevel(delta);
+            giveLevel(delta);
         }
     }
 
     @Override
-    public void increaseLevel(int lvlAmount) {
+    public void giveLevel(int lvlAmount) {
         BattleLevelsAPI.addLevel(getPlayerUniqueId(), lvlAmount);
     }
 
     @Override
-    public void decreaseLevel(int lvlAmount) {
+    public void takeLevel(int lvlAmount) {
         BattleLevelsAPI.removeLevel(getPlayerUniqueId(), lvlAmount);
     }
 
