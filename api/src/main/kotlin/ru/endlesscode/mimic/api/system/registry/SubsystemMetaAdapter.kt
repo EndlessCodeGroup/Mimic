@@ -24,17 +24,13 @@ import ru.endlesscode.mimic.api.system.PlayerSystem
 /**
  * Adapter to work with systems [Subsystem].
  *
- * @see Subsystem
- *
  * @param SubsystemT Subsystem type
  * @param meta The metadata
- * @author Osip Fatkullin
- * @since 0.1
+ * @see Subsystem
  */
 class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(private val meta: Subsystem) {
 
     companion object {
-
         /**
          * Gets metadata from class annotation. If annotation not exists - throws exception.
          *
@@ -46,7 +42,7 @@ class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(privat
          * @throws IllegalArgumentException If [Subsystem] not exists
          */
         @JvmStatic
-        fun <SubsystemT : PlayerSystem> getNotNullMeta(theClass: Class<out SubsystemT>): SubsystemMetaAdapter<SubsystemT> {
+        fun <SubsystemT : PlayerSystem> fromClass(theClass: Class<out SubsystemT>): SubsystemMetaAdapter<SubsystemT> {
             val meta = requireNotNull(theClass.getAnnotation(Subsystem::class.java)) {
                 "Class not contains subsystem annotations."
             }

@@ -22,10 +22,7 @@ package ru.endlesscode.mimic.api.system.registry
 /**
  * Subsystem priorities.
  *
- * Ssubsystem with higher priority will be loaded first. Use priorities to resolve conflicts.
- *
- * @author Osip Fatkullin
- * @since 0.1
+ * Subsystem with higher priority will be loaded first. Use priorities to resolve conflicts.
  */
 enum class SubsystemPriority {
     LOWEST,
@@ -35,10 +32,9 @@ enum class SubsystemPriority {
     HIGHEST;
 
     companion object {
-
         @JvmStatic
         fun fromString(string: String): SubsystemPriority {
-            return SubsystemPriority.valueOf(string.toUpperCase())
+            return valueOf(string.toUpperCase())
         }
     }
 }

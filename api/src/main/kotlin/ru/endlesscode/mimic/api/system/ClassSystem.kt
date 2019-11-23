@@ -19,8 +19,6 @@
 
 package ru.endlesscode.mimic.api.system
 
-import java.util.function.Function
-
 /**
  * System that provides methods to work with players class systems.
  *
@@ -28,91 +26,55 @@ import java.util.function.Function
  * and override all methods that works not properly for your case.
  *
  * @see [PlayerSystem] To read more about implementation.
- * @author Osip Fatkullin
- * @since 0.1
  */
 interface ClassSystem : PlayerSystem {
 
     /**
-     * Gets primary class for player.
+     * Primary class of the player.
      *
-     * @apiNote
-     * Class is called "primary" because some systems can support many classes
-     * for one player.
+     * It is called "primary" because some class systems can support many classes
+     * for one player. Primary class can't be null if player has at least one class.
      *
-     * @implSpec
-     * Method shouldn't return null, but can return empty string
-     *
-     * @return Primary class name
+     * @return Primary class name or `null` if player has not any classes.
      */
     @JvmDefault
-    val primaryClass: String
-        get() {
-            val classes = this.classes
-            return if (classes.isEmpty()) "" else classes[0]
-        }
+    val primaryClass: String?
+        get() = this.classes.firstOrNull()
 
     /**
-     * Gets [List] of player system.
+     * List of player classes.
      *
-     * @apiNote
-     * This method actual for systems which support many classes for one player.
-     * If system not support - it just return [List] with one element.
+     * It is actual for systems which support many classes for one player.
+     * If system doesn't support - it just returns [List] with one element.
      *
-     * @implSpec
-     * Method shouldn't return null, but can return empty [List].
-     * Also must not contain null objects.
+     * Never returns `null`, but can return empty [List].
      *
      * @return List of player system names
      * @throws IllegalStateException If player-related object not exists.
      */
     val classes: List<String>
 
-    /**
-     * Checks player has any class.
-     *
-     * @return true if player has any class
-     */
+    /** Returns `true` if player has any class. */
     @JvmDefault
-    fun hasClass(): Boolean {
-        return !this.primaryClass.isEmpty()
-    }
+    fun hasClass(): Boolean = primaryClass != null
 
-    /**
-     * Checks player has one of required classes.
-     *
-     * @param requiredClasses List of required classes
-     * @return true if player has one of required class
-     */
+    /** Returns `true` if player has any of [requiredClasses]. */
     @JvmDefault
     fun hasOneOfRequiredClasses(requiredClasses: List<String>): Boolean {
         return requiredClasses.any { this.hasRequiredClass(it) }
     }
 
-    /**
-     * Checks player has all required classes.
-     *
-     * @param requiredClasses List of required classes
-     * @return true if player has all required class
-     */
+    /** Returns `true` if player has all [requiredClasses]. */
     @JvmDefault
     fun hasAllRequiredClasses(requiredClasses: List<String>): Boolean {
         return requiredClasses.all { this.hasRequiredClass(it) }
     }
 
-    /**
-     * Checks player has required class.
-     *
-     * @param requiredClass Required class name
-     * @return true if player has required class
-     */
+    /** Returns `true` if player has [requiredClass]. */
     @JvmDefault
-    fun hasRequiredClass(requiredClass: String): Boolean {
-        return requiredClass in this.classes
-    }
+    fun hasRequiredClass(requiredClass: String): Boolean = requiredClass in this.classes
 
-    /**
-     * Factory of class systems.
-     */
-    class Factory(constructor: Function<Any, out ClassSystem>, tag: String) : SystemFactory<ClassSystem>(constructor, tag)
+    /** Factory of class systems. */
+    open class Factory<SubsystemT : ClassSystem>(tag: String, constructor: (Any) -> SubsystemT) :
+        SystemFactory<SubsystemT>(tag, constructor)
 }

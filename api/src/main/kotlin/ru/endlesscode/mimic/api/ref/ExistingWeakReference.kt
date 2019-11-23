@@ -19,7 +19,6 @@
 
 package ru.endlesscode.mimic.api.ref
 
-import org.jetbrains.annotations.NotNull
 import java.lang.ref.WeakReference
 
 /**
@@ -28,19 +27,9 @@ import java.lang.ref.WeakReference
  * @param referent object the new weak reference will refer to
  * @constructor Creates a new weak reference that refers to the given object. The new
  * reference is not registered with any queue.
- *
- * @author Osip Fatkullin
- * @since 1.0
  */
-class ExistingWeakReference<T>(referent: T) : WeakReference<T>(referent) {
+class ExistingWeakReference<T : Any>(referent: T) : WeakReference<T>(referent) {
 
-    /**
-     * {@inheritDoc}.
-     *
-     * @throws IllegalStateException If referent object not exists
-     */
-    @NotNull
-    override fun get(): T {
-        return super.get() ?: error("Referent object is null.")
-    }
+    /** Throws [IllegalStateException] if reference object has been cleared. */
+    override fun get(): T = super.get() ?: error("Referent object is null.")
 }

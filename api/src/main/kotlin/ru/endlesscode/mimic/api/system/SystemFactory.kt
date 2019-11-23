@@ -19,21 +19,16 @@
 
 package ru.endlesscode.mimic.api.system
 
-import java.util.function.Function
-
 /**
  * Factory to create subsystem instances.
  *
- * @implSpec
  * This interface must be implemented for each Player System (not subsystem).
  *
  * @param T           System type
  * @param constructor Function to create system
  * @param tag         The tag
- * @author Osip Fatkullin
- * @since 0.1
-</T> */
-open class SystemFactory<T : PlayerSystem>(private val constructor: Function<Any, out T>, val tag: String) {
+ */
+open class SystemFactory<T : PlayerSystem>(val tag: String, private val constructor: (Any) -> T) {
 
     /**
      * Creates new subsystem object with player initialization.
@@ -41,7 +36,7 @@ open class SystemFactory<T : PlayerSystem>(private val constructor: Function<Any
      * @param playerArg Player object
      * @return Player system for specified player. Can't be null
      */
-    operator fun get(playerArg: Any): T {
-        return constructor.apply(playerArg)
+    fun get(playerArg: Any): T {
+        return constructor(playerArg)
     }
 }

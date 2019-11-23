@@ -19,39 +19,19 @@
 
 package ru.endlesscode.mimic.api.system
 
-/**
- * This interface contains all methods needed to convert levels
- * to exp and vice versa.
- *
- * @author Osip Fatkullin
- * @since 0.1
- */
+/** Entity that contains all methods needed to convert levels to exp and vice versa. */
 interface ExpLevelConverter {
 
-    /**
-     * Converts experience to full level.
-     *
-     * @param exp Experience amount
-     * @return Amount of full levels
-     */
+    /** Converts [exp] to full level, dropping fractional part. */
     @JvmDefault
-    fun expToFullLevel(exp: Double): Int {
-        return expToLevel(exp).toInt()
-    }
+    fun expToFullLevel(exp: Double): Int = expToLevel(exp).toInt()
 
-    /**
-     * Converts experience to level.
-     *
-     * @param expValue Experience amount
-     * @return Level amount
-     */
+    /** Converts [exp] to level, with fractional part. */
     @JvmDefault
-    fun expToLevel(expValue: Double): Double {
-        if (expValue < 0) {
-            return 0.0
-        }
+    fun expToLevel(exp: Double): Double {
+        if (exp < 0) return 0.0
 
-        var exp = expValue
+        var remainingExp = exp
         var level = 0.0
         var requiredExp: Double
         var i = 0
@@ -68,10 +48,10 @@ interface ExpLevelConverter {
                 break
             }
 
-            exp -= requiredExp
+            remainingExp -= requiredExp
 
-            if (exp <= 0) {
-                level += exp / requiredExp
+            if (remainingExp <= 0) {
+                level += remainingExp / requiredExp
                 break
             }
             i++
@@ -80,12 +60,7 @@ interface ExpLevelConverter {
         return level
     }
 
-    /**
-     * Converts level to exp.
-     *
-     * @param level Player level
-     * @return Experience amount to reach given level from 0 exp
-     */
+    /** Returns experience amount to reach given [level] from 0 exp. */
     @JvmDefault
     fun levelToExp(level: Int): Double {
         var exp = 0.0
@@ -100,21 +75,15 @@ interface ExpLevelConverter {
     }
 
     /**
-     * Gets how much experience you need to reach next level after specified.
-     *
-     * @param level Current level
-     * @return Experience from current to next level or -1 if level can't be reached
+     * Returns how much experience you need to reach next after specified [level] or -1 if
+     * level can't be reached.
      */
     @JvmDefault
-    fun getExpToReachNextLevel(level: Int): Double {
-        return getExpToReachLevel(level + 1)
-    }
+    fun getExpToReachNextLevel(level: Int): Double = getExpToReachLevel(level + 1)
 
     /**
-     * Gets how much experience you need to reach specified level.
-     *
-     * @param level Needed level
-     * @return Experience from previous to needed level or -1 if level can't be reached
+     * Returns how much experience you need to reach specified [level] or -1 if
+     * level can't be reached.
      */
     fun getExpToReachLevel(level: Int): Double
 }
