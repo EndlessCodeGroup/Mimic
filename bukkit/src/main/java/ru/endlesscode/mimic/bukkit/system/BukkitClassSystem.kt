@@ -16,31 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system
 
-package ru.endlesscode.mimic.bukkit.system;
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.api.ref.ExistingWeakReference
+import ru.endlesscode.mimic.api.system.ClassSystem
 
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
-import ru.endlesscode.mimic.api.system.ClassSystem;
+/** [ClassSystem] adapted for Bukkit. */
+abstract class BukkitClassSystem internal constructor(player: Player) : ClassSystem {
 
-/**
- * Class system adapted for bukkit.
- */
-public abstract class BukkitClassSystem implements ClassSystem {
+    val player: Player get() = playerRef.get()
 
-    private final ExistingWeakReference<Player> playerRef;
-
-    /**
-     * Constructor that initialize player.
-     *
-     * @param player The player
-     */
-    BukkitClassSystem(@NotNull Player player) {
-        playerRef = new ExistingWeakReference<>(player);
-    }
-
-    public @NotNull Player getPlayer() {
-        return this.playerRef.get();
-    }
+    private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
 }

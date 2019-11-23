@@ -16,40 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.system
 
-package ru.endlesscode.mimic.bukkit.system;
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.api.ref.ExistingWeakReference
+import ru.endlesscode.mimic.api.system.ExpLevelConverter
+import ru.endlesscode.mimic.api.system.LevelSystem
 
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.ref.ExistingWeakReference;
-import ru.endlesscode.mimic.api.system.ExpLevelConverter;
-import ru.endlesscode.mimic.api.system.LevelSystem;
+/** [LevelSystem] adapted for Bukkit. */
+abstract class BukkitLevelSystem internal constructor(
+    override val converter: ExpLevelConverter,
+    player: Player
+) : LevelSystem {
 
-/** Level system adapted for bukkit. */
-public abstract class BukkitLevelSystem implements LevelSystem {
+    val player: Player get() = playerRef.get()
 
-    private final ExistingWeakReference<Player> playerRef;
-    private final ExpLevelConverter converter;
-
-    /**
-     * Constructor that initializes converter.
-     *
-     * @param converter Converter
-     * @param player    The player
-     */
-    BukkitLevelSystem(@NotNull ExpLevelConverter converter, Player player) {
-        this.converter = converter;
-
-        this.playerRef = new ExistingWeakReference<>(player);
-    }
-
-    @NotNull
-    @Override
-    public ExpLevelConverter getConverter() {
-        return converter;
-    }
-
-    public @NotNull Player getPlayer() {
-        return playerRef.get();
-    }
+    private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
 }
