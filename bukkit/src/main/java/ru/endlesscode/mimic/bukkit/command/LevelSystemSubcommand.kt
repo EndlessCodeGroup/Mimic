@@ -83,7 +83,7 @@ internal class LevelSystemSubcommand(
                         util.msg("&6New %s's total exp is %.1f (%d lvl)", target.name, ls.totalExp, ls.level)
                     )
                 }
-                else -> {
+                ValueType.EXP -> {
                     setExp(ls, value)
                     util.send(
                         sender,
@@ -97,21 +97,41 @@ internal class LevelSystemSubcommand(
         }
     }
 
-    @Subcommand("reach|r")
-    @Description("Check that player did reach level")
-    @Syntax("<level> [player]")
-    @CommandCompletion("@nothing @players")
-    fun reach(
+    @Subcommand("has|h|reach|r")
+    @Description("Check that player did reach level or has exp")
+    @Syntax("<value> [lvl|exp|total] [player]")
+    @CommandCompletion("@nothing lvl|exp|total @players")
+    fun has(
         sender: CommandSender,
-        level: Int,
+        value: Int,
+        @Default("lvl") type: ValueType,
         @Default player: String
     ) {
         val target = util.getTarget(sender, player)
-        val reached = systemFactory.get(target).didReachLevel(level)
-        util.send(
-            sender,
-            util.msg("&6Player '%s' did%s reach %d lvl.", target.name, if (reached) "" else " not", level)
-        )
+        when (type) {
+            ValueType.LVL -> {
+                val reached = systemFactory.get(target).didReachLevel(value)
+                util.send(
+                    sender,
+                    util.msg("&6%s did%s reach %d lvl.", target.name, if (reached) "" else " not", value)
+                )
+            }
+            ValueType.EXP -> {
+                val has = systemFactory.get(target).hasExp(value.toDouble())
+                util.send(
+                    sender,
+                    util.msg("&6%s has%s %d exp.", target.name, if (has) "" else " not", value)
+                )
+            }
+            ValueType.TOTAL -> {
+                val has = systemFactory.get(target).hasExpTotal(value.toDouble())
+                util.send(
+                    sender,
+                    util.msg("&6%s has%s %d total exp.", target.name, if (has) "" else " not", value)
+                )
+            }
+        }
+
     }
 
     private fun setLevel(system: LevelSystem, command: String) {
