@@ -16,40 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.command
 
-package ru.endlesscode.mimic.bukkit.command;
-
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.CommandHelp;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.HelpCommand;
-import co.aikar.commands.annotation.Subcommand;
-import co.aikar.commands.annotation.Syntax;
-import org.bukkit.command.CommandSender;
-
+import co.aikar.commands.BaseCommand
+import co.aikar.commands.CommandHelp
+import co.aikar.commands.annotation.*
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-public class MimicCommand extends BaseCommand {
-
-    private final CommandUtil util;
-
-    public MimicCommand(CommandUtil util) {
-        this.util = util;
-    }
-
-    @Subcommand("reload")
-    @Description("Reload BukkitMimic")
-    public void reload(CommandSender sender) {
-        util.send(sender,"Reload...");
-    }
+internal class MimicCommand : BaseCommand() {
 
     @HelpCommand
     @Description("Show help")
     @Syntax("[search]")
-    public void doHelp(CommandSender sender, CommandHelp help) {
-        help.showHelp();
+    fun doHelp(help: CommandHelp) {
+        help.showHelp()
     }
 }

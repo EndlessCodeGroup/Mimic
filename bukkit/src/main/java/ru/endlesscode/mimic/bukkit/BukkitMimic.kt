@@ -96,7 +96,7 @@ class BukkitMimic : JavaPlugin() {
         )
 
         val util = CommandUtil()
-        manager.registerCommand(MimicCommand(util))
+        manager.registerCommand(MimicCommand())
 
         systemRegistry.getSystemFactory<LevelSystem>()?.let {
             manager.registerCommand(LevelSystemSubcommand(it, util))
