@@ -17,7 +17,7 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system.vanilla;
 
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.ExpLevelConverter;

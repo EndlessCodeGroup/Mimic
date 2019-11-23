@@ -17,7 +17,7 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system.skillapi;
 
 import com.sucy.skill.api.enums.ExpSource;
 import com.sucy.skill.api.player.PlayerClass;
@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.endlesscode.mimic.api.system.registry.Subsystem;
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
+import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem;
 
 /**
  * It's implementation of LevelSystem that uses SkillAPI.

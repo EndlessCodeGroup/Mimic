@@ -17,13 +17,14 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system.battlelevels;
 
 import me.robin.battlelevels.api.BattleLevelsAPI;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.endlesscode.mimic.api.system.registry.Subsystem;
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority;
+import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem;
 
 import java.util.UUID;
 

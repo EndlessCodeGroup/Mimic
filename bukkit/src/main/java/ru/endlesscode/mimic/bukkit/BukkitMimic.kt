@@ -29,7 +29,11 @@ import ru.endlesscode.mimic.api.system.registry.getSystemFactory
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MimicCommand
-import ru.endlesscode.mimic.bukkit.system.*
+import ru.endlesscode.mimic.bukkit.system.battlelevels.BattleLevelsLevelSystem
+import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiClassSystem
+import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiLevelSystem
+import ru.endlesscode.mimic.bukkit.system.vanilla.PermissionsClassSystem
+import ru.endlesscode.mimic.bukkit.system.vanilla.VanillaLevelSystem
 import ru.endlesscode.mimic.bukkit.util.Log
 
 /** Main class of the plugin. */

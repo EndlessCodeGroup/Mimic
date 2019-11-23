@@ -24,8 +24,8 @@ import ru.endlesscode.mimic.api.system.LevelSystem
 import ru.endlesscode.mimic.api.system.PlayerSystem
 import ru.endlesscode.mimic.api.system.registry.getSystemFactory
 import ru.endlesscode.mimic.api.system.registry.registerSubsystem
-import ru.endlesscode.mimic.bukkit.system.PermissionsClassSystem
-import ru.endlesscode.mimic.bukkit.system.VanillaLevelSystem
+import ru.endlesscode.mimic.bukkit.system.vanilla.PermissionsClassSystem
+import ru.endlesscode.mimic.bukkit.system.vanilla.VanillaLevelSystem
 import kotlin.test.*
 
 class BukkitSystemRegistryTest : BukkitTestBase() {

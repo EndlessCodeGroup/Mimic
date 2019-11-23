@@ -17,7 +17,7 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system
+package ru.endlesscode.mimic.bukkit.system.skillapi
 
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized

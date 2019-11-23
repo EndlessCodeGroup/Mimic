@@ -1,4 +1,4 @@
-package ru.endlesscode.mimic.bukkit.system
+package ru.endlesscode.mimic.bukkit.system.skillapi
 
 import com.sucy.skill.SkillAPI
 import com.sucy.skill.api.player.PlayerData

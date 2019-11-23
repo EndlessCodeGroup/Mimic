@@ -17,7 +17,7 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system;
+package ru.endlesscode.mimic.bukkit.system.skillapi;
 
 import com.sucy.skill.data.Settings;
 import org.jetbrains.annotations.NotNull;
