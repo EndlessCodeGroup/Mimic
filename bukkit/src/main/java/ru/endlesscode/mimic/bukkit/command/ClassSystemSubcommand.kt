@@ -16,74 +16,57 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ru.endlesscode.mimic.bukkit.command
 
-package ru.endlesscode.mimic.bukkit.command;
-
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.InvalidCommandArgument;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Split;
-import co.aikar.commands.annotation.Subcommand;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.api.system.ClassSystem;
-import ru.endlesscode.mimic.api.system.SystemFactory;
-
-import java.util.Arrays;
+import co.aikar.commands.BaseCommand
+import co.aikar.commands.annotation.*
+import org.bukkit.command.CommandSender
+import ru.endlesscode.mimic.api.system.ClassSystem
+import ru.endlesscode.mimic.api.system.SystemFactory
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
 @Subcommand("class|c")
-public class ClassSystemSubcommand extends BaseCommand {
-
-    private final SystemFactory<ClassSystem> systemFactory;
-    private final CommandUtil util;
-
-    public ClassSystemSubcommand(SystemFactory<ClassSystem> systemFactory, CommandUtil util) {
-        this.systemFactory = systemFactory;
-        this.util = util;
-    }
+internal class ClassSystemSubcommand(
+    private val systemFactory: SystemFactory<ClassSystem>,
+    private val util: CommandUtil
+) : BaseCommand() {
 
     @Subcommand("info|i")
     @Description("Show information about player's class system")
+    @Syntax("[player]")
     @CommandCompletion("@players")
-    public void info(@NotNull CommandSender sender, @Default String player) throws InvalidCommandArgument {
-        Player target = util.getTarget(sender, player);
-        ClassSystem system = systemFactory.get(target);
-
-        util.send(sender,
-                util.msg("&3System: &7%s", system.getName()),
-                util.msg("&3Classes: &7%s", system.getClasses()),
-                util.msg("&3Primary: &7%s", system.getPrimaryClass())
-        );
+    fun info(sender: CommandSender, @Default player: String) {
+        val target = util.getTarget(sender, player)
+        val system = systemFactory.get(target)
+        util.send(
+            sender,
+            util.msg("&3System: &7%s", system.name),
+            util.msg("&3Classes: &7%s", system.classes),
+            util.msg("&3Primary: &7%s", system.primaryClass)
+        )
     }
 
     @Subcommand("has|h")
     @Description("Check that player has given classes")
-    @CommandCompletion("@nothing one|all @players")
-    public void has(CommandSender sender, @Split String[] classes, @Default("all") Mode mode, @Default String player)
-            throws InvalidCommandArgument {
-        Player target = util.getTarget(sender, player);
-        ClassSystem system = systemFactory.get(target);
-
-        boolean has;
-        switch (mode) {
-            case ALL:
-                has = system.hasAllRequiredClasses(Arrays.asList(classes));
-                break;
-            default:
-                has = system.hasOneOfRequiredClasses(Arrays.asList(classes));
+    @Syntax("<classes> [all|one] [player]")
+    @CommandCompletion("@nothing all|one @players")
+    fun has(
+        sender: CommandSender,
+        @Split classes: Array<String>,
+        @Default("all") mode: Mode,
+        @Default player: String
+    ) {
+        val target = util.getTarget(sender, player)
+        val system = systemFactory.get(target)
+        val has = if (mode == Mode.ALL) {
+            system.hasAllRequiredClasses(classes.asList())
+        } else {
+            system.hasOneOfRequiredClasses(classes.asList())
         }
-
-        util.send(sender, util.msg("&6Player '%s' has%s given classes.", target.getName(), has ? "" : " not"));
+        util.send(sender, util.msg("&6Player '%s' has%s given classes.", target.name, if (has) "" else " not"))
     }
 
-    public enum Mode {
-        ONE, ALL
-    }
+    @Suppress("UNUSED")
+    internal enum class Mode { ONE, ALL }
 }
