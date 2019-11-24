@@ -26,24 +26,19 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.api.system.LevelSystem
 import ru.endlesscode.mimic.api.system.SystemFactory
+import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
 import ru.endlesscode.mimic.bukkit.util.Log
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
 @Subcommand("level|lvl|l|experience|exp|xp|e")
 internal class LevelSystemSubcommand(
-    private val systemFactory: SystemFactory<LevelSystem>
+    private val systemFactory: SystemFactory<BukkitLevelSystem>
 ) : MimicCommand() {
 
-    companion object {
-        private val NUMBER get() = Regex("\\d+")
-        private val SIGN_NUMBER get() = Regex("[-+]?\\d+")
-        private val SIGN_NUMBER_PERCENT get() = Regex("[-+]?\\d+%?")
-    }
-
     override fun afterRegister(manager: AbstractCommandManager) {
+        manager.getCommandCompletions().registerEnumCompletion<ExtendedValueType>("extype")
         manager.getCommandCompletions().registerEnumCompletion<ValueType>("type")
     }
 
@@ -60,129 +55,100 @@ internal class LevelSystemSubcommand(
         )
     }
 
-    @Subcommand("set|s")
-    @Description("Change player's level, exp or total exp")
-    @CommandCompletion("@nothing @type @players")
+    @Subcommand("set|s|=")
+    @Description("Set player's level or exp")
+    @CommandCompletion("@nothing @extype @players")
     fun set(
         sender: CommandSender,
-        value: String,
-        @Default("exp") type: ValueType,
+        amount: Double,
+        @Default("exp") type: ExtendedValueType,
         @Optional @Flags("other,defaultself") player: Player
     ) {
-        try {
-            val ls = systemFactory.get(player)
+        catchUnsupported {
+            val system = systemFactory.get(player)
             when (type) {
-                ValueType.LVL -> {
-                    setLevel(ls, value)
-                    sender.send("&6New ${player.name}'s level is ${ls.level}")
-                }
-                ValueType.TOTAL -> {
-                    setTotalExp(ls, value)
-                    sender.send("&6New ${player.name}'s total exp is %.1f (${ls.level} lvl)".format(ls.totalExp))
-                }
-                ValueType.EXP -> {
-                    setExp(ls, value)
-                    val level = ls.level + ls.fractionalExp
-                    sender.send("&6New ${player.name}'s exp is %.1f (%.2f lvl)".format(ls.exp, level))
-                }
+                ExtendedValueType.LVL -> system.level = amount.toInt()
+                ExtendedValueType.TOTAL -> system.totalExp = amount
+                ExtendedValueType.EXP -> system.exp = amount
             }
+            system.printNewStats(sender)
+        }
+    }
+
+    @Subcommand("give|g|+")
+    @Description("Give level or exp to player")
+    @CommandCompletion("@nothing @type @players")
+    fun give(
+        sender: CommandSender,
+        amount: Int,
+        @Default("lvl") type: ValueType,
+        @Optional @Flags("other,defaultself") player: Player
+    ) {
+        catchUnsupported {
+            val system = systemFactory.get(player)
+            when (type) {
+                ValueType.LVL -> system.giveLevel(amount)
+                ValueType.EXP -> system.giveExp(amount.toDouble())
+            }
+            system.printNewStats(sender)
+        }
+    }
+
+    @Subcommand("take|t|-")
+    @Description("Take level or exp from player")
+    @CommandCompletion("@nothing @type @players")
+    fun take(
+        sender: CommandSender,
+        amount: Int,
+        @Default("lvl") type: ValueType,
+        @Optional @Flags("other,defaultself") player: Player
+    ) {
+        catchUnsupported {
+            val system = systemFactory.get(player)
+            when (type) {
+                ValueType.LVL -> system.takeLevel(amount)
+                ValueType.EXP -> system.takeExp(amount.toDouble())
+            }
+            system.printNewStats(sender)
+        }
+    }
+
+    private inline fun catchUnsupported(block: () -> Unit) {
+        try {
+            block()
         } catch (e: UnsupportedOperationException) {
             Log.d(e, quiet = true)
-            wrongArgument(e.message.toString(), showSyntax = false)
+            throw InvalidCommandArgument(MessageKeys.ERROR_PREFIX, false, "{message}", e.message.toString())
         }
+    }
+
+    private fun BukkitLevelSystem.printNewStats(sender: CommandSender) {
+        sender.send("&6New ${player.name}'s stats: $level LVL, %.1f XP".format(exp))
     }
 
     @Subcommand("has|h|reach|r")
     @Description("Check that player did reach level or has exp")
-    @CommandCompletion("@nothing @type @players")
+    @CommandCompletion("@nothing @extype @players")
     fun has(
         sender: CommandSender,
         value: Int,
-        @Default("lvl") type: ValueType,
+        @Default("lvl") type: ExtendedValueType,
         @Optional @Flags("other,defaultself") player: Player
     ) {
         val system = systemFactory.get(player)
-        val has: Boolean
-        val message: String
-        when (type) {
-            ValueType.LVL -> {
-                has = system.didReachLevel(value)
-                message = "&6%s did%s reach %d lvl."
-            }
-            ValueType.EXP -> {
-                has = system.hasExp(value.toDouble())
-                message = "&6%s has%s %d exp."
-            }
-            ValueType.TOTAL -> {
-                has = system.hasExpTotal(value.toDouble())
-                message = "&6%s has%s %d total exp."
-            }
+        val has = when (type) {
+            ExtendedValueType.LVL -> system.didReachLevel(value)
+            ExtendedValueType.EXP -> system.hasExp(value.toDouble())
+            ExtendedValueType.TOTAL -> system.hasExpTotal(value.toDouble())
         }
-        sender.send(message.format(player.name, if (has) "" else " not", value))
+        sender.send("&6${player.name} has%s $value ${type.stringValue}.".format(if (has) "" else " not"))
     }
 
-    private fun setLevel(system: LevelSystem, command: String) {
-        checkArgument(command matches SIGN_NUMBER) { "Level should be a number, can start with + or -." }
-        val value = parseValue(command)
-        when (Action.of(command)) {
-            Action.GIVE -> system.giveLevel(value)
-            Action.TAKE -> system.takeLevel(value)
-            else -> system.level = value
-        }
-    }
+    internal enum class ValueType { LVL, EXP }
 
-    private fun setTotalExp(system: LevelSystem, command: String) {
-        checkArgument(command matches NUMBER) { "Total experience should be a number." }
-        val value = parseValue(command)
-        system.totalExp = value.toDouble()
-    }
-
-    private fun setExp(system: LevelSystem, command: String) {
-        checkArgument(command matches SIGN_NUMBER_PERCENT) {
-            "Experience value should be a number, can start with + or - and end with %."
-        }
-        val percentage = command.endsWith('%')
-        val value = parseValue(command).toDouble()
-        val action = Action.of(command)
-        when {
-            percentage -> {
-                checkArgument(value <= 100) { "Percentage value can't be greater than 100." }
-                checkArgument(action == Action.SET) { "Percentage value not supports + and -." }
-                system.fractionalExp = value / 100
-            }
-            action == Action.GIVE -> system.giveExp(value)
-            action == Action.TAKE -> system.takeExp(value)
-            else -> system.exp = value
-        }
-    }
-
-    private inline fun checkArgument(value: Boolean, lazyMessage: () -> String) {
-        if (!value) {
-            val message = lazyMessage()
-            wrongArgument(message, showSyntax = true)
-        }
-    }
-
-    private fun wrongArgument(message: String, showSyntax: Boolean) {
-        throw InvalidCommandArgument(MessageKeys.ERROR_PREFIX, showSyntax, "{message}", message)
-    }
-
-    private fun parseValue(command: String): Int = command.replace(Regex("\\D+"), "").toInt()
-
-    @Suppress("UNUSED")
-    internal enum class ValueType { LVL, EXP, TOTAL }
-
-    private enum class Action {
-        SET, GIVE, TAKE;
-
-        companion object {
-            internal fun of(command: String): Action {
-                return when (command.first()) {
-                    '+' -> GIVE
-                    '-' -> TAKE
-                    else -> SET
-                }
-            }
-        }
+    internal enum class ExtendedValueType(val stringValue: String) {
+        LVL("level"),
+        EXP("experience"),
+        TOTAL("total experience")
     }
 }

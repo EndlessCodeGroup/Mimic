@@ -22,13 +22,13 @@ package ru.endlesscode.mimic.bukkit
 import co.aikar.commands.BukkitCommandManager
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.api.system.ClassSystem
-import ru.endlesscode.mimic.api.system.LevelSystem
 import ru.endlesscode.mimic.api.system.PlayerSystem
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException
 import ru.endlesscode.mimic.api.system.registry.getSystemFactory
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MainCommand
+import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
 import ru.endlesscode.mimic.bukkit.system.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiLevelSystem
@@ -99,7 +99,7 @@ class Mimic : JavaPlugin() {
 
         manager.registerCommand(MainCommand())
 
-        systemRegistry.getSystemFactory<LevelSystem>()?.let {
+        systemRegistry.getSystemFactory<BukkitLevelSystem>()?.let {
             manager.registerCommand(LevelSystemSubcommand(it))
         }
         systemRegistry.getSystemFactory<ClassSystem>()?.let {
