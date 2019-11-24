@@ -34,12 +34,11 @@ class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(privat
         /**
          * Gets metadata from class annotation. If annotation not exists - throws exception.
          *
-         * @see Subsystem
-         *
          * @param SubsystemT subsystem type
          * @param theClass subsystem class
          * @return [SubsystemMetaAdapter] if metadata exists, otherwise throws exception
          * @throws IllegalArgumentException If [Subsystem] not exists
+         * @see Subsystem
          */
         @JvmStatic
         fun <SubsystemT : PlayerSystem> fromClass(theClass: Class<out SubsystemT>): SubsystemMetaAdapter<SubsystemT> {
@@ -51,18 +50,10 @@ class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(privat
         }
     }
 
-    /**
-     * Returns system priority.
-     *
-     * @return System priority
-     */
+    /** Returns system priority. */
     val priority: SubsystemPriority get() = meta.priority
 
-    /**
-     * Checks existence of all required classes.
-     *
-     * @return true if all classes exists, otherwise false
-     */
+    /** Checks existence of all required classes. Returns `true` if all classes exists, otherwise `false`. */
     fun requiredClassesExists(): Boolean {
         val classNames = meta.classes
 

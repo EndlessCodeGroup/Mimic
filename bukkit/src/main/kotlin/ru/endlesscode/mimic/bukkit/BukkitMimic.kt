@@ -45,9 +45,8 @@ class BukkitMimic : JavaPlugin() {
 
         /** Get system registry that can be used to obtain player systems. */
         @JvmStatic
-        fun getSystemRegistry(): BukkitSystemRegistry {
-            return instance.systemRegistry
-        }
+        val systemRegistry: BukkitSystemRegistry
+            get() = instance.systemRegistry
     }
 
     /** Default subsystems */

@@ -45,10 +45,6 @@ class PermissionsClassSystem private constructor(player: Player) : BukkitClassSy
     override val name: String = TAG
     override val isEnabled: Boolean = true
 
-    override fun hasRequiredClass(requiredClass: String): Boolean {
-        return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase())
-    }
-
     override val classes: List<String>
         get() {
             return player.effectivePermissions.asSequence()
@@ -56,4 +52,8 @@ class PermissionsClassSystem private constructor(player: Player) : BukkitClassSy
                 .map { it.permission.substring(PERMISSION_PREFIX.length) }
                 .toList()
         }
+
+    override fun hasRequiredClass(requiredClass: String): Boolean {
+        return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase())
+    }
 }
