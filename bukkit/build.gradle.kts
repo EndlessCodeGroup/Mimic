@@ -14,14 +14,14 @@ bukkit {
     version = "1.14.4"
 
     meta {
-        setName("BukkitMimic")
+        setName("Mimic")
         setMain("$group.$name")
         setAuthors(listOf("osipxd", "EndlessCodeGroup"))
         setUrl("https://github.com/EndlessCodeGroup/BukkitMimic")
     }
 
     run {
-        setCore("bukkit")
+        setCore("spigot")
         eula = true
     }
 }

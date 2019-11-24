@@ -19,7 +19,7 @@
 package ru.endlesscode.mimic.bukkit.command
 
 import co.aikar.commands.AbstractCommandManager
-import co.aikar.commands.Command
+import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -31,7 +31,7 @@ import ru.endlesscode.mimic.api.system.SystemFactory
 @Subcommand("class|c")
 internal class ClassSystemSubcommand(
     private val systemFactory: SystemFactory<ClassSystem>
-) : Command() {
+) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
         manager.getCommandCompletions().registerEnumCompletion<Mode>()
@@ -39,7 +39,6 @@ internal class ClassSystemSubcommand(
 
     @Subcommand("info|i")
     @Description("Show information about player's class system")
-    @Syntax("[player]")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
         val system = systemFactory.get(player)
@@ -52,7 +51,6 @@ internal class ClassSystemSubcommand(
 
     @Subcommand("has|h")
     @Description("Check that player has given classes")
-    @Syntax("<classes> [all|one] [player]")
     @CommandCompletion("@nothing @mode @players")
     fun has(
         sender: CommandSender,

@@ -33,7 +33,7 @@ object Dependencies {
     const val battleLevelsApi = "me.robin.battlelevels:battlelevels-api:${versions.battleLevels}"
 
     // Libs
-    const val acf = "co.aikar:acf-bukkit:${versions.acf}"
+    const val acf = "co.aikar:acf-paper:${versions.acf}"
 
     // Testing
     const val junit = "junit:junit:${versions.junit}"

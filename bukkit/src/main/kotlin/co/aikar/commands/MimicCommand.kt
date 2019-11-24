@@ -3,9 +3,10 @@ package co.aikar.commands
 internal typealias AbstractCommandManager =
     CommandManager<*, *, *, out MessageFormatter<*>, out CommandExecutionContext<*, *>, out ConditionContext<*>>
 
-internal abstract class Command : BaseCommand() {
+// This class stored in this package because onRegister is package-private method
+internal abstract class MimicCommand : BaseCommand() {
 
-    override fun onRegister(manager: AbstractCommandManager) {
+    final override fun onRegister(manager: AbstractCommandManager) {
         super.onRegister(manager)
         afterRegister(manager)
     }

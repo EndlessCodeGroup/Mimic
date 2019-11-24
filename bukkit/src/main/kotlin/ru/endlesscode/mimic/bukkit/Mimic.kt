@@ -28,7 +28,7 @@ import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException
 import ru.endlesscode.mimic.api.system.registry.getSystemFactory
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
-import ru.endlesscode.mimic.bukkit.command.MimicCommand
+import ru.endlesscode.mimic.bukkit.command.MainCommand
 import ru.endlesscode.mimic.bukkit.system.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiLevelSystem
@@ -37,11 +37,11 @@ import ru.endlesscode.mimic.bukkit.system.vanilla.VanillaLevelSystem
 import ru.endlesscode.mimic.bukkit.util.Log
 
 /** Main class of the plugin. */
-class BukkitMimic : JavaPlugin() {
+class Mimic : JavaPlugin() {
 
     companion object {
         private const val DEBUG = true
-        private lateinit var instance: BukkitMimic
+        private lateinit var instance: Mimic
 
         /** Get system registry that can be used to obtain player systems. */
         @JvmStatic
@@ -93,11 +93,11 @@ class BukkitMimic : JavaPlugin() {
         @Suppress("DEPRECATION") // Yes. I want to use unstable API
         manager.enableUnstableAPI("help")
         manager.commandReplacements.addReplacements(
-            "command", "mimic|bmimic|bukkitmimic",
+            "command", "mimic|m",
             "perm", "mimic.admin"
         )
 
-        manager.registerCommand(MimicCommand())
+        manager.registerCommand(MainCommand())
 
         systemRegistry.getSystemFactory<LevelSystem>()?.let {
             manager.registerCommand(LevelSystemSubcommand(it))

@@ -20,9 +20,9 @@
 package ru.endlesscode.mimic.bukkit.command
 
 import co.aikar.commands.AbstractCommandManager
-import co.aikar.commands.Command
 import co.aikar.commands.InvalidCommandArgument
 import co.aikar.commands.MessageKeys
+import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -32,10 +32,10 @@ import ru.endlesscode.mimic.bukkit.util.Log
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-@Subcommand("level|lvl|l|experience|exp|xp")
+@Subcommand("level|lvl|l|experience|exp|xp|e")
 internal class LevelSystemSubcommand(
     private val systemFactory: SystemFactory<LevelSystem>
-) : Command() {
+) : MimicCommand() {
 
     companion object {
         private val NUMBER get() = Regex("\\d+")
@@ -49,7 +49,6 @@ internal class LevelSystemSubcommand(
 
     @Subcommand("info|i")
     @Description("Show information about player's level system")
-    @Syntax("[player]")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
         val system = systemFactory.get(player)
@@ -63,8 +62,7 @@ internal class LevelSystemSubcommand(
 
     @Subcommand("set|s")
     @Description("Change player's level, exp or total exp")
-    @Syntax("<value> [lvl|exp|total] [player]")
-    @CommandCompletion("+|- @type @players")
+    @CommandCompletion("@nothing @type @players")
     fun set(
         sender: CommandSender,
         value: String,
@@ -96,7 +94,6 @@ internal class LevelSystemSubcommand(
 
     @Subcommand("has|h|reach|r")
     @Description("Check that player did reach level or has exp")
-    @Syntax("<value> [lvl|exp|total] [player]")
     @CommandCompletion("@nothing @type @players")
     fun has(
         sender: CommandSender,
