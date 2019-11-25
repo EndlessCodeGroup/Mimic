@@ -18,18 +18,19 @@
  */
 package ru.endlesscode.mimic.bukkit.system.battlelevels
 
-import me.robin.battlelevels.api.BattleLevelsAPI
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.api.system.registry.Subsystem
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
 import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
-import ru.endlesscode.mimic.bukkit.system.battlelevels.BattleLevelsConverter.Companion.instance
 import java.util.UUID
 import kotlin.math.abs
 
-/** It's implementation of LevelSystem that uses BattleLevels.  */
+/** Implementation of LevelSystem that uses BattleLevels.  */
 @Subsystem(priority = SubsystemPriority.NORMAL, classes = ["me.robin.battlelevels.api.BattleLevelsAPI"])
-class BattleLevelsLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
+class BattleLevelsLevelSystem private constructor(
+    player: Player,
+    private val battleLevelsApi: BattleLevelsApiWrapper
+) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
 
     companion object {
         const val TAG = "BattleLevels"
@@ -38,13 +39,15 @@ class BattleLevelsLevelSystem private constructor(player: Player) : BukkitLevelS
         val FACTORY = Factory(TAG, ::BattleLevelsLevelSystem)
     }
 
+    private constructor(player: Player) : this(player, BattleLevelsApiWrapper())
+
     override val name: String = TAG
     override val isEnabled: Boolean = true
 
     override var level: Int
-        get() = BattleLevelsAPI.getLevel(playerUniqueId)
-        set(newLevel) {
-            val delta = level - newLevel
+        get() = battleLevelsApi.getLevel(playerUniqueId)
+        set(value) {
+            val delta = level - value
             if (delta < 0) {
                 takeLevel(abs(delta))
             } else if (delta > 0) {
@@ -53,9 +56,9 @@ class BattleLevelsLevelSystem private constructor(player: Player) : BukkitLevelS
         }
 
     override var exp: Double
-        get() = BattleLevelsAPI.getScore(playerUniqueId)
-        set(newExperience) {
-            val delta = exp - newExperience
+        get() = battleLevelsApi.getScore(playerUniqueId)
+        set(value) {
+            val delta = exp - value
             if (delta < 0) {
                 takeExp(abs(delta))
             } else if (delta > 0) {
@@ -64,27 +67,27 @@ class BattleLevelsLevelSystem private constructor(player: Player) : BukkitLevelS
         }
 
     override val totalExpToNextLevel: Double
-        get() = BattleLevelsAPI.getNeededForNext(playerUniqueId)
+        get() = battleLevelsApi.getNeededForNext(playerUniqueId)
 
     override val expToNextLevel: Double
-        get() = BattleLevelsAPI.getNeededForNextRemaining(playerUniqueId)
+        get() = battleLevelsApi.getNeededForNextRemaining(playerUniqueId)
 
     private val playerUniqueId: UUID
         get() = player.uniqueId
 
     override fun giveLevel(lvlAmount: Int) {
-        BattleLevelsAPI.addLevel(playerUniqueId, lvlAmount)
+        battleLevelsApi.addLevel(playerUniqueId, lvlAmount)
     }
 
     override fun takeLevel(lvlAmount: Int) {
-        BattleLevelsAPI.removeLevel(playerUniqueId, lvlAmount)
+        battleLevelsApi.removeLevel(playerUniqueId, lvlAmount)
     }
 
     override fun giveExp(expAmount: Double) {
-        BattleLevelsAPI.removeScore(playerUniqueId, expAmount)
+        battleLevelsApi.addScore(playerUniqueId, expAmount)
     }
 
     override fun takeExp(expAmount: Double) {
-        BattleLevelsAPI.removeScore(playerUniqueId, expAmount)
+        battleLevelsApi.removeScore(playerUniqueId, expAmount)
     }
 }

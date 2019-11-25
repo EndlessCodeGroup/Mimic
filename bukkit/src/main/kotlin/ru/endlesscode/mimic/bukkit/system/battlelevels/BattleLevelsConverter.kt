@@ -18,16 +18,25 @@
  */
 package ru.endlesscode.mimic.bukkit.system.battlelevels
 
-import me.robin.battlelevels.api.BattleLevelsAPI
 import ru.endlesscode.mimic.api.system.ExpLevelConverter
 
 /** Converter for BattleLevels level system. */
-class BattleLevelsConverter private constructor() : ExpLevelConverter {
+class BattleLevelsConverter private constructor(
+    private val battleLevelsApi: BattleLevelsApiWrapper
+) : ExpLevelConverter {
 
     companion object {
+        private var internalInstance: BattleLevelsConverter? = null
+
         @JvmStatic
-        val instance: BattleLevelsConverter by lazy { BattleLevelsConverter() }
+        val instance: BattleLevelsConverter
+            get() = getInstance()
+
+        internal fun getInstance(battleLevelsApi: BattleLevelsApiWrapper? = null): BattleLevelsConverter {
+            return internalInstance
+                ?: BattleLevelsConverter(battleLevelsApi ?: BattleLevelsApiWrapper()).also { internalInstance = it }
+        }
     }
 
-    override fun getExpToReachLevel(level: Int): Double = BattleLevelsAPI.getNeededFor(level)
+    override fun getExpToReachLevel(level: Int): Double = battleLevelsApi.getNeededFor(level)
 }
