@@ -53,8 +53,8 @@ class SkillApiLevelSystem internal constructor(
 
     override var exp: Double
         get() = playerClass?.exp ?: 0.0
-        set(newExperience) {
-            playerClass?.exp = newExperience
+        set(value) {
+            playerClass?.exp = value.coerceIn(0.0, totalExpToNextLevel)
         }
 
     private val playerClass: PlayerClass?

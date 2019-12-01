@@ -69,7 +69,7 @@ class BattleLevelsLevelSystem internal constructor(
     override var exp: Double
         get() = (totalExp - converter.getExpToReachLevel(level)).coerceAtLeast(0.0)
         set(value) {
-            val delta = value - exp
+            val delta = value.coerceIn(0.0, totalExpToNextLevel) - exp
             if (delta < 0) {
                 takeExp(abs(delta))
             } else if (delta > 0) {

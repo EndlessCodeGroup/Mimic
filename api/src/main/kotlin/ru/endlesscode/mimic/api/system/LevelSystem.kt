@@ -26,6 +26,7 @@ package ru.endlesscode.mimic.api.system
  * Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.
  */
+@Suppress("DEPRECATION") // Allow to use setExp
 interface LevelSystem : PlayerSystem {
 
     /** Assigned converter. */
@@ -98,13 +99,14 @@ interface LevelSystem : PlayerSystem {
      * possible XP on current level.
      *
      * For implementation:
-     * You should add argument value validation to your implementation because
+     * Better to add argument value validation to your implementation because
      * new value can be bigger than maximal possible experience on current level,
      * and you must trim it to the limit.
      *
      * @return Current level experience points or 0 if player has no exp
      * @throws IllegalStateException If player-related object not exists
      */
+    @set:Deprecated("Better to use giveExp or takeExp to change experience value.")
     var exp: Double
 
     /**
