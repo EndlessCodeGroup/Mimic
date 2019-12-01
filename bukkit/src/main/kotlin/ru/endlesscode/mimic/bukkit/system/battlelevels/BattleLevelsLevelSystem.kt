@@ -47,7 +47,7 @@ class BattleLevelsLevelSystem internal constructor(
     override var level: Int
         get() = battleLevelsApi.getLevel(playerUniqueId)
         set(value) {
-            val delta = level - value
+            val delta = value - level
             if (delta < 0) {
                 takeLevel(abs(delta))
             } else if (delta > 0) {
@@ -58,7 +58,7 @@ class BattleLevelsLevelSystem internal constructor(
     override var exp: Double
         get() = battleLevelsApi.getScore(playerUniqueId)
         set(value) {
-            val delta = exp - value
+            val delta = value - exp
             if (delta < 0) {
                 takeExp(abs(delta))
             } else if (delta > 0) {
