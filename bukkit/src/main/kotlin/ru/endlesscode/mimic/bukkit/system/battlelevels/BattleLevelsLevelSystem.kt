@@ -25,7 +25,7 @@ import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
 import java.util.UUID
 import kotlin.math.abs
 
-/** Implementation of LevelSystem that uses BattleLevels.  */
+/** Implementation of LevelSystem that uses BattleLevels. */
 @Subsystem(priority = SubsystemPriority.NORMAL, classes = ["me.robin.battlelevels.api.BattleLevelsAPI"])
 class BattleLevelsLevelSystem internal constructor(
     player: Player,
@@ -55,8 +55,19 @@ class BattleLevelsLevelSystem internal constructor(
             }
         }
 
-    override var exp: Double
+    override var totalExp: Double
         get() = battleLevelsApi.getScore(playerUniqueId)
+        set(value) {
+            val delta = value - totalExp
+            if (delta < 0) {
+                takeExp(abs(delta))
+            } else if (delta > 0) {
+                giveExp(delta)
+            }
+        }
+
+    override var exp: Double
+        get() = (totalExp - converter.getExpToReachLevel(level)).coerceAtLeast(0.0)
         set(value) {
             val delta = value - exp
             if (delta < 0) {
