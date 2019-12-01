@@ -55,4 +55,41 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
         verify(battleLevelsApi, never()).removeLevel(any(), any())
         verify(battleLevelsApi, never()).addLevel(any(), any())
     }
+
+    @Test
+    fun `when set exp lower than current - should remove score`() {
+        // Given
+        whenever(battleLevelsApi.getScore(any())) doReturn 100.0
+
+        // When
+        levelSystem.exp = 60.0
+
+        // Then
+        verify(battleLevelsApi).removeScore(any(), eq(40.0))
+    }
+
+    @Test
+    fun `when set exp higher than current - should add score`() {
+        // Given
+        whenever(battleLevelsApi.getScore(any())) doReturn 100.0
+
+        // When
+        levelSystem.exp = 160.0
+
+        // Then
+        verify(battleLevelsApi).addScore(any(), eq(60.0))
+    }
+
+    @Test
+    fun `when set exp equal to current - should not change level`() {
+        // Given
+        whenever(battleLevelsApi.getScore(any())) doReturn 100.0
+
+        // When
+        levelSystem.exp = 100.0
+
+        // Then
+        verify(battleLevelsApi, never()).removeScore(any(), any())
+        verify(battleLevelsApi, never()).addScore(any(), any())
+    }
 }
