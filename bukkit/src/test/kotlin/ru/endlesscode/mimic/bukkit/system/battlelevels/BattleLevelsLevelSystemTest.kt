@@ -93,6 +93,34 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
         verify(battleLevelsApi, never()).addScore(any(), any())
     }
 
+    @Test
+    fun `when take exp more than current exp - should take level too`() {
+        // Given
+        set(level = 10, totalExp = 106.0)
+        whenever(battleLevelsApi.getNeededFor(any())) doReturn 10.0
+
+        // When
+        levelSystem.takeExp(28.0)
+
+        // Then
+        verify(battleLevelsApi).removeScore(any(), eq(28.0))
+        verify(battleLevelsApi).removeLevel(any(), eq(3))
+    }
+
+    @Test
+    fun `when take exp not more than current exp - should take only exp`() {
+        // Given
+        set(level = 10, totalExp = 106.0)
+        whenever(battleLevelsApi.getNeededFor(any())) doReturn 10.0
+
+        // When
+        levelSystem.takeExp(6.0)
+
+        // Then
+        verify(battleLevelsApi).removeScore(any(), eq(6.0))
+        verify(battleLevelsApi, never()).removeLevel(any(), any())
+    }
+
     private fun set(level: Int? = null, totalExp: Double? = null) {
         if (level != null) whenever(battleLevelsApi.getLevel(any())) doReturn level
         if (totalExp != null) whenever(battleLevelsApi.getScore(any())) doReturn totalExp
