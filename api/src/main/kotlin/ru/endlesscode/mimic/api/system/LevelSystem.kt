@@ -113,7 +113,9 @@ interface LevelSystem : PlayerSystem {
      * @return Experience required to level up or -1 if level-up is impossible
      * @throws IllegalStateException If player-related object not exists
      */
+    @JvmDefault
     val totalExpToNextLevel: Double
+        get() = converter.getExpToReachNextLevel(level)
 
     /**
      * Remaining experience for the player to reach next level.

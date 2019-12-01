@@ -46,7 +46,7 @@ class SkillApiLevelSystem internal constructor(
         get() = skillApi.isLoaded
 
     override var level: Int
-        get() = playerClass?.level ?: 0
+        get() = playerClass?.level ?: 1
         set(newLevel) {
             playerClass?.level = newLevel
         }
@@ -56,9 +56,6 @@ class SkillApiLevelSystem internal constructor(
         set(newExperience) {
             playerClass?.exp = newExperience
         }
-
-    override val totalExpToNextLevel: Double
-        get() = playerClass?.requiredExp?.toDouble() ?: -1.0
 
     private val playerClass: PlayerClass?
         get() = skillApi.getPlayerData(player).mainClass

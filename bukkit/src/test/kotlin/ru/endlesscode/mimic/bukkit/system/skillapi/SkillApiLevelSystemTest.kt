@@ -134,6 +134,7 @@ class SkillApiLevelSystemTest : SkillApiTestBase() {
     fun `when set exp - should set class exp`() {
         // Given
         prepareMainClass()
+        whenever(playerClass.level) doReturn 2
         val expAmount = 10.0
 
         // When
@@ -147,14 +148,14 @@ class SkillApiLevelSystemTest : SkillApiTestBase() {
     fun `when get exp to next level - should return right exp`() {
         // Given
         prepareMainClass()
-        whenever(playerClass.exp) doReturn 7.0
-        whenever(playerClass.requiredExp) doReturn 10
+        whenever(playerClass.exp) doReturn 70.0
+        whenever(playerClass.level) doReturn 10
 
         // When
         val actual = levelSystem.expToNextLevel
 
         // Then
-        assertEquals(3.0, actual)
+        assertEquals(30.0, actual)
     }
 
     @Test
