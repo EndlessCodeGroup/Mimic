@@ -77,12 +77,6 @@ class BattleLevelsLevelSystem internal constructor(
             }
         }
 
-    override val totalExpToNextLevel: Double
-        get() = battleLevelsApi.getNeededForNext(playerUniqueId)
-
-    override val expToNextLevel: Double
-        get() = battleLevelsApi.getNeededForNextRemaining(playerUniqueId)
-
     private val playerUniqueId: UUID
         get() = player.uniqueId
 
