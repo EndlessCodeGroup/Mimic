@@ -22,7 +22,7 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @Test
     fun `when set level lower than current - should remove level`() {
         // Given
-        whenever(battleLevelsApi.getLevel(any())) doReturn 10
+        set(level = 10)
 
         // When
         levelSystem.level = 6
@@ -34,7 +34,7 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @Test
     fun `when set level higher than current - should add level`() {
         // Given
-        whenever(battleLevelsApi.getLevel(any())) doReturn 10
+        set(level = 10)
 
         // When
         levelSystem.level = 16
@@ -46,7 +46,7 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @Test
     fun `when set level equal to current - should not change level`() {
         // Given
-        whenever(battleLevelsApi.getLevel(any())) doReturn 10
+        set(level = 10)
 
         // When
         levelSystem.level = 10
@@ -59,7 +59,7 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @Test
     fun `when set total exp lower than current - should remove score`() {
         // Given
-        whenever(battleLevelsApi.getScore(any())) doReturn 100.0
+        set(totalExp = 100.0)
 
         // When
         levelSystem.totalExp = 60.0
@@ -71,7 +71,7 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @Test
     fun `when set total exp higher than current - should add score`() {
         // Given
-        whenever(battleLevelsApi.getScore(any())) doReturn 100.0
+        set(totalExp = 100.0)
 
         // When
         levelSystem.totalExp = 160.0
@@ -83,7 +83,7 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @Test
     fun `when set total exp equal to current - should not change score`() {
         // Given
-        whenever(battleLevelsApi.getScore(any())) doReturn 100.0
+        set(totalExp = 100.0)
 
         // When
         levelSystem.totalExp = 100.0
@@ -91,5 +91,10 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
         // Then
         verify(battleLevelsApi, never()).removeScore(any(), any())
         verify(battleLevelsApi, never()).addScore(any(), any())
+    }
+
+    private fun set(level: Int? = null, totalExp: Double? = null) {
+        if (level != null) whenever(battleLevelsApi.getLevel(any())) doReturn level
+        if (totalExp != null) whenever(battleLevelsApi.getScore(any())) doReturn totalExp
     }
 }
