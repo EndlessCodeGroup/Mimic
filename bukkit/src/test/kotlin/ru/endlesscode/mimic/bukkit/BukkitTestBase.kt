@@ -26,6 +26,7 @@ import org.bukkit.Server
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.SimpleServicesManager
+import java.util.UUID
 import kotlin.test.BeforeTest
 
 /** Base for all Bukkit-related tests. */
@@ -38,7 +39,7 @@ open class BukkitTestBase {
     open fun setUp() {
         server = mockServer()
         plugin = mockPlugin()
-        player = mock()
+        player = mockPlayer()
 
         mockBukkit()
     }
@@ -50,6 +51,10 @@ open class BukkitTestBase {
 
     private fun mockPlugin(): Plugin = mock {
         on { server } doReturn server
+    }
+
+    private fun mockPlayer(): Player = mock {
+        on { uniqueId } doReturn UUID.randomUUID()
     }
 
     private fun mockBukkit() {

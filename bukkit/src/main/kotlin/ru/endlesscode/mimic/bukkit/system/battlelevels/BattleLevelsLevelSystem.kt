@@ -27,7 +27,7 @@ import kotlin.math.abs
 
 /** Implementation of LevelSystem that uses BattleLevels.  */
 @Subsystem(priority = SubsystemPriority.NORMAL, classes = ["me.robin.battlelevels.api.BattleLevelsAPI"])
-class BattleLevelsLevelSystem private constructor(
+class BattleLevelsLevelSystem internal constructor(
     player: Player,
     private val battleLevelsApi: BattleLevelsApiWrapper
 ) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
