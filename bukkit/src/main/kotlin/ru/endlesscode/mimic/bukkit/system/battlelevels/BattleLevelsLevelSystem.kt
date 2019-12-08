@@ -90,7 +90,23 @@ class BattleLevelsLevelSystem internal constructor(
     }
 
     override fun giveExp(expAmount: Double) {
-        battleLevelsApi.addScore(playerUniqueId, expAmount)
+        val remainingExp = expToNextLevel
+        val currentLevel = level
+
+        if (expAmount >= remainingExp) {
+            var levelsToGive = 0
+            var extraExp = expAmount
+            var expToNextLevel = remainingExp
+            while (extraExp >= expToNextLevel) {
+                extraExp -= expToNextLevel
+                levelsToGive++
+                expToNextLevel = converter.getExpToReachLevel(currentLevel + levelsToGive)
+            }
+            giveLevel(levelsToGive)
+            if (extraExp > 0) battleLevelsApi.addScore(playerUniqueId, extraExp)
+        } else {
+            battleLevelsApi.addScore(playerUniqueId, expAmount)
+        }
     }
 
     override fun takeExp(expAmount: Double) {
@@ -98,14 +114,14 @@ class BattleLevelsLevelSystem internal constructor(
         val currentLevel = level
 
         if (expAmount > currentExp) {
-            var extraExp = expAmount - currentExp
             var levelsToTake = 0
+            var extraExp = expAmount - currentExp
             while (extraExp > 0) {
                 extraExp -= converter.getExpToReachLevel(currentLevel - levelsToTake)
                 levelsToTake++
             }
             takeLevel(levelsToTake)
-            if (extraExp < 0) giveExp(abs(extraExp))
+            if (extraExp < 0) battleLevelsApi.addScore(playerUniqueId, abs(extraExp))
         } else {
             battleLevelsApi.removeScore(playerUniqueId, expAmount)
         }
