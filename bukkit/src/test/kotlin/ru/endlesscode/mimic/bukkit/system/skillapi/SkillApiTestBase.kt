@@ -46,9 +46,7 @@ open class SkillApiTestBase : BukkitTestBase() {
 
     private fun mockSettings(): Settings = mock {
         // Our formula exp to next level is: lvl * 10
-        on { getRequiredExp(any()) } doAnswer { invocation ->
-            invocation.getArgument<Int>(0) * 10
-        }
+        on { getRequiredExp(any()) } doAnswer { it.getArgument<Int>(0) * 10 }
     }
 
     protected fun prepareClasses(vararg classNames: String) {

@@ -15,7 +15,10 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @BeforeTest
     override fun setUp() {
         super.setUp()
-        battleLevelsApi = mock()
+        battleLevelsApi = mock {
+            // Our formula exp to next level is static = 10
+            on { getNeededFor(any()) } doAnswer { it.getArgument<Int>(0) * 10.0 }
+        }
         levelSystem = BattleLevelsLevelSystem(player, battleLevelsApi)
     }
 
@@ -94,24 +97,37 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     }
 
     @Test
-    fun `when take exp more than current exp - should take level too`() {
+    fun `when take exp more than current exp - should take level and give extra exp`() {
         // Given
         set(level = 10, totalExp = 106.0)
-        whenever(battleLevelsApi.getNeededFor(any())) doReturn 10.0
 
         // When
         levelSystem.takeExp(28.0)
 
         // Then
-        verify(battleLevelsApi).removeScore(any(), eq(28.0))
         verify(battleLevelsApi).removeLevel(any(), eq(3))
+        verify(battleLevelsApi).addScore(any(), eq(8.0))
+        verify(battleLevelsApi, never()).removeScore(any(), any())
+    }
+
+    @Test
+    fun `when take exp equal to two levels - should take level and not give extra exp`() {
+        // Given
+        set(level = 10, totalExp = 106.0)
+
+        // When
+        levelSystem.takeExp(26.0)
+
+        // Then
+        verify(battleLevelsApi).removeLevel(any(), eq(2))
+        verify(battleLevelsApi, never()).addScore(any(), any())
+        verify(battleLevelsApi, never()).removeScore(any(), any())
     }
 
     @Test
     fun `when take exp not more than current exp - should take only exp`() {
         // Given
         set(level = 10, totalExp = 106.0)
-        whenever(battleLevelsApi.getNeededFor(any())) doReturn 10.0
 
         // When
         levelSystem.takeExp(6.0)

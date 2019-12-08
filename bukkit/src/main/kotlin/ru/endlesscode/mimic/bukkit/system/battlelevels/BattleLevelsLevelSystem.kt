@@ -66,8 +66,9 @@ class BattleLevelsLevelSystem internal constructor(
             }
         }
 
+    @Suppress("OverridingDeprecatedMember") // Ok for implementation
     override var exp: Double
-        get() = (totalExp - converter.getExpToReachLevel(level)).coerceAtLeast(0.0)
+        get() = (totalExp - converter.levelToExp(level)).coerceAtLeast(0.0)
         set(value) {
             val delta = value.coerceIn(0.0, totalExpToNextLevel) - exp
             if (delta < 0) {
@@ -93,6 +94,20 @@ class BattleLevelsLevelSystem internal constructor(
     }
 
     override fun takeExp(expAmount: Double) {
-        battleLevelsApi.removeScore(playerUniqueId, expAmount)
+        val currentExp = exp
+        val currentLevel = level
+
+        if (expAmount > currentExp) {
+            var extraExp = expAmount - currentExp
+            var levelsToTake = 0
+            while (extraExp > 0) {
+                extraExp -= converter.getExpToReachLevel(currentLevel - levelsToTake)
+                levelsToTake++
+            }
+            takeLevel(levelsToTake)
+            if (extraExp < 0) giveExp(abs(extraExp))
+        } else {
+            battleLevelsApi.removeScore(playerUniqueId, expAmount)
+        }
     }
 }

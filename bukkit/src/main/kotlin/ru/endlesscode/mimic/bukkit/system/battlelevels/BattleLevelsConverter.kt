@@ -38,5 +38,7 @@ class BattleLevelsConverter private constructor(
         }
     }
 
-    override fun getExpToReachLevel(level: Int): Double = battleLevelsApi.getNeededFor(level)
+    override fun getExpToReachLevel(level: Int): Double {
+        return battleLevelsApi.getNeededFor(level) - battleLevelsApi.getNeededFor(level - 1)
+    }
 }
