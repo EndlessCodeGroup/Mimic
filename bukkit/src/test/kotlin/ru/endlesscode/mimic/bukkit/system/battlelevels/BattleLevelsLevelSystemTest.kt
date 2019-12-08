@@ -74,13 +74,13 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
     @Test
     fun `when set total exp higher than current - should add score`() {
         // Given
-        set(totalExp = 100.0)
+        set(level = 10, totalExp = 100.0)
 
         // When
         levelSystem.totalExp = 160.0
 
         // Then
-        verify(battleLevelsApi).addScore(any(), eq(60.0))
+        verify(battleLevelsApi).addLevel(any(), eq(6))
     }
 
     @Test
@@ -94,6 +94,45 @@ class BattleLevelsLevelSystemTest : BukkitTestBase() {
         // Then
         verify(battleLevelsApi, never()).removeScore(any(), any())
         verify(battleLevelsApi, never()).addScore(any(), any())
+    }
+
+    @Test
+    fun `when give exp more than one level - should add level and give extra exp`() {
+        // Given
+        set(level = 1, totalExp = 16.0)
+
+        // When
+        levelSystem.giveExp(28.0)
+
+        // Then
+        verify(battleLevelsApi).addLevel(any(), eq(3))
+        verify(battleLevelsApi).addScore(any(), eq(4.0))
+    }
+
+    @Test
+    fun `when give exp equal to one level - should add level`() {
+        // Given
+        set(level = 1, totalExp = 16.0)
+
+        // When
+        levelSystem.giveExp(4.0)
+
+        // Then
+        verify(battleLevelsApi).addLevel(any(), eq(1))
+        verify(battleLevelsApi, never()).addScore(any(), any())
+    }
+
+    @Test
+    fun `when give exp not more than one level - should add exp`() {
+        // Given
+        set(level = 1, totalExp = 16.0)
+
+        // When
+        levelSystem.giveExp(3.0)
+
+        // Then
+        verify(battleLevelsApi).addScore(any(), eq(3.0))
+        verify(battleLevelsApi, never()).addLevel(any(), any())
     }
 
     @Test

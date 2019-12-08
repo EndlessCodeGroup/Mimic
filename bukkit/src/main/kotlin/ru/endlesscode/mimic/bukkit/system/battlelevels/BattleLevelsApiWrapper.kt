@@ -9,6 +9,6 @@ internal class BattleLevelsApiWrapper {
     fun getScore(uuid: UUID): Double = BattleLevelsAPI.getScore(uuid)
     fun addLevel(uuid: UUID, amount: Int): Unit = BattleLevelsAPI.addLevel(uuid, amount)
     fun removeLevel(uuid: UUID, amount: Int): Unit = BattleLevelsAPI.removeLevel(uuid, amount)
-    fun addScore(uuid: UUID, amount: Double): Unit = BattleLevelsAPI.addScore(uuid, amount, true)
+    fun addScore(uuid: UUID, amount: Double): Unit = BattleLevelsAPI.addScore(uuid, amount, false)
     fun removeScore(uuid: UUID, amount: Double): Unit = BattleLevelsAPI.removeScore(uuid, amount)
 }
