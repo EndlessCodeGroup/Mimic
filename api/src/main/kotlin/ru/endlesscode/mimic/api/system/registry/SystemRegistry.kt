@@ -19,13 +19,13 @@
 
 package ru.endlesscode.mimic.api.system.registry
 
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 import ru.endlesscode.mimic.api.system.SystemFactory
 
 /**
  * Class responsible for accounting all system hooks.
  *
- * Systems - it is classes that directly extends PlayerSystem. Subsystems - it
+ * Systems - it is classes that directly implements MimicSystem. Subsystems - it
  * is concrete implementations of systems.
  *
  * Recommended to use a singleton pattern when implement this class.
@@ -43,7 +43,7 @@ abstract class SystemRegistry {
      * @throws SystemNotRegisteredException If registering failed
      */
     @JvmOverloads
-    fun <SubsystemT : PlayerSystem> registerSubsystem(
+    fun <SubsystemT : MimicSystem> registerSubsystem(
         subsystemClass: Class<SubsystemT>,
         systemFactory: SystemFactory<SubsystemT>? = null
     ): Boolean {
@@ -56,7 +56,7 @@ abstract class SystemRegistry {
         }
     }
 
-    private fun <SubsystemT : PlayerSystem> tryToRegisterSubsystem(
+    private fun <SubsystemT : MimicSystem> tryToRegisterSubsystem(
         subsystemClass: Class<SubsystemT>,
         givenFactory: SystemFactory<SubsystemT>?
     ): Boolean {
@@ -70,7 +70,7 @@ abstract class SystemRegistry {
         }
     }
 
-    private fun <SubsystemT : PlayerSystem> Class<SubsystemT>.getSubsystemFactory(): SystemFactory<SubsystemT> {
+    private fun <SubsystemT : MimicSystem> Class<SubsystemT>.getSubsystemFactory(): SystemFactory<SubsystemT> {
         try {
             @Suppress("UNCHECKED_CAST")
             return getField("FACTORY").get(null) as SystemFactory<SubsystemT>
@@ -102,12 +102,12 @@ abstract class SystemRegistry {
      * @param systemClass System class
      * @return System factory or `null` if system factory not found in registry.
      */
-    fun <SystemT : PlayerSystem> getSystemFactory(systemClass: Class<SystemT>): SystemFactory<SystemT>? {
+    fun <SystemT : MimicSystem> getSystemFactory(systemClass: Class<SystemT>): SystemFactory<SystemT>? {
         val factoryClass = systemClass.getFactoryClass()
         return getFactory(factoryClass)
     }
 
-    private fun <SystemT : PlayerSystem> Class<SystemT>.getFactoryClass(): Class<SystemFactory<SystemT>> {
+    private fun <SystemT : MimicSystem> Class<SystemT>.getFactoryClass(): Class<SystemFactory<SystemT>> {
         val factoryClass = declaredClasses.find(SystemFactory::class.java::isAssignableFrom)
         requireNotNull(factoryClass) { "Given class not contains any System Factory" }
 
@@ -115,7 +115,7 @@ abstract class SystemRegistry {
         return (factoryClass as Class<out SystemFactory<SystemT>>).getRootFactoryClass()
     }
 
-    private fun <SystemT : PlayerSystem> Class<out SystemFactory<SystemT>>.getRootFactoryClass(): Class<SystemFactory<SystemT>> {
+    private fun <SystemT : MimicSystem> Class<out SystemFactory<SystemT>>.getRootFactoryClass(): Class<SystemFactory<SystemT>> {
         var factoryClass: Class<*> = this
         while (factoryClass.superclass != SystemFactory::class.java) {
             factoryClass = factoryClass.superclass
@@ -132,7 +132,7 @@ abstract class SystemRegistry {
      * @param factoryClass Factory class
      * @return System factory or `null` if system factory not found.
      */
-    abstract fun <SystemT : PlayerSystem> getFactory(
+    abstract fun <SystemT : MimicSystem> getFactory(
         factoryClass: Class<out SystemFactory<SystemT>>
     ): SystemFactory<SystemT>?
 
@@ -140,11 +140,11 @@ abstract class SystemRegistry {
     abstract fun unregisterAllSubsystems()
 
     /** Unregister subsystem with specified type. */
-    fun <SubsystemT : PlayerSystem> unregisterSubsystem(subsystemClass: Class<SubsystemT>) {
+    fun <SubsystemT : MimicSystem> unregisterSubsystem(subsystemClass: Class<SubsystemT>) {
         val factory = subsystemClass.getSubsystemFactory()
         unregisterFactory(factory)
     }
 
     /** Unregister specified [factory]. */
-    abstract fun <SubsystemT : PlayerSystem> unregisterFactory(factory: SystemFactory<out SubsystemT>)
+    abstract fun <SubsystemT : MimicSystem> unregisterFactory(factory: SystemFactory<out SubsystemT>)
 }

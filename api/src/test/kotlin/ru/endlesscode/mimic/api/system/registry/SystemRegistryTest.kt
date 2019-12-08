@@ -87,7 +87,7 @@ class SystemRegistryTest {
     @Test
     fun `when get system factory - and pass wrong player system - should throw an exception`() {
         assertFailsWith<IllegalArgumentException> {
-            registry.getSystemFactory(MissingFactoryPlayerSystem::class.java)
+            registry.getSystemFactory(MissingFactorySystem::class.java)
         }
     }
 

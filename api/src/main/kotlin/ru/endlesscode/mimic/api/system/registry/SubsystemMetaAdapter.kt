@@ -19,7 +19,7 @@
 
 package ru.endlesscode.mimic.api.system.registry
 
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 
 /**
  * Adapter to work with systems [Subsystem].
@@ -28,7 +28,7 @@ import ru.endlesscode.mimic.api.system.PlayerSystem
  * @param meta The metadata
  * @see Subsystem
  */
-class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(private val meta: Subsystem) {
+class SubsystemMetaAdapter<SubsystemT : MimicSystem> private constructor(private val meta: Subsystem) {
 
     companion object {
         /**
@@ -41,7 +41,7 @@ class SubsystemMetaAdapter<SubsystemT : PlayerSystem> private constructor(privat
          * @see Subsystem
          */
         @JvmStatic
-        fun <SubsystemT : PlayerSystem> fromClass(theClass: Class<out SubsystemT>): SubsystemMetaAdapter<SubsystemT> {
+        fun <SubsystemT : MimicSystem> fromClass(theClass: Class<out SubsystemT>): SubsystemMetaAdapter<SubsystemT> {
             val meta = requireNotNull(theClass.getAnnotation(Subsystem::class.java)) {
                 "Class not contains subsystem annotations."
             }

@@ -21,7 +21,7 @@ package ru.endlesscode.mimic.bukkit
 
 import ru.endlesscode.mimic.api.system.ClassSystem
 import ru.endlesscode.mimic.api.system.LevelSystem
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 import ru.endlesscode.mimic.api.system.registry.getSystemFactory
 import ru.endlesscode.mimic.api.system.registry.registerSubsystem
 import ru.endlesscode.mimic.bukkit.system.vanilla.PermissionsClassSystem
@@ -96,7 +96,7 @@ class BukkitSystemRegistryTest : BukkitTestBase() {
         server.servicesManager.unregisterAll(plugin)
     }
 
-    private inline fun <reified SystemT : PlayerSystem> checkSystemNotExists() {
+    private inline fun <reified SystemT : MimicSystem> checkSystemNotExists() {
         assertNull(systemRegistry.getSystemFactory<SystemT>())
     }
 }

@@ -28,15 +28,15 @@ package ru.endlesscode.mimic.api.system
  * @param constructor Function to create system
  * @param tag         The tag
  */
-open class SystemFactory<T : PlayerSystem>(val tag: String, private val constructor: (Any) -> T) {
+open class SystemFactory<T : MimicSystem>(val tag: String, private val constructor: (Any) -> T) {
 
     /**
      * Creates new subsystem object with player initialization.
      *
-     * @param playerArg Player object
+     * @param arg Argument needed for system initialization.
      * @return Player system for specified player. Can't be null
      */
-    fun get(playerArg: Any): T {
-        return constructor(playerArg)
+    fun get(arg: Any): T {
+        return constructor(arg)
     }
 }

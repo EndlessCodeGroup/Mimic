@@ -22,7 +22,7 @@ package ru.endlesscode.mimic.bukkit
 import co.aikar.commands.BukkitCommandManager
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.api.system.ClassSystem
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 import ru.endlesscode.mimic.api.system.registry.SystemNotRegisteredException
 import ru.endlesscode.mimic.api.system.registry.getSystemFactory
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
@@ -75,7 +75,7 @@ class Mimic : JavaPlugin() {
         defaultSubsystems.forEach(::hookSystem)
     }
 
-    private fun <T : PlayerSystem> hookSystem(system: Class<out T>) {
+    private fun <T : MimicSystem> hookSystem(system: Class<out T>) {
         try {
             if (systemRegistry.registerSubsystem(system)) {
                 Log.d("Subsystem '${system.simpleName}' registered.")

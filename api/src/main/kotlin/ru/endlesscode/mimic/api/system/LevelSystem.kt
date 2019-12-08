@@ -27,7 +27,7 @@ package ru.endlesscode.mimic.api.system
  * and override all methods that works not properly for your case.
  */
 @Suppress("DEPRECATION") // Allow to use setExp
-interface LevelSystem : PlayerSystem {
+interface LevelSystem : MimicSystem {
 
     /** Assigned converter. */
     val converter: ExpLevelConverter

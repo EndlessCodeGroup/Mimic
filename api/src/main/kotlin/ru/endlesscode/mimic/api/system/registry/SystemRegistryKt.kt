@@ -19,7 +19,7 @@
 
 package ru.endlesscode.mimic.api.system.registry
 
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 import ru.endlesscode.mimic.api.system.SystemFactory
 
 /**
@@ -28,7 +28,7 @@ import ru.endlesscode.mimic.api.system.SystemFactory
  * @return `true` if subsystem registered, or `false` if registration not needed
  * @throws SystemNotRegisteredException If registering failed
  */
-inline fun <reified SubsystemT : PlayerSystem> SystemRegistry.registerSubsystem(
+inline fun <reified SubsystemT : MimicSystem> SystemRegistry.registerSubsystem(
     systemFactory: SystemFactory<SubsystemT>? = null
 ): Boolean {
     return this.registerSubsystem(SubsystemT::class.java, systemFactory)
@@ -40,11 +40,11 @@ inline fun <reified SubsystemT : PlayerSystem> SystemRegistry.registerSubsystem(
  * @param SystemT     System type
  * @return System factory or `null` if system factory not found in registry.
  */
-inline fun <reified SystemT : PlayerSystem> SystemRegistry.getSystemFactory(): SystemFactory<SystemT>? {
+inline fun <reified SystemT : MimicSystem> SystemRegistry.getSystemFactory(): SystemFactory<SystemT>? {
     return this.getSystemFactory(SystemT::class.java)
 }
 
 /** Unregister subsystem with specified type. */
-inline fun <reified SubsystemT : PlayerSystem> SystemRegistry.unregisterSubsystem() {
+inline fun <reified SubsystemT : MimicSystem> SystemRegistry.unregisterSubsystem() {
     this.unregisterSubsystem(SubsystemT::class.java)
 }

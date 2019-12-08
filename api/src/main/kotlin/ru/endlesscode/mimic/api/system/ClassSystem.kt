@@ -25,9 +25,9 @@ package ru.endlesscode.mimic.api.system
  * Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.
  *
- * @see [PlayerSystem] To read more about implementation.
+ * @see [MimicSystem] To read more about implementation.
  */
-interface ClassSystem : PlayerSystem {
+interface ClassSystem : MimicSystem {
 
     /**
      * Primary class of the player.

@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.api.ref.ExistingWeakReference
  * Implementation should contain something player-related object to get data from.
  * For this object recommended use [ExistingWeakReference]
  */
-interface PlayerSystem {
+interface MimicSystem {
 
     /** Returns `true` if the system is found and enabled. */
     val isEnabled: Boolean

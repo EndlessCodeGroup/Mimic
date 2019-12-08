@@ -2,7 +2,7 @@ package ru.endlesscode.mimic.api.system.registry
 
 import ru.endlesscode.mimic.api.system.ClassSystem
 import ru.endlesscode.mimic.api.system.LevelSystem
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 import kotlin.test.fail
 
 
@@ -32,7 +32,7 @@ abstract class CorrectClassSystem : ClassSystem {
 abstract class NotNeededClassSystem : ClassSystem
 
 /** Wring player system, that hasn't factory inner class. */
-abstract class MissingFactoryPlayerSystem private constructor() : PlayerSystem {
+abstract class MissingFactorySystem private constructor() : MimicSystem {
     @Suppress("unused")
     abstract class NotFactoryInnerClass
 }

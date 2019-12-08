@@ -24,12 +24,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 import kotlin.reflect.KClass
 
 @RunWith(Parameterized::class)
 class SubsystemMetaAdapterTest(
-    private val subsystemClass: KClass<out PlayerSystem>,
+    private val subsystemClass: KClass<out MimicSystem>,
     private val requiredClassesExists: Boolean,
     private val priority: SubsystemPriority
 ) {

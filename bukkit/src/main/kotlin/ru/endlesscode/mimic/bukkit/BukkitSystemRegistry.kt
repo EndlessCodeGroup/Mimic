@@ -21,7 +21,7 @@ package ru.endlesscode.mimic.bukkit
 
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicesManager
-import ru.endlesscode.mimic.api.system.PlayerSystem
+import ru.endlesscode.mimic.api.system.MimicSystem
 import ru.endlesscode.mimic.api.system.SystemFactory
 import ru.endlesscode.mimic.api.system.registry.SubsystemPriority
 import ru.endlesscode.mimic.api.system.registry.SystemRegistry
@@ -41,7 +41,7 @@ class BukkitSystemRegistry internal constructor(
         servicesManager.register(factoryClass, subsystemFactory, plugin, servicePriority)
     }
 
-    override fun <SystemT : PlayerSystem> getFactory(
+    override fun <SystemT : MimicSystem> getFactory(
         factoryClass: Class<out SystemFactory<SystemT>>
     ): SystemFactory<SystemT>? {
         return servicesManager.load(factoryClass)
@@ -51,7 +51,7 @@ class BukkitSystemRegistry internal constructor(
         servicesManager.unregisterAll(plugin)
     }
 
-    override fun <SystemT : PlayerSystem> unregisterFactory(factory: SystemFactory<out SystemT>) {
+    override fun <SystemT : MimicSystem> unregisterFactory(factory: SystemFactory<out SystemT>) {
         servicesManager.unregister(factory)
     }
 }
