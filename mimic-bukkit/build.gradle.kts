@@ -1,20 +1,20 @@
 // Bukkit MimicAPI implementation build config
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "5.1.0"
+    id("com.github.johnrengelman.shadow") version "6.0.0"
     id("ru.endlesscode.bukkitgradle")
 }
 
 description = "API for integration with Bukkit RPG plugins"
 
 bukkit {
-    version = "1.14.4"
+    version = "1.16.1"
 
     meta {
         setName("Mimic")
-        setMain("$group.$name")
+        setMain("$group.bukkit.$name")
         setAuthors(listOf("osipxd", "EndlessCodeGroup"))
-        setUrl("https://github.com/EndlessCodeGroup/BukkitMimic")
+        setUrl("https://github.com/EndlessCodeGroup/MimicAPI")
     }
 
     run {
