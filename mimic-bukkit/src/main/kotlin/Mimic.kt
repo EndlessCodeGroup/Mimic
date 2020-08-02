@@ -22,7 +22,6 @@ package ru.endlesscode.mimic.bukkit
 import co.aikar.commands.BukkitCommandManager
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
-import ru.endlesscode.mimic.ClassSystem
 import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
@@ -39,28 +38,20 @@ class Mimic : JavaPlugin() {
 
     companion object {
         private const val DEBUG = true
-        private lateinit var instance: Mimic
-
-        /** Get system registry that can be used to obtain player systems. */
-        @JvmStatic
-        val systemRegistry: BukkitSystemRegistry
-            get() = instance.systemRegistry
     }
 
     /** Default subsystems */
     private val defaultSubsystems = listOf(
-        VanillaLevelSystem::class.java,
-        PermissionsClassSystem::class.java,
-        SkillApiClassSystem::class.java,
-        SkillApiLevelSystem::class.java,
-        BattleLevelsLevelSystem::class.java
+        MinecraftLevelSystem.provider to ServicePriority.Lowest,
+        PermissionsClassSystem.provider to ServicePriority.Lowest,
+        SkillApiClassSystem.provider to ServicePriority.Normal,
+        SkillApiLevelSystem.provider to ServicePriority.Normal,
+        BattleLevelsLevelSystem.provider to ServicePriority.Normal
     )
 
-    @get:JvmName("_getSystemRegistry") // Conflicts with static getSystemRegistry
-    private val systemRegistry by lazy { BukkitSystemRegistry(this, server.servicesManager) }
+    private inline val servicesManager get() = server.servicesManager
 
     override fun onLoad() {
-        instance = this
         Log.init(logger, DEBUG)
         hookDefaultSystems()
     }
@@ -70,19 +61,18 @@ class Mimic : JavaPlugin() {
     }
 
     private fun hookDefaultSystems() {
-        defaultSubsystems.forEach(::hookSystem)
+        defaultSubsystems.forEach { (service, priority) ->
+            hookService(service, priority)
+        }
     }
 
-    private fun <T : MimicSystem> hookSystem(system: Class<out T>) {
-        try {
-            if (systemRegistry.registerSubsystem(system)) {
-                Log.d("Subsystem '${system.simpleName}' registered.")
-            } else {
-                Log.d("Subsystem '${system.simpleName}' not needed. Skipped.")
-            }
-        } catch (e: registry.SystemNotRegisteredException) {
-            Log.w("[${system.simpleName}] ${e.message}")
-            Log.d(e)
+    private fun <T : MimicService> hookService(service: T, priority: ServicePriority) {
+        val serviceClass = service.javaClass
+        if (service.isEnabled) {
+            servicesManager.register(serviceClass, service, this, priority)
+            Log.d("Subsystem '${serviceClass.name}' registered.")
+        } else {
+            Log.d("Subsystem '${serviceClass.name}' not needed. Skipped.")
         }
     }
 
@@ -97,15 +87,15 @@ class Mimic : JavaPlugin() {
 
         manager.registerCommand(MainCommand())
 
-        systemRegistry.getSystemFactory<BukkitLevelSystem>()?.let {
+        servicesManager.getProvider<BukkitLevelSystem.Provider>()?.let {
             manager.registerCommand(LevelSystemSubcommand(it))
         }
-        systemRegistry.getSystemFactory<ClassSystem>()?.let {
+        servicesManager.getProvider<BukkitClassSystem.Provider>()?.let {
             manager.registerCommand(ClassSystemSubcommand(it))
         }
     }
 
     override fun onDisable() {
-        systemRegistry.unregisterAllSubsystems()
+        servicesManager.unregisterAll(this)
     }
 }
