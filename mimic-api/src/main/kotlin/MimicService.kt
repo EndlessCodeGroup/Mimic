@@ -19,24 +19,15 @@
 
 package ru.endlesscode.mimic
 
-/**
- * Factory to create subsystem instances.
- *
- * This interface must be implemented for each Player System (not subsystem).
- *
- * @param T           System type
- * @param constructor Function to create system
- * @param tag         The tag
- */
-open class SystemFactory<T : MimicSystem>(val tag: String, private val constructor: (Any) -> T) {
+/** This interface should be implemented by any service relate to Mimic. */
+interface MimicService {
+
+    /** Returns `true` if the service found and it is enabled. */
+    val isEnabled: Boolean
 
     /**
-     * Creates new subsystem object with player initialization.
-     *
-     * @param arg Argument needed for system initialization.
-     * @return Player system for specified player. Can't be null
+     * Returns the ID of the service.
+     * Usually used name of the plugin that implements service.
      */
-    fun get(arg: Any): T {
-        return constructor(arg)
-    }
+    val id: String
 }

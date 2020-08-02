@@ -20,19 +20,11 @@
 package ru.endlesscode.mimic
 
 /**
- * This interface should be implemented by any system that should work with Mimic.
- *
- * Implementation should contain something player-related object to get data from.
- * For this object recommended use [ExistingWeakReference][ru.endlesscode.mimic.ref.ExistingWeakReference]
+ * Service that provides [T].
+ * Should be used if some service needs arguments for initialization.
  */
-interface MimicSystem {
+interface ProviderService<out T : Any> : MimicService {
 
-    /** Returns `true` if the system is found and enabled. */
-    val isEnabled: Boolean
-
-    /**
-     * Returns the ID of the system.
-     * Usually used name of the plugin that implements system.
-     */
-    val id: String
+    /** Creates new [T] initialized with [arg]. */
+    fun get(arg: Any): T
 }

@@ -27,7 +27,7 @@ package ru.endlesscode.mimic
  * and override all methods that works not properly for your case.
  */
 @Suppress("DEPRECATION") // Allow to use setExp
-interface LevelSystem : MimicSystem {
+interface LevelSystem {
 
     /** Assigned converter. */
     val converter: ExpLevelConverter
@@ -217,7 +217,6 @@ interface LevelSystem : MimicSystem {
     @JvmDefault
     fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
 
-    /** Factory of level systems. */
-    open class Factory<SubsystemT : LevelSystem>(tag: String, constructor: (Any) -> SubsystemT) :
-        SystemFactory<SubsystemT>(tag, constructor)
+    /** Provider of level systems. */
+    interface Provider<SubsystemT : LevelSystem> : ProviderService<SubsystemT>
 }

@@ -1,10 +1,7 @@
 package ru.endlesscode.mimic
 
-/**
- * System for getting custom items by theirs id. Also can be used to match id with item.
- * @see MimicSystem
- */
-interface ItemsSystem<ItemStackT : Any> : MimicSystem {
+/** Service for getting custom items by theirs ID. Also can be used to match id with item. */
+interface ItemsService<ItemStackT : Any> : MimicService {
 
     /** Returns `true` if given [item] represented with given [itemId] in the system. */
     fun isSameItem(item: ItemStackT, itemId: String): Boolean

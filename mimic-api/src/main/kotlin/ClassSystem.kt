@@ -24,10 +24,8 @@ package ru.endlesscode.mimic
  *
  * Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.
- *
- * @see [MimicSystem] To read more about implementation.
  */
-interface ClassSystem : MimicSystem {
+interface ClassSystem {
 
     /**
      * Primary class of the player.
@@ -74,7 +72,6 @@ interface ClassSystem : MimicSystem {
     @JvmDefault
     fun hasRequiredClass(requiredClass: String): Boolean = requiredClass in this.classes
 
-    /** Factory of class systems. */
-    open class Factory<SubsystemT : ClassSystem>(tag: String, constructor: (Any) -> SubsystemT) :
-        SystemFactory<SubsystemT>(tag, constructor)
+    /** Provider of class systems. */
+    interface Provider<SubsystemT : ClassSystem> : ProviderService<SubsystemT>
 }
