@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,13 @@
 package ru.endlesscode.mimic.bukkit
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.ClassSystem
-import ru.endlesscode.mimic.util.ExistingWeakReference
+import ru.endlesscode.mimic.ProviderService
 
-/** [ClassSystem] adapted for Bukkit. */
-abstract class BukkitClassSystem(player: Player) : ClassSystem {
+abstract class PlayerSystemProviderService<T : Any>(final override val id: String) : ProviderService<T> {
 
-    val player: Player get() = playerRef.get()
+    override val isEnabled: Boolean = true
 
-    private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
+    final override fun get(arg: Any): T = getSystem(arg as Player)
 
-    /** Provider of Bukkit class systems. */
-    abstract class Provider(id: String) : PlayerSystemProviderService<BukkitClassSystem>(id)
+    abstract fun getSystem(player: Player): T
 }

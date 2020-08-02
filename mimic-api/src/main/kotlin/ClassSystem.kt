@@ -71,7 +71,4 @@ interface ClassSystem {
     /** Returns `true` if player has [requiredClass]. */
     @JvmDefault
     fun hasRequiredClass(requiredClass: String): Boolean = requiredClass in this.classes
-
-    /** Provider of class systems. */
-    interface Provider<SubsystemT : ClassSystem> : ProviderService<SubsystemT>
 }

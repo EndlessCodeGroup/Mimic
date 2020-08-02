@@ -22,7 +22,7 @@ package ru.endlesscode.mimic.bukkit
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.ExpLevelConverter
 import ru.endlesscode.mimic.LevelSystem
-import ru.endlesscode.mimic.ref.ExistingWeakReference
+import ru.endlesscode.mimic.util.ExistingWeakReference
 
 /** [LevelSystem] adapted for Bukkit. */
 abstract class BukkitLevelSystem(
@@ -35,12 +35,5 @@ abstract class BukkitLevelSystem(
     private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
 
     /** Provider of Bukkit level systems. */
-    class Provider(
-        override val id: String,
-        override val isEnabled: Boolean = true,
-        private val constructor: (Player) -> BukkitLevelSystem
-    ) : LevelSystem.Provider<BukkitLevelSystem> {
-
-        override fun get(arg: Any): BukkitLevelSystem = constructor(arg as Player)
-    }
+    abstract class Provider(id: String) : PlayerSystemProviderService<BukkitLevelSystem>(id)
 }

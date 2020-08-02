@@ -216,7 +216,4 @@ interface LevelSystem {
      */
     @JvmDefault
     fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
-
-    /** Provider of level systems. */
-    interface Provider<SubsystemT : LevelSystem> : ProviderService<SubsystemT>
 }

@@ -17,7 +17,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.ref
+package ru.endlesscode.mimic.util
 
 import java.lang.ref.WeakReference
 
