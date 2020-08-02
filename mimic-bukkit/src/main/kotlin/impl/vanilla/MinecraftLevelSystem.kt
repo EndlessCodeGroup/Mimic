@@ -16,25 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.system.vanilla
+package ru.endlesscode.mimic.bukkit.impl.vanilla
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
-import ru.endlesscode.mimic.bukkit.system.vanilla.VanillaConverter.Companion.instance
+import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.vanilla.VanillaConverter.Companion.instance
 
 /** Vanilla experience bar system. */
-@registry.Subsystem(priority = registry.SubsystemPriority.LOWEST)
-class VanillaLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
+class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
 
     companion object {
-        const val TAG = "Vanilla Level System"
+        const val ID = "minecraft"
 
         @JvmField
-        val FACTORY = Factory(TAG, ::VanillaLevelSystem)
+        val provider = object : Provider(ID) {
+            override fun getSystem(player: Player): BukkitLevelSystem = MinecraftLevelSystem(player)
+        }
     }
-
-    override val name: String = TAG
-    override val isEnabled: Boolean = true
 
     override var level: Int
         get() = player.level

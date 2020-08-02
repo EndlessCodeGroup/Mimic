@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,20 +20,19 @@
 package ru.endlesscode.mimic.bukkit
 
 import co.aikar.commands.BukkitCommandManager
+import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
-import ru.endlesscode.ClassSystem
-import ru.endlesscode.MimicSystem
-import ru.endlesscode.mimic.api.system.registry.getSystemFactory
+import ru.endlesscode.mimic.ClassSystem
+import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MainCommand
-import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
-import ru.endlesscode.mimic.bukkit.system.battlelevels.BattleLevelsLevelSystem
-import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiClassSystem
-import ru.endlesscode.mimic.bukkit.system.skillapi.SkillApiLevelSystem
-import ru.endlesscode.mimic.bukkit.system.vanilla.PermissionsClassSystem
-import ru.endlesscode.mimic.bukkit.system.vanilla.VanillaLevelSystem
-import ru.endlesscode.mimic.bukkit.util.Log
+import ru.endlesscode.mimic.bukkit.impl.battlelevels.BattleLevelsLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiClassSystem
+import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.vanilla.PermissionsClassSystem
+import ru.endlesscode.mimic.bukkit.internal.Log
 
 /** Main class of the plugin. */
 class Mimic : JavaPlugin() {

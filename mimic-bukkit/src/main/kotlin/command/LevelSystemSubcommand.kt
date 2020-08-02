@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,14 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.endlesscode.SystemFactory
-import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
-import ru.endlesscode.mimic.bukkit.util.Log
+import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
+import ru.endlesscode.mimic.bukkit.internal.Log
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
 @Subcommand("level|lvl|l|experience|exp|xp|e")
 internal class LevelSystemSubcommand(
-    private val systemFactory: SystemFactory<BukkitLevelSystem>
+    private val systemProvider: BukkitLevelSystem.Provider
 ) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
@@ -46,9 +45,9 @@ internal class LevelSystemSubcommand(
     @Description("Show information about player's level system")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
-        val system = systemFactory.get(player)
+        val system = systemProvider.get(player)
         sender.send(
-            "&3System: &7${system.name}",
+            "&3System: &7${systemProvider.id}",
             "&3Level: &7%.2f".format(system.level + system.fractionalExp),
             "&3Exp: &7%.1f &8| &3To next level: &7%.1f".format(system.exp, system.expToNextLevel),
             "&3Total exp: &7%.1f".format(system.totalExp)
@@ -65,7 +64,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemFactory.get(player)
+            val system = systemProvider.get(player)
             when (type) {
                 ExtendedValueType.LVL -> system.level = amount.toInt()
                 ExtendedValueType.TOTAL -> system.totalExp = amount
@@ -85,7 +84,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemFactory.get(player)
+            val system = systemProvider.get(player)
             when (type) {
                 ValueType.LVL -> system.giveLevel(amount)
                 ValueType.EXP -> system.giveExp(amount.toDouble())
@@ -104,7 +103,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemFactory.get(player)
+            val system = systemProvider.get(player)
             when (type) {
                 ValueType.LVL -> system.takeLevel(amount)
                 ValueType.EXP -> system.takeExp(amount.toDouble())
@@ -135,7 +134,7 @@ internal class LevelSystemSubcommand(
         @Default("lvl") type: ExtendedValueType,
         @Optional @Flags("other,defaultself") player: Player
     ) {
-        val system = systemFactory.get(player)
+        val system = systemProvider.get(player)
         val has = when (type) {
             ExtendedValueType.LVL -> system.didReachLevel(value)
             ExtendedValueType.EXP -> system.hasExp(value.toDouble())

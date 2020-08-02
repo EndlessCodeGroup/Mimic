@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.system.vanilla
+package ru.endlesscode.mimic.bukkit.impl.vanilla
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.system.BukkitClassSystem
+import ru.endlesscode.mimic.bukkit.BukkitClassSystem
 
 /**
  * Class system based on permissions.
@@ -29,19 +29,17 @@ import ru.endlesscode.mimic.bukkit.system.BukkitClassSystem
  * - mimic.class.ClassTwo
  * First class will be used as primary.
  */
-@registry.Subsystem(priority = registry.SubsystemPriority.LOWEST)
 class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
 
     companion object {
-        const val TAG = "Permission Class System"
+        const val ID = "premissions"
         const val PERMISSION_PREFIX = "mimic.class."
 
         @JvmField
-        val FACTORY = Factory(TAG, ::PermissionsClassSystem)
+        val provider: Provider = object : Provider(ID) {
+            override fun getSystem(player: Player): BukkitClassSystem = PermissionsClassSystem(player)
+        }
     }
-
-    override val name: String = TAG
-    override val isEnabled: Boolean = true
 
     override val classes: List<String>
         get() {

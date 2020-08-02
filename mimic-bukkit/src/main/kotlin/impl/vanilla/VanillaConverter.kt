@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.system.vanilla
+package ru.endlesscode.mimic.bukkit.impl.vanilla
 
-import ru.endlesscode.ExpLevelConverter
+import ru.endlesscode.mimic.ExpLevelConverter
 import kotlin.math.sqrt
 
 /**
@@ -30,7 +30,7 @@ class VanillaConverter private constructor() : ExpLevelConverter {
 
     companion object {
         @JvmStatic
-        val instance: VanillaConverter by lazy { VanillaConverter() }
+        val instance: ExpLevelConverter by lazy { VanillaConverter() }
     }
 
     override fun expToLevel(exp: Double): Double = when {

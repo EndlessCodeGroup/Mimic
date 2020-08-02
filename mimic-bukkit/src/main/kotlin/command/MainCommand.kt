@@ -10,6 +10,7 @@ import co.aikar.commands.annotation.HelpCommand
 @CommandAlias("%command")
 @CommandPermission("%perm")
 internal class MainCommand : MimicCommand() {
+
     @HelpCommand
     @Description("Show help")
     fun doHelp(help: CommandHelp) {

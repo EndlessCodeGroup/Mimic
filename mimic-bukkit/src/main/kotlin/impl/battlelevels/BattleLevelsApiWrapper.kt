@@ -1,4 +1,4 @@
-package ru.endlesscode.mimic.bukkit.system.battlelevels
+package ru.endlesscode.mimic.bukkit.impl.battlelevels
 
 import me.robin.battlelevels.api.BattleLevelsAPI
 import java.util.*

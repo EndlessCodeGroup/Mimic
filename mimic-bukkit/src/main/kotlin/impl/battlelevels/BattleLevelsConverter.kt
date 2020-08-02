@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.system.battlelevels
+package ru.endlesscode.mimic.bukkit.impl.battlelevels
 
-import ru.endlesscode.ExpLevelConverter
+import ru.endlesscode.mimic.ExpLevelConverter
 
 /** Converter for BattleLevels level system. */
 class BattleLevelsConverter private constructor(
@@ -29,10 +29,10 @@ class BattleLevelsConverter private constructor(
         private var internalInstance: BattleLevelsConverter? = null
 
         @JvmStatic
-        val instance: BattleLevelsConverter
+        val instance: ExpLevelConverter
             get() = getInstance()
 
-        internal fun getInstance(battleLevelsApi: BattleLevelsApiWrapper? = null): BattleLevelsConverter {
+        internal fun getInstance(battleLevelsApi: BattleLevelsApiWrapper? = null): ExpLevelConverter {
             return internalInstance
                 ?: BattleLevelsConverter(battleLevelsApi ?: BattleLevelsApiWrapper()).also { internalInstance = it }
         }

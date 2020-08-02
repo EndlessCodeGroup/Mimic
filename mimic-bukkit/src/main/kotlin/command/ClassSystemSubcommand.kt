@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,14 +23,13 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.endlesscode.ClassSystem
-import ru.endlesscode.SystemFactory
+import ru.endlesscode.mimic.bukkit.BukkitClassSystem
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
 @Subcommand("class|c")
 internal class ClassSystemSubcommand(
-    private val systemFactory: SystemFactory<ClassSystem>
+    private val systemProvider: BukkitClassSystem.Provider
 ) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
@@ -41,9 +40,9 @@ internal class ClassSystemSubcommand(
     @Description("Show information about player's class system")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
-        val system = systemFactory.get(player)
+        val system = systemProvider.get(player)
         sender.send(
-            "&3System: &7${system.name}",
+            "&3System: &7${systemProvider.id}",
             "&3Classes: &7${system.classes}",
             "&3Primary: &7${system.primaryClass}"
         )
@@ -58,7 +57,7 @@ internal class ClassSystemSubcommand(
         @Default("all") mode: Mode,
         @Optional @Flags("other,defaultself") player: Player
     ) {
-        val system = systemFactory.get(player)
+        val system = systemProvider.get(player)
         val has = if (mode == Mode.ALL) {
             system.hasAllRequiredClasses(classes.asList())
         } else {

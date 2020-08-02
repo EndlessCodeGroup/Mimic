@@ -16,31 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.system.battlelevels
+package ru.endlesscode.mimic.bukkit.impl.battlelevels
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
+import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
+import ru.endlesscode.mimic.util.checkClassesExist
 import java.util.*
 import kotlin.math.abs
 
 /** Implementation of LevelSystem that uses BattleLevels. */
-@registry.Subsystem(priority = registry.SubsystemPriority.NORMAL, classes = ["me.robin.battlelevels.api.BattleLevelsAPI"])
 class BattleLevelsLevelSystem internal constructor(
     player: Player,
     private val battleLevelsApi: BattleLevelsApiWrapper
 ) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
 
     companion object {
-        const val TAG = "BattleLevels"
+        const val ID = "battlelevels"
 
         @JvmField
-        val FACTORY = Factory(TAG, ::BattleLevelsLevelSystem)
+        val provider: Provider = object : Provider(ID) {
+            override val isEnabled: Boolean
+                get() = checkClassesExist("me.robin.battlelevels.api.BattleLevelsAPI")
+
+            override fun getSystem(player: Player): BukkitLevelSystem = BattleLevelsLevelSystem(player)
+        }
     }
 
     private constructor(player: Player) : this(player, BattleLevelsApiWrapper())
-
-    override val name: String = TAG
-    override val isEnabled: Boolean = true
 
     override var level: Int
         get() = battleLevelsApi.getLevel(playerUniqueId)

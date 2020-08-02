@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.system.skillapi
+package ru.endlesscode.mimic.bukkit.impl.skillapi
 
 import com.sucy.skill.data.Settings
-import ru.endlesscode.ExpLevelConverter
+import ru.endlesscode.mimic.ExpLevelConverter
 
 /** Converter for SkillAPI level system. */
 class SkillApiConverter internal constructor(skillApi: SkillApiWrapper) :
@@ -29,10 +29,10 @@ class SkillApiConverter internal constructor(skillApi: SkillApiWrapper) :
         private var internalInstance: SkillApiConverter? = null
 
         @JvmStatic
-        val instance: SkillApiConverter
+        val instance: ExpLevelConverter
             get() = getInstance()
 
-        internal fun getInstance(skillApi: SkillApiWrapper? = null): SkillApiConverter {
+        internal fun getInstance(skillApi: SkillApiWrapper? = null): ExpLevelConverter {
             return internalInstance
                 ?: SkillApiConverter(skillApi ?: SkillApiWrapper()).also { internalInstance = it }
         }
