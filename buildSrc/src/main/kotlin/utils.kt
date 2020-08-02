@@ -19,21 +19,15 @@
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private const val JAVA_8 = "1.8"
 
-val Project.apiProject: Project get() = this.project(":api")
-
 /** Default project configurations. */
 fun Project.configureProject() {
     apply(plugin = "kotlin")
-
-    group = "ru.endlesscode.mimic.$name"
 
     tasks.withType(JavaCompile::class) {
         sourceCompatibility = JAVA_8
@@ -73,16 +67,15 @@ fun DependencyHandlerScope.testingDependencies() {
 fun Project.configurePublish() {
     apply(plugin = "maven-publish")
 
-    val sourceJar = tasks.register<Jar>("sourceJar") {
-        archiveClassifier.set("sources")
-        from(project.the<SourceSetContainer>()["main"].allJava)
+    java {
+        @Suppress("UnstableApiUsage")
+        withSourcesJar()
     }
 
     configure<PublishingExtension> {
         publications {
-            create<MavenPublication>(project.name) {
+            create<MavenPublication>("maven") {
                 from(components["java"])
-                artifact(sourceJar.get())
             }
         }
     }
