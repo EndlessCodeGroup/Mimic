@@ -17,10 +17,11 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system.skillapi
+package ru.endlesscode.mimic.bukkit.impl.skillapi
 
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import ru.endlesscode.mimic.ExpLevelConverter
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -43,7 +44,7 @@ class SkillApiConverterTest(
     }
 
     // SUT
-    private lateinit var converter: SkillApiConverter
+    private lateinit var converter: ExpLevelConverter
 
     @BeforeTest
     override fun setUp() {

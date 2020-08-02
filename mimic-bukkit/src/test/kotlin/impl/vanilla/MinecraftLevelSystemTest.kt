@@ -17,19 +17,19 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system.vanilla
+package ru.endlesscode.mimic.bukkit.impl.vanilla
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
 import ru.endlesscode.mimic.bukkit.BukkitTestBase
-import ru.endlesscode.mimic.bukkit.system.BukkitLevelSystem
-import ru.endlesscode.test.assertEqualsDoubles
+import ru.endlesscode.mimic.bukkit.test.assertEqualsDoubles
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class VanillaLevelSystemTest : BukkitTestBase() {
+class MinecraftLevelSystemTest : BukkitTestBase() {
 
     // SUT
     private lateinit var levelSystem: BukkitLevelSystem
@@ -37,7 +37,7 @@ class VanillaLevelSystemTest : BukkitTestBase() {
     @BeforeTest
     override fun setUp() {
         super.setUp()
-        levelSystem = VanillaLevelSystem.FACTORY.get(player)
+        levelSystem = MinecraftLevelSystem.provider.get(player)
     }
 
     @Test

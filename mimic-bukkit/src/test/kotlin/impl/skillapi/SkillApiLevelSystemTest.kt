@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,17 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system.skillapi
+package ru.endlesscode.mimic.bukkit.impl.skillapi
 
 import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.doReturnConsecutively
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.sucy.skill.api.enums.ExpSource
 import com.sucy.skill.api.player.PlayerClass
-import ru.endlesscode.LevelSystem
-import kotlin.test.*
+import ru.endlesscode.mimic.LevelSystem
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SkillApiLevelSystemTest : SkillApiTestBase() {
 
@@ -156,16 +157,6 @@ class SkillApiLevelSystemTest : SkillApiTestBase() {
 
         // Then
         assertEquals(30.0, actual)
-    }
-
-    @Test
-    fun `when check system loaded - should check SkillAPI is enabled`() {
-        // When
-        whenever(skillApi.isLoaded) doReturnConsecutively listOf(true, false)
-
-        // Then
-        assertTrue(levelSystem.isEnabled)
-        assertFalse(levelSystem.isEnabled)
     }
 
     private fun prepareMainClass() {

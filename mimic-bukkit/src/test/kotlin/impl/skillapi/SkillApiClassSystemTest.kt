@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,9 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system.skillapi
+package ru.endlesscode.mimic.bukkit.impl.skillapi
 
-import com.nhaarman.mockitokotlin2.verify
-import ru.endlesscode.ClassSystem
+import ru.endlesscode.mimic.ClassSystem
 import kotlin.test.*
 
 class SkillApiClassSystemTest : SkillApiTestBase() {
@@ -81,14 +80,5 @@ class SkillApiClassSystemTest : SkillApiTestBase() {
 
         // Then
         assertNull(actualPrimaryClass)
-    }
-
-    @Test
-    fun `when check is system enabled - should check is SkillAPI enabled`() {
-        // When
-        classSystem.isEnabled
-
-        // Then
-        verify(skillApi).isLoaded
     }
 }

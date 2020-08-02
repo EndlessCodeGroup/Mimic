@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,13 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system.vanilla
+package ru.endlesscode.mimic.bukkit.impl.vanilla
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.bukkit.permissions.PermissionAttachmentInfo
-import ru.endlesscode.ClassSystem
+import ru.endlesscode.mimic.ClassSystem
 import ru.endlesscode.mimic.bukkit.BukkitTestBase
 import java.util.*
 import kotlin.test.BeforeTest
@@ -39,7 +39,7 @@ class PermissionsClassSystemTest : BukkitTestBase() {
     @BeforeTest
     override fun setUp() {
         super.setUp()
-        classSystem = PermissionsClassSystem.FACTORY.get(player)
+        classSystem = PermissionsClassSystem.provider.get(player)
     }
 
     @Test

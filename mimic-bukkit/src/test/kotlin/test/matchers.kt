@@ -17,7 +17,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.test
+package ru.endlesscode.mimic.bukkit.test
 
 import kotlin.math.abs
 

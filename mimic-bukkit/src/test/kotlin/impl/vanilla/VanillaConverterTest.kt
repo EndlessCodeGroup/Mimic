@@ -17,10 +17,11 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.system.vanilla
+package ru.endlesscode.mimic.bukkit.impl.vanilla
 
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import ru.endlesscode.mimic.ExpLevelConverter
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -49,7 +50,7 @@ class VanillaConverterTest(
     }
 
     // SUT
-    private lateinit var converter: VanillaConverter
+    private lateinit var converter: ExpLevelConverter
 
     @BeforeTest
     fun setUp() {
