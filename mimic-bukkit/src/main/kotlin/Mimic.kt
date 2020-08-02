@@ -29,6 +29,7 @@ import ru.endlesscode.mimic.bukkit.command.MainCommand
 import ru.endlesscode.mimic.bukkit.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsService
 import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftLevelSystem
 import ru.endlesscode.mimic.bukkit.impl.vanilla.PermissionsClassSystem
 import ru.endlesscode.mimic.bukkit.internal.Log
@@ -44,6 +45,7 @@ class Mimic : JavaPlugin() {
     private val defaultSubsystems = listOf(
         MinecraftLevelSystem.provider to ServicePriority.Lowest,
         PermissionsClassSystem.provider to ServicePriority.Lowest,
+        MinecraftItemsService() to ServicePriority.Lowest,
         SkillApiClassSystem.provider to ServicePriority.Normal,
         SkillApiLevelSystem.provider to ServicePriority.Normal,
         BattleLevelsLevelSystem.provider to ServicePriority.Normal
