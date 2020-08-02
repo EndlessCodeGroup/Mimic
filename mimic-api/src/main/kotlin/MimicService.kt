@@ -1,7 +1,7 @@
 /*
  * This file is part of MimicAPI.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * MimicAPI is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by

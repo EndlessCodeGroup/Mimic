@@ -1,7 +1,10 @@
-package ru.endlesscode.mimic
+package ru.endlesscode.mimic.exp
 
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import ru.endlesscode.mimic.EXP_IN_LEVEL
+import ru.endlesscode.mimic.ExpLevelConverter
+import ru.endlesscode.mimic.mockExpLevelConverter
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -21,7 +24,11 @@ class ExpLevelConverterTest(
             data(exp = 0.0, level = 0.0),
             data(exp = 10.0, level = 1.0),
             data(exp = 15.0, level = 1.25),
-            data(exp = -10.0, level = 0.0, levelToExp = 0.0),
+            data(
+                exp = -10.0,
+                level = 0.0,
+                levelToExp = 0.0
+            ),
             data(exp = 105.0, level = 4.1)
         )
 

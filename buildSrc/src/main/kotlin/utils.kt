@@ -31,7 +31,7 @@ val Project.apiProject: Project get() = this.project(":mimic-api")
 fun Project.configureProject() {
     apply(plugin = "kotlin")
 
-    group = "ru.endlesscode.mimic.$name"
+    group = "ru.endlesscode.mimic"
 
     tasks.withType(JavaCompile::class) {
         sourceCompatibility = JAVA_8

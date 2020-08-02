@@ -17,12 +17,14 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic
+package ru.endlesscode.mimic.exp
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import ru.endlesscode.mimic.LevelSystem
+import ru.endlesscode.mimic.mockExpLevelConverter
 import ru.endlesscode.mimic.mockito.MOCKS_ONLY_ABSTRACTS
 import ru.endlesscode.mimic.mockito.doubleEq
 import kotlin.test.*
