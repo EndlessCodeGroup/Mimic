@@ -5,9 +5,6 @@ plugins {
     id("ru.endlesscode.bukkitgradle")
 }
 
-val minorVersion = 0
-
-version = "${apiProject.version}.$minorVersion"
 description = "API for integration with Bukkit RPG plugins"
 
 bukkit {
@@ -32,6 +29,8 @@ repositories {
 }
 
 dependencies {
+    api(project(":mimic-bukkit-api"))
+
     compileOnly(bukkit) { isTransitive = false }
     implementation(deps.acf)
 
@@ -46,4 +45,6 @@ tasks.shadowJar {
     relocate("co.aikar.commands", "${group}.shade.acf")
 }
 
-tasks.build.get().dependsOn(tasks.shadowJar)
+tasks.named("build") {
+    dependsOn(tasks.shadowJar)
+}

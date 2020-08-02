@@ -7,15 +7,7 @@ plugins {
 // Common configurations for all Mimic projects
 subprojects {
     configureProject()
-}
 
-// Configuration for API implementations
-configure(subprojects - apiProject) {
-    // Finish configuring MimicAPI first
-    evaluationDependsOn(apiProject.path)
-
-    // Use api as dependency
-    dependencies {
-        "api"(apiProject)
-    }
+    version = "0.2"
+    group = "ru.endlesscode.mimic"
 }

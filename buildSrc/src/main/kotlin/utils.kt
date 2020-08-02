@@ -25,13 +25,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private const val JAVA_8 = "1.8"
 
-val Project.apiProject: Project get() = this.project(":mimic-api")
-
 /** Default project configurations. */
 fun Project.configureProject() {
     apply(plugin = "kotlin")
-
-    group = "ru.endlesscode.mimic"
 
     tasks.withType(JavaCompile::class) {
         sourceCompatibility = JAVA_8
