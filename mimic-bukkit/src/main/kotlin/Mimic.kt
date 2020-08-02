@@ -24,6 +24,7 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
+import ru.endlesscode.mimic.bukkit.command.ItemsServiceSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MainCommand
 import ru.endlesscode.mimic.bukkit.impl.battlelevels.BattleLevelsLevelSystem
@@ -95,6 +96,9 @@ class Mimic : JavaPlugin() {
         }
         servicesManager.getProvider<BukkitClassSystem.Provider>()?.let {
             manager.registerCommand(ClassSystemSubcommand(it))
+        }
+        servicesManager.getProvider<BukkitItemsService>()?.let {
+            manager.registerCommand(ItemsServiceSubcommand(it))
         }
     }
 

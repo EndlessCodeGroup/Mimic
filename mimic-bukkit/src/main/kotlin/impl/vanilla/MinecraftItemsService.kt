@@ -22,6 +22,7 @@ package ru.endlesscode.mimic.bukkit.impl.vanilla
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.bukkit.BukkitItemsService
+import java.util.*
 
 /** Items service implementation using material name as itemId. */
 class MinecraftItemsService : BukkitItemsService {
@@ -29,11 +30,18 @@ class MinecraftItemsService : BukkitItemsService {
     override val isEnabled: Boolean = true
     override val id: String = "minecraft"
 
+    override val knownIds by lazy {
+        Material.values().asSequence()
+            .filter { it.isItem }
+            .map { it.name.toLowerCase(Locale.ENGLISH) }
+            .toList()
+    }
+
     override fun isSameItem(item: ItemStack, itemId: String): Boolean = getItemId(item) == itemId
 
     override fun isItemExists(itemId: String): Boolean = getMaterial(itemId) != null
 
-    override fun getItemId(item: ItemStack): String? = item.type.name.toLowerCase()
+    override fun getItemId(item: ItemStack): String? = item.type.name.toLowerCase(Locale.ENGLISH)
 
     override fun getItem(itemId: String, amount: Int): ItemStack? {
         val material = getMaterial(itemId) ?: return null
@@ -43,7 +51,7 @@ class MinecraftItemsService : BukkitItemsService {
 
     private fun getMaterial(name: String): Material? {
         return try {
-            Material.valueOf(name.toUpperCase())
+            Material.valueOf(name.toUpperCase(Locale.ENGLISH))
                 .takeIf { it.isItem }
         } catch (_: IllegalArgumentException) {
             null
