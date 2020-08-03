@@ -20,8 +20,7 @@
 package ru.endlesscode.mimic
 
 /**
- * System that provides methods to work with players level systems.
- * You can check or change values of level and experience.
+ * System that provides methods to work with player's level and experience points.
  *
  * Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.
