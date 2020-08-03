@@ -29,6 +29,7 @@ import ru.endlesscode.mimic.mockito.MOCKS_ONLY_ABSTRACTS
 import ru.endlesscode.mimic.mockito.doubleEq
 import kotlin.test.*
 
+@Suppress("DEPRECATION")
 class LevelSystemTest {
 
     // SUT
