@@ -1,45 +1,43 @@
 package ru.endlesscode.mimic.exp
 
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
-import ru.endlesscode.mimic.EXP_IN_LEVEL
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
 import ru.endlesscode.mimic.ExpLevelConverter
 import ru.endlesscode.mimic.mockExpLevelConverter
+import java.util.stream.Stream
 import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@RunWith(Parameterized::class)
-class ExpLevelConverterTest(
-    private val exp: Double,
-    private val level: Double,
-    private val fullLevelExp: Double,
-    private val fullLevel: Int
-) {
+class ExpLevelConverterTest {
 
+    @Suppress("unused") // Used in MethodSource
     companion object {
         @JvmStatic
-        @Parameterized.Parameters
-        fun data(): Collection<Array<Any>> = listOf(
-            data(exp = 0.0, level = 0.0),
-            data(exp = 10.0, level = 1.0),
-            data(exp = 15.0, level = 1.25),
-            data(
-                exp = -10.0,
-                level = 0.0,
-                levelToExp = 0.0
-            ),
-            data(exp = 105.0, level = 4.1)
+        fun expLevel(): Stream<Arguments> = Stream.of(
+            arguments(0.0, 0.0),
+            arguments(10.0, 1.0),
+            arguments(15.0, 1.25),
+            arguments(-10.0, 0.0),
+            arguments(105.0, 4.1)
         )
 
-        private fun data(
-            exp: Double,
-            level: Double,
-            levelToExp: Double = (exp / EXP_IN_LEVEL).toInt() * EXP_IN_LEVEL,
-            fullLevel: Int = level.toInt()
-        ): Array<Any> {
-            return arrayOf(exp, level, levelToExp, fullLevel)
-        }
+        @JvmStatic
+        fun expFullLevel(): Stream<Arguments> = Stream.of(
+            arguments(0.0, 0),
+            arguments(10.0, 1),
+            arguments(15.0, 1),
+            arguments(-10.0, 0),
+            arguments(105.0, 4)
+        )
+
+        @JvmStatic
+        fun fullLevelExp(): Stream<Arguments> = Stream.of(
+            arguments(0, 0.0),
+            arguments(1, 10.0),
+            arguments(4, 100.0)
+        )
     }
 
     // SUT
@@ -50,30 +48,33 @@ class ExpLevelConverterTest(
         converter = mockExpLevelConverter()
     }
 
-    @Test
-    fun `when expToLevel - should return right level`() {
+    @ParameterizedTest
+    @MethodSource("expLevel")
+    fun `when expToLevel - should return right level`(exp: Double, expectedLevel: Double) {
         // When
         val level = converter.expToLevel(exp)
 
         // Then
-        assertEquals(this.level, level)
+        assertEquals(expectedLevel, level)
     }
 
-    @Test
-    fun `when expToFullLevel - should return right level`() {
+    @ParameterizedTest
+    @MethodSource("expFullLevel")
+    fun `when expToFullLevel - should return right level`(exp: Double, fullLevel: Int) {
         // When
         val level = converter.expToFullLevel(exp)
 
         // Then
-        assertEquals(this.fullLevel, level)
+        assertEquals(fullLevel, level)
     }
 
-    @Test
-    fun `when levelToExp - should return right exp`() {
+    @ParameterizedTest
+    @MethodSource("fullLevelExp")
+    fun `when levelToExp - should return right exp`(fullLevel: Int, fullLevelExp: Double) {
         // When
         val exp = converter.levelToExp(fullLevel)
 
         // Then
-        assertEquals(this.fullLevelExp, exp)
+        assertEquals(fullLevelExp, exp)
     }
 }

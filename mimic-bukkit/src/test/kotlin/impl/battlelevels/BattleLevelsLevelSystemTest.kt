@@ -20,9 +20,9 @@
 package ru.endlesscode.mimic.bukkit.impl.battlelevels
 
 import com.nhaarman.mockitokotlin2.*
-import org.junit.Test
 import ru.endlesscode.mimic.bukkit.BukkitTestBase
 import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class BattleLevelsLevelSystemTest : BukkitTestBase() {
 
