@@ -42,7 +42,16 @@ dependencies {
 }
 
 tasks.shadowJar {
-    relocate("co.aikar.commands", "${group}.shade.acf")
+    val shadePackage = "${project.group}.shade"
+    relocate("co.aikar", "$shadePackage.acf")
+    relocate("kotlin", "$shadePackage.kotlin")
+    relocate("org.intellij", "$shadePackage.intellij")
+    relocate("org.jetbrains", "$shadePackage.jetbrains")
+
+    exclude("META-INF/*.kotlin_module")
+    exclude("META-INF/maven/**")
+
+    minimize()
 }
 
 tasks.named("assemble") {
