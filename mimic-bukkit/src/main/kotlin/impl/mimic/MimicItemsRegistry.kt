@@ -25,9 +25,11 @@ import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
 import ru.endlesscode.mimic.bukkit.loadAll
 
 /**
- * Items service combining all items services.
+ * Items registry combining all items registries.
+ *
  * It uses service ID as namespace for items IDs.
- * For example: `acacia_boat` -> `minecraft:acacia_boat`
+ * For example: `acacia_boat` -> `minecraft:acacia_boat`.
+ * If you use item ID without namespace it will search over all registries.
  */
 class MimicItemsRegistry(private val servicesManager: ServicesManager) : BukkitItemsRegistry {
 
