@@ -45,7 +45,7 @@ class MinecraftItemsService : BukkitItemsService {
 
     override fun getItem(itemId: String, amount: Int): ItemStack? {
         val material = getMaterial(itemId) ?: return null
-        val realAmount = amount.coerceIn(0, material.maxStackSize)
+        val realAmount = amount.coerceIn(1, material.maxStackSize)
         return ItemStack(material, realAmount)
     }
 
