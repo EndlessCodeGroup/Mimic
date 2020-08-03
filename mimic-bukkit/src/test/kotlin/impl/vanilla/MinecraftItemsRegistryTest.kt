@@ -23,20 +23,20 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import ru.endlesscode.mimic.bukkit.BukkitItemsService
+import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class MinecraftItemsServiceTest {
+class MinecraftItemsRegistryTest {
 
     // SUT
-    private lateinit var itemsService: BukkitItemsService
+    private lateinit var itemsService: BukkitItemsRegistry
 
     @BeforeTest
     fun setUp() {
-        itemsService = MinecraftItemsService()
+        itemsService = MinecraftItemsRegistry()
     }
 
     @Test

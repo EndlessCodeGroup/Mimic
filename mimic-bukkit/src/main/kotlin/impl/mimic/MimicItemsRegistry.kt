@@ -21,15 +21,17 @@ package ru.endlesscode.mimic.bukkit.impl.mimic
 
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.ServicesManager
-import ru.endlesscode.mimic.bukkit.BukkitItemsService
+import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
 import ru.endlesscode.mimic.bukkit.loadAll
 
 /**
- * Items service combining all items services.
+ * Items registry combining all items registries.
+ *
  * It uses service ID as namespace for items IDs.
- * For example: `acacia_boat` -> `minecraft:acacia_boat`
+ * For example: `acacia_boat` -> `minecraft:acacia_boat`.
+ * If you use item ID without namespace it will search over all registries.
  */
-class MimicItemsService(private val servicesManager: ServicesManager) : BukkitItemsService {
+class MimicItemsRegistry(private val servicesManager: ServicesManager) : BukkitItemsRegistry {
 
     override val isEnabled: Boolean = true
     override val id: String = "mimic"
@@ -39,8 +41,8 @@ class MimicItemsService(private val servicesManager: ServicesManager) : BukkitIt
             service.knownIds.map { service.namespaced(it) }
         }
 
-    private val services: Collection<BukkitItemsService>
-        get() = servicesManager.loadAll<BukkitItemsService>()
+    private val services: Collection<BukkitItemsRegistry>
+        get() = servicesManager.loadAll<BukkitItemsRegistry>()
             .filterNot { it == this }
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
@@ -70,7 +72,7 @@ class MimicItemsService(private val servicesManager: ServicesManager) : BukkitIt
         }
     }
 
-    private fun <T> runOnServices(itemId: String, block: Sequence<BukkitItemsService>.(id: String) -> T): T {
+    private fun <T> runOnServices(itemId: String, block: Sequence<BukkitItemsRegistry>.(id: String) -> T): T {
         val (namespace, id) = if (':' in itemId) {
             itemId.split(":", limit = 2)
         } else {
@@ -82,6 +84,6 @@ class MimicItemsService(private val servicesManager: ServicesManager) : BukkitIt
             .block(id)
     }
 
-    private fun BukkitItemsService.namespaced(itemId: String) = "$id:$itemId"
-    private fun BukkitItemsService.namespaceMatches(namespace: String) = namespace.isEmpty() || namespace == id
+    private fun BukkitItemsRegistry.namespaced(itemId: String) = "$id:$itemId"
+    private fun BukkitItemsRegistry.namespaceMatches(namespace: String) = namespace.isEmpty() || namespace == id
 }

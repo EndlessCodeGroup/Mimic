@@ -25,24 +25,24 @@ import org.bukkit.plugin.ServicePriority
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
-import ru.endlesscode.mimic.bukkit.BukkitItemsService
+import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
 import ru.endlesscode.mimic.bukkit.BukkitTestBase
-import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsService
-import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsService
+import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsRegistry
+import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsRegistry
 import kotlin.test.*
 
-internal class MimicItemsServiceTest : BukkitTestBase() {
+internal class MimicItemsRegistryTest : BukkitTestBase() {
 
     // SUT
-    private lateinit var itemsService: BukkitItemsService
+    private lateinit var itemsService: BukkitItemsRegistry
 
     @BeforeTest
     override fun setUp() {
         super.setUp()
-        itemsService = MimicItemsService(servicesManager)
+        itemsService = MimicItemsRegistry(servicesManager)
 
-        servicesManager.register(BukkitItemsService::class.java, MinecraftItemsService(), plugin, ServicePriority.Lowest)
-        servicesManager.register(BukkitItemsService::class.java, itemsService, plugin, ServicePriority.Highest)
+        servicesManager.register(BukkitItemsRegistry::class.java, MinecraftItemsRegistry(), plugin, ServicePriority.Lowest)
+        servicesManager.register(BukkitItemsRegistry::class.java, itemsService, plugin, ServicePriority.Highest)
     }
 
     @ParameterizedTest

@@ -6,8 +6,12 @@ plugins {
 
 // Common configurations for all Mimic projects
 subprojects {
-    configureProject()
-
     version = "0.2"
     group = "ru.endlesscode.mimic"
+
+    configureProject()
+    configureBintray(
+        repoUrl = "https://github.com/EndlessCodeGroup/MimicAPI",
+        projectName = "Mimic"
+    )
 }

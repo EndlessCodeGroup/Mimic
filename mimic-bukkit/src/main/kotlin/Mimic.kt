@@ -24,15 +24,15 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
-import ru.endlesscode.mimic.bukkit.command.ItemsServiceSubcommand
+import ru.endlesscode.mimic.bukkit.command.ItemsSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MainCommand
 import ru.endlesscode.mimic.bukkit.impl.battlelevels.BattleLevelsLevelSystem
-import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsService
+import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.bukkit.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiLevelSystem
-import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsService
+import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftLevelSystem
 import ru.endlesscode.mimic.bukkit.internal.Log
 import kotlin.reflect.KClass
@@ -65,8 +65,8 @@ class Mimic : JavaPlugin() {
         hookService<BukkitClassSystem.Provider>(PermissionsClassSystem.provider, ServicePriority.Lowest)
         hookService<BukkitClassSystem.Provider>(SkillApiClassSystem.provider, ServicePriority.Normal)
         Log.d("BukkitItemsService:")
-        hookService<BukkitItemsService>(MinecraftItemsService(), ServicePriority.Lowest)
-        hookService<BukkitItemsService>(MimicItemsService(servicesManager), ServicePriority.Highest)
+        hookService<BukkitItemsRegistry>(MinecraftItemsRegistry(), ServicePriority.Lowest)
+        hookService<BukkitItemsRegistry>(MimicItemsRegistry(servicesManager), ServicePriority.Highest)
     }
 
     private inline fun <reified ServiceT : MimicService> hookService(service: ServiceT, priority: ServicePriority) {
@@ -99,8 +99,8 @@ class Mimic : JavaPlugin() {
         servicesManager.load<BukkitClassSystem.Provider>()?.let {
             manager.registerCommand(ClassSystemSubcommand(it))
         }
-        servicesManager.load<BukkitItemsService>()?.let {
-            manager.registerCommand(ItemsServiceSubcommand(it))
+        servicesManager.load<BukkitItemsRegistry>()?.let {
+            manager.registerCommand(ItemsSubcommand(it))
         }
     }
 

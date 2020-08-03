@@ -20,7 +20,7 @@
 package ru.endlesscode.mimic
 
 /**
- * System that provides methods to work with players class systems.
+ * System that provides methods to work with player's class.
  *
  * Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.
