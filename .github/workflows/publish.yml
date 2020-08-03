@@ -19,7 +19,7 @@ jobs:
     - name: Upload to Bintray
       uses: eskatos/gradle-command-action@v1
       with:
-        arguments: uploadBintray
+        arguments: bintrayUpload
       env:
         BINTRAY_USERNAME: ${{ secrets.BINTRAY_USERNAME }}
         BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
@@ -40,7 +40,9 @@ jobs:
         with:
           arguments: assemble
       - name: Copy plugin to root directory
-        run: cp ./mimic-bukkit/build/libs/*-all.jar Mimic.jar
+        run: |
+          ls -la ./mimic-bukkit/build/libs/
+          cp ./mimic-bukkit/build/libs/*-all.jar Mimic.jar
       - name: Create Release
         id: create-release
         uses: actions/create-release@v1
