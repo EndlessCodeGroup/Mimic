@@ -23,20 +23,20 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 
 #### [Level Systems][BukkitLevelSystem.Provider]
 
-- [Minecraft][minecraft-exp] _(Default)_
-- [SkillAPI]
-- [BattleLevels]
+- **[Minecraft][minecraft-exp]** _(Default)_
+- **[SkillAPI]**
+- **[BattleLevels]**
 
 #### [Class Systems][BukkitClassSystem.Provider]
 
-- Permissions-based _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
-- [SkillAPI]
+- **Permissions-based** _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
+- **[SkillAPI]**
 
 #### [Items Registries][BukkitItemsRegistry]
 
 [MimicItemsRegistry] - Items registry combining all others items registries.
-It uses service ID as namespace for items IDs.
-For example: `acacia_boat -> minecraft:acacia_boat`.
+It uses service ID as namespace for items IDs.  
+For example: `acacia_boat -> minecraft:acacia_boat`.  
 If you use item ID without namespace it will search over all registries.
 
 | Registry                            | Namespace    |

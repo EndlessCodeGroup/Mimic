@@ -4,7 +4,7 @@ Mimic API adopted for Bukkit.
 
 ## Usage
 
-Mimic uses [ServiceManager] to store [MimicServices][MimicService].
+Mimic uses [ServicesManager] to store [MimicServices][MimicService].
 
 Available services:
 - [BukkitLevelSystem.Provider]
