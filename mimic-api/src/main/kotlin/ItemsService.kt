@@ -22,8 +22,12 @@ package ru.endlesscode.mimic
 /** Service for getting custom items by theirs ID. Also can be used to match id with item. */
 interface ItemsService<ItemStackT : Any> : MimicService {
 
+    /** Returns all known item IDs. */
+    val knownIds: Collection<String>
+
     /** Returns `true` if given [item] represented with given [itemId]. */
-    fun isSameItem(item: ItemStackT, itemId: String): Boolean
+    @JvmDefault
+    fun isSameItem(item: ItemStackT, itemId: String): Boolean = getItemId(item) == itemId
 
     /** Returns `true` if item with given [itemId] exists. */
     fun isItemExists(itemId: String): Boolean
@@ -32,5 +36,14 @@ interface ItemsService<ItemStackT : Any> : MimicService {
     fun getItemId(item: ItemStackT): String?
 
     /** Returns item by given [itemId], or `null` if id not found. */
-    fun getItem(itemId: String): ItemStackT?
+    @JvmDefault
+    fun getItem(itemId: String): ItemStackT? = getItem(itemId, amount = 1)
+
+    /**
+     * Returns specified item stack with specified [amount] by given [itemId], or `null` if id not found.
+     *
+     * If given [amount] is greater than maximum possible, will use maximum possible amount.
+     * Amount shouldn't be less than `1`.
+     */
+    fun getItem(itemId: String, amount: Int): ItemStackT?
 }

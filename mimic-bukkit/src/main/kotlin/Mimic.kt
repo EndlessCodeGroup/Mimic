@@ -24,14 +24,18 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
+import ru.endlesscode.mimic.bukkit.command.ItemsServiceSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MainCommand
 import ru.endlesscode.mimic.bukkit.impl.battlelevels.BattleLevelsLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsService
+import ru.endlesscode.mimic.bukkit.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsService
 import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftLevelSystem
-import ru.endlesscode.mimic.bukkit.impl.vanilla.PermissionsClassSystem
 import ru.endlesscode.mimic.bukkit.internal.Log
+import kotlin.reflect.KClass
 
 /** Main class of the plugin. */
 class Mimic : JavaPlugin() {
@@ -40,39 +44,41 @@ class Mimic : JavaPlugin() {
         private const val DEBUG = true
     }
 
-    /** Default subsystems */
-    private val defaultSubsystems = listOf(
-        MinecraftLevelSystem.provider to ServicePriority.Lowest,
-        PermissionsClassSystem.provider to ServicePriority.Lowest,
-        SkillApiClassSystem.provider to ServicePriority.Normal,
-        SkillApiLevelSystem.provider to ServicePriority.Normal,
-        BattleLevelsLevelSystem.provider to ServicePriority.Normal
-    )
-
     private inline val servicesManager get() = server.servicesManager
 
     override fun onLoad() {
         Log.init(logger, DEBUG)
-        hookDefaultSystems()
+        hookDefaultServices()
     }
 
     override fun onEnable() {
         registerCommands()
     }
 
-    private fun hookDefaultSystems() {
-        defaultSubsystems.forEach { (service, priority) ->
-            hookService(service, priority)
-        }
+    @Suppress("RemoveExplicitTypeArguments") // We should specify type explicitly
+    private fun hookDefaultServices() {
+        Log.d("BukkitLevelSystem.Provider:")
+        hookService<BukkitLevelSystem.Provider>(MinecraftLevelSystem.provider, ServicePriority.Lowest)
+        hookService<BukkitLevelSystem.Provider>(SkillApiLevelSystem.provider, ServicePriority.Normal)
+        hookService<BukkitLevelSystem.Provider>(BattleLevelsLevelSystem.provider, ServicePriority.Normal)
+        Log.d("BukkitClassSystem.Provider:")
+        hookService<BukkitClassSystem.Provider>(PermissionsClassSystem.provider, ServicePriority.Lowest)
+        hookService<BukkitClassSystem.Provider>(SkillApiClassSystem.provider, ServicePriority.Normal)
+        Log.d("BukkitItemsService:")
+        hookService<BukkitItemsService>(MinecraftItemsService(), ServicePriority.Lowest)
+        hookService<BukkitItemsService>(MimicItemsService(servicesManager), ServicePriority.Highest)
     }
 
-    private fun <T : MimicService> hookService(service: T, priority: ServicePriority) {
-        val serviceClass = service.javaClass
+    private inline fun <reified ServiceT : MimicService> hookService(service: ServiceT, priority: ServicePriority) {
+        hookService(ServiceT::class, service, priority)
+    }
+
+    private fun <T : MimicService> hookService(serviceClass: KClass<T>, service: T, priority: ServicePriority) {
         if (service.isEnabled) {
-            servicesManager.register(serviceClass, service, this, priority)
-            Log.d("Subsystem '${serviceClass.name}' registered.")
+            servicesManager.register(serviceClass.java, service, this, priority)
+            Log.d("- '${service.id}' registered.")
         } else {
-            Log.d("Subsystem '${serviceClass.name}' not needed. Skipped.")
+            Log.d("- '${service.id}' not needed. Skipped.")
         }
     }
 
@@ -87,11 +93,14 @@ class Mimic : JavaPlugin() {
 
         manager.registerCommand(MainCommand())
 
-        servicesManager.getProvider<BukkitLevelSystem.Provider>()?.let {
+        servicesManager.load<BukkitLevelSystem.Provider>()?.let {
             manager.registerCommand(LevelSystemSubcommand(it))
         }
-        servicesManager.getProvider<BukkitClassSystem.Provider>()?.let {
+        servicesManager.load<BukkitClassSystem.Provider>()?.let {
             manager.registerCommand(ClassSystemSubcommand(it))
+        }
+        servicesManager.load<BukkitItemsService>()?.let {
+            manager.registerCommand(ItemsServiceSubcommand(it))
         }
     }
 

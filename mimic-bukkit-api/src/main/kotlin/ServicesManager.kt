@@ -22,12 +22,17 @@ package ru.endlesscode.mimic.bukkit
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.ServicesManager
 
-/** Kotlin-style call of [ServicesManager.getRegistration] */
-inline fun <reified T> ServicesManager.getProvider(): T? {
-    return getRegistration(T::class.java)?.provider
+/** Kotlin-style call of [ServicesManager.load]. */
+inline fun <reified T> ServicesManager.load(): T? {
+    return load(T::class.java)
 }
 
-/** Kotlin-style call of [ServicesManager.getRegistration] */
-inline fun <reified T> ServicesManager.getRegistration(): RegisteredServiceProvider<T>? {
-    return getRegistration(T::class.java)
+/** Kotlin-style call of [ServicesManager.getRegistrations] followed with [RegisteredServiceProvider.getProvider]. */
+inline fun <reified T> ServicesManager.loadAll(): Collection<T> {
+    return getRegistrations(T::class.java).map { it.provider }
+}
+
+/** Kotlin-style call of [ServicesManager.getRegistrations]. */
+inline fun <reified T> ServicesManager.getRegistrations(): Collection<RegisteredServiceProvider<T>> {
+    return getRegistrations(T::class.java)
 }

@@ -16,6 +16,8 @@
  * along with RPGInventory.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import internal.java
+import internal.test
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
@@ -33,6 +35,10 @@ fun Project.configureProject() {
         sourceCompatibility = JAVA_8
         targetCompatibility = JAVA_8
         options.encoding = "UTF-8"
+    }
+
+    tasks.test {
+        useJUnitPlatform()
     }
 
     tasks.withType(KotlinCompile::class) {
@@ -58,9 +64,10 @@ fun Project.configureProject() {
 }
 
 fun DependencyHandlerScope.testingDependencies() {
-    "testImplementation"(kotlin("test-junit"))
-    "testImplementation"(deps.junit)
-    "testImplementation"(deps.mockitoInline)
+    "testImplementation"(kotlin("test-junit5"))
+    "testImplementation"(deps.jupiter)
+    "testImplementation"(deps.jupiter_params)
+    "testImplementation"(deps.mockito_inline)
     "testImplementation"(deps.mockito)
 }
 

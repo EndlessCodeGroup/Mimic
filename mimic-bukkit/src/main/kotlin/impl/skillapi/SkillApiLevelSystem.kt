@@ -31,7 +31,7 @@ class SkillApiLevelSystem internal constructor(
 ) : BukkitLevelSystem(SkillApiConverter.getInstance(skillApi), player) {
 
     companion object {
-        const val ID = "SkillAPI"
+        const val ID = "skillapi"
 
         @JvmField
         val provider: Provider = object : Provider(ID) {

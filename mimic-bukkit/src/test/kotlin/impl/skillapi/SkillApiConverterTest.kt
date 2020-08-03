@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,27 +19,25 @@
 
 package ru.endlesscode.mimic.bukkit.impl.skillapi
 
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
 import ru.endlesscode.mimic.ExpLevelConverter
+import java.util.stream.Stream
 import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@RunWith(Parameterized::class)
-class SkillApiConverterTest(
-    private val exp: Double,
-    private val level: Double
-) : SkillApiTestBase() {
+class SkillApiConverterTest : SkillApiTestBase() {
 
+    @Suppress("unused")
     companion object {
         @JvmStatic
-        @Parameterized.Parameters
-        fun data(): List<Array<Double>> = listOf(
-            arrayOf(0.0, 1.0),
-            arrayOf(-1.0, 0.0),
-            arrayOf(100.0, 5.0),
-            arrayOf(140.0, 5.8)
+        fun expLevel(): Stream<Arguments> = Stream.of(
+            arguments(0.0, 1.0),
+            arguments(-1.0, 0.0),
+            arguments(100.0, 5.0),
+            arguments(140.0, 5.8)
         )
     }
 
@@ -53,12 +51,13 @@ class SkillApiConverterTest(
         converter = SkillApiConverter.getInstance(skillApi)
     }
 
-    @Test
-    fun testExpToLevel() {
+    @ParameterizedTest
+    @MethodSource("expLevel")
+    fun testExpToLevel(exp: Double, level: Double) {
         // When
-        val actual = converter.expToLevel(this.exp)
+        val actualLevel = converter.expToLevel(exp)
 
         // Then
-        assertEquals(this.level, actual)
+        assertEquals(level, actualLevel)
     }
 }

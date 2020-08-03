@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,34 +19,40 @@
 
 package ru.endlesscode.mimic.bukkit.impl.vanilla
 
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.Arguments.arguments
+import org.junit.jupiter.params.provider.MethodSource
 import ru.endlesscode.mimic.ExpLevelConverter
+import java.util.stream.Stream
 import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@RunWith(Parameterized::class)
-class VanillaConverterTest(
-    private val exp: Int,
-    private val level: Int,
-    private val expToNext: Int
-) {
+class VanillaConverterTest {
 
+    @Suppress("unused")
     companion object {
         @JvmStatic
-        @Parameterized.Parameters
-        fun data(): List<Array<Int>> {
-            return listOf(
-                arrayOf(0, 0, 7),
-                arrayOf(7, 1, 9),
-                arrayOf(315, 15, 37),
-                arrayOf(352, 16, 42),
-                arrayOf(1395, 30, 112),
-                arrayOf(1507, 31, 121),
-                arrayOf(2727, 39, 193)
-            )
-        }
+        fun levelExp(): Stream<Arguments> = Stream.of(
+            arguments(0, 0),
+            arguments(1, 7),
+            arguments(15, 315),
+            arguments(16, 352),
+            arguments(30, 1395),
+            arguments(31, 1507),
+            arguments(39, 2727)
+        )
+
+        @JvmStatic
+        fun levelExpToNext(): Stream<Arguments> = Stream.of(
+            arguments(0, 7.0),
+            arguments(1, 9.0),
+            arguments(15, 37.0),
+            arguments(16, 42.0),
+            arguments(30, 112.0),
+            arguments(31, 121.0),
+            arguments(39, 193.0)
+        )
     }
 
     // SUT
@@ -57,8 +63,9 @@ class VanillaConverterTest(
         converter = VanillaConverter.instance
     }
 
-    @Test
-    fun testExpToFullLevel() {
+    @ParameterizedTest
+    @MethodSource("levelExp")
+    fun testExpToFullLevel(level: Int, exp: Int) {
         // When
         val fullLevel = converter.expToFullLevel(exp.toDouble())
 
@@ -66,21 +73,23 @@ class VanillaConverterTest(
         assertEquals(level, fullLevel)
     }
 
-    @Test
-    fun testLevelToExp() {
+    @ParameterizedTest
+    @MethodSource("levelExp")
+    fun testLevelToExp(level: Int, exp: Int) {
         // When
-        val exp = converter.levelToExp(level)
+        val actualExp = converter.levelToExp(level)
 
         // Then
-        assertEquals(this.exp.toDouble(), exp)
+        assertEquals(exp.toDouble(), actualExp)
     }
 
-    @Test
-    fun testGetExpToReachNextLevel() {
+    @ParameterizedTest
+    @MethodSource("levelExpToNext")
+    fun testGetExpToReachNextLevel(level: Int, expToNext: Double) {
         // When
-        val expToNext = converter.getExpToReachNextLevel(level)
+        val actualExpToNext = converter.getExpToReachNextLevel(level)
 
         // Then
-        assertEquals(this.expToNext.toDouble(), expToNext)
+        assertEquals(expToNext, actualExpToNext)
     }
 }
