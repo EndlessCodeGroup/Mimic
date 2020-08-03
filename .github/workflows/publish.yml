@@ -5,7 +5,7 @@ on:
     tags: [ v* ]
 
 jobs:
-  check:
+  bintray:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,4 +15,4 @@ jobs:
         java-version: 8
     - uses: eskatos/gradle-command-action@v1
       with:
-        arguments: uploadBintray -Dbintray.username=${{ secrets.BINTRAY_USERNAME }} -DbintrayApiKey==${{ secrets.BINTRAY_API_KEY }}
+        arguments: uploadBintray -Dbintray.username=${{ secrets.BINTRAY_USERNAME }} -Dbintray.apiKey==${{ secrets.BINTRAY_API_KEY }}
