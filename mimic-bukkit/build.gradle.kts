@@ -5,7 +5,7 @@ plugins {
     id("ru.endlesscode.bukkitgradle")
 }
 
-description = "API for integration with Bukkit RPG plugins"
+description = "Bukkit plugin with implementations of Mimic APIs"
 
 bukkit {
     version = "1.16.1"
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":mimic-bukkit-api"))
+    implementation(project(":mimic-bukkit-api"))
 
     compileOnly(bukkit) { isTransitive = false }
     implementation(deps.acf)

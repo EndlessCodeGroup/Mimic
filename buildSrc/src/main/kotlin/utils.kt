@@ -16,11 +16,8 @@
  * along with RPGInventory.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import internal.java
 import internal.test
 import org.gradle.api.Project
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -70,21 +67,4 @@ fun DependencyHandlerScope.testingDependencies() {
     "testImplementation"(deps.jupiter_params)
     "testImplementation"(deps.mockito_inline)
     "testImplementation"(deps.mockito)
-}
-
-fun Project.configurePublish() {
-    apply(plugin = "maven-publish")
-
-    java {
-        @Suppress("UnstableApiUsage")
-        withSourcesJar()
-    }
-
-    configure<PublishingExtension> {
-        publications {
-            create<MavenPublication>("maven") {
-                from(components["java"])
-            }
-        }
-    }
 }
