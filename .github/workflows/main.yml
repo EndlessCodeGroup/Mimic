@@ -18,3 +18,5 @@ jobs:
     - uses: eskatos/gradle-command-action@v1
       with:
         arguments: check
+      env:
+        warningsAsErrors: true
