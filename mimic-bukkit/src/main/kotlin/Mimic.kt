@@ -91,13 +91,13 @@ class Mimic : JavaPlugin() {
 
         manager.registerCommand(MainCommand())
 
-        servicesManager.getProvider<BukkitLevelSystem.Provider>()?.let {
+        servicesManager.load<BukkitLevelSystem.Provider>()?.let {
             manager.registerCommand(LevelSystemSubcommand(it))
         }
-        servicesManager.getProvider<BukkitClassSystem.Provider>()?.let {
+        servicesManager.load<BukkitClassSystem.Provider>()?.let {
             manager.registerCommand(ClassSystemSubcommand(it))
         }
-        servicesManager.getProvider<BukkitItemsService>()?.let {
+        servicesManager.load<BukkitItemsService>()?.let {
             manager.registerCommand(ItemsServiceSubcommand(it))
         }
     }
