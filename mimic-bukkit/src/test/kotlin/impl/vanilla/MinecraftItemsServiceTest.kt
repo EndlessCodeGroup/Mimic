@@ -20,12 +20,14 @@
 package ru.endlesscode.mimic.bukkit.impl.vanilla
 
 import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import ru.endlesscode.mimic.bukkit.BukkitItemsService
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class MinecraftItemsServiceTest {
 
@@ -47,6 +49,15 @@ class MinecraftItemsServiceTest {
         assertEquals(1, item.amount)
     }
 
+    @Test
+    fun `when get unknown item - should return null`() {
+        // When
+        val item = itemsService.getItem("super_duper_item")
+
+        // Then
+        assertNull(item)
+    }
+
     @ParameterizedTest
     @CsvSource(
         "cobblestone,   0,  1",
@@ -64,5 +75,32 @@ class MinecraftItemsServiceTest {
 
         // Then
         assertEquals(realAmount, item.amount)
+    }
+
+    @Test
+    fun `when get id - should return id`() {
+        // Given
+        val item = ItemStack(Material.ACACIA_BOAT)
+
+        // When
+        val itemId = itemsService.getItemId(item)
+
+        // Then
+        assertEquals("acacia_boat", itemId)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "air,           true",
+        "unknown,       false",
+        "gold_sword,    false",
+        "golden_sword,  true"
+    )
+    fun `when check is item exists`(itemId: String, shouldExist: Boolean) {
+        // When
+        val exists = itemsService.isItemExists(itemId)
+
+        // Then
+        assertEquals(shouldExist, exists)
     }
 }
