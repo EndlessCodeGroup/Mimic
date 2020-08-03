@@ -45,6 +45,6 @@ tasks.shadowJar {
     relocate("co.aikar.commands", "${group}.shade.acf")
 }
 
-tasks.named("build") {
+tasks.named("assemble") {
     dependsOn(tasks.shadowJar)
 }
