@@ -30,13 +30,14 @@ fun Project.configureBintray(
     repoUrl: String,
     projectName: String = this.name
 ) {
-    val bintrayUsername = System.getProperty("bintray.username")
-    val bintrayApiKey = System.getProperty("bintray.apiKey")
+    val bintrayUsername = System.getProperty("bintray.username") ?: System.getenv("BINTRAY_USERNAME")
+    val bintrayApiKey = System.getProperty("bintray.apiKey") ?: System.getenv("BINTRAY_API_KEY")
     if (bintrayUsername == null || bintrayApiKey == null) {
         println(
             """
             System properties 'bintray.username' and 'bintray.apiKey' are not specified.
             Publication to Bintray is unavailable.
+            Alternatively, you can specify environment variables 'BINTRAY_USERNAME' and 'BINTRAY_API_KEY'.
             https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_system_properties
         """.trimIndent())
         return
