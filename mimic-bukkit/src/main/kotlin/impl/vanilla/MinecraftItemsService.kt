@@ -37,8 +37,6 @@ class MinecraftItemsService : BukkitItemsService {
             .toList()
     }
 
-    override fun isSameItem(item: ItemStack, itemId: String): Boolean = getItemId(item) == itemId
-
     override fun isItemExists(itemId: String): Boolean = getMaterial(itemId) != null
 
     override fun getItemId(item: ItemStack): String? = item.type.name.toLowerCase(Locale.ENGLISH)

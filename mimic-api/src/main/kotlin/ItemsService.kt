@@ -26,7 +26,8 @@ interface ItemsService<ItemStackT : Any> : MimicService {
     val knownIds: Collection<String>
 
     /** Returns `true` if given [item] represented with given [itemId]. */
-    fun isSameItem(item: ItemStackT, itemId: String): Boolean
+    @JvmDefault
+    fun isSameItem(item: ItemStackT, itemId: String): Boolean = getItemId(item) == itemId
 
     /** Returns `true` if item with given [itemId] exists. */
     fun isItemExists(itemId: String): Boolean
