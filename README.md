@@ -14,7 +14,7 @@ With Mimic you don't need to download all RPG plugins and write specified code f
 ### Available APIs
 - [LevelSystem] - API to work with player's level and experience points
 - [ClassSystem] - API to work with player's classes
-- [ItemsService] - Service for getting items by theirs ID
+- [ItemsRegistry] - API for getting items by theirs ID
 
 ### Implementations
 
@@ -38,4 +38,4 @@ Please make sure to update tests as appropriate.
 
 [LevelSystem]: mimic-api/src/main/kotlin/LevelSystem.kt
 [ClassSystem]: mimic-api/src/main/kotlin/ClassSystem.kt
-[ItemsService]: mimic-api/src/main/kotlin/ItemsService.kt
+[ItemsRegistry]: mimic-api/src/main/kotlin/ItemsRegistry.kt

@@ -20,7 +20,7 @@
 package ru.endlesscode.mimic
 
 /** Service for getting items by theirs ID. Also can be used to match id with item. */
-interface ItemsService<ItemStackT : Any> : MimicService {
+interface ItemsRegistry<ItemStackT : Any> : MimicService {
 
     /** Returns all known item IDs. */
     val knownIds: Collection<String>

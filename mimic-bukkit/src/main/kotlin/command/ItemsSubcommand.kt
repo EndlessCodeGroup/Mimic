@@ -24,23 +24,23 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitItemsService
+import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
 @Subcommand("items|i")
-internal class ItemsServiceSubcommand(private val itemsService: BukkitItemsService) : MimicCommand() {
+internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
-        manager.getCommandCompletions().registerAsyncCompletion("item") { itemsService.knownIds }
+        manager.getCommandCompletions().registerAsyncCompletion("item") { itemsRegistry.knownIds }
     }
 
     @Subcommand("info|i")
     @Description("Show information about items service")
     fun info(sender: CommandSender) {
         sender.send(
-            "&3Items Service: &7${itemsService.id}",
-            "&3Known IDs amount: &7${itemsService.knownIds.size}"
+            "&3Items Service: &7${itemsRegistry.id}",
+            "&3Known IDs amount: &7${itemsRegistry.knownIds.size}"
         )
     }
 
@@ -53,7 +53,7 @@ internal class ItemsServiceSubcommand(private val itemsService: BukkitItemsServi
         item: String,
         @Default("1") amount: Int
     ) {
-        val itemStack = itemsService.getItem(item, amount)
+        val itemStack = itemsRegistry.getItem(item, amount)
         if (itemStack != null) {
             player.inventory.addItem(itemStack)
             sender.send("&6Gave ${itemStack.amount} [$item] to ${player.name}.")
@@ -69,7 +69,7 @@ internal class ItemsServiceSubcommand(private val itemsService: BukkitItemsServi
         @Flags("itemheld") player: Player,
         @Single item: String
     ) {
-        val isSame = itemsService.isSameItem(player.inventory.itemInMainHand, item)
+        val isSame = itemsRegistry.isSameItem(player.inventory.itemInMainHand, item)
         player.send("&6Item in hand and '$item' are%s same.".format(if (isSame) "" else "n't"))
     }
 
@@ -78,7 +78,7 @@ internal class ItemsServiceSubcommand(private val itemsService: BukkitItemsServi
     fun id(
         @Flags("itemheld") player: Player
     ) {
-        val id = itemsService.getItemId(player.inventory.itemInMainHand)
+        val id = itemsRegistry.getItemId(player.inventory.itemInMainHand)
         player.send("&6Id of item in hand is '$id'")
     }
 
@@ -89,7 +89,7 @@ internal class ItemsServiceSubcommand(private val itemsService: BukkitItemsServi
         sender: CommandSender,
         @Single item: String
     ) {
-        val itemExists = itemsService.isItemExists(item)
+        val itemExists = itemsRegistry.isItemExists(item)
         sender.send("&6Item with id '$item'%s exists".format(if (itemExists) "" else " isn't"))
     }
 }

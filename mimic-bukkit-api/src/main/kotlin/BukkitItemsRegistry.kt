@@ -20,7 +20,7 @@
 package ru.endlesscode.mimic.bukkit
 
 import org.bukkit.inventory.ItemStack
-import ru.endlesscode.mimic.ItemsService
+import ru.endlesscode.mimic.ItemsRegistry
 
-/** [ItemsService] adapted for Bukkit. */
-interface BukkitItemsService : ItemsService<ItemStack>
+/** [ItemsRegistry] adapted for Bukkit. */
+interface BukkitItemsRegistry : ItemsRegistry<ItemStack>
