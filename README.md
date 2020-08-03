@@ -2,7 +2,7 @@
 
 [![license](https://img.shields.io/github/license/EndlessCodeGroup/MimicAPI.svg)](https://choosealicense.com/licenses/lgpl-3.0/)
 
-[![Logo](https://cloud.endlesscode.ru/index.php/apps/files_sharing/ajax/publicpreview.php?x=1920&y=482&a=true&file=images/api-text-logo.png&t=xKLWe4aJm3tmyNZ&scalingup=0)](#)
+[![Logo](images/logo.png)]()
 
 Abstraction API for RPG plugins.
 MimicAPI is independent of any platform.
