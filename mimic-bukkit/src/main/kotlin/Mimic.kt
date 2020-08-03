@@ -28,11 +28,12 @@ import ru.endlesscode.mimic.bukkit.command.ItemsServiceSubcommand
 import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.bukkit.command.MainCommand
 import ru.endlesscode.mimic.bukkit.impl.battlelevels.BattleLevelsLevelSystem
+import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsService
+import ru.endlesscode.mimic.bukkit.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsService
 import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftLevelSystem
-import ru.endlesscode.mimic.bukkit.impl.vanilla.PermissionsClassSystem
 import ru.endlesscode.mimic.bukkit.internal.Log
 import kotlin.reflect.KClass
 
@@ -65,6 +66,7 @@ class Mimic : JavaPlugin() {
         hookService<BukkitClassSystem.Provider>(SkillApiClassSystem.provider, ServicePriority.Normal)
         Log.d("BukkitItemsService:")
         hookService<BukkitItemsService>(MinecraftItemsService(), ServicePriority.Lowest)
+        hookService<BukkitItemsService>(MimicItemsService(servicesManager), ServicePriority.Highest)
     }
 
     private inline fun <reified ServiceT : MimicService> hookService(service: ServiceT, priority: ServicePriority) {
