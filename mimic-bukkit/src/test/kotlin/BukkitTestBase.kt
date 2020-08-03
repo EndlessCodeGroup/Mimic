@@ -25,6 +25,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.ServicesManager
 import org.bukkit.plugin.SimpleServicesManager
 import java.util.*
 import kotlin.test.BeforeTest
@@ -34,6 +35,7 @@ open class BukkitTestBase {
     protected lateinit var server: Server
     protected lateinit var plugin: Plugin
     protected lateinit var player: Player
+    protected val servicesManager: ServicesManager = SimpleServicesManager()
 
     @BeforeTest
     open fun setUp() {
@@ -46,7 +48,7 @@ open class BukkitTestBase {
 
     private fun mockServer(): Server = mock {
         on { pluginManager } doReturn mock()
-        on { servicesManager } doReturn SimpleServicesManager()
+        on { servicesManager } doReturn servicesManager
     }
 
     private fun mockPlugin(): Plugin = mock {
