@@ -47,6 +47,7 @@ fun Project.configureProject() {
             apiVersion = "1.3"
             languageVersion = "1.3"
             freeCompilerArgs = listOf("-Xjvm-default=enable")
+            allWarningsAsErrors = System.getenv("warningsAsErrors") == "true"
             javaParameters = true
         }
     }

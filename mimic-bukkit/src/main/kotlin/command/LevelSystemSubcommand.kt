@@ -65,6 +65,7 @@ internal class LevelSystemSubcommand(
     ) {
         catchUnsupported {
             val system = systemProvider.get(player)
+            @Suppress("DEPRECATION") // Allow to use exp setter
             when (type) {
                 ExtendedValueType.LVL -> system.level = amount.toInt()
                 ExtendedValueType.TOTAL -> system.totalExp = amount
