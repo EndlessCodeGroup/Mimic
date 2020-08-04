@@ -20,7 +20,6 @@ package ru.endlesscode.mimic.bukkit.impl.battlelevels
 
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
-import ru.endlesscode.mimic.util.checkClassesExist
 import java.util.*
 import kotlin.math.abs
 
@@ -35,14 +34,14 @@ class BattleLevelsLevelSystem internal constructor(
 
         @JvmField
         val provider: Provider = object : Provider(ID) {
-            override val isEnabled: Boolean
-                get() = checkClassesExist("me.robin.battlelevels.api.BattleLevelsAPI")
+            private val battleLevelsApi = BattleLevelsApiWrapper()
 
-            override fun getSystem(player: Player): BukkitLevelSystem = BattleLevelsLevelSystem(player)
+            override val isEnabled: Boolean
+                get() = battleLevelsApi.isLoaded
+
+            override fun getSystem(player: Player): BukkitLevelSystem = BattleLevelsLevelSystem(player, battleLevelsApi)
         }
     }
-
-    private constructor(player: Player) : this(player, BattleLevelsApiWrapper())
 
     override var level: Int
         get() = battleLevelsApi.getLevel(playerUniqueId)

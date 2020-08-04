@@ -1,9 +1,12 @@
 package ru.endlesscode.mimic.bukkit.impl.battlelevels
 
 import me.robin.battlelevels.api.BattleLevelsAPI
+import ru.endlesscode.mimic.util.checkClassesLoaded
 import java.util.*
 
 internal class BattleLevelsApiWrapper {
+    val isLoaded: Boolean get() = checkClassesLoaded("me.robin.battlelevels.api.BattleLevelsAPI")
+
     fun getNeededFor(level: Int): Double = BattleLevelsAPI.getNeededFor(level)
     fun getLevel(uuid: UUID): Int = BattleLevelsAPI.getLevel(uuid)
     fun getScore(uuid: UUID): Double = BattleLevelsAPI.getScore(uuid)

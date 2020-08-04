@@ -22,7 +22,6 @@ import com.sucy.skill.api.enums.ExpSource
 import com.sucy.skill.api.player.PlayerClass
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
-import ru.endlesscode.mimic.util.checkClassesExist
 
 /** Implementation of LevelSystem that uses SkillAPI. */
 class SkillApiLevelSystem internal constructor(
@@ -38,7 +37,7 @@ class SkillApiLevelSystem internal constructor(
             private val skillApi = SkillApiWrapper()
 
             override val isEnabled: Boolean
-                get() = checkClassesExist("com.sucy.skill.SkillAPI") && skillApi.isLoaded
+                get() = skillApi.isLoaded
 
             override fun getSystem(player: Player): BukkitLevelSystem = SkillApiLevelSystem(player, skillApi)
         }

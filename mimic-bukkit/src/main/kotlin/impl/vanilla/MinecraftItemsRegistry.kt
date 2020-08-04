@@ -48,11 +48,7 @@ class MinecraftItemsRegistry : BukkitItemsRegistry {
     }
 
     private fun getMaterial(name: String): Material? {
-        return try {
-            Material.valueOf(name.toUpperCase(Locale.ENGLISH))
-                .takeIf { it.isItem }
-        } catch (_: IllegalArgumentException) {
-            null
-        }
+        return Material.getMaterial(name.toUpperCase(Locale.ENGLISH))
+            ?.takeIf { it.isItem }
     }
 }

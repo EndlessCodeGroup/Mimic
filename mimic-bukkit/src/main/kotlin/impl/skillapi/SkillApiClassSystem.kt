@@ -21,7 +21,6 @@ package ru.endlesscode.mimic.bukkit.impl.skillapi
 import com.sucy.skill.api.player.PlayerData
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.bukkit.BukkitClassSystem
-import ru.endlesscode.mimic.util.checkClassesExist
 
 /** Implementation of ClassSystem that uses SkillAPI. */
 class SkillApiClassSystem internal constructor(
@@ -38,7 +37,7 @@ class SkillApiClassSystem internal constructor(
             private val skillApi = SkillApiWrapper()
 
             override val isEnabled: Boolean
-                get() = checkClassesExist("com.sucy.skill.SkillAPI") && skillApi.isLoaded
+                get() = skillApi.isLoaded
 
             override fun getSystem(player: Player): BukkitClassSystem = SkillApiClassSystem(player, skillApi)
         }
