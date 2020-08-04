@@ -33,13 +33,8 @@ import ru.endlesscode.mimic.bukkit.BukkitClassSystem
 class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
 
     companion object {
-        const val ID = "premissions"
-        const val PERMISSION_PREFIX = "mimic.class."
-
-        @JvmField
-        val provider: Provider = object : Provider(ID) {
-            override fun getSystem(player: Player): BukkitClassSystem = PermissionsClassSystem(player)
-        }
+        const val ID: String = "premissions"
+        const val PERMISSION_PREFIX: String = "mimic.class."
     }
 
     override val classes: List<String>
@@ -52,5 +47,9 @@ class PermissionsClassSystem private constructor(player: Player) : BukkitClassSy
 
     override fun hasRequiredClass(requiredClass: String): Boolean {
         return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase())
+    }
+
+    class Provider : BukkitClassSystem.Provider(ID) {
+        override fun getSystem(player: Player): BukkitClassSystem = PermissionsClassSystem(player)
     }
 }

@@ -30,17 +30,7 @@ class BattleLevelsLevelSystem internal constructor(
 ) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
 
     companion object {
-        const val ID = "battlelevels"
-
-        @JvmField
-        val provider: Provider = object : Provider(ID) {
-            private val battleLevelsApi = BattleLevelsApiWrapper()
-
-            override val isEnabled: Boolean
-                get() = battleLevelsApi.isLoaded
-
-            override fun getSystem(player: Player): BukkitLevelSystem = BattleLevelsLevelSystem(player, battleLevelsApi)
-        }
+        const val ID: String = "battlelevels"
     }
 
     override var level: Int
@@ -123,6 +113,12 @@ class BattleLevelsLevelSystem internal constructor(
             if (extraExp < 0) battleLevelsApi.addScore(playerUniqueId, abs(extraExp))
         } else {
             battleLevelsApi.removeScore(playerUniqueId, expAmount)
+        }
+    }
+
+    class Provider : BukkitLevelSystem.Provider(ID) {
+        override fun getSystem(player: Player): BukkitLevelSystem {
+            return BattleLevelsLevelSystem(player, BattleLevelsApiWrapper())
         }
     }
 }

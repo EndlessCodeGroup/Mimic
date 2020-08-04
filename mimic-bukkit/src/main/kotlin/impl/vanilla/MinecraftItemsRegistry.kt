@@ -27,8 +27,12 @@ import java.util.*
 /** Items service implementation using material name as itemId. */
 class MinecraftItemsRegistry : BukkitItemsRegistry {
 
+    companion object {
+        const val ID: String = "minecraft"
+    }
+
     override val isEnabled: Boolean = true
-    override val id: String = "minecraft"
+    override val id: String = ID
 
     override val knownIds by lazy {
         Material.values().asSequence()

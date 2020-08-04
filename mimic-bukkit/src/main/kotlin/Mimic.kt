@@ -22,6 +22,7 @@ package ru.endlesscode.mimic.bukkit
 import co.aikar.commands.BukkitCommandManager
 import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.ServicePriority
+import org.bukkit.plugin.ServicePriority.*
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
@@ -36,6 +37,7 @@ import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftLevelSystem
 import ru.endlesscode.mimic.bukkit.internal.Log
+import ru.endlesscode.mimic.util.checkClassesLoaded
 import kotlin.reflect.KClass
 
 /** Main class of the plugin. */
@@ -59,30 +61,61 @@ class Mimic : JavaPlugin() {
 
     @Suppress("RemoveExplicitTypeArguments") // We should specify type explicitly
     private fun hookDefaultServices() {
-        Log.d("BukkitLevelSystem.Provider:")
-        hookService<BukkitLevelSystem.Provider>(MinecraftLevelSystem.provider, ServicePriority.Lowest)
-        hookService<BukkitLevelSystem.Provider>(SkillApiLevelSystem.provider, ServicePriority.Normal)
-        hookService<BukkitLevelSystem.Provider>(BattleLevelsLevelSystem.provider, ServicePriority.Normal)
-        Log.d("BukkitClassSystem.Provider:")
-        hookService<BukkitClassSystem.Provider>(PermissionsClassSystem.provider, ServicePriority.Lowest)
-        hookService<BukkitClassSystem.Provider>(SkillApiClassSystem.provider, ServicePriority.Normal)
-        Log.d("BukkitItemsService:")
-        hookService<BukkitItemsRegistry>(MinecraftItemsRegistry(), ServicePriority.Lowest)
-        hookService<BukkitItemsRegistry>(MimicItemsRegistry(servicesManager), ServicePriority.Highest)
+        // LevelSystem
+        hookLevels(MinecraftLevelSystem::Provider, Lowest)
+        hookLevels(SkillApiLevelSystem::Provider, Normal, "com.sucy.skill.SkillAPI")
+        hookLevels(BattleLevelsLevelSystem::Provider, Normal, "me.robin.battlelevels.api.BattleLevelsAPI")
+
+        // ClassSystem
+        hookClasses(PermissionsClassSystem::Provider, Lowest)
+        hookClasses(SkillApiClassSystem::Provider, Normal, "com.sucy.skill.SkillAPI")
+
+        // ItemsRegistry
+        hookItems(::MinecraftItemsRegistry, Lowest)
+        hookItems({ MimicItemsRegistry(servicesManager) }, Highest)
     }
 
-    private inline fun <reified ServiceT : MimicService> hookService(service: ServiceT, priority: ServicePriority) {
-        hookService(ServiceT::class, service, priority)
+    //<editor-fold defaultstate="collapsed" desc="hook* methods">
+    private fun hookLevels(
+        constructor: () -> BukkitLevelSystem.Provider,
+        priority: ServicePriority,
+        vararg requiredPackages: String
+    ) {
+        hookService(BukkitLevelSystem.Provider::class, constructor, priority, requiredPackages)
     }
 
-    private fun <T : MimicService> hookService(serviceClass: KClass<T>, service: T, priority: ServicePriority) {
-        if (service.isEnabled) {
+    private fun hookClasses(
+        constructor: () -> BukkitClassSystem.Provider,
+        priority: ServicePriority,
+        vararg requiredPackages: String
+    ) {
+        hookService(BukkitClassSystem.Provider::class, constructor, priority, requiredPackages)
+    }
+
+    private fun hookItems(
+        constructor: () -> BukkitItemsRegistry,
+        priority: ServicePriority,
+        vararg requiredPackages: String
+    ) {
+        hookService(BukkitItemsRegistry::class, constructor, priority, requiredPackages)
+    }
+
+    private fun <ServiceT : MimicService> hookService(
+        serviceClass: KClass<ServiceT>,
+        constructor: () -> ServiceT,
+        priority: ServicePriority,
+        requiredPackages: Array<out String>
+    ) {
+        if (checkClassesLoaded(*requiredPackages)) {
+            val service = constructor()
             servicesManager.register(serviceClass.java, service, this, priority)
-            Log.d("- '${service.id}' registered.")
-        } else {
-            Log.d("- '${service.id}' not needed. Skipped.")
+            val serviceName = serviceClass.java.name
+                .replace(Regex(".*\\.Bukkit"), "")
+                .substringBefore("$")
+            logger.info("[$serviceName] '${service.id}' found")
         }
     }
+    //</editor-fold>
 
     private fun initMetrics() {
         val metrics = Metrics(this, 8413)
@@ -112,9 +145,5 @@ class Mimic : JavaPlugin() {
 
     private inline fun <reified T : Any> loadService(): T {
         return checkNotNull(servicesManager.load())
-    }
-
-    override fun onDisable() {
-        servicesManager.unregisterAll(this)
     }
 }

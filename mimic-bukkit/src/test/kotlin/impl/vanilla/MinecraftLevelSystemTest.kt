@@ -38,7 +38,7 @@ class MinecraftLevelSystemTest : BukkitTestBase() {
     @BeforeTest
     override fun setUp() {
         super.setUp()
-        levelSystem = MinecraftLevelSystem.provider.get(player)
+        levelSystem = MinecraftLevelSystem.Provider().get(player)
     }
 
     @Test

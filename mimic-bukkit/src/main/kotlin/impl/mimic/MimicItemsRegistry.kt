@@ -33,8 +33,12 @@ import ru.endlesscode.mimic.bukkit.loadAll
  */
 class MimicItemsRegistry(private val servicesManager: ServicesManager) : BukkitItemsRegistry {
 
+    companion object {
+        const val ID: String = "mimic"
+    }
+
     override val isEnabled: Boolean = true
-    override val id: String = "mimic"
+    override val id: String = ID
 
     override val knownIds: Collection<String>
         get() = services.flatMap { service ->

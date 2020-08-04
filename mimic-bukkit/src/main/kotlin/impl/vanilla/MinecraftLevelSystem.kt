@@ -26,12 +26,7 @@ import ru.endlesscode.mimic.bukkit.impl.vanilla.VanillaConverter.Companion.insta
 class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
 
     companion object {
-        const val ID = "minecraft"
-
-        @JvmField
-        val provider = object : Provider(ID) {
-            override fun getSystem(player: Player): BukkitLevelSystem = MinecraftLevelSystem(player)
-        }
+        const val ID: String = "minecraft"
     }
 
     override var level: Int
@@ -59,4 +54,8 @@ class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSyst
 
     override val totalExpToNextLevel: Double
         get() = player.expToLevel.toDouble()
+
+    class Provider : BukkitLevelSystem.Provider(ID) {
+        override fun getSystem(player: Player): BukkitLevelSystem = MinecraftLevelSystem(player)
+    }
 }

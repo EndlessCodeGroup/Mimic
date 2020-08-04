@@ -29,18 +29,7 @@ class SkillApiClassSystem internal constructor(
 ) : BukkitClassSystem(player) {
 
     companion object {
-        const val ID = "skillapi"
-
-        @JvmField
-        val provider: Provider = object : Provider(ID) {
-
-            private val skillApi = SkillApiWrapper()
-
-            override val isEnabled: Boolean
-                get() = skillApi.isLoaded
-
-            override fun getSystem(player: Player): BukkitClassSystem = SkillApiClassSystem(player, skillApi)
-        }
+        const val ID: String = "skillapi"
     }
 
     override val classes: List<String>
@@ -51,4 +40,14 @@ class SkillApiClassSystem internal constructor(
 
     private val playerData: PlayerData
         get() = skillApi.getPlayerData(player)
+
+    class Provider : BukkitClassSystem.Provider(ID) {
+
+        private val skillApi = SkillApiWrapper()
+
+        override val isEnabled: Boolean
+            get() = skillApi.isLoaded
+
+        override fun getSystem(player: Player): BukkitClassSystem = SkillApiClassSystem(player, skillApi)
+    }
 }
