@@ -18,11 +18,12 @@
 
 object Dependencies {
     // RPG Plugins
-    const val skillApi = "com.sucy:SkillAPI:3.102"
-    const val battleLevelsApi = "me.robin.battlelevels:battlelevels-api:6.9.1"
+    const val skillapi = "com.sucy:SkillAPI:3.102"
+    const val battlelevels = "me.robin.battlelevels:battlelevels-api:6.9.1"
 
     // Libs
     const val acf = "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    const val bstats_bukkit = "org.bstats:bstats-bukkit:1.7"
 
     // Testing
     private const val jupiter_version = "5.6.2"

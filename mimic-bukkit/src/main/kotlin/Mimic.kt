@@ -20,6 +20,7 @@
 package ru.endlesscode.mimic.bukkit
 
 import co.aikar.commands.BukkitCommandManager
+import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.MimicService
@@ -52,6 +53,7 @@ class Mimic : JavaPlugin() {
     }
 
     override fun onEnable() {
+        initMetrics()
         registerCommands()
     }
 
@@ -82,6 +84,17 @@ class Mimic : JavaPlugin() {
         }
     }
 
+    private fun initMetrics() {
+        val metrics = Metrics(this, 8413)
+
+        metrics.addCustomChart(Metrics.SimplePie("level_system") {
+            loadService<BukkitLevelSystem.Provider>().id
+        })
+        metrics.addCustomChart(Metrics.SimplePie("class_system") {
+            loadService<BukkitClassSystem.Provider>().id
+        })
+    }
+
     private fun registerCommands() {
         val manager = BukkitCommandManager(this)
         @Suppress("DEPRECATION") // Yes. I want to use unstable API
@@ -92,16 +105,13 @@ class Mimic : JavaPlugin() {
         )
 
         manager.registerCommand(MainCommand())
+        manager.registerCommand(LevelSystemSubcommand(loadService()))
+        manager.registerCommand(ClassSystemSubcommand(loadService()))
+        manager.registerCommand(ItemsSubcommand(loadService()))
+    }
 
-        servicesManager.load<BukkitLevelSystem.Provider>()?.let {
-            manager.registerCommand(LevelSystemSubcommand(it))
-        }
-        servicesManager.load<BukkitClassSystem.Provider>()?.let {
-            manager.registerCommand(ClassSystemSubcommand(it))
-        }
-        servicesManager.load<BukkitItemsRegistry>()?.let {
-            manager.registerCommand(ItemsSubcommand(it))
-        }
+    private inline fun <reified T : Any> loadService(): T {
+        return checkNotNull(servicesManager.load())
     }
 
     override fun onDisable() {
