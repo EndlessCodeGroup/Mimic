@@ -17,10 +17,9 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit
+package ru.endlesscode.mimic
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.ProviderService
 
 abstract class PlayerSystemProviderService<T : Any>(final override val id: String) : ProviderService<T> {
 

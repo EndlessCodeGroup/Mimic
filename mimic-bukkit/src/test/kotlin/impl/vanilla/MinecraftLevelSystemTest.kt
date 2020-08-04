@@ -17,14 +17,14 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.vanilla
+package ru.endlesscode.mimic.impl.vanilla
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
-import ru.endlesscode.mimic.bukkit.BukkitTestBase
-import ru.endlesscode.mimic.bukkit.test.assertEqualsDoubles
+import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.test.assertEqualsDoubles
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

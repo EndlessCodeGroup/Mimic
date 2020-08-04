@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.impl.vanilla
+package ru.endlesscode.mimic.impl.vanilla
 
-import ru.endlesscode.mimic.ExpLevelConverter
+import ru.endlesscode.mimic.level.ExpLevelConverter
 import kotlin.math.sqrt
 
 /**

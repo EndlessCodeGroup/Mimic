@@ -1,4 +1,4 @@
-package ru.endlesscode.mimic.bukkit.command
+package ru.endlesscode.mimic.command
 
 import co.aikar.commands.CommandHelp
 import co.aikar.commands.MimicCommand
@@ -6,10 +6,10 @@ import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.Plugin
 import ru.endlesscode.mimic.MimicService
-import ru.endlesscode.mimic.bukkit.BukkitClassSystem
-import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
-import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
 import ru.endlesscode.mimic.bukkit.loadAll
+import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 @CommandAlias("%command")
 @CommandPermission("%perm")

@@ -36,6 +36,6 @@ Please make sure to update tests as appropriate.
 
 [Vault]: https://github.com/MilkBowl/Vault
 
-[LevelSystem]: mimic-api/src/main/kotlin/LevelSystem.kt
-[ClassSystem]: mimic-api/src/main/kotlin/ClassSystem.kt
-[ItemsRegistry]: mimic-api/src/main/kotlin/ItemsRegistry.kt
+[LevelSystem]: mimic-api/src/main/kotlin/level/LevelSystem.kt
+[ClassSystem]: mimic-api/src/main/kotlin/classes/ClassSystem.kt
+[ItemsRegistry]: mimic-api/src/main/kotlin/items/ItemsRegistry.kt

@@ -1,23 +1,25 @@
 /*
- * This file is part of MimicAPI.
+ * This file is part of Mimic.
  * Copyright (C) 2020 Osip Fatkullin
  * Copyright (C) 2020 EndlessCode Group and contributors
  *
- * MimicAPI is free software: you can redistribute it and/or modify
+ * Mimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * MimicAPI is distributed in the hope that it will be useful,
+ * Mimic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Mimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic
+package ru.endlesscode.mimic.items
+
+import ru.endlesscode.mimic.MimicService
 
 /** Service for getting items by theirs ID. Also can be used to match id with item. */
 interface ItemsRegistry<ItemStackT : Any> : MimicService {
@@ -40,7 +42,7 @@ interface ItemsRegistry<ItemStackT : Any> : MimicService {
     fun getItem(itemId: String): ItemStackT? = getItem(itemId, amount = 1)
 
     /**
-     * Returns specified item stack with specified [amount] by given [itemId], or `null` if id not found.
+     * Returns item stack with specified [amount] by given [itemId], or `null` if id not found in this registry.
      *
      * If given [amount] is greater than maximum possible, will use maximum possible amount.
      * Amount shouldn't be less than `1`.

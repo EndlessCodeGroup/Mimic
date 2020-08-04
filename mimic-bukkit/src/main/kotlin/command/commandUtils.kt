@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.command
+package ru.endlesscode.mimic.command
 
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender

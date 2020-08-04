@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.impl.battlelevels
+
+package ru.endlesscode.mimic.impl.battlelevels
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
+import ru.endlesscode.mimic.level.BukkitLevelSystem
 import java.util.*
 import kotlin.math.abs
 

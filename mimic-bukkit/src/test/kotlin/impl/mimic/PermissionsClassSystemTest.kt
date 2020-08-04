@@ -17,14 +17,14 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.mimic
+package ru.endlesscode.mimic.impl.mimic
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import org.bukkit.permissions.PermissionAttachmentInfo
-import ru.endlesscode.mimic.ClassSystem
-import ru.endlesscode.mimic.bukkit.BukkitTestBase
+import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.classes.ClassSystem
 import java.util.*
 import kotlin.test.BeforeTest
 import kotlin.test.Test

@@ -17,10 +17,22 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit
+package ru.endlesscode.mimic.level
 
-import org.bukkit.inventory.ItemStack
-import ru.endlesscode.mimic.ItemsRegistry
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.PlayerSystemProviderService
+import ru.endlesscode.mimic.util.ExistingWeakReference
 
-/** [ItemsRegistry] adapted for Bukkit. */
-interface BukkitItemsRegistry : ItemsRegistry<ItemStack>
+/** [LevelSystem] adapted for Bukkit. */
+abstract class BukkitLevelSystem(
+    override val converter: ExpLevelConverter,
+    player: Player
+) : LevelSystem {
+
+    val player: Player get() = playerRef.get()
+
+    private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
+
+    /** Provider of Bukkit level systems. */
+    abstract class Provider(id: String) : PlayerSystemProviderService<BukkitLevelSystem>(id)
+}

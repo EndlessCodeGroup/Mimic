@@ -17,11 +17,11 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.vanilla
+package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import java.util.*
 
 /** Items service implementation using material name as itemId. */

@@ -17,7 +17,7 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.internal
+package ru.endlesscode.mimic.internal
 
 import java.util.logging.Level
 import java.util.logging.Logger

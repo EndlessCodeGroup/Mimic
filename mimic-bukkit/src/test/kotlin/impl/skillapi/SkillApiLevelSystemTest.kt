@@ -17,14 +17,14 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.skillapi
+package ru.endlesscode.mimic.impl.skillapi
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.sucy.skill.api.enums.ExpSource
 import com.sucy.skill.api.player.PlayerClass
-import ru.endlesscode.mimic.LevelSystem
+import ru.endlesscode.mimic.level.LevelSystem
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

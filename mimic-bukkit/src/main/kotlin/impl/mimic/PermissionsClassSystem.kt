@@ -17,10 +17,10 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.mimic
+package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitClassSystem
+import ru.endlesscode.mimic.classes.BukkitClassSystem
 
 /**
  * Class system based on permissions.

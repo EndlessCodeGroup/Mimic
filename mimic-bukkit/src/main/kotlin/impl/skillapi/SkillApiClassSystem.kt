@@ -16,11 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.impl.skillapi
+
+package ru.endlesscode.mimic.impl.skillapi
 
 import com.sucy.skill.api.player.PlayerData
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitClassSystem
+import ru.endlesscode.mimic.classes.BukkitClassSystem
 
 /** Implementation of ClassSystem that uses SkillAPI. */
 class SkillApiClassSystem internal constructor(

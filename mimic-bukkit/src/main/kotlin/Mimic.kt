@@ -17,26 +17,29 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit
+package ru.endlesscode.mimic
 
 import co.aikar.commands.BukkitCommandManager
 import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
 import org.bukkit.plugin.java.JavaPlugin
-import ru.endlesscode.mimic.MimicService
-import ru.endlesscode.mimic.bukkit.command.ClassSystemSubcommand
-import ru.endlesscode.mimic.bukkit.command.ItemsSubcommand
-import ru.endlesscode.mimic.bukkit.command.LevelSystemSubcommand
-import ru.endlesscode.mimic.bukkit.command.MainCommand
-import ru.endlesscode.mimic.bukkit.impl.battlelevels.BattleLevelsLevelSystem
-import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsRegistry
-import ru.endlesscode.mimic.bukkit.impl.mimic.PermissionsClassSystem
-import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiClassSystem
-import ru.endlesscode.mimic.bukkit.impl.skillapi.SkillApiLevelSystem
-import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsRegistry
-import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftLevelSystem
-import ru.endlesscode.mimic.bukkit.internal.Log
+import ru.endlesscode.mimic.bukkit.load
+import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.command.ClassSystemSubcommand
+import ru.endlesscode.mimic.command.ItemsSubcommand
+import ru.endlesscode.mimic.command.LevelSystemSubcommand
+import ru.endlesscode.mimic.command.MainCommand
+import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
+import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
+import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
+import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
+import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
+import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.util.checkClassesLoaded
 import kotlin.reflect.KClass
 

@@ -17,7 +17,7 @@
  * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic
+package ru.endlesscode.mimic.level
 
 /** Entity that contains all methods needed to convert levels to exp and vice versa. */
 interface ExpLevelConverter {

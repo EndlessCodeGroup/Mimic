@@ -14,16 +14,29 @@ Available services:
 To use any of services you should get it from `ServiceManager`:
 ```java
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import ru.endlesscode.mimic.bukkit.BukkitClassSystem;
-import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry;
-import ru.endlesscode.mimic.bukkit.BukkitLevelSystem;
+import ru.endlesscode.mimic.classes.BukkitClassSystem;
+import ru.endlesscode.mimic.items.BukkitItemsRegistry;
+import ru.endlesscode.mimic.level.BukkitLevelSystem;
 
 public class MyPlugin extends JavaPlugin {
 
     private static BukkitLevelSystem.Provider levelSystemProvider = null;
     private static BukkitClassSystem.Provider classSystemProvider = null;
     private static BukkitItemsRegistry itemsRegistry = null;
+
+    public static BukkitLevelSystem getLevelSystem(Player player) {
+        return levelSystemProvider.get(player);
+    }
+
+    public static BukkitClassSystem getClassSystem(Player player) {
+        return classSystemProvider.get(player);
+    }
+
+    public static BukkitItemsRegistry getItemsRegistry() {
+        return itemsRegistry;
+    }
 
     @Override
     public void onEnable() {
@@ -48,24 +61,12 @@ public class MyPlugin extends JavaPlugin {
         classSystemProvider = sm.load(BukkitClassSystem.Provider.class);
         itemsRegistry = sm.load(BukkitItemsRegistry.class);
     }
-
-    public static BukkitLevelSystem getLevelSystem(Player player) {
-        return levelSystemProvider.get(player);
-    }
-
-    public static BukkitClassSystem getClassSystem(Player player) {
-        return classSystemProvider.get(player);
-    }
-    
-    public static BukkitItemsRegistry getItemsRegistry() {
-        return itemsRegistry;
-    }
 }
 ```
 
 [ServicesManager]: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/plugin/ServicesManager.html
 
 [MimicService]: ../mimic-api/src/main/kotlin/MimicService.kt
-[BukkitLevelSystem.Provider]: src/main/kotlin/BukkitLevelSystem.kt
-[BukkitClassSystem.Provider]: src/main/kotlin/BukkitClassSystem.kt
-[BukkitItemsRegistry]: src/main/kotlin/BukkitItemsRegistry.kt
+[BukkitLevelSystem.Provider]: src/main/kotlin/level/BukkitLevelSystem.kt
+[BukkitClassSystem.Provider]: src/main/kotlin/classes/BukkitClassSystem.kt
+[BukkitItemsRegistry]: src/main/kotlin/items/BukkitItemsRegistry.kt

@@ -47,8 +47,8 @@ If you use item ID without namespace it will search over all registries.
 [skillapi]: https://www.spigotmc.org/resources/4824/
 [battlelevels]: https://www.spigotmc.org/resources/2218/
 
-[BukkitLevelSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/BukkitLevelSystem.kt
-[BukkitClassSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/BukkitClassSystem.kt
-[BukkitItemsRegistry]: ../mimic-bukkit-api/src/main/kotlin/BukkitItemsRegistry.kt
+[BukkitLevelSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/level/BukkitLevelSystem.kt
+[BukkitClassSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/classes/BukkitClassSystem.kt
+[BukkitItemsRegistry]: ../mimic-bukkit-api/src/main/kotlin/items/BukkitItemsRegistry.kt
 [MimicItemsRegistry]: src/main/kotlin/impl/mimic/MimicItemsRegistry.kt
 [MinecraftItemsRegistry]: src/main/kotlin/impl/vanilla/MinecraftItemsRegistry.kt

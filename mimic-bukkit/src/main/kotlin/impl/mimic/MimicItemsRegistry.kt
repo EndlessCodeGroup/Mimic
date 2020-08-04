@@ -17,12 +17,12 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.mimic
+package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.ServicesManager
-import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
 import ru.endlesscode.mimic.bukkit.loadAll
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 /**
  * Items registry combining all items registries.

@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.command
+package ru.endlesscode.mimic.command
 
 import co.aikar.commands.AbstractCommandManager
 import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitClassSystem
+import ru.endlesscode.mimic.classes.BukkitClassSystem
 
 @CommandAlias("%command")
 @CommandPermission("%perm")

@@ -17,14 +17,14 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.skillapi
+package ru.endlesscode.mimic.impl.skillapi
 
 import com.nhaarman.mockitokotlin2.*
 import com.sucy.skill.api.classes.RPGClass
 import com.sucy.skill.api.player.PlayerClass
 import com.sucy.skill.api.player.PlayerData
 import com.sucy.skill.data.Settings
-import ru.endlesscode.mimic.bukkit.BukkitTestBase
+import ru.endlesscode.mimic.BukkitTestBase
 import kotlin.test.BeforeTest
 
 open class SkillApiTestBase : BukkitTestBase() {

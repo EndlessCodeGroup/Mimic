@@ -25,10 +25,10 @@ import org.bukkit.plugin.ServicePriority
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
-import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
-import ru.endlesscode.mimic.bukkit.BukkitTestBase
-import ru.endlesscode.mimic.bukkit.impl.mimic.MimicItemsRegistry
-import ru.endlesscode.mimic.bukkit.impl.vanilla.MinecraftItemsRegistry
+import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import kotlin.test.*
 
 internal class MimicItemsRegistryTest : BukkitTestBase() {
