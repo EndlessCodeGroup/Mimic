@@ -137,7 +137,7 @@ class Mimic : JavaPlugin() {
             "perm", "mimic.admin"
         )
 
-        manager.registerCommand(MainCommand())
+        manager.registerCommand(MainCommand(this))
         manager.registerCommand(LevelSystemSubcommand(loadService()))
         manager.registerCommand(ClassSystemSubcommand(loadService()))
         manager.registerCommand(ItemsSubcommand(loadService()))
