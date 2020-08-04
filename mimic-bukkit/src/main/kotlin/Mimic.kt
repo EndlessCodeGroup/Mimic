@@ -43,19 +43,17 @@ import kotlin.reflect.KClass
 /** Main class of the plugin. */
 class Mimic : JavaPlugin() {
 
-    companion object {
-        private const val DEBUG = true
-    }
+    private val isReleased = !description.version.endsWith("-SNAPSHOT")
 
     private inline val servicesManager get() = server.servicesManager
 
     override fun onLoad() {
-        Log.init(logger, DEBUG)
+        Log.init(logger, debug = !isReleased)
         hookDefaultServices()
     }
 
     override fun onEnable() {
-        initMetrics()
+        if (isReleased) initMetrics()
         registerCommands()
     }
 
