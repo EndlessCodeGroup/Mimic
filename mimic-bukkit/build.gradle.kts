@@ -27,10 +27,11 @@ repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
     maven(url = "https://repo.aikar.co/content/groups/aikar/")
     maven(url = "https://repo.codemc.org/repository/maven-public")
+    flatDir { dir("libs") }
 }
 
 dependencies {
-    implementation(project(":mimic-bukkit-api"))
+    api(project(":mimic-bukkit-api"))
 
     compileOnly(bukkit) { isTransitive = false }
     implementation(deps.acf)
@@ -38,6 +39,9 @@ dependencies {
 
     compileOnly(deps.skillapi)
     compileOnly(deps.battlelevels)
+
+    // From libs/ directory
+    compileOnly(":CustomItemsAPI")
 
     testImplementation(bukkit)
     testImplementation(deps.skillapi)
