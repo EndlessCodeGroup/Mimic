@@ -1,20 +1,20 @@
 /*
- * This file is part of MimicAPI.
+ * This file is part of Mimic.
  * Copyright (C) 2020 Osip Fatkullin
  * Copyright (C) 2020 EndlessCode Group and contributors
  *
- * MimicAPI is free software: you can redistribute it and/or modify
+ * Mimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * MimicAPI is distributed in the hope that it will be useful,
+ * Mimic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Mimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package ru.endlesscode.mimic.classes
@@ -54,21 +54,21 @@ interface ClassSystem {
 
     /** Returns `true` if player has any class. */
     @JvmDefault
-    fun hasClass(): Boolean = primaryClass != null
+    fun hasAnyClass(): Boolean = primaryClass != null
 
     /** Returns `true` if player has any of [requiredClasses]. */
     @JvmDefault
-    fun hasOneOfRequiredClasses(requiredClasses: List<String>): Boolean {
-        return requiredClasses.any { this.hasRequiredClass(it) }
+    fun hasAnyOfClasses(requiredClasses: List<String>): Boolean {
+        return requiredClasses.any { this.hasClass(it) }
     }
 
     /** Returns `true` if player has all [requiredClasses]. */
     @JvmDefault
-    fun hasAllRequiredClasses(requiredClasses: List<String>): Boolean {
-        return requiredClasses.all { this.hasRequiredClass(it) }
+    fun hasAllClasses(requiredClasses: List<String>): Boolean {
+        return requiredClasses.all { this.hasClass(it) }
     }
 
     /** Returns `true` if player has [requiredClass]. */
     @JvmDefault
-    fun hasRequiredClass(requiredClass: String): Boolean = requiredClass in this.classes
+    fun hasClass(requiredClass: String): Boolean = requiredClass in this.classes
 }

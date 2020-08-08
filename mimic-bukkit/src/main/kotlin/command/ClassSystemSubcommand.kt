@@ -59,9 +59,9 @@ internal class ClassSystemSubcommand(
     ) {
         val system = systemProvider.get(player)
         val has = if (mode == Mode.ALL) {
-            system.hasAllRequiredClasses(classes.asList())
+            system.hasAllClasses(classes.asList())
         } else {
-            system.hasOneOfRequiredClasses(classes.asList())
+            system.hasAnyOfClasses(classes.asList())
         }
         sender.send("&6Player '${player.name}' has%s given classes.".format(if (has) "" else " not"))
     }

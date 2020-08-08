@@ -45,7 +45,7 @@ class PermissionsClassSystem private constructor(player: Player) : BukkitClassSy
                 .toList()
         }
 
-    override fun hasRequiredClass(requiredClass: String): Boolean {
+    override fun hasClass(requiredClass: String): Boolean {
         return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase())
     }
 

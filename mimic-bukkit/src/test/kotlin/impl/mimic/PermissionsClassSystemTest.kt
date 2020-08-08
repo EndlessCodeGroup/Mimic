@@ -48,7 +48,7 @@ class PermissionsClassSystemTest : BukkitTestBase() {
         addClasses("first", "second", "third")
 
         // When
-        val hasClass = classSystem.hasRequiredClass("second")
+        val hasClass = classSystem.hasClass("second")
 
         // Then
         assertTrue(hasClass)
@@ -60,7 +60,7 @@ class PermissionsClassSystemTest : BukkitTestBase() {
         addClasses("first", "second", "third")
 
         // When
-        val hasClass = classSystem.hasRequiredClass("Second")
+        val hasClass = classSystem.hasClass("Second")
 
         // Then
         assertTrue(hasClass)
@@ -72,7 +72,7 @@ class PermissionsClassSystemTest : BukkitTestBase() {
         addClasses("first", "second")
 
         // When
-        val hasClass = classSystem.hasRequiredClass("FirstClass")
+        val hasClass = classSystem.hasClass("FirstClass")
 
         // Then
         assertFalse(hasClass)
