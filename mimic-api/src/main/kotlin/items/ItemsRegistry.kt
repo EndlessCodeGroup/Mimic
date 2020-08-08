@@ -21,7 +21,7 @@ package ru.endlesscode.mimic.items
 
 import ru.endlesscode.mimic.MimicService
 
-/** Service for getting items by theirs ID. Also can be used to match id with item. */
+/** Service for getting items by theirs ID. Also can be used to match ID with item. */
 interface ItemsRegistry<ItemStackT : Any> : MimicService {
 
     /** Returns all known item IDs. */
@@ -34,15 +34,15 @@ interface ItemsRegistry<ItemStackT : Any> : MimicService {
     /** Returns `true` if item with given [itemId] exists. */
     fun isItemExists(itemId: String): Boolean
 
-    /** Returns id that represents given [item], or `null` if the id not found. */
+    /** Returns ID representing given [item], or `null` if the ID not found in this registry. */
     fun getItemId(item: ItemStackT): String?
 
-    /** Returns item by given [itemId], or `null` if id not found. */
+    /** Returns item by given [itemId], or `null` if the ID not found in this registry. */
     @JvmDefault
     fun getItem(itemId: String): ItemStackT? = getItem(itemId, amount = 1)
 
     /**
-     * Returns item stack with specified [amount] by given [itemId], or `null` if id not found in this registry.
+     * Returns item stack with specified [amount] by given [itemId], or `null` if ID not found in this registry.
      *
      * If given [amount] is greater than maximum possible, will use maximum possible amount.
      * Amount shouldn't be less than `1`.
