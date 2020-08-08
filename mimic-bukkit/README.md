@@ -4,15 +4,26 @@ Bukkit plugin containing Mimic APIs implementations.
 
 ## Usage
 
-### Permissions
+### For Developers
+
+If you are plugins developer, read [mimic-bukkit-api].
+There you'll find a guide on how to use MimicAPI and how to create your own implementation of Mimic APIs.
+
+### For Server Owners
+
+If some plugin requires Mimic, just put it into `plugins/` folder.
+No configuration needed.
+
+#### Permissions
 
 `mimic.admin` - Permission to use mimic commands
 
-### Commands
+#### Commands
 
 | Command                | Description                          |
 |------------------------|--------------------------------------|
 | `/mimic help <search>` | Print help                           |
+| `/mimic info`          | Show mimic status                    |
 | `/mimic level`         | Manage player's level and experience |
 | `/mimic class`         | Check player's classes               |
 | `/mimic items`         | Deal with items                      |
@@ -48,6 +59,8 @@ If you use item ID without namespace it will search over all registries.
 [skillapi]: https://www.spigotmc.org/resources/4824/
 [battlelevels]: https://www.spigotmc.org/resources/2218/
 [customitems]: https://www.spigotmc.org/resources/63848/
+
+[mimic-bukkit-api]: ../mimic-bukkit-api
 
 [BukkitLevelSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/level/BukkitLevelSystem.kt
 [BukkitClassSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/classes/BukkitClassSystem.kt
