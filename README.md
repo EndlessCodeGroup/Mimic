@@ -1,8 +1,8 @@
-# MimicAPI [![Build Status](https://img.shields.io/github/workflow/status/EndlessCodeGroup/MimicAPI/CI?style=flat-square)](https://travis-ci.org/EndlessCodeGroup/MimicAPI) [![Test Coverage](https://img.shields.io/codacy/coverage/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)](https://www.codacy.com/app/EndlessCode-Group/MimicAPI?utm_source=github.com&utm_medium=referral&utm_content=EndlessCodeGroup/MimicAPI&utm_campaign=Badge_Coverage) [![Code Quality](https://img.shields.io/codacy/grade/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)](https://www.codacy.com/app/EndlessCode-Group/MimicAPI?utm_source%3Dgithub.com%26amp;utm_medium%3Dreferral%26amp;utm_content%3DEndlessCodeGroup/MimicAPI%26amp;utm_campaign%3DBadge_Grade)
-
+# MimicAPI 
+[![Download](https://img.shields.io/bintray/v/endlesscode/repo/mimic?style=flat-square)](https://bintray.com/endlesscode/repo/mimic/_latestVersion) [![Build Status](https://img.shields.io/github/workflow/status/EndlessCodeGroup/MimicAPI/CI?style=flat-square)](https://travis-ci.org/EndlessCodeGroup/MimicAPI) [![Code Quality](https://img.shields.io/codacy/grade/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)](https://www.codacy.com/app/EndlessCode-Group/MimicAPI?utm_source%3Dgithub.com%26amp;utm_medium%3Dreferral%26amp;utm_content%3DEndlessCodeGroup/MimicAPI%26amp;utm_campaign%3DBadge_Grade)
 [![license](https://img.shields.io/github/license/EndlessCodeGroup/MimicAPI.svg?style=flat-square)](LICENSE)
 
-[![Logo](images/logo.png)]()
+[![Logo](images/logo.png)](#)
 
 Abstraction API for RPG plugins.
 
@@ -24,6 +24,38 @@ With Mimic you don't need to download all RPG plugins and write specified code f
 It also provides commands to test your API implementation.
 Use it as example of Mimic APIs usage and implementation.
 
+## Installation
+
+If you are server owner, just get needed plugin from [Implementations](#implementations) section.
+If you are developer you can use [Gradle] or [Maven] to plug MimicAPI to your plugin.
+
+### Gradle
+
+```groovy
+repositories {
+    maven { url  "https://dl.bintray.com/endlesscode/repo" }
+}
+
+dependencies {
+    compileOnly("ru.endlesscode.mimic:mimic-bukkit-api:0.3")
+}
+```
+
+### Maven
+```xml
+<repository>
+    <id>bintray-endlesscode-repo</id>
+    <url>https://dl.bintray.com/endlesscode/repo</url>
+</repository>
+
+<dependency>
+  <groupId>ru.endlesscode.mimic</groupId>
+  <artifactId>mimic-bukkit-api</artifactId>
+  <version>0.3</version>
+  <scope>provided</scope>
+</dependency>
+```
+
 ## Usage
 
 > Look [Implementations](#implementations) pages for API usage examples for your platform.
@@ -35,7 +67,9 @@ For major changes, please open an issue first to discuss what you would like to 
 Please make sure to update tests as appropriate.
 
 [Vault]: https://github.com/MilkBowl/Vault
+[Gradle]: https://gradle.org/
+[Maven]: https://maven.apache.org/
 
-[LevelSystem]: mimic-api/src/main/kotlin/LevelSystem.kt
-[ClassSystem]: mimic-api/src/main/kotlin/ClassSystem.kt
-[ItemsRegistry]: mimic-api/src/main/kotlin/ItemsRegistry.kt
+[LevelSystem]: mimic-api/src/main/kotlin/level/LevelSystem.kt
+[ClassSystem]: mimic-api/src/main/kotlin/classes/ClassSystem.kt
+[ItemsRegistry]: mimic-api/src/main/kotlin/items/ItemsRegistry.kt

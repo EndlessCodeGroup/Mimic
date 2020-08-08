@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +17,19 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit
+package ru.endlesscode.mimic.classes
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.ExpLevelConverter
-import ru.endlesscode.mimic.LevelSystem
+import ru.endlesscode.mimic.PlayerSystemProviderService
 import ru.endlesscode.mimic.util.ExistingWeakReference
 
-/** [LevelSystem] adapted for Bukkit. */
-abstract class BukkitLevelSystem(
-    override val converter: ExpLevelConverter,
-    player: Player
-) : LevelSystem {
+/** [ClassSystem] adapted for Bukkit. */
+abstract class BukkitClassSystem(player: Player) : ClassSystem {
 
     val player: Player get() = playerRef.get()
 
     private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
 
-    /** Provider of Bukkit level systems. */
-    abstract class Provider(id: String) : PlayerSystemProviderService<BukkitLevelSystem>(id)
+    /** Provider of Bukkit class systems. */
+    abstract class Provider(id: String) : PlayerSystemProviderService<BukkitClassSystem>(id)
 }

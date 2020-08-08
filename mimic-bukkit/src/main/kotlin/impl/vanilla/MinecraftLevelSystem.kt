@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.impl.vanilla
+package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
-import ru.endlesscode.mimic.bukkit.impl.vanilla.VanillaConverter.Companion.instance
+import ru.endlesscode.mimic.impl.vanilla.MinecraftExpLevelConverter.Companion.instance
+import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 /** Vanilla experience bar system. */
 class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
 
     companion object {
-        const val ID = "minecraft"
-
-        @JvmField
-        val provider = object : Provider(ID) {
-            override fun getSystem(player: Player): BukkitLevelSystem = MinecraftLevelSystem(player)
-        }
+        const val ID: String = "minecraft"
     }
 
     override var level: Int
@@ -59,4 +54,8 @@ class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSyst
 
     override val totalExpToNextLevel: Double
         get() = player.expToLevel.toDouble()
+
+    class Provider : BukkitLevelSystem.Provider(ID) {
+        override fun getSystem(player: Player): BukkitLevelSystem = MinecraftLevelSystem(player)
+    }
 }

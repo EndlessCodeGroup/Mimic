@@ -17,22 +17,22 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit
+package ru.endlesscode.mimic.level
 
-import org.bukkit.plugin.RegisteredServiceProvider
-import org.bukkit.plugin.ServicesManager
+import org.bukkit.entity.Player
+import ru.endlesscode.mimic.PlayerSystemProviderService
+import ru.endlesscode.mimic.util.ExistingWeakReference
 
-/** Kotlin-style call of [ServicesManager.load]. */
-inline fun <reified T> ServicesManager.load(): T? {
-    return load(T::class.java)
-}
+/** [LevelSystem] adapted for Bukkit. */
+abstract class BukkitLevelSystem(
+    override val converter: ExpLevelConverter,
+    player: Player
+) : LevelSystem {
 
-/** Kotlin-style call of [ServicesManager.getRegistrations] followed with [RegisteredServiceProvider.getProvider]. */
-inline fun <reified T> ServicesManager.loadAll(): Collection<T> {
-    return getRegistrations(T::class.java).map { it.provider }
-}
+    val player: Player get() = playerRef.get()
 
-/** Kotlin-style call of [ServicesManager.getRegistrations]. */
-inline fun <reified T> ServicesManager.getRegistrations(): Collection<RegisteredServiceProvider<T>> {
-    return getRegistrations(T::class.java)
+    private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
+
+    /** Provider of Bukkit level systems. */
+    abstract class Provider(id: String) : PlayerSystemProviderService<BukkitLevelSystem>(id)
 }

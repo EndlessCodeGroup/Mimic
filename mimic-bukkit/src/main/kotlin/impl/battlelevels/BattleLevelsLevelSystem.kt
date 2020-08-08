@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.impl.battlelevels
+
+package ru.endlesscode.mimic.impl.battlelevels
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
-import ru.endlesscode.mimic.util.checkClassesExist
+import ru.endlesscode.mimic.level.BukkitLevelSystem
 import java.util.*
 import kotlin.math.abs
 
@@ -31,18 +31,8 @@ class BattleLevelsLevelSystem internal constructor(
 ) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
 
     companion object {
-        const val ID = "battlelevels"
-
-        @JvmField
-        val provider: Provider = object : Provider(ID) {
-            override val isEnabled: Boolean
-                get() = checkClassesExist("me.robin.battlelevels.api.BattleLevelsAPI")
-
-            override fun getSystem(player: Player): BukkitLevelSystem = BattleLevelsLevelSystem(player)
-        }
+        const val ID: String = "battlelevels"
     }
-
-    private constructor(player: Player) : this(player, BattleLevelsApiWrapper())
 
     override var level: Int
         get() = battleLevelsApi.getLevel(playerUniqueId)
@@ -124,6 +114,12 @@ class BattleLevelsLevelSystem internal constructor(
             if (extraExp < 0) battleLevelsApi.addScore(playerUniqueId, abs(extraExp))
         } else {
             battleLevelsApi.removeScore(playerUniqueId, expAmount)
+        }
+    }
+
+    class Provider : BukkitLevelSystem.Provider(ID) {
+        override fun getSystem(player: Player): BukkitLevelSystem {
+            return BattleLevelsLevelSystem(player, BattleLevelsApiWrapper())
         }
     }
 }

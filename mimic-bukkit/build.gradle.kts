@@ -12,7 +12,7 @@ bukkit {
 
     meta {
         setName("Mimic")
-        setMain("$group.bukkit.$name")
+        setMain("$group.$name")
         setAuthors(listOf("osipxd", "EndlessCodeGroup"))
         setUrl("https://github.com/EndlessCodeGroup/MimicAPI")
     }
@@ -26,19 +26,25 @@ bukkit {
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
     maven(url = "https://repo.aikar.co/content/groups/aikar/")
+    maven(url = "https://repo.codemc.org/repository/maven-public")
+    flatDir { dir("libs") }
 }
 
 dependencies {
-    implementation(project(":mimic-bukkit-api"))
+    api(project(":mimic-bukkit-api"))
 
     compileOnly(bukkit) { isTransitive = false }
     implementation(deps.acf)
+    implementation(deps.bstats_bukkit)
 
-    compileOnly(deps.skillApi)
-    compileOnly(deps.battleLevelsApi)
+    compileOnly(deps.skillapi)
+    compileOnly(deps.battlelevels)
+
+    // From libs/ directory
+    compileOnly(":CustomItemsAPI")
 
     testImplementation(bukkit)
-    testImplementation(deps.skillApi)
+    testImplementation(deps.skillapi)
 }
 
 tasks.shadowJar {
@@ -47,6 +53,7 @@ tasks.shadowJar {
     relocate("kotlin", "$shadePackage.kotlin")
     relocate("org.intellij", "$shadePackage.intellij")
     relocate("org.jetbrains", "$shadePackage.jetbrains")
+    relocate("org.bstats.bukkit", "$shadePackage.bstats")
 
     exclude("META-INF/*.kotlin_module")
     exclude("META-INF/maven/**")

@@ -17,13 +17,13 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.vanilla
+package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

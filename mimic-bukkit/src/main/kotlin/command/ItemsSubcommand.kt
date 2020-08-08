@@ -17,14 +17,14 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.command
+package ru.endlesscode.mimic.command
 
 import co.aikar.commands.AbstractCommandManager
 import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 @CommandAlias("%command")
 @CommandPermission("%perm")

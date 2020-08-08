@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.impl.skillapi
+
+package ru.endlesscode.mimic.impl.skillapi
 
 import com.sucy.skill.api.enums.ExpSource
 import com.sucy.skill.api.player.PlayerClass
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitLevelSystem
-import ru.endlesscode.mimic.util.checkClassesExist
+import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 /** Implementation of LevelSystem that uses SkillAPI. */
 class SkillApiLevelSystem internal constructor(
@@ -31,17 +31,7 @@ class SkillApiLevelSystem internal constructor(
 ) : BukkitLevelSystem(SkillApiConverter.getInstance(skillApi), player) {
 
     companion object {
-        const val ID = "skillapi"
-
-        @JvmField
-        val provider: Provider = object : Provider(ID) {
-            private val skillApi = SkillApiWrapper()
-
-            override val isEnabled: Boolean
-                get() = checkClassesExist("com.sucy.skill.SkillAPI") && skillApi.isLoaded
-
-            override fun getSystem(player: Player): BukkitLevelSystem = SkillApiLevelSystem(player, skillApi)
-        }
+        const val ID: String = "skillapi"
     }
 
     override var level: Int
@@ -82,5 +72,14 @@ class SkillApiLevelSystem internal constructor(
 
     override fun giveExp(expAmount: Double) {
         playerClass?.giveExp(expAmount, ExpSource.SPECIAL)
+    }
+
+    class Provider : BukkitLevelSystem.Provider(ID) {
+        private val skillApi = SkillApiWrapper()
+
+        override val isEnabled: Boolean
+            get() = skillApi.isLoaded
+
+        override fun getSystem(player: Player): BukkitLevelSystem = SkillApiLevelSystem(player, skillApi)
     }
 }

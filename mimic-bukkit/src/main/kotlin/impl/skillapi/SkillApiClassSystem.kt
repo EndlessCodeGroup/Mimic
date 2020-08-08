@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ru.endlesscode.mimic.bukkit.impl.skillapi
+
+package ru.endlesscode.mimic.impl.skillapi
 
 import com.sucy.skill.api.player.PlayerData
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.bukkit.BukkitClassSystem
-import ru.endlesscode.mimic.util.checkClassesExist
+import ru.endlesscode.mimic.classes.BukkitClassSystem
 
 /** Implementation of ClassSystem that uses SkillAPI. */
 class SkillApiClassSystem internal constructor(
@@ -30,18 +30,7 @@ class SkillApiClassSystem internal constructor(
 ) : BukkitClassSystem(player) {
 
     companion object {
-        const val ID = "skillapi"
-
-        @JvmField
-        val provider: Provider = object : Provider(ID) {
-
-            private val skillApi = SkillApiWrapper()
-
-            override val isEnabled: Boolean
-                get() = checkClassesExist("com.sucy.skill.SkillAPI") && skillApi.isLoaded
-
-            override fun getSystem(player: Player): BukkitClassSystem = SkillApiClassSystem(player, skillApi)
-        }
+        const val ID: String = "skillapi"
     }
 
     override val classes: List<String>
@@ -52,4 +41,14 @@ class SkillApiClassSystem internal constructor(
 
     private val playerData: PlayerData
         get() = skillApi.getPlayerData(player)
+
+    class Provider : BukkitClassSystem.Provider(ID) {
+
+        private val skillApi = SkillApiWrapper()
+
+        override val isEnabled: Boolean
+            get() = skillApi.isLoaded
+
+        override fun getSystem(player: Player): BukkitClassSystem = SkillApiClassSystem(player, skillApi)
+    }
 }

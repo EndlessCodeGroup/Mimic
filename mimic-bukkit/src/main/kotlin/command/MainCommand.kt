@@ -1,19 +1,46 @@
-package ru.endlesscode.mimic.bukkit.command
+package ru.endlesscode.mimic.command
 
 import co.aikar.commands.CommandHelp
 import co.aikar.commands.MimicCommand
-import co.aikar.commands.annotation.CommandAlias
-import co.aikar.commands.annotation.CommandPermission
-import co.aikar.commands.annotation.Description
-import co.aikar.commands.annotation.HelpCommand
+import co.aikar.commands.annotation.*
+import org.bukkit.command.CommandSender
+import org.bukkit.plugin.Plugin
+import ru.endlesscode.mimic.MimicService
+import ru.endlesscode.mimic.bukkit.loadAll
+import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-internal class MainCommand : MimicCommand() {
+internal class MainCommand(private val plugin: Plugin) : MimicCommand() {
 
     @HelpCommand
     @Description("Show help")
     fun doHelp(help: CommandHelp) {
         help.showHelp()
+    }
+
+    @Subcommand("info")
+    @Description("Show info about Mimic and loaded services")
+    fun info(sender: CommandSender) {
+        val servicesManager = plugin.server.servicesManager
+        val levelSystems = servicesManager.loadAll<BukkitLevelSystem.Provider>()
+        val classSystems = servicesManager.loadAll<BukkitClassSystem.Provider>()
+        val itemsRegistries = servicesManager.loadAll<BukkitItemsRegistry>()
+
+        sender.send(
+            "&2${plugin.description.fullName}",
+            "&3Level Systems: &7${levelSystems.toMessage()}",
+            "&3Class Systems: &7${classSystems.toMessage()}",
+            "&3Items Registries: &7${itemsRegistries.toMessage()}"
+        )
+    }
+}
+
+private fun <ServiceT : MimicService> Collection<ServiceT>.toMessage(): String {
+    return joinToString { service ->
+        val color = if (service.isEnabled) "&a" else "&c"
+        "$color${service.id}&7"
     }
 }

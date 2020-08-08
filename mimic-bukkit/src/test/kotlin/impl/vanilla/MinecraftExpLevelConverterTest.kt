@@ -17,18 +17,18 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.vanilla
+package ru.endlesscode.mimic.impl.vanilla
 
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
-import ru.endlesscode.mimic.ExpLevelConverter
+import ru.endlesscode.mimic.level.ExpLevelConverter
 import java.util.stream.Stream
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 
-class VanillaConverterTest {
+class MinecraftExpLevelConverterTest {
 
     @Suppress("unused")
     companion object {
@@ -60,7 +60,7 @@ class VanillaConverterTest {
 
     @BeforeTest
     fun setUp() {
-        converter = VanillaConverter.instance
+        converter = MinecraftExpLevelConverter.instance
     }
 
     @ParameterizedTest

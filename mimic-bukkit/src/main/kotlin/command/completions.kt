@@ -1,4 +1,4 @@
-package ru.endlesscode.mimic.bukkit.command
+package ru.endlesscode.mimic.command
 
 import co.aikar.commands.CommandCompletionContext
 import co.aikar.commands.CommandCompletions

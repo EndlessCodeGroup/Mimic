@@ -17,9 +17,9 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.bukkit.impl.skillapi
+package ru.endlesscode.mimic.impl.skillapi
 
-import ru.endlesscode.mimic.ClassSystem
+import ru.endlesscode.mimic.classes.ClassSystem
 import kotlin.test.*
 
 class SkillApiClassSystemTest : SkillApiTestBase() {

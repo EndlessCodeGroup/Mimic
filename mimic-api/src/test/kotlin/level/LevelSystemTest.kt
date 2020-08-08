@@ -1,30 +1,28 @@
 /*
- * This file is part of MimicAPI.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * This file is part of Mimic.
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
- * MimicAPI is free software: you can redistribute it and/or modify
+ * Mimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * MimicAPI is distributed in the hope that it will be useful,
+ * Mimic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with MimicAPI.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Mimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ru.endlesscode.mimic.exp
+package ru.endlesscode.mimic.level
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import ru.endlesscode.mimic.LevelSystem
-import ru.endlesscode.mimic.mockExpLevelConverter
 import ru.endlesscode.mimic.mockito.MOCKS_ONLY_ABSTRACTS
 import ru.endlesscode.mimic.mockito.doubleEq
 import kotlin.test.*
@@ -385,7 +383,7 @@ class LevelSystemTest {
         level: Int? = null,
         exp: Double? = null
     ) {
-         level?.let { whenever(this.level) doReturn it }
-         exp?.let { whenever(this.exp) doReturn it }
+        level?.let { whenever(this.level) doReturn it }
+        exp?.let { whenever(this.exp) doReturn it }
     }
 }
