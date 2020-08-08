@@ -13,61 +13,133 @@ Available services:
 
 ### How to use Mimic APIs?
 
-To use any of APIs you should get it from `ServiceManager`:
+Firstly you should make sure Mimic is enabled with such method:
 ```java
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.ServicesManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import ru.endlesscode.mimic.classes.BukkitClassSystem;
-import ru.endlesscode.mimic.items.BukkitItemsRegistry;
-import ru.endlesscode.mimic.level.BukkitLevelSystem;
+private boolean checkMimicEnabled() {
+    return getServer().getPluginManager().isPluginEnabled("Mimic");
+}
+```
 
-public class MyPlugin extends JavaPlugin {
-
-    // Declare field for needed APIs
-    private static BukkitLevelSystem.Provider levelSystemProvider = null;
-    private static BukkitClassSystem.Provider classSystemProvider = null;
-    private static BukkitItemsRegistry itemsRegistry = null;
-
-    public static BukkitLevelSystem getLevelSystem(Player player) {
-        return levelSystemProvider.get(player);
-    }
-
-    public static BukkitClassSystem getClassSystem(Player player) {
-        return classSystemProvider.get(player);
-    }
-
-    public static BukkitItemsRegistry getItemsRegistry() {
-        return itemsRegistry;
-    }
-
-    @Override
-    public void onEnable() {
-        // Check that Mimic exists before API usage.
-        // You can also add `Mimic` to `depend` list in plugin.yml
-        if (!checkMimic()) {
-            getLogger().severe("Mimic is required for the plugin!");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
-        setupMimic();
-    }
-
-    private boolean checkMimic() {
-        return getServer().getPluginManager().isPluginEnabled("Mimic");
-    }
-
-    private void setupMimic() {
-        ServicesManager sm = getServer().getServicesManager();
-        // Services will never be null because there always exists default
-        // implementation for each service
-        levelSystemProvider = sm.load(BukkitLevelSystem.Provider.class);
-        classSystemProvider = sm.load(BukkitClassSystem.Provider.class);
-        itemsRegistry = sm.load(BukkitItemsRegistry.class);
+If you want to make Mimic hard dependency for your plugin, you can add it to the `depend` list in `plugin.yml`.
+Another way is to add it to `softdepend` and show a clear error message to the server owner what he should to do:
+```java
+@Override
+public void onEnable() {
+    if (!checkMimicEnabled()) {
+        getLogger().severe("Mimic is required for the plugin!");
+        getLogger().severe("Download it: https://www.spigotmc.org/resources/82515/");
+        getServer().getPluginManager().disablePlugin(this);
+        return;
     }
 }
 ```
+
+Mimic uses `ServicesManager` to hold API implementations and each API implements interface [MimicService].
+You can load needed APIs in `onEnable` of your plugin:
+```java
+ServicesManager sm = getServer().getServicesManager();
+// Services will never be null because there always exists default
+// implementation for each service
+levelSystemProvider = sm.load(BukkitLevelSystem.Provider.class);
+classSystemProvider = sm.load(BukkitClassSystem.Provider.class);
+itemsRegistry = sm.load(BukkitItemsRegistry.class);
+```
+
+Now you can use APIs:
+```java
+// System got from the provider holds a weak reference to a player object
+// and should not live a long time.
+BukkitLevelSystem levelSystem = levelSystemProvider.get(player);
+int playerLevel = levelSystem.getLevel();
+levelSystem.giveExp(42);
+
+BukkitClassSystem classSystem = classSystemProvider.get(player);
+String playerPrimaryClass = classSystem.getPrimaryClass();
+boolean isMage = classSystem.hasOneOfClasses(Arrays.asList("Mage", "Druid", "Necromancer"));
+
+// ItemsRegistry is not related to player so it can be used without provider
+ItemStack stick = itemsRegistry.getItem("minecraft:stick");
+boolean isStickMagic = itemsRegistry.isSameItem(stick, "customitems:magic_wand");
+boolean isMagicStickExists = itemsRegistry.isItemExists("customitems:magic_wand");
+```
+
+<details>
+    <summary>Full example</summary>
+    
+    ```java
+    import org.bukkit.entity.Player;
+    import org.bukkit.inventory.ItemStack;
+    import org.bukkit.plugin.ServicesManager;
+    import org.bukkit.plugin.java.JavaPlugin;
+    import ru.endlesscode.mimic.classes.BukkitClassSystem;
+    import ru.endlesscode.mimic.items.BukkitItemsRegistry;
+    import ru.endlesscode.mimic.level.BukkitLevelSystem;
+    
+    import java.util.Arrays;
+    
+    public class MyPlugin extends JavaPlugin {
+    
+        // Declare field for needed APIs
+        private static BukkitLevelSystem.Provider levelSystemProvider = null;
+        private static BukkitClassSystem.Provider classSystemProvider = null;
+        private static BukkitItemsRegistry itemsRegistry = null;
+    
+        public static BukkitLevelSystem getLevelSystem(Player player) {
+            return levelSystemProvider.get(player);
+        }
+    
+        public static BukkitClassSystem getClassSystem(Player player) {
+            return classSystemProvider.get(player);
+        }
+    
+        public static BukkitItemsRegistry getItemsRegistry() {
+            return itemsRegistry;
+        }
+    
+        @Override
+        public void onEnable() {
+            if (!checkMimicEnabled()) {
+                getLogger().severe("Mimic is required for the plugin!");
+                getLogger().severe("Download it on https://www.spigotmc.org/resources/82515/");
+                getServer().getPluginManager().disablePlugin(this);
+                return;
+            }
+    
+            setupMimic();
+        }
+    
+        private boolean checkMimicEnabled() {
+            return getServer().getPluginManager().isPluginEnabled("Mimic");
+        }
+    
+        private void setupMimic() {
+            ServicesManager sm = getServer().getServicesManager();
+            // Services will never be null because there always exists default
+            // implementation for each service
+            levelSystemProvider = sm.load(BukkitLevelSystem.Provider.class);
+            classSystemProvider = sm.load(BukkitClassSystem.Provider.class);
+            itemsRegistry = sm.load(BukkitItemsRegistry.class);
+        }
+    
+        // Method to demonstrate usage
+        private void useApis(Player player) {
+            // System got from provider holds weak reference to player object and should not live a long time.
+            BukkitLevelSystem levelSystem = levelSystemProvider.get(player);
+            int playerLevel = levelSystem.getLevel();
+            levelSystem.giveExp(42);
+    
+            BukkitClassSystem classSystem = classSystemProvider.get(player);
+            String playerPrimaryClass = classSystem.getPrimaryClass();
+            boolean isMage = classSystem.hasAnyOfClasses(Arrays.asList("Mage", "Druid", "Necromancer"));
+    
+            // ItemsRegistry is not related to player so it can be used without provider
+            ItemStack stick = itemsRegistry.getItem("minecraft:stick");
+            boolean isStickMagical = itemsRegistry.isSameItem(stick, "customitems:magic_wand");
+            boolean isMagicStickExists = itemsRegistry.isItemExists("customitems:magic_wand");
+        }
+    }
+    ```
+</details>
 
 ### How to implement API in my plugin?
 
