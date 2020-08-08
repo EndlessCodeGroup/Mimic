@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,11 @@ import kotlin.math.sqrt
  *
  * @see [Minecraft Wiki: Experience - Leveling Up](https://minecraft.gamepedia.com/Experience#Leveling_up)
  */
-class VanillaConverter private constructor() : ExpLevelConverter {
+class MinecraftExpLevelConverter private constructor() : ExpLevelConverter {
 
     companion object {
         @JvmStatic
-        val instance: ExpLevelConverter by lazy { VanillaConverter() }
+        val instance: ExpLevelConverter by lazy { MinecraftExpLevelConverter() }
     }
 
     override fun expToLevel(exp: Double): Double = when {

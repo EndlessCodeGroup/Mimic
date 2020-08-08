@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2020 Osip Fatkullin
+ * Copyright (C) 2020 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.impl.vanilla.VanillaConverter.Companion.instance
+import ru.endlesscode.mimic.impl.vanilla.MinecraftExpLevelConverter.Companion.instance
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 /** Vanilla experience bar system. */

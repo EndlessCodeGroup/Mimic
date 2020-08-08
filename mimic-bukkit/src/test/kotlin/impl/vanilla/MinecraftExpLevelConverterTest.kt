@@ -28,7 +28,7 @@ import java.util.stream.Stream
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 
-class VanillaConverterTest {
+class MinecraftExpLevelConverterTest {
 
     @Suppress("unused")
     companion object {
@@ -60,7 +60,7 @@ class VanillaConverterTest {
 
     @BeforeTest
     fun setUp() {
-        converter = VanillaConverter.instance
+        converter = MinecraftExpLevelConverter.instance
     }
 
     @ParameterizedTest
