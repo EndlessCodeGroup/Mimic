@@ -39,13 +39,15 @@ It uses service ID as namespace for items IDs.
 For example: `acacia_boat -> minecraft:acacia_boat`.  
 If you use item ID without namespace it will search over all registries.
 
-| Registry                            | Namespace    |
-|-------------------------------------|--------------|
-| [Minecraft][MinecraftItemsRegistry] | `minecraft:` |
+| Registry                            | Namespace      |
+|-------------------------------------|----------------|
+| [Minecraft][MinecraftItemsRegistry] | `minecraft:`   |
+| [CustomItems]                       | `customitems:` |
 
 [minecraft-exp]: https://minecraft.gamepedia.com/Experience
 [skillapi]: https://www.spigotmc.org/resources/4824/
 [battlelevels]: https://www.spigotmc.org/resources/2218/
+[customitems]: https://www.spigotmc.org/resources/63848/
 
 [BukkitLevelSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/level/BukkitLevelSystem.kt
 [BukkitClassSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/classes/BukkitClassSystem.kt
