@@ -12,7 +12,7 @@ bukkit {
 
     meta {
         setName("Mimic")
-        setMain("$group.bukkit.$name")
+        setMain("$group.$name")
         setAuthors(listOf("osipxd", "EndlessCodeGroup"))
         setUrl("https://github.com/EndlessCodeGroup/MimicAPI")
     }

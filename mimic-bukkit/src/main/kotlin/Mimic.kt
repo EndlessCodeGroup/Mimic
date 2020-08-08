@@ -109,13 +109,17 @@ class Mimic : JavaPlugin() {
         priority: ServicePriority,
         requiredPackages: Array<out String>
     ) {
-        if (checkClassesLoaded(*requiredPackages)) {
-            val service = constructor()
-            servicesManager.register(serviceClass.java, service, this, priority)
-            val serviceName = serviceClass.java.name
-                .replace(Regex(".*\\.Bukkit"), "")
-                .substringBefore("$")
-            logger.info("[$serviceName] '${service.id}' found")
+        try {
+            if (checkClassesLoaded(*requiredPackages)) {
+                val service = constructor()
+                servicesManager.register(serviceClass.java, service, this, priority)
+                val serviceName = serviceClass.java.name
+                    .replace(Regex(".*\\.Bukkit"), "")
+                    .substringBefore("$")
+                logger.info("[$serviceName] '${service.id}' found")
+            }
+        } catch (e: Exception) {
+            Log.d(e)
         }
     }
     //</editor-fold>
