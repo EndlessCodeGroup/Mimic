@@ -21,18 +21,21 @@ package ru.endlesscode.mimic.impl.battlelevels
 
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.ExpLevelConverter
 import java.util.*
 import kotlin.math.abs
 
 /** Implementation of LevelSystem that uses BattleLevels. */
 public class BattleLevelsLevelSystem internal constructor(
     player: Player,
-    private val battleLevelsApi: BattleLevelsApiWrapper
-) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
+    private val battleLevelsApi: BattleLevelsApiWrapper,
+) : BukkitLevelSystem(player) {
 
     public companion object {
         public const val ID: String = "battlelevels"
     }
+
+    override val converter: ExpLevelConverter = BattleLevelsConverter.getInstance(battleLevelsApi)
 
     override var level: Int
         get() = battleLevelsApi.getLevel(playerUniqueId)

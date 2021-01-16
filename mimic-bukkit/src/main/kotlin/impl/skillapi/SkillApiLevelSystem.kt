@@ -23,16 +23,19 @@ import com.sucy.skill.api.enums.ExpSource
 import com.sucy.skill.api.player.PlayerClass
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.ExpLevelConverter
 
 /** Implementation of LevelSystem that uses SkillAPI. */
 public class SkillApiLevelSystem internal constructor(
     player: Player,
-    private val skillApi: SkillApiWrapper
-) : BukkitLevelSystem(SkillApiConverter.getInstance(skillApi), player) {
+    private val skillApi: SkillApiWrapper,
+) : BukkitLevelSystem(player) {
 
     public companion object {
         public const val ID: String = "skillapi"
     }
+
+    override val converter: ExpLevelConverter = SkillApiConverter.getInstance(skillApi)
 
     override var level: Int
         get() = playerClass?.level ?: 1
