@@ -1,0 +1,6 @@
+loadbefore:
+  - SkillAPI
+  - BattleLevels
+  - CustomItems
+  - MMOCore
+  - MMOItems
