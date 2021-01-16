@@ -47,7 +47,7 @@ class LevelSystemTest {
         ls.prepare(level = 1)
 
         // When
-        ls.giveLevel(4)
+        ls.giveLevels(4)
 
         // Then
         verify(ls).level = 5
@@ -59,7 +59,7 @@ class LevelSystemTest {
         ls.prepare(level = 6)
 
         // When
-        ls.takeLevel(4)
+        ls.takeLevels(4)
 
         // Then
         verify(ls).level = 2
@@ -71,7 +71,7 @@ class LevelSystemTest {
         ls.prepare(level = 6)
 
         // When
-        ls.takeLevel(10)
+        ls.takeLevels(10)
 
         // Then
         verify(ls).level = 0

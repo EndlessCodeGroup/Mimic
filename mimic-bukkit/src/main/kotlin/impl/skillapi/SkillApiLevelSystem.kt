@@ -39,20 +39,20 @@ public class SkillApiLevelSystem internal constructor(
 
     override var level: Int
         get() = playerClass?.level ?: 1
-        set(newLevel) {
-            playerClass?.level = newLevel
+        set(value) {
+            playerClass?.level = value
         }
 
     override var exp: Double
         get() = playerClass?.exp ?: 0.0
         set(value) {
-            playerClass?.exp = value.coerceIn(0.0, totalExpToNextLevel)
+            playerClass?.exp = value
         }
 
     private val playerClass: PlayerClass?
         get() = skillApi.getPlayerData(player).mainClass
 
-    override fun takeLevel(lvlAmount: Int) {
+    override fun takeLevels(lvlAmount: Int) {
         if (playerClass != null) {
             val newLevel = (level - lvlAmount).coerceAtLeast(1)
             val fractional = fractionalExp
@@ -61,7 +61,7 @@ public class SkillApiLevelSystem internal constructor(
         }
     }
 
-    override fun giveLevel(lvlAmount: Int) {
+    override fun giveLevels(lvlAmount: Int) {
         playerClass?.giveLevels(lvlAmount)
     }
 

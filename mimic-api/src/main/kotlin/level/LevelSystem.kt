@@ -77,7 +77,7 @@ public interface LevelSystem {
             if (value < 1.0) {
                 this.exp = converter.getExpToReachNextLevel(this.level) * allowedExp
             } else {
-                this.giveLevel(1)
+                this.giveLevels(1)
                 this.exp = 0.0
             }
         }
@@ -126,13 +126,13 @@ public interface LevelSystem {
     /**
      * Decreases the player level by a specified amount.
      *
-     * Never use negative amount to increase player level, use [giveLevel] instead.
+     * Never use negative amount to increase player level, use [giveLevels] instead.
      *
      * @param lvlAmount Amount of levels to take away
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    public fun takeLevel(lvlAmount: Int) {
+    public fun takeLevels(lvlAmount: Int) {
         val currentLevel = this.level
         this.level = currentLevel - lvlAmount.coerceAtMost(currentLevel)
     }
@@ -140,13 +140,13 @@ public interface LevelSystem {
     /**
      * Increases the player level by a specified amount.
      *
-     * Never use negative amount to decrease player level, use [takeLevel] instead.
+     * Never use negative amount to decrease player level, use [takeLevels] instead.
      *
      * @param lvlAmount Amount of additional levels
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    public fun giveLevel(lvlAmount: Int) {
+    public fun giveLevels(lvlAmount: Int) {
         this.level += lvlAmount
     }
 
