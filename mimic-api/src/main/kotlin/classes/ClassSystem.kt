@@ -25,7 +25,7 @@ package ru.endlesscode.mimic.classes
  * Before implementing run an eye over all default method implementations
  * and override all methods that works not properly for your case.
  */
-interface ClassSystem {
+public interface ClassSystem {
 
     /**
      * Primary class of the player.
@@ -36,7 +36,7 @@ interface ClassSystem {
      * @return Primary class name or `null` if player has not any classes.
      */
     @JvmDefault
-    val primaryClass: String?
+    public val primaryClass: String?
         get() = this.classes.firstOrNull()
 
     /**
@@ -50,25 +50,25 @@ interface ClassSystem {
      * @return List of player system names
      * @throws IllegalStateException If player-related object not exists.
      */
-    val classes: List<String>
+    public val classes: List<String>
 
     /** Returns `true` if player has any class. */
     @JvmDefault
-    fun hasAnyClass(): Boolean = primaryClass != null
+    public fun hasAnyClass(): Boolean = primaryClass != null
 
     /** Returns `true` if player has any of [requiredClasses]. */
     @JvmDefault
-    fun hasAnyOfClasses(requiredClasses: List<String>): Boolean {
+    public fun hasAnyOfClasses(requiredClasses: List<String>): Boolean {
         return requiredClasses.any { this.hasClass(it) }
     }
 
     /** Returns `true` if player has all [requiredClasses]. */
     @JvmDefault
-    fun hasAllClasses(requiredClasses: List<String>): Boolean {
+    public fun hasAllClasses(requiredClasses: List<String>): Boolean {
         return requiredClasses.all { this.hasClass(it) }
     }
 
     /** Returns `true` if player has [requiredClass]. */
     @JvmDefault
-    fun hasClass(requiredClass: String): Boolean = requiredClass in this.classes
+    public fun hasClass(requiredClass: String): Boolean = requiredClass in this.classes
 }

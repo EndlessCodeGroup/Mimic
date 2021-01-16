@@ -31,10 +31,10 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
  * For example: `acacia_boat` -> `minecraft:acacia_boat`.
  * If you use item ID without namespace it will search over all registries.
  */
-class MimicItemsRegistry(private val servicesManager: ServicesManager) : BukkitItemsRegistry {
+public class MimicItemsRegistry(private val servicesManager: ServicesManager) : BukkitItemsRegistry {
 
-    companion object {
-        const val ID: String = "mimic"
+    public companion object {
+        public const val ID: String = "mimic"
     }
 
     override val isEnabled: Boolean = true

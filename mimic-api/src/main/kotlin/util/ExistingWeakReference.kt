@@ -28,7 +28,7 @@ import java.lang.ref.WeakReference
  * @constructor Creates a new weak reference that refers to the given object. The new
  * reference is not registered with any queue.
  */
-class ExistingWeakReference<T : Any>(referent: T) : WeakReference<T>(referent) {
+public class ExistingWeakReference<T : Any>(referent: T) : WeakReference<T>(referent) {
 
     /** Throws [IllegalStateException] if reference object has been cleared. */
     override fun get(): T = super.get() ?: error("Referent object is null.")

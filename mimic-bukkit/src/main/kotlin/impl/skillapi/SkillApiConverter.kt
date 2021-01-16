@@ -23,14 +23,14 @@ import com.sucy.skill.data.Settings
 import ru.endlesscode.mimic.level.ExpLevelConverter
 
 /** Converter for SkillAPI level system. */
-class SkillApiConverter internal constructor(skillApi: SkillApiWrapper) :
+public class SkillApiConverter internal constructor(skillApi: SkillApiWrapper) :
     ExpLevelConverter {
 
-    companion object {
+    public companion object {
         private var internalInstance: SkillApiConverter? = null
 
         @JvmStatic
-        val instance: ExpLevelConverter
+        public val instance: ExpLevelConverter
             get() = getInstance()
 
         internal fun getInstance(skillApi: SkillApiWrapper? = null): ExpLevelConverter {

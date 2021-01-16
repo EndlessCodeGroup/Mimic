@@ -25,16 +25,16 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import java.util.*
 
 /** Items service implementation using material name as itemId. */
-class MinecraftItemsRegistry : BukkitItemsRegistry {
+public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
-    companion object {
-        const val ID: String = "minecraft"
+    public companion object {
+        public const val ID: String = "minecraft"
     }
 
     override val isEnabled: Boolean = true
     override val id: String = ID
 
-    override val knownIds by lazy {
+    override val knownIds: List<String> by lazy {
         Material.values().asSequence()
             .filter { it.isItem }
             .map { it.name.toLowerCase(Locale.ENGLISH) }

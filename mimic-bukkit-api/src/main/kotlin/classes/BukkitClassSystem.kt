@@ -24,12 +24,12 @@ import ru.endlesscode.mimic.PlayerSystemProviderService
 import ru.endlesscode.mimic.util.ExistingWeakReference
 
 /** [ClassSystem] adapted for Bukkit. */
-abstract class BukkitClassSystem(player: Player) : ClassSystem {
+public abstract class BukkitClassSystem(player: Player) : ClassSystem {
 
-    val player: Player get() = playerRef.get()
+    public val player: Player get() = playerRef.get()
 
     private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
 
     /** Provider of Bukkit class systems. */
-    abstract class Provider(id: String) : PlayerSystemProviderService<BukkitClassSystem>(id)
+    public abstract class Provider(id: String) : PlayerSystemProviderService<BukkitClassSystem>(id)
 }

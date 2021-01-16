@@ -24,13 +24,13 @@ import org.bukkit.entity.Player
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 
 /** Implementation of ClassSystem that uses SkillAPI. */
-class SkillApiClassSystem internal constructor(
+public class SkillApiClassSystem internal constructor(
     player: Player,
     private val skillApi: SkillApiWrapper
 ) : BukkitClassSystem(player) {
 
-    companion object {
-        const val ID: String = "skillapi"
+    public companion object {
+        public const val ID: String = "skillapi"
     }
 
     override val classes: List<String>
@@ -42,7 +42,7 @@ class SkillApiClassSystem internal constructor(
     private val playerData: PlayerData
         get() = skillApi.getPlayerData(player)
 
-    class Provider : BukkitClassSystem.Provider(ID) {
+    internal class Provider : BukkitClassSystem.Provider(ID) {
 
         private val skillApi = SkillApiWrapper()
 

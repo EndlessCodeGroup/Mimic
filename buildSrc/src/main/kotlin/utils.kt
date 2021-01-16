@@ -20,6 +20,7 @@ import internal.test
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.*
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private const val JAVA_8 = "1.8"
@@ -41,12 +42,16 @@ fun Project.configureProject() {
     tasks.withType(KotlinCompile::class) {
         kotlinOptions {
             jvmTarget = "1.8"
-            apiVersion = "1.3"
-            languageVersion = "1.3"
+            apiVersion = "1.4"
+            languageVersion = "1.4"
             freeCompilerArgs = listOf("-Xjvm-default=enable")
             allWarningsAsErrors = System.getenv("warningsAsErrors") == "true"
             javaParameters = true
         }
+    }
+
+    extensions.configure<KotlinProjectExtension> {
+        explicitApi()
     }
 
     dependencies {

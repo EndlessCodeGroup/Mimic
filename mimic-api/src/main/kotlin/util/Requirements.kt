@@ -22,7 +22,7 @@
 package ru.endlesscode.mimic.util
 
 /** Checks that classes are exist. */
-fun checkClassesLoaded(vararg classes: String): Boolean {
+public fun checkClassesLoaded(vararg classes: String): Boolean {
     return try {
         classes.forEach { Class.forName(it) }
         true

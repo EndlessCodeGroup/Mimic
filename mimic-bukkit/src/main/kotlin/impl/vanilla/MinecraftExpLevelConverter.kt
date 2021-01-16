@@ -26,11 +26,11 @@ import kotlin.math.sqrt
  *
  * @see [Minecraft Wiki: Experience - Leveling Up](https://minecraft.gamepedia.com/Experience#Leveling_up)
  */
-class MinecraftExpLevelConverter private constructor() : ExpLevelConverter {
+public class MinecraftExpLevelConverter private constructor() : ExpLevelConverter {
 
-    companion object {
+    public companion object {
         @JvmStatic
-        val instance: ExpLevelConverter by lazy { MinecraftExpLevelConverter() }
+        public val instance: ExpLevelConverter by lazy { MinecraftExpLevelConverter() }
     }
 
     override fun expToLevel(exp: Double): Double = when {

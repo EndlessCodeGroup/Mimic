@@ -25,13 +25,13 @@ import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 /** Implementation of LevelSystem that uses SkillAPI. */
-class SkillApiLevelSystem internal constructor(
+public class SkillApiLevelSystem internal constructor(
     player: Player,
     private val skillApi: SkillApiWrapper
 ) : BukkitLevelSystem(SkillApiConverter.getInstance(skillApi), player) {
 
-    companion object {
-        const val ID: String = "skillapi"
+    public companion object {
+        public const val ID: String = "skillapi"
     }
 
     override var level: Int
@@ -74,7 +74,7 @@ class SkillApiLevelSystem internal constructor(
         playerClass?.giveExp(expAmount, ExpSource.SPECIAL)
     }
 
-    class Provider : BukkitLevelSystem.Provider(ID) {
+    internal class Provider : BukkitLevelSystem.Provider(ID) {
         private val skillApi = SkillApiWrapper()
 
         override val isEnabled: Boolean

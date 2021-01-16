@@ -25,13 +25,13 @@ import java.util.*
 import kotlin.math.abs
 
 /** Implementation of LevelSystem that uses BattleLevels. */
-class BattleLevelsLevelSystem internal constructor(
+public class BattleLevelsLevelSystem internal constructor(
     player: Player,
     private val battleLevelsApi: BattleLevelsApiWrapper
 ) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
 
-    companion object {
-        const val ID: String = "battlelevels"
+    public companion object {
+        public const val ID: String = "battlelevels"
     }
 
     override var level: Int
@@ -117,7 +117,7 @@ class BattleLevelsLevelSystem internal constructor(
         }
     }
 
-    class Provider : BukkitLevelSystem.Provider(ID) {
+    public class Provider : BukkitLevelSystem.Provider(ID) {
         override fun getSystem(player: Player): BukkitLevelSystem {
             return BattleLevelsLevelSystem(player, BattleLevelsApiWrapper())
         }

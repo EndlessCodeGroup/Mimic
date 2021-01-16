@@ -23,10 +23,10 @@ import com.jojodmo.customitems.api.CustomItemsAPI
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
-class CustomItemsRegistry : BukkitItemsRegistry {
+public class CustomItemsRegistry : BukkitItemsRegistry {
 
-    companion object {
-        const val ID = "customitems"
+    public companion object {
+        public const val ID: String = "customitems"
     }
 
     override val isEnabled: Boolean get() = CustomItemsAPI.isEnabled()

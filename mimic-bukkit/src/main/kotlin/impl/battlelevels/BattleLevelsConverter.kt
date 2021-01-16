@@ -22,15 +22,15 @@ package ru.endlesscode.mimic.impl.battlelevels
 import ru.endlesscode.mimic.level.ExpLevelConverter
 
 /** Converter for BattleLevels level system. */
-class BattleLevelsConverter private constructor(
+public class BattleLevelsConverter private constructor(
     private val battleLevelsApi: BattleLevelsApiWrapper
 ) : ExpLevelConverter {
 
-    companion object {
+    public companion object {
         private var internalInstance: BattleLevelsConverter? = null
 
         @JvmStatic
-        val instance: ExpLevelConverter
+        public val instance: ExpLevelConverter
             get() = getInstance()
 
         internal fun getInstance(battleLevelsApi: BattleLevelsApiWrapper? = null): ExpLevelConverter {

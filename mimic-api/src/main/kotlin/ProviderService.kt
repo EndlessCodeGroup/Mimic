@@ -23,8 +23,8 @@ package ru.endlesscode.mimic
  * Service that provides [T].
  * Should be used if some service needs arguments for initialization.
  */
-interface ProviderService<out T : Any> : MimicService {
+public interface ProviderService<out T : Any> : MimicService {
 
     /** Creates new [T] initialized with [arg]. */
-    fun get(arg: Any): T
+    public fun get(arg: Any): T
 }

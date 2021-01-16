@@ -22,4 +22,4 @@ package ru.endlesscode.mimic.items
 import org.bukkit.inventory.ItemStack
 
 /** [ItemsRegistry] adapted for Bukkit. */
-interface BukkitItemsRegistry : ItemsRegistry<ItemStack>
+public interface BukkitItemsRegistry : ItemsRegistry<ItemStack>

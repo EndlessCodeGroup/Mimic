@@ -26,27 +26,23 @@ package ru.endlesscode.mimic.level
  * and override all methods that works not properly for your case.
  */
 @Suppress("DEPRECATION") // Allow to use setExp
-interface LevelSystem {
+public interface LevelSystem {
 
     /** Assigned converter. */
-    val converter: ExpLevelConverter
+    public val converter: ExpLevelConverter
 
     /**
-     * Current level of the player.
-     *
-     * Level can not be lesser than zero.
-     *
+     * Current level of the player. Level can not be lesser than zero.
      * @throws IllegalStateException If player-related object not exists
      */
-    var level: Int
+    public var level: Int
 
     /**
      * Player's total experience points.
-     *
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    var totalExp: Double
+    public var totalExp: Double
         get() {
             val levelExp = this.converter.levelToExp(this.level)
             return levelExp + this.exp
@@ -67,11 +63,10 @@ interface LevelSystem {
      * Current fractional XP.
      *
      * This is a percentage value. 0 means "no progress" and 1 is "next level".
-     *
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    var fractionalExp: Double
+    public var fractionalExp: Double
         get() {
             val expToNextLevel = converter.getExpToReachNextLevel(this.level)
             val exp = this.exp.coerceAtMost(expToNextLevel - 1)
@@ -106,7 +101,7 @@ interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @set:Deprecated("Better to use giveExp or takeExp to change experience value.")
-    var exp: Double
+    public var exp: Double
 
     /**
      * Total amount of experience required for the player to reach next level.
@@ -115,7 +110,7 @@ interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    val totalExpToNextLevel: Double
+    public val totalExpToNextLevel: Double
         get() = converter.getExpToReachNextLevel(level)
 
     /**
@@ -125,7 +120,7 @@ interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    val expToNextLevel: Double
+    public val expToNextLevel: Double
         get() = totalExpToNextLevel - exp
 
     /**
@@ -137,7 +132,7 @@ interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    fun takeLevel(lvlAmount: Int) {
+    public fun takeLevel(lvlAmount: Int) {
         val currentLevel = this.level
         this.level = currentLevel - lvlAmount.coerceAtMost(currentLevel)
     }
@@ -151,7 +146,7 @@ interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    fun giveLevel(lvlAmount: Int) {
+    public fun giveLevel(lvlAmount: Int) {
         this.level += lvlAmount
     }
 
@@ -162,7 +157,7 @@ interface LevelSystem {
      * @return true if player player did reach required level
      */
     @JvmDefault
-    fun didReachLevel(requiredLevel: Int): Boolean = requiredLevel.coerceAtLeast(0) <= this.level
+    public fun didReachLevel(requiredLevel: Int): Boolean = requiredLevel.coerceAtLeast(0) <= this.level
 
     /**
      * Takes away player the amount of experience specified.
@@ -176,7 +171,7 @@ interface LevelSystem {
      * @see giveExp
      */
     @JvmDefault
-    fun takeExp(expAmount: Double) {
+    public fun takeExp(expAmount: Double) {
         val currentTotalExp = this.totalExp
         this.totalExp = currentTotalExp - expAmount.coerceAtMost(currentTotalExp)
     }
@@ -193,7 +188,7 @@ interface LevelSystem {
      * @see takeExp
      */
     @JvmDefault
-    fun giveExp(expAmount: Double) {
+    public fun giveExp(expAmount: Double) {
         totalExp += expAmount
     }
 
@@ -205,7 +200,7 @@ interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    fun hasExp(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.exp
+    public fun hasExp(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.exp
 
     /**
      * Checks player has required total experience.
@@ -214,5 +209,5 @@ interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     @JvmDefault
-    fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
+    public fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
 }

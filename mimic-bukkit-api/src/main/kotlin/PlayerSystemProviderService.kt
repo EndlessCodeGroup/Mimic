@@ -21,11 +21,11 @@ package ru.endlesscode.mimic
 
 import org.bukkit.entity.Player
 
-abstract class PlayerSystemProviderService<T : Any>(final override val id: String) : ProviderService<T> {
+public abstract class PlayerSystemProviderService<T : Any>(final override val id: String) : ProviderService<T> {
 
     override val isEnabled: Boolean = true
 
     final override fun get(arg: Any): T = getSystem(arg as Player)
 
-    abstract fun getSystem(player: Player): T
+    public abstract fun getSystem(player: Player): T
 }

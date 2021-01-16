@@ -20,14 +20,14 @@
 package ru.endlesscode.mimic
 
 /** This interface should be implemented by any service relate to Mimic. */
-interface MimicService {
+public interface MimicService {
 
     /** Returns `true` if the service found and it is enabled. */
-    val isEnabled: Boolean
+    public val isEnabled: Boolean
 
     /**
      * Returns the ID of the service.
      * Usually used name of the plugin that implements service.
      */
-    val id: String
+    public val id: String
 }

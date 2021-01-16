@@ -45,7 +45,7 @@ import ru.endlesscode.mimic.util.checkClassesLoaded
 import kotlin.reflect.KClass
 
 /** Main class of the plugin. */
-class Mimic : JavaPlugin() {
+public class Mimic : JavaPlugin() {
 
     private val isReleased = !description.version.endsWith("-SNAPSHOT")
 

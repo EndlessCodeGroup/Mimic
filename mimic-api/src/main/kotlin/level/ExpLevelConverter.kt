@@ -20,15 +20,15 @@
 package ru.endlesscode.mimic.level
 
 /** Entity that contains all methods needed to convert levels to exp and vice versa. */
-interface ExpLevelConverter {
+public interface ExpLevelConverter {
 
     /** Converts [exp] to full level, dropping fractional part. */
     @JvmDefault
-    fun expToFullLevel(exp: Double): Int = expToLevel(exp).toInt()
+    public fun expToFullLevel(exp: Double): Int = expToLevel(exp).toInt()
 
     /** Converts [exp] to level, with fractional part. */
     @JvmDefault
-    fun expToLevel(exp: Double): Double {
+    public fun expToLevel(exp: Double): Double {
         if (exp < 0) return 0.0
 
         var remainingExp = exp
@@ -62,7 +62,7 @@ interface ExpLevelConverter {
 
     /** Returns experience amount to reach given [level] from 0 exp. */
     @JvmDefault
-    fun levelToExp(level: Int): Double {
+    public fun levelToExp(level: Int): Double {
         var exp = 0.0
         for (i in 0 until level) {
             val expToReachNext = getExpToReachNextLevel(i)
@@ -79,11 +79,11 @@ interface ExpLevelConverter {
      * level can't be reached.
      */
     @JvmDefault
-    fun getExpToReachNextLevel(level: Int): Double = getExpToReachLevel(level + 1)
+    public fun getExpToReachNextLevel(level: Int): Double = getExpToReachLevel(level + 1)
 
     /**
      * Returns how much experience you need to reach specified [level] or -1 if
      * level can't be reached.
      */
-    fun getExpToReachLevel(level: Int): Double
+    public fun getExpToReachLevel(level: Int): Double
 }

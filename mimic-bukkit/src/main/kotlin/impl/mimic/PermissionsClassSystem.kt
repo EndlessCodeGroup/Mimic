@@ -30,11 +30,11 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
  * - mimic.class.ClassTwo
  * First class will be used as primary.
  */
-class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
+public class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
 
-    companion object {
-        const val ID: String = "premissions"
-        const val PERMISSION_PREFIX: String = "mimic.class."
+    public companion object {
+        public const val ID: String = "premissions"
+        public const val PERMISSION_PREFIX: String = "mimic.class."
     }
 
     override val classes: List<String>
@@ -49,7 +49,7 @@ class PermissionsClassSystem private constructor(player: Player) : BukkitClassSy
         return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase())
     }
 
-    class Provider : BukkitClassSystem.Provider(ID) {
+    internal class Provider : BukkitClassSystem.Provider(ID) {
         override fun getSystem(player: Player): BukkitClassSystem = PermissionsClassSystem(player)
     }
 }
