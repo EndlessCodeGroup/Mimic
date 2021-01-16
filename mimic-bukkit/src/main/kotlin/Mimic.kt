@@ -141,7 +141,7 @@ class Mimic : JavaPlugin() {
         manager.enableUnstableAPI("help")
         manager.enableUnstableAPI("brigadier")
         manager.commandReplacements.addReplacements(
-            "command", "mimic|m",
+            "command", "mimic",
             "perm", "mimic.admin"
         )
 

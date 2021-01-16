@@ -31,7 +31,7 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-@Subcommand("level|lvl|l|experience|exp|xp|e")
+@Subcommand("experience|xp")
 internal class LevelSystemSubcommand(
     private val systemProvider: BukkitLevelSystem.Provider
 ) : MimicCommand() {
@@ -41,7 +41,7 @@ internal class LevelSystemSubcommand(
         manager.getCommandCompletions().registerEnumCompletion<ValueType>("type")
     }
 
-    @Subcommand("info|i")
+    @Subcommand("info")
     @Description("Show information about player's level system")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
@@ -54,7 +54,7 @@ internal class LevelSystemSubcommand(
         )
     }
 
-    @Subcommand("set|s|=")
+    @Subcommand("set")
     @Description("Set player's level or exp")
     @CommandCompletion("@nothing @extype @players")
     fun set(
@@ -69,13 +69,13 @@ internal class LevelSystemSubcommand(
             when (type) {
                 ExtendedValueType.LVL -> system.level = amount.toInt()
                 ExtendedValueType.TOTAL -> system.totalExp = amount
-                ExtendedValueType.EXP -> system.exp = amount
+                ExtendedValueType.POINTS -> system.exp = amount
             }
             system.printNewStats(sender)
         }
     }
 
-    @Subcommand("give|g|+")
+    @Subcommand("give")
     @Description("Give level or exp to player")
     @CommandCompletion("@nothing @type @players")
     fun give(
@@ -88,13 +88,13 @@ internal class LevelSystemSubcommand(
             val system = systemProvider.get(player)
             when (type) {
                 ValueType.LVL -> system.giveLevel(amount)
-                ValueType.EXP -> system.giveExp(amount.toDouble())
+                ValueType.POINTS -> system.giveExp(amount.toDouble())
             }
             system.printNewStats(sender)
         }
     }
 
-    @Subcommand("take|t|-")
+    @Subcommand("take")
     @Description("Take level or exp from player")
     @CommandCompletion("@nothing @type @players")
     fun take(
@@ -107,7 +107,7 @@ internal class LevelSystemSubcommand(
             val system = systemProvider.get(player)
             when (type) {
                 ValueType.LVL -> system.takeLevel(amount)
-                ValueType.EXP -> system.takeExp(amount.toDouble())
+                ValueType.POINTS -> system.takeExp(amount.toDouble())
             }
             system.printNewStats(sender)
         }
@@ -126,7 +126,7 @@ internal class LevelSystemSubcommand(
         sender.send("&6New ${player.name}'s stats: $level LVL, %.1f XP".format(exp))
     }
 
-    @Subcommand("has|h|reach|r")
+    @Subcommand("has")
     @Description("Check that player did reach level or has exp")
     @CommandCompletion("@nothing @extype @players")
     fun has(
@@ -138,17 +138,18 @@ internal class LevelSystemSubcommand(
         val system = systemProvider.get(player)
         val has = when (type) {
             ExtendedValueType.LVL -> system.didReachLevel(value)
-            ExtendedValueType.EXP -> system.hasExp(value.toDouble())
+            ExtendedValueType.POINTS -> system.hasExp(value.toDouble())
             ExtendedValueType.TOTAL -> system.hasExpTotal(value.toDouble())
         }
-        sender.send("&6${player.name} has%s $value ${type.stringValue}.".format(if (has) "" else " not"))
+        sender.send("&6${player.name} has%s $value ${type.stringValue}."
+            .format(if (has) "" else " not"))
     }
 
-    internal enum class ValueType { LVL, EXP }
+    internal enum class ValueType { LVL, POINTS }
 
     internal enum class ExtendedValueType(val stringValue: String) {
         LVL("level"),
-        EXP("experience"),
+        POINTS("points"),
         TOTAL("total experience")
     }
 }

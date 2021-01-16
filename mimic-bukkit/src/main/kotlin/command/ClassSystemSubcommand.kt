@@ -27,7 +27,7 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-@Subcommand("class|c")
+@Subcommand("class")
 internal class ClassSystemSubcommand(
     private val systemProvider: BukkitClassSystem.Provider
 ) : MimicCommand() {
@@ -36,7 +36,7 @@ internal class ClassSystemSubcommand(
         manager.getCommandCompletions().registerEnumCompletion<Mode>()
     }
 
-    @Subcommand("info|i")
+    @Subcommand("info")
     @Description("Show information about player's class system")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
@@ -48,7 +48,7 @@ internal class ClassSystemSubcommand(
         )
     }
 
-    @Subcommand("has|h")
+    @Subcommand("has")
     @Description("Check that player has given classes")
     @CommandCompletion("@nothing @mode @players")
     fun has(

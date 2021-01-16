@@ -28,14 +28,14 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-@Subcommand("items|i")
+@Subcommand("items")
 internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
         manager.getCommandCompletions().registerAsyncCompletion("item") { itemsRegistry.knownIds }
     }
 
-    @Subcommand("info|i")
+    @Subcommand("info")
     @Description("Show information about items service")
     fun info(sender: CommandSender) {
         sender.send(
@@ -44,7 +44,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
         )
     }
 
-    @Subcommand("give|g")
+    @Subcommand("give")
     @Description("Give item to player")
     @CommandCompletion("@players @item")
     fun give(
@@ -62,7 +62,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
         }
     }
 
-    @Subcommand("compare|c")
+    @Subcommand("compare")
     @Description("Compare item in hand corresponds and given item")
     @CommandCompletion("@item")
     fun compare(
@@ -73,7 +73,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
         player.send("&6Item in hand and '$item' are%s same.".format(if (isSame) "" else "n't"))
     }
 
-    @Subcommand("id|d")
+    @Subcommand("id")
     @Description("Prints ID of item in hand")
     fun id(
         @Flags("itemheld") player: Player
@@ -82,7 +82,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
         player.send("&6Id of item in hand is '$id'")
     }
 
-    @Subcommand("find|f")
+    @Subcommand("find")
     @Description("Check that item with given ID exists")
     @CommandCompletion("@item")
     fun find(
