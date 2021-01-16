@@ -33,7 +33,7 @@ public interface ClassSystem {
      * It is called "primary" because some class systems can support many classes
      * for one player. Primary class can't be null if player has at least one class.
      *
-     * @return Primary class name or `null` if player has not any classes.
+     * @return Primary class name or `null` if player has no any classes.
      */
     @JvmDefault
     public val primaryClass: String?
