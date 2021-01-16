@@ -27,6 +27,7 @@ bukkit {
 
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
+    maven(url = "https://mvn.lumine.io/repository/maven-public/")
     aikar()
     codemc()
     flatDir { dir("libs") }
@@ -41,6 +42,9 @@ dependencies {
 
     compileOnly(rpgplugins.skillapi)
     compileOnly(rpgplugins.battlelevels)
+    compileOnly(rpgplugins.mmoCore)
+    compileOnly(rpgplugins.mmoLib)
+    compileOnly(rpgplugins.mmoItems) { isTransitive = false }
 
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
@@ -64,6 +68,3 @@ tasks.shadowJar {
     minimize()
 }
 
-tasks.named("assemble") {
-    dependsOn(tasks.shadowJar)
-}

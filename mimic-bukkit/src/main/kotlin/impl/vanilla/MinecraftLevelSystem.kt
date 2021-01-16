@@ -19,15 +19,18 @@
 package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.impl.vanilla.MinecraftExpLevelConverter.Companion.instance
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.ExpLevelConverter
 
 /** Vanilla experience bar system. */
-public class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSystem(instance, player) {
+public class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSystem(player) {
 
     public companion object {
         public const val ID: String = "minecraft"
     }
+
+    override val converter: ExpLevelConverter
+        get() = MinecraftExpLevelConverter.instance
 
     override var level: Int
         get() = player.level

@@ -20,13 +20,13 @@ No configuration needed.
 
 #### Commands
 
-| Command                | Description                          |
-|------------------------|--------------------------------------|
-| `/mimic help <search>` | Print help                           |
-| `/mimic info`          | Show mimic status                    |
-| `/mimic level`         | Manage player's level and experience |
-| `/mimic class`         | Check player's classes               |
-| `/mimic items`         | Deal with items                      |
+ Command                | Description                          
+------------------------|--------------------------------------
+ `/mimic help <search>` | Print help                           
+ `/mimic info`          | Show mimic status                    
+ `/mimic experience`    | Manage player's level and experience 
+ `/mimic class`         | Check player's classes               
+ `/mimic items`         | Deal with items                      
 
 ## Supported Implementations 
 
@@ -37,11 +37,13 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 - **[Minecraft][minecraft-exp]** _(Default)_
 - **[SkillAPI]**
 - **[BattleLevels]**
+- **[MMOCore]**
 
 #### [Class Systems][BukkitClassSystem.Provider]
 
 - **Permissions-based** _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
 - **[SkillAPI]**
+- **[MMOCore]**
 
 #### [Items Registries][BukkitItemsRegistry]
 
@@ -50,15 +52,18 @@ It uses service ID as namespace for items IDs.
 For example: `acacia_boat -> minecraft:acacia_boat`.  
 If you use item ID without namespace it will search over all registries.
 
-| Registry                            | Namespace      |
-|-------------------------------------|----------------|
-| [Minecraft][MinecraftItemsRegistry] | `minecraft:`   |
-| [CustomItems]                       | `customitems:` |
+ Registry                            | Namespace      
+-------------------------------------|----------------
+ [Minecraft][MinecraftItemsRegistry] | `minecraft:`   
+ [CustomItems]                       | `customitems:` 
+ [MMOItems]                          | `mmoitems:` 
 
 [minecraft-exp]: https://minecraft.gamepedia.com/Experience
 [skillapi]: https://www.spigotmc.org/resources/4824/
 [battlelevels]: https://www.spigotmc.org/resources/2218/
 [customitems]: https://www.spigotmc.org/resources/63848/
+[mmocore]: https://www.spigotmc.org/resources/70575/
+[mmoitems]: https://www.spigotmc.org/resources/39267/
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 

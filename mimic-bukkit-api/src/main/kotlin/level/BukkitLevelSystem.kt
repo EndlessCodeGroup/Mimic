@@ -24,10 +24,7 @@ import ru.endlesscode.mimic.PlayerSystemProviderService
 import ru.endlesscode.mimic.util.ExistingWeakReference
 
 /** [LevelSystem] adapted for Bukkit. */
-public abstract class BukkitLevelSystem(
-    override val converter: ExpLevelConverter,
-    player: Player
-) : LevelSystem {
+public abstract class BukkitLevelSystem(player: Player) : LevelSystem {
 
     public val player: Player get() = playerRef.get()
 

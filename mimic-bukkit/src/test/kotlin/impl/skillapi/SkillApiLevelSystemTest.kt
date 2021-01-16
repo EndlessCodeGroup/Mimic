@@ -50,7 +50,7 @@ class SkillApiLevelSystemTest : SkillApiTestBase() {
         whenever(levelSystem.level) doReturn 3
 
         // When
-        levelSystem.takeLevel(1)
+        levelSystem.takeLevels(1)
 
         // Then
         verify(playerClass).level = 2
@@ -63,7 +63,7 @@ class SkillApiLevelSystemTest : SkillApiTestBase() {
         val lvlAmount = 10
 
         // When
-        levelSystem.giveLevel(lvlAmount)
+        levelSystem.giveLevels(lvlAmount)
 
         // Then
         verify(playerClass).giveLevels(lvlAmount)

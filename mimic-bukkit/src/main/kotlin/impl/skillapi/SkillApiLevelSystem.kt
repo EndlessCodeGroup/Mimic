@@ -23,33 +23,36 @@ import com.sucy.skill.api.enums.ExpSource
 import com.sucy.skill.api.player.PlayerClass
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.ExpLevelConverter
 
 /** Implementation of LevelSystem that uses SkillAPI. */
 public class SkillApiLevelSystem internal constructor(
     player: Player,
-    private val skillApi: SkillApiWrapper
-) : BukkitLevelSystem(SkillApiConverter.getInstance(skillApi), player) {
+    private val skillApi: SkillApiWrapper,
+) : BukkitLevelSystem(player) {
 
     public companion object {
         public const val ID: String = "skillapi"
     }
 
+    override val converter: ExpLevelConverter = SkillApiConverter.getInstance(skillApi)
+
     override var level: Int
         get() = playerClass?.level ?: 1
-        set(newLevel) {
-            playerClass?.level = newLevel
+        set(value) {
+            playerClass?.level = value
         }
 
     override var exp: Double
         get() = playerClass?.exp ?: 0.0
         set(value) {
-            playerClass?.exp = value.coerceIn(0.0, totalExpToNextLevel)
+            playerClass?.exp = value
         }
 
     private val playerClass: PlayerClass?
         get() = skillApi.getPlayerData(player).mainClass
 
-    override fun takeLevel(lvlAmount: Int) {
+    override fun takeLevels(lvlAmount: Int) {
         if (playerClass != null) {
             val newLevel = (level - lvlAmount).coerceAtLeast(1)
             val fractional = fractionalExp
@@ -58,7 +61,7 @@ public class SkillApiLevelSystem internal constructor(
         }
     }
 
-    override fun giveLevel(lvlAmount: Int) {
+    override fun giveLevels(lvlAmount: Int) {
         playerClass?.giveLevels(lvlAmount)
     }
 

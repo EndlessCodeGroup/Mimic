@@ -37,8 +37,8 @@ internal class LevelSystemSubcommand(
 ) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
-        manager.getCommandCompletions().registerEnumCompletion<ExtendedValueType>("extype")
-        manager.getCommandCompletions().registerEnumCompletion<ValueType>("type")
+        manager.commandCompletions.registerEnumCompletion<ExtendedValueType>("extype")
+        manager.commandCompletions.registerEnumCompletion<ValueType>("type")
     }
 
     @Subcommand("info")
@@ -87,7 +87,7 @@ internal class LevelSystemSubcommand(
         catchUnsupported {
             val system = systemProvider.get(player)
             when (type) {
-                ValueType.LVL -> system.giveLevel(amount)
+                ValueType.LVL -> system.giveLevels(amount)
                 ValueType.POINTS -> system.giveExp(amount.toDouble())
             }
             system.printNewStats(sender)
@@ -106,7 +106,7 @@ internal class LevelSystemSubcommand(
         catchUnsupported {
             val system = systemProvider.get(player)
             when (type) {
-                ValueType.LVL -> system.takeLevel(amount)
+                ValueType.LVL -> system.takeLevels(amount)
                 ValueType.POINTS -> system.takeExp(amount.toDouble())
             }
             system.printNewStats(sender)

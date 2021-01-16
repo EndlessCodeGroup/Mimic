@@ -21,27 +21,30 @@ package ru.endlesscode.mimic.impl.battlelevels
 
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.ExpLevelConverter
 import java.util.*
 import kotlin.math.abs
 
 /** Implementation of LevelSystem that uses BattleLevels. */
 public class BattleLevelsLevelSystem internal constructor(
     player: Player,
-    private val battleLevelsApi: BattleLevelsApiWrapper
-) : BukkitLevelSystem(BattleLevelsConverter.getInstance(battleLevelsApi), player) {
+    private val battleLevelsApi: BattleLevelsApiWrapper,
+) : BukkitLevelSystem(player) {
 
     public companion object {
         public const val ID: String = "battlelevels"
     }
+
+    override val converter: ExpLevelConverter = BattleLevelsConverter.getInstance(battleLevelsApi)
 
     override var level: Int
         get() = battleLevelsApi.getLevel(playerUniqueId)
         set(value) {
             val delta = value - level
             if (delta < 0) {
-                takeLevel(abs(delta))
+                takeLevels(abs(delta))
             } else if (delta > 0) {
-                giveLevel(delta)
+                giveLevels(delta)
             }
         }
 
@@ -71,11 +74,11 @@ public class BattleLevelsLevelSystem internal constructor(
     private val playerUniqueId: UUID
         get() = player.uniqueId
 
-    override fun giveLevel(lvlAmount: Int) {
+    override fun giveLevels(lvlAmount: Int) {
         battleLevelsApi.addLevel(playerUniqueId, lvlAmount)
     }
 
-    override fun takeLevel(lvlAmount: Int) {
+    override fun takeLevels(lvlAmount: Int) {
         battleLevelsApi.removeLevel(playerUniqueId, lvlAmount)
     }
 
@@ -92,7 +95,7 @@ public class BattleLevelsLevelSystem internal constructor(
                 levelsToGive++
                 expToNextLevel = converter.getExpToReachLevel(currentLevel + levelsToGive)
             }
-            giveLevel(levelsToGive)
+            giveLevels(levelsToGive)
             if (extraExp > 0) battleLevelsApi.addScore(playerUniqueId, extraExp)
         } else {
             battleLevelsApi.addScore(playerUniqueId, expAmount)
@@ -110,7 +113,7 @@ public class BattleLevelsLevelSystem internal constructor(
                 extraExp -= converter.getExpToReachLevel(currentLevel - levelsToTake)
                 levelsToTake++
             }
-            takeLevel(levelsToTake)
+            takeLevels(levelsToTake)
             if (extraExp < 0) battleLevelsApi.addScore(playerUniqueId, abs(extraExp))
         } else {
             battleLevelsApi.removeScore(playerUniqueId, expAmount)
