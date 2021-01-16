@@ -19,7 +19,7 @@
 
 package ru.endlesscode.mimic
 
-import co.aikar.commands.BukkitCommandManager
+import co.aikar.commands.PaperCommandManager
 import org.bstats.bukkit.Metrics
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
@@ -135,10 +135,11 @@ class Mimic : JavaPlugin() {
         })
     }
 
+    @Suppress("DEPRECATION") // Yes. I want to use unstable API
     private fun registerCommands() {
-        val manager = BukkitCommandManager(this)
-        @Suppress("DEPRECATION") // Yes. I want to use unstable API
+        val manager = PaperCommandManager(this)
         manager.enableUnstableAPI("help")
+        manager.enableUnstableAPI("brigadier")
         manager.commandReplacements.addReplacements(
             "command", "mimic|m",
             "perm", "mimic.admin"

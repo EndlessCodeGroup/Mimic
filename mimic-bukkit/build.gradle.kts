@@ -1,39 +1,39 @@
-// Bukkit MimicAPI implementation build config
+import ru.endlesscode.bukkitgradle.dependencies.*
 
 plugins {
     id("com.github.johnrengelman.shadow") version "6.0.0"
-    id("ru.endlesscode.bukkitgradle")
+    id("ru.endlesscode.bukkitgradle") version "0.9.1"
 }
 
 description = "Bukkit plugin with implementations of Mimic APIs"
 
 bukkit {
-    version = "1.16.1"
+    apiVersion = "1.16.4"
 
     meta {
-        setName("Mimic")
-        setMain("$group.$name")
-        setAuthors(listOf("osipxd", "EndlessCodeGroup"))
-        setUrl("https://github.com/EndlessCodeGroup/MimicAPI")
+        name.set("Mimic")
+        apiVersion.set("1.13")
+        authors.set(listOf("osipxd", "EndlessCodeGroup"))
+        url.set("https://github.com/EndlessCodeGroup/MimicAPI")
     }
 
-    run {
-        setCore("spigot")
+    server {
+        setCore("paper")
         eula = true
     }
 }
 
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
-    maven(url = "https://repo.aikar.co/content/groups/aikar/")
-    maven(url = "https://repo.codemc.org/repository/maven-public")
+    aikar()
+    codemc()
     flatDir { dir("libs") }
 }
 
 dependencies {
     api(project(":mimic-bukkit-api"))
 
-    compileOnly(bukkit) { isTransitive = false }
+    compileOnly(bukkitApi) { isTransitive = false }
     implementation(deps.acf)
     implementation(deps.bstats_bukkit)
 
@@ -43,7 +43,7 @@ dependencies {
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
 
-    testImplementation(bukkit)
+    testImplementation(bukkitApi)
     testImplementation(deps.skillapi)
 }
 

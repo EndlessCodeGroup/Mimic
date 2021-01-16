@@ -1,3 +1,4 @@
+@file:Suppress("ClassName")
 /*
 * This file is part of RPGInventory.
 * Copyright (C) 2019 EndlessCode Group and contributors
@@ -22,7 +23,6 @@ object Dependencies {
     const val battlelevels = "me.robin.battlelevels:battlelevels-api:6.9.1"
 
     // Libs
-    const val acf = "co.aikar:acf-paper:0.5.0-SNAPSHOT"
     const val bstats_bukkit = "org.bstats:bstats-bukkit:1.7"
 
     // Testing
@@ -31,6 +31,12 @@ object Dependencies {
     const val jupiter_params = "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
     const val mockito = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     const val mockito_inline = "org.mockito:mockito-inline:2.23.0"
+}
+
+object acf {
+    private const val version = "0.5.0-SNAPSHOT"
+    const val paper = "co.aikar:acf-paper:$version"
+    const val brigadier = "co.aikar:acf-brigadier:$version"
 }
 
 // Aliases
