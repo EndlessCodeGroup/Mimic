@@ -70,5 +70,9 @@ public interface ClassSystem {
 
     /** Returns `true` if player has [requiredClass]. */
     @JvmDefault
-    public fun hasClass(requiredClass: String): Boolean = requiredClass in this.classes
+    public fun hasClass(requiredClass: String): Boolean {
+        return this.classes.any {
+            it.equals(requiredClass, ignoreCase = true)
+        }
+    }
 }
