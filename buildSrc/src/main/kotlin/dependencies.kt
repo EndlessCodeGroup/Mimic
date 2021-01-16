@@ -17,27 +17,27 @@
 * along with RPGInventory.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-object Dependencies {
-    // RPG Plugins
+object rpgplugins {
     const val skillapi = "com.sucy:SkillAPI:3.102"
     const val battlelevels = "me.robin.battlelevels:battlelevels-api:6.9.1"
-
-    // Libs
-    const val bstats_bukkit = "org.bstats:bstats-bukkit:1.7"
-
-    // Testing
-    private const val jupiter_version = "5.6.2"
-    const val jupiter = "org.junit.jupiter:junit-jupiter:$jupiter_version"
-    const val jupiter_params = "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
-    const val mockito = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    const val mockito_inline = "org.mockito:mockito-inline:2.23.0"
 }
 
 object acf {
-    private const val version = "0.5.0-SNAPSHOT"
-    const val paper = "co.aikar:acf-paper:$version"
-    const val brigadier = "co.aikar:acf-brigadier:$version"
+    const val paper = "co.aikar:acf-paper:0.5.0-SNAPSHOT"
 }
 
-// Aliases
-val deps = Dependencies
+object misc {
+    const val bstats = "org.bstats:bstats-bukkit:1.8"
+}
+
+// Testing
+object junit {
+    private const val jupiter_version = "5.7.0"
+    const val jupiter = "org.junit.jupiter:junit-jupiter:$jupiter_version"
+    const val jupiter_params = "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
+}
+
+object mockito {
+    const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    const val inline = "org.mockito:mockito-inline:2.23.0"
+}

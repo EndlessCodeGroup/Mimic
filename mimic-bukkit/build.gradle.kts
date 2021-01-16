@@ -1,4 +1,6 @@
-import ru.endlesscode.bukkitgradle.dependencies.*
+import ru.endlesscode.bukkitgradle.dependencies.aikar
+import ru.endlesscode.bukkitgradle.dependencies.codemc
+import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 
 plugins {
     id("com.github.johnrengelman.shadow") version "6.0.0"
@@ -14,7 +16,7 @@ bukkit {
         name.set("Mimic")
         apiVersion.set("1.13")
         authors.set(listOf("osipxd", "EndlessCodeGroup"))
-        url.set("https://github.com/EndlessCodeGroup/MimicAPI")
+        url.set("https://github.com/EndlessCodeGroup/Mimic")
     }
 
     server {
@@ -33,23 +35,24 @@ repositories {
 dependencies {
     api(project(":mimic-bukkit-api"))
 
-    compileOnly(bukkitApi) { isTransitive = false }
-    implementation(deps.acf)
-    implementation(deps.bstats_bukkit)
+    compileOnly(spigotApi) { isTransitive = false }
+    implementation(acf.paper)
+    implementation(misc.bstats)
 
-    compileOnly(deps.skillapi)
-    compileOnly(deps.battlelevels)
+    compileOnly(rpgplugins.skillapi)
+    compileOnly(rpgplugins.battlelevels)
 
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
 
-    testImplementation(bukkitApi)
-    testImplementation(deps.skillapi)
+    testImplementation(spigotApi)
+    testImplementation(rpgplugins.skillapi)
 }
 
 tasks.shadowJar {
     val shadePackage = "${project.group}.shade"
-    relocate("co.aikar", "$shadePackage.acf")
+    relocate("co.aikar.commands", "$shadePackage.acf.commands")
+    relocate("co.aikar.locales", "$shadePackage.acf.locales")
     relocate("kotlin", "$shadePackage.kotlin")
     relocate("org.intellij", "$shadePackage.intellij")
     relocate("org.jetbrains", "$shadePackage.jetbrains")

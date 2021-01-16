@@ -63,8 +63,8 @@ fun Project.configureProject() {
 
 fun DependencyHandlerScope.testingDependencies() {
     "testImplementation"(kotlin("test-junit5"))
-    "testImplementation"(deps.jupiter)
-    "testImplementation"(deps.jupiter_params)
-    "testImplementation"(deps.mockito_inline)
-    "testImplementation"(deps.mockito)
+    "testImplementation"(junit.jupiter)
+    "testImplementation"(junit.jupiter_params)
+    "testImplementation"(mockito.kotlin)
+    "testImplementation"(mockito.inline)
 }
