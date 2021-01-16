@@ -36,6 +36,7 @@ import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
+import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
 import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
@@ -79,6 +80,7 @@ public class Mimic : JavaPlugin() {
         // ItemsRegistry
         hookItems(::MinecraftItemsRegistry, Lowest)
         hookItems(::CustomItemsRegistry, Normal, "com.jojodmo.customitems.api.CustomItemsAPI")
+        hookItems(::MmoItemsRegistry, Normal, "net.Indyuce.mmoitems.MMOItems")
         hookItems({ MimicItemsRegistry(servicesManager) }, Highest)
     }
 

@@ -44,6 +44,7 @@ dependencies {
     compileOnly(rpgplugins.battlelevels)
     compileOnly(rpgplugins.mmoCore)
     compileOnly(rpgplugins.mmoLib)
+    compileOnly(rpgplugins.mmoItems) { isTransitive = false }
 
     // From libs/ directory
     compileOnly(":CustomItemsAPI")

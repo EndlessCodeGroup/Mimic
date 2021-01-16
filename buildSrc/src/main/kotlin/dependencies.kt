@@ -22,6 +22,7 @@ object rpgplugins {
     const val battlelevels = "me.robin.battlelevels:battlelevels-api:6.9.1"
     const val mmoCore = "net.Indyuce:MMOCore:1.6.2"
     const val mmoLib = "net.Indyuce:MMOLib:1.7.3"
+    const val mmoItems = "net.Indyuce:MMOItems:6.5"
 }
 
 object acf {

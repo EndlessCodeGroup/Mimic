@@ -40,7 +40,7 @@ public class CustomItemsRegistry : BukkitItemsRegistry {
 
     override fun isItemExists(itemId: String): Boolean = CustomItemsAPI.getCustomItem(itemId) != null
 
-    override fun getItemId(item: ItemStack): String? = CustomItemsAPI.getCustomItemID(item)
+    override fun getItemId(item: ItemStack): String? = CustomItemsAPI.getCustomItemID(item)?.toLowerCase()
 
     override fun getItem(itemId: String, amount: Int): ItemStack? = CustomItemsAPI.getCustomItem(itemId, amount)
 }
