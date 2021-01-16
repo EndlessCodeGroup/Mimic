@@ -35,6 +35,7 @@ import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
+import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
@@ -68,6 +69,7 @@ public class Mimic : JavaPlugin() {
         hookLevels(MinecraftLevelSystem::Provider, Lowest)
         hookLevels(SkillApiLevelSystem::Provider, Normal, "com.sucy.skill.SkillAPI")
         hookLevels(BattleLevelsLevelSystem::Provider, Normal, "me.robin.battlelevels.api.BattleLevelsAPI")
+        hookLevels(MmoCoreLevelSystem::Provider, Normal, "net.Indyuce.mmocore.MMOCore")
 
         // ClassSystem
         hookClasses(PermissionsClassSystem::Provider, Lowest)

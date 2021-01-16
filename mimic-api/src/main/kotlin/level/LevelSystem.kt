@@ -68,7 +68,7 @@ public interface LevelSystem {
     @JvmDefault
     public var fractionalExp: Double
         get() {
-            val expToNextLevel = converter.getExpToReachNextLevel(this.level)
+            val expToNextLevel = totalExpToNextLevel
             val exp = this.exp.coerceAtMost(expToNextLevel - 1)
             return if (exp <= 0.0) 0.0 else exp / expToNextLevel
         }
