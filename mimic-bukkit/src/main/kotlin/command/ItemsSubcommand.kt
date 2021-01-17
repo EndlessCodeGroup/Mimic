@@ -32,7 +32,7 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
 internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
-        manager.getCommandCompletions().registerAsyncCompletion("item") { itemsRegistry.knownIds }
+        manager.commandCompletions.registerAsyncCompletion("item") { itemsRegistry.knownIds }
     }
 
     @Subcommand("info")
@@ -40,7 +40,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
     fun info(sender: CommandSender) {
         sender.send(
             "&3Items Service: &7${itemsRegistry.id}",
-            "&3Known IDs amount: &7${itemsRegistry.knownIds.size}"
+            "&3Known IDs amount: &7${itemsRegistry.knownIds.size}+"
         )
     }
 

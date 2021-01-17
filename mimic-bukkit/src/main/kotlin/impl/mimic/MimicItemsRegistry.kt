@@ -63,15 +63,13 @@ public class MimicItemsRegistry(private val servicesManager: ServicesManager) : 
 
     override fun getItemId(item: ItemStack): String? {
         return services.asSequence()
-            .map { service -> service.getItemId(item)?.let { service.namespaced(it) } }
-            .filterNotNull()
+            .mapNotNull { service -> service.getItemId(item)?.let { service.namespaced(it) } }
             .firstOrNull()
     }
 
     override fun getItem(itemId: String, amount: Int): ItemStack? {
         return runOnServices(itemId) { id ->
-            map { service -> service.getItem(id, amount) }
-                .filterNotNull()
+            mapNotNull { service -> service.getItem(id, amount) }
                 .firstOrNull()
         }
     }
