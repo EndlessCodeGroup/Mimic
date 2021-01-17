@@ -40,6 +40,7 @@ import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
 import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgClassSystem
+import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgItemsRegistry
 import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgLevelSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
@@ -88,6 +89,7 @@ public class Mimic : JavaPlugin() {
         hookItems(::MinecraftItemsRegistry, Lowest)
         hookItems(::CustomItemsRegistry, Normal, "com.jojodmo.customitems.api.CustomItemsAPI")
         hookItems(::MmoItemsRegistry, Normal, "net.Indyuce.mmoitems.MMOItems")
+        hookItems(::QuantumRpgItemsRegistry, Normal, "su.nightexpress.quantumrpg.QuantumRPG")
         hookItems({ MimicItemsRegistry(servicesManager) }, Highest)
     }
 
