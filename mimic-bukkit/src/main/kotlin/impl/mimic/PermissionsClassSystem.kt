@@ -33,7 +33,7 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 public class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
 
     public companion object {
-        public const val ID: String = "premissions"
+        public const val ID: String = "permissions"
         public const val PERMISSION_PREFIX: String = "mimic.class."
     }
 
