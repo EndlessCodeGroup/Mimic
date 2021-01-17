@@ -60,7 +60,7 @@ internal class LevelSystemSubcommand(
     fun set(
         sender: CommandSender,
         amount: Double,
-        @Default("exp") type: ExtendedValueType,
+        @Default("lvl") type: ExtendedValueType,
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {

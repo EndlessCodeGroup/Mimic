@@ -50,13 +50,11 @@ public interface LevelSystem {
         set(value) {
             val allowedTotalExperience = value.coerceAtLeast(0.0)
 
-            val level = this.converter.expToLevel(allowedTotalExperience)
-            val fullLevel = this.converter.expToFullLevel(allowedTotalExperience)
-            val expToNextLevel = this.converter.getExpToReachNextLevel(fullLevel)
-            val levelPercent = level - fullLevel
+            val level = this.converter.expToFullLevel(allowedTotalExperience)
+            val levelExp = this.converter.levelToExp(level)
 
-            this.level = fullLevel
-            this.exp = expToNextLevel * levelPercent
+            this.level = level
+            this.exp = allowedTotalExperience - levelExp
         }
 
     /**
