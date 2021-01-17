@@ -50,6 +50,8 @@ dependencies {
 
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
+    compileOnly(":QuantumRPG:5.10.2")
+    compileOnly(":NexEngine:2.0.3")
 
     testImplementation(spigotApi)
     testImplementation(rpgplugins.skillapi)

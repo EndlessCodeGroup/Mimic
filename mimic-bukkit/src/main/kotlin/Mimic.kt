@@ -39,6 +39,9 @@ import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
+import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgClassSystem
+import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgItemsRegistry
+import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgLevelSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
@@ -66,7 +69,6 @@ public class Mimic : JavaPlugin() {
         registerCommands()
     }
 
-    @Suppress("RemoveExplicitTypeArguments") // We should specify type explicitly
     private fun hookDefaultServices() {
         // LevelSystem
         hookLevels(MinecraftLevelSystem::Provider, Lowest)
@@ -74,17 +76,20 @@ public class Mimic : JavaPlugin() {
         hookLevels(BattleLevelsLevelSystem::Provider, Normal, "me.robin.battlelevels.api.BattleLevelsAPI")
         hookLevels(MmoCoreLevelSystem::Provider, Normal, "net.Indyuce.mmocore.MMOCore")
         hookLevels(HeroesLevelSystem::Provider, Normal, "com.herocraftonline.heroes.Heroes")
+        hookLevels(QuantumRpgLevelSystem::Provider, Normal, "su.nightexpress.quantumrpg.QuantumRPG")
 
         // ClassSystem
         hookClasses(PermissionsClassSystem::Provider, Lowest)
         hookClasses(SkillApiClassSystem::Provider, Normal, "com.sucy.skill.SkillAPI")
         hookClasses(MmoCoreClassSystem::Provider, Normal, "net.Indyuce.mmocore.MMOCore")
         hookClasses(HeroesClassSystem::Provider, Normal, "com.herocraftonline.heroes.Heroes")
+        hookClasses(QuantumRpgClassSystem::Provider, Normal, "su.nightexpress.quantumrpg.QuantumRPG")
 
         // ItemsRegistry
         hookItems(::MinecraftItemsRegistry, Lowest)
         hookItems(::CustomItemsRegistry, Normal, "com.jojodmo.customitems.api.CustomItemsAPI")
         hookItems(::MmoItemsRegistry, Normal, "net.Indyuce.mmoitems.MMOItems")
+        hookItems(::QuantumRpgItemsRegistry, Normal, "su.nightexpress.quantumrpg.QuantumRPG")
         hookItems({ MimicItemsRegistry(servicesManager) }, Highest)
     }
 
