@@ -38,12 +38,14 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 - **[SkillAPI]**
 - **[BattleLevels]**
 - **[MMOCore]**
+- **[Heroes]**
 
 #### [Class Systems][BukkitClassSystem.Provider]
 
 - **Permissions-based** _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
 - **[SkillAPI]**
 - **[MMOCore]**
+- **[Heroes]**
 
 #### [Items Registries][BukkitItemsRegistry]
 
@@ -64,6 +66,7 @@ If you use item ID without namespace it will search over all registries.
 [customitems]: https://www.spigotmc.org/resources/63848/
 [mmocore]: https://www.spigotmc.org/resources/70575/
 [mmoitems]: https://www.spigotmc.org/resources/39267/
+[heroes]: https://www.spigotmc.org/resources/24734/
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 
