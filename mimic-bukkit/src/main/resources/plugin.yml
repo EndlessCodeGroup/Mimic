@@ -4,3 +4,4 @@ loadbefore:
   - CustomItems
   - MMOCore
   - MMOItems
+  - Heroes
