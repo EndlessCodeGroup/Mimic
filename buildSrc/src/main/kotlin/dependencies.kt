@@ -23,6 +23,7 @@ object rpgplugins {
     const val mmoCore = "net.Indyuce:MMOCore:1.6.2"
     const val mmoLib = "net.Indyuce:MMOLib:1.7.3"
     const val mmoItems = "net.Indyuce:MMOItems:6.5"
+    const val heroes = "com.herocraftonline.heroes:Heroes:1.9.6-SNAPSHOT:stripped"
 }
 
 object acf {
