@@ -39,6 +39,7 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 - **[BattleLevels]**
 - **[MMOCore]**
 - **[Heroes]**
+- **[QuantumRPG]**
 
 #### [Class Systems][BukkitClassSystem.Provider]
 
@@ -46,19 +47,21 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 - **[SkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**
+- **[QuantumRPG]**
 
 #### [Items Registries][BukkitItemsRegistry]
 
 [MimicItemsRegistry] - Items registry combining all others items registries.
 It uses service ID as namespace for items IDs.  
 For example: `acacia_boat -> minecraft:acacia_boat`.  
-If you use item ID without namespace it will search over all registries.
+If you use item ID without a namespace, it will search over all registries.
 
- Registry                            | Namespace      
--------------------------------------|----------------
- [Minecraft][MinecraftItemsRegistry] | `minecraft:`   
- [CustomItems]                       | `customitems:` 
- [MMOItems]                          | `mmoitems:` 
+ Registry                            | ID Structure      
+-------------------------------------|--------------------------
+ [Minecraft][MinecraftItemsRegistry] | `minecraft:[id]`
+ [CustomItems]                       | `customitems:[id]`
+ [MMOItems]                          | `mmoitems:[id]`
+ [QuantumRPG]                        | `quantumrpg:[type]/[id]`
 
 [minecraft-exp]: https://minecraft.gamepedia.com/Experience
 [skillapi]: https://www.spigotmc.org/resources/4824/
@@ -67,6 +70,7 @@ If you use item ID without namespace it will search over all registries.
 [mmocore]: https://www.spigotmc.org/resources/70575/
 [mmoitems]: https://www.spigotmc.org/resources/39267/
 [heroes]: https://www.spigotmc.org/resources/24734/
+[quantumrpg]: https://www.spigotmc.org/resources/40007/
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 
