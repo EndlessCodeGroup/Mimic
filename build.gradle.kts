@@ -6,7 +6,7 @@ plugins {
 
 // Common configurations for all Mimic projects
 subprojects {
-    version = "0.4"
+    version = "0.5"
     group = "ru.endlesscode.mimic"
 
     configureProject()
