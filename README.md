@@ -1,6 +1,8 @@
 # Mimic
-[![Version](https://img.shields.io/maven-central/v/ru.endlesscode.mimic/mimic-api?style=flat-square)][mavenCentral] [![Build Status](https://img.shields.io/github/workflow/status/EndlessCodeGroup/Mimic/CI/main?style=flat-square)][ci] [![Code Quality](https://img.shields.io/codacy/grade/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)][codacy]
-[![license](https://img.shields.io/github/license/EndlessCodeGroup/Mimic.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/maven-central/v/ru.endlesscode.mimic/mimic-api?style=flat-square)][mavenCentral]
+[![Build Status](https://img.shields.io/github/workflow/status/EndlessCodeGroup/Mimic/CI?style=flat-square)][ci]
+[![Code Quality](https://img.shields.io/codacy/grade/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)][codacy]
+[![license](https://img.shields.io/github/license/EndlessCodeGroup/Mimic.svg?style=flat-square)][license]
 
 [![Logo](images/logo.png)](#)
 
@@ -72,6 +74,7 @@ Please make sure to update tests as appropriate.
 [codacy]: https://www.codacy.com/app/EndlessCode-Group/MimicAPI?utm_source%3Dgithub.com%26amp;utm_medium%3Dreferral%26amp;utm_content%3DEndlessCodeGroup/MimicAPI%26amp;utm_campaign%3DBadge_Grade
 [mavenCentral]: https://search.maven.org/search?q=g:ru.endlesscode.mimic
 [ci]: https://github.com/EndlessCodeGroup/Mimic/actions/
+[license]: LICENSE
 
 [Vault]: https://github.com/MilkBowl/Vault
 [Gradle]: https://gradle.org/
