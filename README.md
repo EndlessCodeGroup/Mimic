@@ -1,6 +1,6 @@
 # Mimic
-[![Download](https://img.shields.io/bintray/v/endlesscode/repo/mimic?style=flat-square)](https://bintray.com/endlesscode/repo/mimic/_latestVersion) [![Build Status](https://img.shields.io/github/workflow/status/EndlessCodeGroup/MimicAPI/CI?style=flat-square)](https://travis-ci.org/EndlessCodeGroup/MimicAPI) [![Code Quality](https://img.shields.io/codacy/grade/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)](https://www.codacy.com/app/EndlessCode-Group/MimicAPI?utm_source%3Dgithub.com%26amp;utm_medium%3Dreferral%26amp;utm_content%3DEndlessCodeGroup/MimicAPI%26amp;utm_campaign%3DBadge_Grade)
-[![license](https://img.shields.io/github/license/EndlessCodeGroup/MimicAPI.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/maven-central/v/ru.endlesscode.mimic/mimic-api?style=flat-square)][mavenCentral] [![Build Status](https://img.shields.io/github/workflow/status/EndlessCodeGroup/Mimic/CI/main?style=flat-square)][ci] [![Code Quality](https://img.shields.io/codacy/grade/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)][codacy]
+[![license](https://img.shields.io/github/license/EndlessCodeGroup/Mimic.svg?style=flat-square)](LICENSE)
 
 [![Logo](images/logo.png)](#)
 
@@ -41,7 +41,7 @@ If you are developer you can use [Gradle] or [Maven] to plug MimicAPI to your pl
 
 ```kotlin
 repositories {
-    maven { setUrl("https://dl.bintray.com/endlesscode/repo") }
+    mavenCentral()
 }
 
 dependencies {
@@ -51,11 +51,6 @@ dependencies {
 
 ### Maven
 ```xml
-<repository>
-    <id>bintray-endlesscode-repo</id>
-    <url>https://dl.bintray.com/endlesscode/repo</url>
-</repository>
-
 <dependency>
   <groupId>ru.endlesscode.mimic</groupId>
   <artifactId>mimic-bukkit-api</artifactId>
@@ -73,6 +68,10 @@ Pull requests are welcome.
 For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
+
+[codacy]: https://www.codacy.com/app/EndlessCode-Group/MimicAPI?utm_source%3Dgithub.com%26amp;utm_medium%3Dreferral%26amp;utm_content%3DEndlessCodeGroup/MimicAPI%26amp;utm_campaign%3DBadge_Grade
+[mavenCentral]: https://search.maven.org/search?q=g:ru.endlesscode.mimic
+[ci]: https://github.com/EndlessCodeGroup/Mimic/actions/
 
 [Vault]: https://github.com/MilkBowl/Vault
 [Gradle]: https://gradle.org/
