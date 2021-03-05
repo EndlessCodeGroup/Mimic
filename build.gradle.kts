@@ -6,7 +6,7 @@ plugins {
 
 // Common configurations for all Mimic projects
 subprojects {
-    apply(plugin = "kotlin-project")
+    apply(plugin = "commons")
     apply(plugin = "publish")
 
     version = "0.6-SNAPSHOT"
