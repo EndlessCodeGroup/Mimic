@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,13 @@ package ru.endlesscode.mimic
 
 import org.bukkit.entity.Player
 
+/** [ProviderService] requiring [Player] to initialize "PlayerSystem" [T]. */
 public abstract class PlayerSystemProviderService<T : Any>(final override val id: String) : ProviderService<T> {
 
     override val isEnabled: Boolean = true
 
     final override fun get(arg: Any): T = getSystem(arg as Player)
 
+    /** Returns new instance of [T] initialized with the given [player] object. */
     public abstract fun getSystem(player: Player): T
 }
