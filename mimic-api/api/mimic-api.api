@@ -1,0 +1,65 @@
+public abstract interface class ru/endlesscode/mimic/MimicService {
+	public abstract fun getId ()Ljava/lang/String;
+	public abstract fun isEnabled ()Z
+}
+
+public abstract interface class ru/endlesscode/mimic/ProviderService : ru/endlesscode/mimic/MimicService {
+	public abstract fun get (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class ru/endlesscode/mimic/classes/ClassSystem {
+	public abstract fun getClasses ()Ljava/util/List;
+	public fun getPrimaryClass ()Ljava/lang/String;
+	public fun hasAllClasses (Ljava/util/List;)Z
+	public fun hasAnyClass ()Z
+	public fun hasAnyOfClasses (Ljava/util/List;)Z
+	public fun hasClass (Ljava/lang/String;)Z
+}
+
+public abstract interface class ru/endlesscode/mimic/items/ItemsRegistry : ru/endlesscode/mimic/MimicService {
+	public fun getItem (Ljava/lang/String;)Ljava/lang/Object;
+	public abstract fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public abstract fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
+	public abstract fun getKnownIds ()Ljava/util/Collection;
+	public abstract fun isItemExists (Ljava/lang/String;)Z
+	public fun isSameItem (Ljava/lang/Object;Ljava/lang/String;)Z
+}
+
+public abstract interface class ru/endlesscode/mimic/level/ExpLevelConverter {
+	public fun expToFullLevel (D)I
+	public fun expToLevel (D)D
+	public abstract fun getExpToReachLevel (I)D
+	public fun getExpToReachNextLevel (I)D
+	public fun levelToExp (I)D
+}
+
+public abstract interface class ru/endlesscode/mimic/level/LevelSystem {
+	public fun didReachLevel (I)Z
+	public abstract fun getConverter ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public abstract fun getExp ()D
+	public fun getExpToNextLevel ()D
+	public fun getFractionalExp ()D
+	public abstract fun getLevel ()I
+	public fun getTotalExp ()D
+	public fun getTotalExpToNextLevel ()D
+	public fun giveExp (D)V
+	public fun giveLevels (I)V
+	public fun hasExp (D)Z
+	public fun hasExpTotal (D)Z
+	public abstract fun setExp (D)V
+	public fun setFractionalExp (D)V
+	public abstract fun setLevel (I)V
+	public fun setTotalExp (D)V
+	public fun takeExp (D)V
+	public fun takeLevels (I)V
+}
+
+public final class ru/endlesscode/mimic/util/ExistingWeakReference : java/lang/ref/WeakReference {
+	public fun <init> (Ljava/lang/Object;)V
+	public fun get ()Ljava/lang/Object;
+}
+
+public final class ru/endlesscode/mimic/util/Requirements {
+	public static final fun checkClassesLoaded ([Ljava/lang/String;)Z
+}
+

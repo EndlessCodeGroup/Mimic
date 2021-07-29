@@ -1,0 +1,325 @@
+public final class ru/endlesscode/mimic/Mimic : org/bukkit/plugin/java/JavaPlugin {
+	public fun <init> ()V
+	public fun onEnable ()V
+	public fun onLoad ()V
+}
+
+public final class ru/endlesscode/mimic/impl/battlelevels/BattleLevelsConverter : ru/endlesscode/mimic/level/ExpLevelConverter {
+	public static final field Companion Lru/endlesscode/mimic/impl/battlelevels/BattleLevelsConverter$Companion;
+	public synthetic fun <init> (Lru/endlesscode/mimic/impl/battlelevels/BattleLevelsApiWrapper;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getExpToReachLevel (I)D
+	public static final fun getInstance ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+}
+
+public final class ru/endlesscode/mimic/impl/battlelevels/BattleLevelsConverter$Companion {
+	public final fun getInstance ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+}
+
+public final class ru/endlesscode/mimic/impl/battlelevels/BattleLevelsLevelSystem : ru/endlesscode/mimic/level/BukkitLevelSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/battlelevels/BattleLevelsLevelSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun getConverter ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExp ()D
+	public fun getLevel ()I
+	public fun getTotalExp ()D
+	public fun giveExp (D)V
+	public fun giveLevels (I)V
+	public fun setExp (D)V
+	public fun setLevel (I)V
+	public fun setTotalExp (D)V
+	public fun takeExp (D)V
+	public fun takeLevels (I)V
+}
+
+public final class ru/endlesscode/mimic/impl/battlelevels/BattleLevelsLevelSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/battlelevels/BattleLevelsLevelSystem$Provider : ru/endlesscode/mimic/level/BukkitLevelSystem$Provider {
+	public fun <init> ()V
+	public synthetic fun getSystem (Lorg/bukkit/entity/Player;)Ljava/lang/Object;
+	public fun getSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/BukkitLevelSystem;
+}
+
+public final class ru/endlesscode/mimic/impl/customitems/CustomItemsRegistry : ru/endlesscode/mimic/items/BukkitItemsRegistry {
+	public static final field Companion Lru/endlesscode/mimic/impl/customitems/CustomItemsRegistry$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun <init> ()V
+	public fun getId ()Ljava/lang/String;
+	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public fun getKnownIds ()Ljava/util/Collection;
+	public fun isEnabled ()Z
+	public fun isItemExists (Ljava/lang/String;)Z
+	public synthetic fun isSameItem (Ljava/lang/Object;Ljava/lang/String;)Z
+	public fun isSameItem (Lorg/bukkit/inventory/ItemStack;Ljava/lang/String;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/customitems/CustomItemsRegistry$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/heroes/HeroesClassSystem : ru/endlesscode/mimic/classes/BukkitClassSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/heroes/HeroesClassSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lru/endlesscode/mimic/impl/heroes/HeroesWrapper;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getClasses ()Ljava/util/List;
+	public fun getPrimaryClass ()Ljava/lang/String;
+}
+
+public final class ru/endlesscode/mimic/impl/heroes/HeroesClassSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/heroes/HeroesExpLevelConverter : ru/endlesscode/mimic/level/ExpLevelConverter {
+	public fun expToFullLevel (D)I
+	public fun expToLevel (D)D
+	public fun getExpToReachLevel (I)D
+	public fun levelToExp (I)D
+}
+
+public final class ru/endlesscode/mimic/impl/heroes/HeroesLevelSystem : ru/endlesscode/mimic/level/BukkitLevelSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/heroes/HeroesLevelSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lru/endlesscode/mimic/impl/heroes/HeroesWrapper;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getConverter ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExp ()D
+	public fun getLevel ()I
+	public fun getTotalExp ()D
+	public fun giveExp (D)V
+	public fun setExp (D)V
+	public fun setLevel (I)V
+	public fun setTotalExp (D)V
+	public fun takeExp (D)V
+}
+
+public final class ru/endlesscode/mimic/impl/heroes/HeroesLevelSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/mimic/MimicItemsRegistry : ru/endlesscode/mimic/items/BukkitItemsRegistry {
+	public static final field Companion Lru/endlesscode/mimic/impl/mimic/MimicItemsRegistry$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun <init> (Lorg/bukkit/plugin/ServicesManager;)V
+	public fun getId ()Ljava/lang/String;
+	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public fun getKnownIds ()Ljava/util/Collection;
+	public fun isEnabled ()Z
+	public fun isItemExists (Ljava/lang/String;)Z
+	public synthetic fun isSameItem (Ljava/lang/Object;Ljava/lang/String;)Z
+	public fun isSameItem (Lorg/bukkit/inventory/ItemStack;Ljava/lang/String;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/mimic/MimicItemsRegistry$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/mimic/PermissionsClassSystem : ru/endlesscode/mimic/classes/BukkitClassSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/mimic/PermissionsClassSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public static final field PERMISSION_PREFIX Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getClasses ()Ljava/util/List;
+	public fun hasClass (Ljava/lang/String;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/mimic/PermissionsClassSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/mmocore/MmoCoreClassSystem : ru/endlesscode/mimic/classes/BukkitClassSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/mmocore/MmoCoreClassSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lru/endlesscode/mimic/impl/mmocore/MmoCoreWrapper;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getClasses ()Ljava/util/List;
+}
+
+public final class ru/endlesscode/mimic/impl/mmocore/MmoCoreClassSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/mmocore/MmoCoreExpLevelConverter : ru/endlesscode/mimic/level/ExpLevelConverter {
+	public static final field Companion Lru/endlesscode/mimic/impl/mmocore/MmoCoreExpLevelConverter$Companion;
+	public static final fun get (Lorg/bukkit/OfflinePlayer;)Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExpToReachLevel (I)D
+}
+
+public final class ru/endlesscode/mimic/impl/mmocore/MmoCoreExpLevelConverter$Companion {
+	public final fun get (Lorg/bukkit/OfflinePlayer;)Lru/endlesscode/mimic/level/ExpLevelConverter;
+}
+
+public final class ru/endlesscode/mimic/impl/mmocore/MmoCoreLevelSystem : ru/endlesscode/mimic/level/BukkitLevelSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/mmocore/MmoCoreLevelSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lru/endlesscode/mimic/impl/mmocore/MmoCoreWrapper;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getConverter ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExp ()D
+	public fun getLevel ()I
+	public fun getTotalExpToNextLevel ()D
+	public fun giveExp (D)V
+	public fun giveLevels (I)V
+	public fun setExp (D)V
+	public fun setLevel (I)V
+	public fun takeLevels (I)V
+}
+
+public final class ru/endlesscode/mimic/impl/mmocore/MmoCoreLevelSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/mmoitems/MmoItemsRegistry : ru/endlesscode/mimic/items/BukkitItemsRegistry {
+	public static final field Companion Lru/endlesscode/mimic/impl/mmoitems/MmoItemsRegistry$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public fun getKnownIds ()Ljava/util/Collection;
+	public fun isEnabled ()Z
+	public fun isItemExists (Ljava/lang/String;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/mmoitems/MmoItemsRegistry$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgClassSystem : ru/endlesscode/mimic/classes/BukkitClassSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/quantumrpg/QuantumRpgClassSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lru/endlesscode/mimic/impl/quantumrpg/QuantumRpgWrapper;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getClasses ()Ljava/util/List;
+	public fun getPrimaryClass ()Ljava/lang/String;
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgClassSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgExpLevelConverter : ru/endlesscode/mimic/level/ExpLevelConverter {
+	public static final field Companion Lru/endlesscode/mimic/impl/quantumrpg/QuantumRpgExpLevelConverter$Companion;
+	public static final fun get (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExpToReachLevel (I)D
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgExpLevelConverter$Companion {
+	public final fun get (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/ExpLevelConverter;
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgItemsRegistry : ru/endlesscode/mimic/items/BukkitItemsRegistry {
+	public static final field Companion Lru/endlesscode/mimic/impl/quantumrpg/QuantumRpgItemsRegistry$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public fun getKnownIds ()Ljava/util/Collection;
+	public fun isEnabled ()Z
+	public fun isItemExists (Ljava/lang/String;)Z
+	public synthetic fun isSameItem (Ljava/lang/Object;Ljava/lang/String;)Z
+	public fun isSameItem (Lorg/bukkit/inventory/ItemStack;Ljava/lang/String;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgItemsRegistry$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgLevelSystem : ru/endlesscode/mimic/level/BukkitLevelSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/quantumrpg/QuantumRpgLevelSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lru/endlesscode/mimic/impl/quantumrpg/QuantumRpgWrapper;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getConverter ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExp ()D
+	public fun getExpToNextLevel ()D
+	public fun getLevel ()I
+	public fun getTotalExpToNextLevel ()D
+	public fun giveExp (D)V
+	public fun setExp (D)V
+	public fun setLevel (I)V
+	public fun takeExp (D)V
+}
+
+public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgLevelSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/skillapi/SkillApiClassSystem : ru/endlesscode/mimic/classes/BukkitClassSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/skillapi/SkillApiClassSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun getClasses ()Ljava/util/List;
+	public fun getPrimaryClass ()Ljava/lang/String;
+}
+
+public final class ru/endlesscode/mimic/impl/skillapi/SkillApiClassSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/skillapi/SkillApiConverter : ru/endlesscode/mimic/level/ExpLevelConverter {
+	public static final field Companion Lru/endlesscode/mimic/impl/skillapi/SkillApiConverter$Companion;
+	public fun getExpToReachLevel (I)D
+	public fun getExpToReachNextLevel (I)D
+	public static final fun getInstance ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+}
+
+public final class ru/endlesscode/mimic/impl/skillapi/SkillApiConverter$Companion {
+	public final fun getInstance ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+}
+
+public final class ru/endlesscode/mimic/impl/skillapi/SkillApiLevelSystem : ru/endlesscode/mimic/level/BukkitLevelSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/skillapi/SkillApiLevelSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun getConverter ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExp ()D
+	public fun getLevel ()I
+	public fun giveExp (D)V
+	public fun giveLevels (I)V
+	public fun setExp (D)V
+	public fun setLevel (I)V
+	public fun takeExp (D)V
+	public fun takeLevels (I)V
+}
+
+public final class ru/endlesscode/mimic/impl/skillapi/SkillApiLevelSystem$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftExpLevelConverter : ru/endlesscode/mimic/level/ExpLevelConverter {
+	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/MinecraftExpLevelConverter$Companion;
+	public fun expToLevel (D)D
+	public fun getExpToReachLevel (I)D
+	public fun getExpToReachNextLevel (I)D
+	public static final fun getInstance ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun levelToExp (I)D
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftExpLevelConverter$Companion {
+	public final fun getInstance ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftItemsRegistry : ru/endlesscode/mimic/items/BukkitItemsRegistry {
+	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/MinecraftItemsRegistry$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun <init> ()V
+	public fun getId ()Ljava/lang/String;
+	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public synthetic fun getKnownIds ()Ljava/util/Collection;
+	public fun getKnownIds ()Ljava/util/List;
+	public fun isEnabled ()Z
+	public fun isItemExists (Ljava/lang/String;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftItemsRegistry$Companion {
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftLevelSystem : ru/endlesscode/mimic/level/BukkitLevelSystem {
+	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/MinecraftLevelSystem$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun <init> (Lorg/bukkit/entity/Player;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getConverter ()Lru/endlesscode/mimic/level/ExpLevelConverter;
+	public fun getExp ()D
+	public fun getFractionalExp ()D
+	public fun getLevel ()I
+	public fun getTotalExpToNextLevel ()D
+	public fun setExp (D)V
+	public fun setFractionalExp (D)V
+	public fun setLevel (I)V
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftLevelSystem$Companion {
+}
+

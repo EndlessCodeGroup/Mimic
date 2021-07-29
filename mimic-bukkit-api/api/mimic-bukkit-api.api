@@ -1,0 +1,29 @@
+public abstract class ru/endlesscode/mimic/PlayerSystemProviderService : ru/endlesscode/mimic/ProviderService {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun getId ()Ljava/lang/String;
+	public abstract fun getSystem (Lorg/bukkit/entity/Player;)Ljava/lang/Object;
+	public fun isEnabled ()Z
+}
+
+public abstract class ru/endlesscode/mimic/classes/BukkitClassSystem : ru/endlesscode/mimic/classes/ClassSystem {
+	public fun <init> (Lorg/bukkit/entity/Player;)V
+	public final fun getPlayer ()Lorg/bukkit/entity/Player;
+}
+
+public abstract class ru/endlesscode/mimic/classes/BukkitClassSystem$Provider : ru/endlesscode/mimic/PlayerSystemProviderService {
+	public fun <init> (Ljava/lang/String;)V
+}
+
+public abstract interface class ru/endlesscode/mimic/items/BukkitItemsRegistry : ru/endlesscode/mimic/items/ItemsRegistry {
+}
+
+public abstract class ru/endlesscode/mimic/level/BukkitLevelSystem : ru/endlesscode/mimic/level/LevelSystem {
+	public fun <init> (Lorg/bukkit/entity/Player;)V
+	public final fun getPlayer ()Lorg/bukkit/entity/Player;
+}
+
+public abstract class ru/endlesscode/mimic/level/BukkitLevelSystem$Provider : ru/endlesscode/mimic/PlayerSystemProviderService {
+	public fun <init> (Ljava/lang/String;)V
+}
+
