@@ -3,14 +3,14 @@ import ru.endlesscode.bukkitgradle.dependencies.codemc
 import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "6.0.0"
-    id("ru.endlesscode.bukkitgradle") version "0.9.1"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("ru.endlesscode.bukkitgradle") version "0.9.2"
 }
 
 description = "Bukkit plugin with implementations of Mimic APIs"
 
 bukkit {
-    apiVersion = "1.16.4"
+    apiVersion = "1.17.1"
 
     meta {
         name.set("Mimic")
@@ -28,7 +28,7 @@ bukkit {
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
     maven(url = "https://mvn.lumine.io/repository/maven-public/")
-    maven(url = "http://nexus.hc.to/content/repositories/pub_snapshots/")
+    maven(url = "https://nexus.hc.to/content/repositories/pub_snapshots/")
     aikar()
     codemc()
     flatDir { dir("libs") }
