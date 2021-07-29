@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,5 +21,5 @@ package ru.endlesscode.mimic.items
 
 import org.bukkit.inventory.ItemStack
 
-/** [ItemsRegistry] adapted for Bukkit. */
+/** [ItemsRegistry] for Bukkit. */
 public interface BukkitItemsRegistry : ItemsRegistry<ItemStack>

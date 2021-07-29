@@ -24,3 +24,25 @@ jobs:
         arguments: check
       env:
         warningsAsErrors: true
+
+  docs:
+    name: Publish Docs
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && success()
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - name: Generate docs
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: dokkaHtmlMultiModule
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: build/dokka/htmlMultiModule

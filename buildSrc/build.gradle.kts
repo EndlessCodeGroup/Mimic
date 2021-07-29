@@ -9,6 +9,7 @@ java {
 
 dependencies {
     implementation(kotlin("gradle-plugin", version = "1.4.30"))
+    implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
     implementation("de.undercouch:gradle-download-task:4.1.1")
 }
 
