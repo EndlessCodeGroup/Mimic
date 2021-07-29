@@ -1,7 +1,7 @@
 /*
  * This file is part of Mimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * Mimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +35,6 @@ public interface ClassSystem {
      *
      * @return Primary class name or `null` if player has no any classes.
      */
-    @JvmDefault
     public val primaryClass: String?
         get() = this.classes.firstOrNull()
 
@@ -53,23 +52,19 @@ public interface ClassSystem {
     public val classes: List<String>
 
     /** Returns `true` if player has any class. */
-    @JvmDefault
     public fun hasAnyClass(): Boolean = primaryClass != null
 
     /** Returns `true` if player has any of [requiredClasses]. */
-    @JvmDefault
     public fun hasAnyOfClasses(requiredClasses: List<String>): Boolean {
         return requiredClasses.any { this.hasClass(it) }
     }
 
     /** Returns `true` if player has all [requiredClasses]. */
-    @JvmDefault
     public fun hasAllClasses(requiredClasses: List<String>): Boolean {
         return requiredClasses.all { this.hasClass(it) }
     }
 
     /** Returns `true` if player has [requiredClass]. */
-    @JvmDefault
     public fun hasClass(requiredClass: String): Boolean {
         return this.classes.any {
             it.equals(requiredClass, ignoreCase = true)

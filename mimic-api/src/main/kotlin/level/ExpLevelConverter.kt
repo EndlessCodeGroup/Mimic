@@ -23,11 +23,9 @@ package ru.endlesscode.mimic.level
 public interface ExpLevelConverter {
 
     /** Converts [exp] to full level, dropping fractional part. */
-    @JvmDefault
     public fun expToFullLevel(exp: Double): Int = expToLevel(exp).toInt()
 
     /** Converts [exp] to level, with fractional part. */
-    @JvmDefault
     public fun expToLevel(exp: Double): Double {
         if (exp < 0) return 0.0
 
@@ -61,7 +59,6 @@ public interface ExpLevelConverter {
     }
 
     /** Returns experience amount to reach given [level] from 0 exp. */
-    @JvmDefault
     public fun levelToExp(level: Int): Double {
         var exp = 0.0
         for (i in 0 until level) {
@@ -78,7 +75,6 @@ public interface ExpLevelConverter {
      * Returns how much experience you need to reach next after specified [level] or -1 if
      * level can't be reached.
      */
-    @JvmDefault
     public fun getExpToReachNextLevel(level: Int): Double = getExpToReachLevel(level + 1)
 
     /**

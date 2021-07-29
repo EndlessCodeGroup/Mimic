@@ -1,7 +1,7 @@
 /*
  * This file is part of Mimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * Mimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -28,7 +28,6 @@ public interface ItemsRegistry<ItemStackT : Any> : MimicService {
     public val knownIds: Collection<String>
 
     /** Returns `true` if given [item] represented with given [itemId]. */
-    @JvmDefault
     public fun isSameItem(item: ItemStackT, itemId: String): Boolean = getItemId(item) == itemId
 
     /** Returns `true` if item with given [itemId] exists. */
@@ -38,7 +37,6 @@ public interface ItemsRegistry<ItemStackT : Any> : MimicService {
     public fun getItemId(item: ItemStackT): String?
 
     /** Returns item by given [itemId], or `null` if the ID not found in this registry. */
-    @JvmDefault
     public fun getItem(itemId: String): ItemStackT? = getItem(itemId, amount = 1)
 
     /**
