@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@ package ru.endlesscode.mimic.impl.vanilla
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
-import java.util.*
 
 /** Items service implementation using material name as itemId. */
 public class MinecraftItemsRegistry : BukkitItemsRegistry {
@@ -37,13 +36,13 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
     override val knownIds: List<String> by lazy {
         Material.values().asSequence()
             .filter { it.isItem }
-            .map { it.name.toLowerCase(Locale.ENGLISH) }
+            .map { it.name.lowercase() }
             .toList()
     }
 
     override fun isItemExists(itemId: String): Boolean = getMaterial(itemId) != null
 
-    override fun getItemId(item: ItemStack): String? = item.type.name.toLowerCase(Locale.ENGLISH)
+    override fun getItemId(item: ItemStack): String = item.type.name.lowercase()
 
     override fun getItem(itemId: String, amount: Int): ItemStack? {
         val material = getMaterial(itemId) ?: return null
@@ -52,7 +51,7 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
     }
 
     private fun getMaterial(name: String): Material? {
-        return Material.getMaterial(name.toUpperCase(Locale.ENGLISH))
+        return Material.getMaterial(name.uppercase())
             ?.takeIf { it.isItem }
     }
 }

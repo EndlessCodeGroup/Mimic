@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public class CustomItemsRegistry : BukkitItemsRegistry {
 
     override fun isItemExists(itemId: String): Boolean = CustomItemsAPI.getCustomItem(itemId) != null
 
-    override fun getItemId(item: ItemStack): String? = CustomItemsAPI.getCustomItemID(item)?.toLowerCase()
+    override fun getItemId(item: ItemStack): String? = CustomItemsAPI.getCustomItemID(item)?.lowercase()
 
     override fun getItem(itemId: String, amount: Int): ItemStack? = CustomItemsAPI.getCustomItem(itemId, amount)
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.classes.BukkitClassSystem
+import java.util.*
 
 /**
  * Class system based on permissions.
@@ -46,7 +47,7 @@ public class PermissionsClassSystem private constructor(player: Player) : Bukkit
         }
 
     override fun hasClass(requiredClass: String): Boolean {
-        return player.hasPermission(PERMISSION_PREFIX + requiredClass.toLowerCase())
+        return player.hasPermission(PERMISSION_PREFIX + requiredClass.lowercase(Locale.getDefault()))
     }
 
     internal class Provider : BukkitClassSystem.Provider(ID) {
