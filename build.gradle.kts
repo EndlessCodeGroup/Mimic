@@ -1,6 +1,7 @@
 // Root project build config
 
 plugins {
+    id("org.jetbrains.dokka")
     id("com.github.ben-manes.versions") version "0.36.0"
 }
 
@@ -11,4 +12,8 @@ subprojects {
 
     version = "0.6-SNAPSHOT"
     group = "ru.endlesscode.mimic"
+}
+
+repositories {
+    mavenCentral()
 }
