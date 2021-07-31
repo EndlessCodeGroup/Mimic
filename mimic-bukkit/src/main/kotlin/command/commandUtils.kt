@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2018 Osip Fatkullin
- * Copyright (C) 2018 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,12 @@ import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 
 internal fun CommandSender.send(vararg messages: String) {
+    for (message in messages) {
+        sendMessage(message.colored())
+    }
+}
+
+internal fun CommandSender.send(messages: Collection<String>) {
     for (message in messages) {
         sendMessage(message.colored())
     }

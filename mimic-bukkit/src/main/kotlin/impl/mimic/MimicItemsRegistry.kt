@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class MimicItemsRegistry(private val servicesManager: ServicesManager) : 
             service.knownIds.map { service.namespaced(it) }
         }
 
-    private val services: Collection<BukkitItemsRegistry>
+    internal val services: Collection<BukkitItemsRegistry>
         get() = servicesManager.loadAll<BukkitItemsRegistry>()
             .filterNot { it == this }
 

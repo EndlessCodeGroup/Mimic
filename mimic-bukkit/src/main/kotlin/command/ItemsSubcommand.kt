@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 @CommandAlias("%command")
@@ -38,10 +39,15 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
     @Subcommand("info")
     @Description("Show information about items service")
     fun info(sender: CommandSender) {
+        val registries = (itemsRegistry as? MimicItemsRegistry)?.services
+            .orEmpty()
+            .map { "  &f${it.id}: &7${it.knownIds.size}" }
+
         sender.send(
             "&3Items Service: &7${itemsRegistry.id}",
-            "&3Known IDs amount: &7${itemsRegistry.knownIds.size}+"
+            "&3Known IDs amount: &7${itemsRegistry.knownIds.size}"
         )
+        sender.send(registries)
     }
 
     @Subcommand("give")

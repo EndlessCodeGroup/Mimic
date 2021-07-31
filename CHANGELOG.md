@@ -1,5 +1,17 @@
 ## [Unreleased]
 
+### Bukkit Plugin
+
+- More detailed output of command `/mimic items info`:
+  ```
+  Items Service: mimic
+  Known IDs amount: 1161
+    rpginventory: 4
+    quantumrpg: 55
+    mmoitems: 126
+    minecraft: 976
+  ```
+
 ### Housekeeping
 
 - Add API binary compatibility validation
