@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.bukkit.load
+import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.command.ItemsSubcommand
@@ -147,6 +148,12 @@ public class Mimic : JavaPlugin() {
         })
         metrics.addCustomChart(Metrics.SimplePie("class_system") {
             loadService<BukkitClassSystem.Provider>().id
+        })
+        metrics.addCustomChart(Metrics.AdvancedPie("items_registry_custom") {
+            servicesManager.loadAll<BukkitItemsRegistry>()
+                .map { it.id }
+                .filterNot { it == MimicItemsRegistry.ID || it == MinecraftItemsRegistry.ID }
+                .associateWith { 1 }
         })
     }
 
