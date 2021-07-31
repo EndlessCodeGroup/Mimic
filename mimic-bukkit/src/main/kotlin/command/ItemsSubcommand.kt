@@ -52,14 +52,15 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
 
     @Subcommand("give")
     @Description("Give item to player")
-    @CommandCompletion("@players @item")
+    @CommandCompletion("@players @item @nothing")
     fun give(
         sender: CommandSender,
         @Flags("other") player: Player,
         item: String,
-        @Default("1") amount: Int
+        @Default("1") amount: Int,
+        @Optional payload: String?,
     ) {
-        val itemStack = itemsRegistry.getItem(item, amount)
+        val itemStack = itemsRegistry.getItem(item, payload, amount)
         if (itemStack != null) {
             player.inventory.addItem(itemStack)
             sender.send("&6Gave ${itemStack.amount} [$item] to ${player.name}.")
@@ -73,7 +74,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
     @CommandCompletion("@item")
     fun compare(
         @Flags("itemheld") player: Player,
-        @Single item: String
+        @Single item: String,
     ) {
         val isSame = itemsRegistry.isSameItem(player.inventory.itemInMainHand, item)
         player.send("&6Item in hand and '$item' are%s same.".format(if (isSame) "" else "n't"))
@@ -82,7 +83,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
     @Subcommand("id")
     @Description("Prints ID of item in hand")
     fun id(
-        @Flags("itemheld") player: Player
+        @Flags("itemheld") player: Player,
     ) {
         val id = itemsRegistry.getItemId(player.inventory.itemInMainHand)
         player.send("&6Id of item in hand is '$id'")
@@ -93,7 +94,7 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
     @CommandCompletion("@item")
     fun find(
         sender: CommandSender,
-        @Single item: String
+        @Single item: String,
     ) {
         val itemExists = itemsRegistry.isItemExists(item)
         sender.send("&6Item with id '$item'%s exists".format(if (itemExists) "" else " isn't"))
