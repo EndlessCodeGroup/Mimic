@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import ru.endlesscode.bukkitgradle.dependencies.aikar
 import ru.endlesscode.bukkitgradle.dependencies.codemc
 import ru.endlesscode.bukkitgradle.dependencies.spigotApi
@@ -5,6 +6,7 @@ import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("ru.endlesscode.bukkitgradle") version "0.10.0"
+    kotlin("plugin.serialization")
 }
 
 description = "Bukkit plugin with implementations of Mimic APIs"
@@ -40,6 +42,7 @@ dependencies {
     compileOnly(spigotApi) { isTransitive = false }
     implementation(acf.paper)
     implementation(misc.bstats)
+    implementation(misc.serialization_hocon)
 
     compileOnly(rpgplugins.skillapi)
     compileOnly(rpgplugins.battlelevels)
@@ -56,6 +59,16 @@ dependencies {
 
     testImplementation(spigotApi)
     testImplementation(rpgplugins.skillapi)
+
+    // TODO: Remove after this bug will be fixed
+    //  Issue: https://github.com/Kotlin/kotlinx.serialization/issues/1189
+    components {
+        withModule<HoconSerializationRule>("org.jetbrains.kotlinx:kotlinx-serialization-hocon")
+    }
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
 }
 
 tasks.shadowJar {
@@ -72,4 +85,3 @@ tasks.shadowJar {
 
     minimize()
 }
-

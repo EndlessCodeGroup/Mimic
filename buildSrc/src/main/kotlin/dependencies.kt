@@ -33,6 +33,7 @@ object acf {
 
 object misc {
     const val bstats = "org.bstats:bstats-bukkit:1.8"
+    const val serialization_hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.2.2"
 }
 
 // Testing
