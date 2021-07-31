@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemFlag
 import ru.endlesscode.mimic.internal.DI
 import ru.endlesscode.mimic.internal.EnchantmentSerializer
 import ru.endlesscode.mimic.internal.ItemFlagsSerializer
+import ru.endlesscode.mimic.internal.Log
 
 /**
  * Payload to configure item's [ItemMeta][org.bukkit.inventory.meta.ItemMeta].
@@ -58,8 +59,12 @@ public data class ItemMetaPayload(
          */
         @JvmStatic
         public fun parse(input: String): ItemMetaPayload? {
-            val hocon = DI.hocon
-            return hocon.decodeFromConfig(ConfigFactory.parseString(input))
+            return try {
+                DI.hocon.decodeFromConfig(ConfigFactory.parseString(input))
+            } catch (e: Exception) {
+                Log.w(e)
+                null
+            }
         }
     }
 }

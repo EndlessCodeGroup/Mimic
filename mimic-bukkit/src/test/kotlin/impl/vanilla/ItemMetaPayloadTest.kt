@@ -33,8 +33,8 @@ import kotlin.test.assertNull
 internal class ItemMetaPayloadTest {
 
     @ParameterizedTest
-    @ValueSource(strings = ["", "{}"])
-    fun `parse - empty object - should return null`(input: String) {
+    @ValueSource(strings = ["", "{}", "invalid:::", "display-name: 1"])
+    fun `parse - empty or invalid object - should return null`(input: String) {
         // When
         val result = ItemMetaPayload.parse(input)
 
