@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.colorized
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 /** Items service implementation using material name as itemId. */
@@ -53,7 +54,7 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
         val minecraftPayload: ItemMetaPayload? = when (payload) {
             is ItemMetaPayload -> payload
-            is String -> parsePayload(payload)
+            is String -> ItemMetaPayload.parse(payload)
             null -> null
             else -> unknownPayload(itemId, payload)
         }
@@ -68,10 +69,6 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
             ?.takeIf { it.isItem }
     }
 
-    private fun parsePayload(payload: String): ItemMetaPayload {
-        TODO("Not yet implemented")
-    }
-
     private fun unknownPayload(itemId: String, payload: Any): ItemMetaPayload? {
         Log.w("[${javaClass.simpleName}] Ignoring unsupported payload for item $itemId:\n$payload")
         return null
@@ -81,9 +78,9 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
         if (payload == null) return this
 
         // Apply text options
-        setDisplayName(payload.displayName)
-        setLocalizedName(payload.localizedName)
-        lore = payload.lore
+        setDisplayName(payload.displayName?.colorized())
+        setLocalizedName(payload.localizedName?.colorized())
+        lore = payload.lore?.colorized()
 
         // Apply damage or custom model data
         isUnbreakable = payload.isUnbreakable
