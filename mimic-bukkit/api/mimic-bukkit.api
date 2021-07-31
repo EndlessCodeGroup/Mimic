@@ -275,6 +275,52 @@ public final class ru/endlesscode/mimic/impl/skillapi/SkillApiLevelSystem : ru/e
 public final class ru/endlesscode/mimic/impl/skillapi/SkillApiLevelSystem$Companion {
 }
 
+public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload {
+	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Z
+	public final fun component4 ()I
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun component6 ()Ljava/util/Map;
+	public final fun component7 ()Ljava/util/Set;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public static synthetic fun copy$default (Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;ILjava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCustomModelData ()Ljava/lang/Integer;
+	public final fun getDamage ()I
+	public final fun getEnchantments ()Ljava/util/Map;
+	public final fun getFlags ()Ljava/util/Set;
+	public final fun getLore ()Ljava/util/List;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun isUnbreakable ()Z
+	public static final fun parse (Ljava/lang/String;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public fun toString ()Ljava/lang/String;
+	public static final fun write$Self (Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer;
+	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$Companion {
+	public final fun parse (Ljava/lang/String;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class ru/endlesscode/mimic/impl/vanilla/MinecraftExpLevelConverter : ru/endlesscode/mimic/level/ExpLevelConverter {
 	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/MinecraftExpLevelConverter$Companion;
 	public fun expToLevel (D)D
