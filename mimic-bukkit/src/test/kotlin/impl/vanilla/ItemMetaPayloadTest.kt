@@ -26,6 +26,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
@@ -39,6 +40,15 @@ internal class ItemMetaPayloadTest {
 
         // Then
         assertNull(result)
+    }
+
+    @Test
+    fun `parse - flags in lowercase - should be case parsed`() {
+        // When
+        val result = ItemMetaPayload.parse("item-flags: [hide_attributes, hide_dye]")
+
+        // Then
+        assertEquals(ItemMetaPayload(itemFlags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)), result)
     }
 
     @ParameterizedTest
@@ -75,7 +85,7 @@ internal class ItemMetaPayloadTest {
                     isUnbreakable = true,
                     damage = 42,
                     customModelData = 24,
-                    itemFlags = listOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
+                    itemFlags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
                 )
             ),
             // Unknown fields

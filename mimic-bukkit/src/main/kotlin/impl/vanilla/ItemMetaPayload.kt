@@ -17,7 +17,7 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:UseSerializers(EnchantmentSerializer::class)
+@file:UseSerializers(EnchantmentSerializer::class, ItemFlagsSerializer::class)
 
 package ru.endlesscode.mimic.impl.vanilla
 
@@ -29,6 +29,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import ru.endlesscode.mimic.internal.DI
 import ru.endlesscode.mimic.internal.EnchantmentSerializer
+import ru.endlesscode.mimic.internal.ItemFlagsSerializer
 
 /**
  * Payload to configure item's [ItemMeta][org.bukkit.inventory.meta.ItemMeta].
@@ -43,7 +44,7 @@ public data class ItemMetaPayload(
     val damage: Int = 0,
     val customModelData: Int? = null,
     val enchants: Map<Enchantment, Int> = emptyMap(),
-    val itemFlags: List<ItemFlag> = emptyList(),
+    val itemFlags: Set<ItemFlag> = emptySet(),
 ) {
 
     public companion object {

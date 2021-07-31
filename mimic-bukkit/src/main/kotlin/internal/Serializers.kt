@@ -28,6 +28,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.ItemFlag
 
 internal object EnchantmentSerializer : KSerializer<Enchantment> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Enchantment", PrimitiveKind.STRING)
@@ -43,4 +44,16 @@ internal object EnchantmentSerializer : KSerializer<Enchantment> {
     }
 
     override fun serialize(encoder: Encoder, value: Enchantment) = encoder.encodeString(value.key.toString())
+}
+
+internal object ItemFlagsSerializer : KSerializer<ItemFlag> {
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("ItemFlag", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): ItemFlag {
+        val value = decoder.decodeString()
+        return enumValueOrNull<ItemFlag>(value.uppercase())
+            ?: throw SerializationException("$value is not a valid ItemFlag, must be one of ${ItemFlag.values()}")
+    }
+
+    override fun serialize(encoder: Encoder, value: ItemFlag) = encoder.encodeString(value.name)
 }
