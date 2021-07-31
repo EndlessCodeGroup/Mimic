@@ -4,7 +4,7 @@ import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 
 plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("ru.endlesscode.bukkitgradle") version "0.9.2"
+    id("ru.endlesscode.bukkitgradle") version "0.10.0"
 }
 
 description = "Bukkit plugin with implementations of Mimic APIs"
