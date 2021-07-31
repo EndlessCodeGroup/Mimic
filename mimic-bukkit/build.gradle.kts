@@ -40,6 +40,8 @@ dependencies {
     api(project(":mimic-bukkit-api"))
 
     compileOnly(spigotApi) { isTransitive = false }
+    compileOnly(misc.annotations)
+
     implementation(acf.paper)
     implementation(misc.bstats)
     implementation(misc.serialization_hocon)
@@ -72,13 +74,16 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 tasks.shadowJar {
+    dependencies {
+        exclude(dependency(misc.annotations))
+    }
+
     val shadePackage = "${project.group}.shade"
     relocate("co.aikar.commands", "$shadePackage.acf.commands")
     relocate("co.aikar.locales", "$shadePackage.acf.locales")
     relocate("kotlin", "$shadePackage.kotlin")
-    relocate("org.intellij", "$shadePackage.intellij")
-    relocate("org.jetbrains", "$shadePackage.jetbrains")
     relocate("org.bstats.bukkit", "$shadePackage.bstats")
+    relocate("com.typesafe.config", "$shadePackage.hocon")
 
     exclude("META-INF/*.kotlin_module")
     exclude("META-INF/maven/**")
