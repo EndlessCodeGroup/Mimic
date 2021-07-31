@@ -67,9 +67,9 @@ public class MimicItemsRegistry(private val servicesManager: ServicesManager) : 
             .firstOrNull()
     }
 
-    override fun getItem(itemId: String, amount: Int): ItemStack? {
+    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
         return runOnServices(itemId) { id ->
-            mapNotNull { service -> service.getItem(id, amount) }
+            mapNotNull { service -> service.getItem(id, payload, amount) }
                 .firstOrNull()
         }
     }

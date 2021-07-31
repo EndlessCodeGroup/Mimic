@@ -45,8 +45,8 @@ public final class ru/endlesscode/mimic/impl/customitems/CustomItemsRegistry : r
 	public static final field ID Ljava/lang/String;
 	public fun <init> ()V
 	public fun getId ()Ljava/lang/String;
-	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
-	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Lorg/bukkit/inventory/ItemStack;
 	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
 	public fun getKnownIds ()Ljava/util/Collection;
@@ -100,8 +100,8 @@ public final class ru/endlesscode/mimic/impl/mimic/MimicItemsRegistry : ru/endle
 	public static final field ID Ljava/lang/String;
 	public fun <init> (Lorg/bukkit/plugin/ServicesManager;)V
 	public fun getId ()Ljava/lang/String;
-	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
-	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Lorg/bukkit/inventory/ItemStack;
 	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
 	public fun getKnownIds ()Ljava/util/Collection;
@@ -168,8 +168,8 @@ public final class ru/endlesscode/mimic/impl/mmoitems/MmoItemsRegistry : ru/endl
 	public static final field Companion Lru/endlesscode/mimic/impl/mmoitems/MmoItemsRegistry$Companion;
 	public static final field ID Ljava/lang/String;
 	public fun getId ()Ljava/lang/String;
-	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
-	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Lorg/bukkit/inventory/ItemStack;
 	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
 	public fun getKnownIds ()Ljava/util/Collection;
@@ -205,8 +205,8 @@ public final class ru/endlesscode/mimic/impl/quantumrpg/QuantumRpgItemsRegistry 
 	public static final field Companion Lru/endlesscode/mimic/impl/quantumrpg/QuantumRpgItemsRegistry$Companion;
 	public static final field ID Ljava/lang/String;
 	public fun getId ()Ljava/lang/String;
-	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
-	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Lorg/bukkit/inventory/ItemStack;
 	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
 	public fun getKnownIds ()Ljava/util/Collection;
@@ -293,8 +293,8 @@ public final class ru/endlesscode/mimic/impl/vanilla/MinecraftItemsRegistry : ru
 	public static final field ID Ljava/lang/String;
 	public fun <init> ()V
 	public fun getId ()Ljava/lang/String;
-	public synthetic fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
-	public fun getItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public synthetic fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Lorg/bukkit/inventory/ItemStack;
 	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
 	public synthetic fun getKnownIds ()Ljava/util/Collection;

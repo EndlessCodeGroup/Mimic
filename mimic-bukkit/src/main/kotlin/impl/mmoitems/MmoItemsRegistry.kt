@@ -49,7 +49,7 @@ public class MmoItemsRegistry private constructor(private val mmoItems: MmoItems
         return nbtItem.getString("MMOITEMS_ITEM_ID")?.lowercase()
     }
 
-    override fun getItem(itemId: String, amount: Int): ItemStack? {
+    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
         val template = templates.find { it.id.equals(itemId, ignoreCase = true) } ?: return null
 
         return template.buildItemStack()

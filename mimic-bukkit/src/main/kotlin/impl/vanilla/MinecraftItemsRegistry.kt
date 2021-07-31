@@ -44,7 +44,7 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
     override fun getItemId(item: ItemStack): String = item.type.name.lowercase()
 
-    override fun getItem(itemId: String, amount: Int): ItemStack? {
+    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
         val material = getMaterial(itemId) ?: return null
         val realAmount = amount.coerceIn(1, material.maxStackSize)
         return ItemStack(material, realAmount)

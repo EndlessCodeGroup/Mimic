@@ -23,7 +23,9 @@ package ru.endlesscode.mimic
 public object MimicApiLevel {
 
     /**
-     * Version 0.6
+     * # Version 0.6
+     * - Mimic API levels
+     * - Payload in ItemsRegistry.getItem
      */
     public const val VERSION_0_6: Int = 1
 
