@@ -1,5 +1,15 @@
 ## [Unreleased]
 
+### API
+
+- Add `MimicApiLevel` class to check current running Mimic API version:
+  ```kotlin
+  // Specify here the version required for APIs you use.
+  if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_6)) {
+    println("At least Mimic 0.6 is required. Please download it from {link here}")
+  }
+  ```
+
 ### Bukkit Plugin
 
 - More detailed output of command `/mimic items info`:
