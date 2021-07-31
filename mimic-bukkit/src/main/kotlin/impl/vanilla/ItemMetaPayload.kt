@@ -17,15 +17,24 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:UseSerializers(EnchantmentSerializer::class)
+
 package ru.endlesscode.mimic.impl.vanilla
 
+import com.typesafe.config.ConfigFactory
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
+import kotlinx.serialization.hocon.decodeFromConfig
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
+import ru.endlesscode.mimic.internal.DI
+import ru.endlesscode.mimic.internal.EnchantmentSerializer
 
 /**
  * Payload to configure item's [ItemMeta][org.bukkit.inventory.meta.ItemMeta].
  * @see org.bukkit.inventory.meta.ItemMeta
  */
+@Serializable
 public data class ItemMetaPayload(
     val displayName: String? = null,
     val localizedName: String? = null,
@@ -35,4 +44,21 @@ public data class ItemMetaPayload(
     val customModelData: Int? = null,
     val enchants: Map<Enchantment, Int> = emptyMap(),
     val itemFlags: List<ItemFlag> = emptyList(),
-)
+) {
+
+    public companion object {
+
+        /**
+         * Tries to parse [ItemMetaPayload] from the given [input].
+         * Returns `null` if parsing failed or [input] is empty.
+         *
+         * Input should be formatted in [HOCON](https://github.com/lightbend/config/blob/main/HOCON.md).
+         * Unknown fields are ignored.
+         */
+        @JvmStatic
+        public fun parse(input: String): ItemMetaPayload? {
+            val hocon = DI.hocon
+            return hocon.decodeFromConfig(ConfigFactory.parseString(input))
+        }
+    }
+}
