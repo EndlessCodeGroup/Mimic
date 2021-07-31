@@ -11,6 +11,7 @@
     mmoitems: 126
     minecraft: 976
   ```
+- Improve integration with Heroes class system (#14)
 
 ### Housekeeping
 
