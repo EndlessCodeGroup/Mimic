@@ -27,7 +27,10 @@ import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.colorized
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
-/** Items service implementation using material name as itemId. */
+/**
+ * Items service implementation using material name as itemId.
+ * Supports [ItemMetaPayload] as a payload in [getItem].
+ */
 public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
     public companion object {
@@ -78,18 +81,17 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
         if (payload == null) return this
 
         // Apply text options
-        setDisplayName(payload.displayName?.colorized())
-        setLocalizedName(payload.localizedName?.colorized())
+        setDisplayName(payload.name?.colorized())
         lore = payload.lore?.colorized()
 
-        // Apply damage or custom model data
+        // Apply damage and custom model data
         isUnbreakable = payload.isUnbreakable
         (this as? Damageable)?.damage = payload.damage
         setCustomModelData(payload.customModelData)
 
         // Apply enchants and item flags
-        payload.enchants.forEach { (enchant, level) -> addEnchant(enchant, level, true) }
-        addItemFlags(*payload.itemFlags.toTypedArray())
+        payload.enchantments.forEach { (enchant, level) -> addEnchant(enchant, level, true) }
+        addItemFlags(*payload.flags.toTypedArray())
 
         return this
     }

@@ -24,6 +24,7 @@
   ```
 - Improve integration with Heroes class system (#14)
 - Add statistics about used items registries
+- Add payload support to `MinecraftItemsRegistry`.
 
 ### Housekeeping
 

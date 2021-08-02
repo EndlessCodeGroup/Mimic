@@ -33,7 +33,7 @@ import kotlin.test.assertNull
 internal class ItemMetaPayloadTest {
 
     @ParameterizedTest
-    @ValueSource(strings = ["", "{}", "invalid:::", "display-name: 1"])
+    @ValueSource(strings = ["", "{}", "invalid:::", "name: 1"])
     fun `parse - empty or invalid object - should return null`(input: String) {
         // When
         val result = ItemMetaPayload.parse(input)
@@ -45,10 +45,10 @@ internal class ItemMetaPayloadTest {
     @Test
     fun `parse - flags in lowercase - should be case parsed`() {
         // When
-        val result = ItemMetaPayload.parse("item-flags: [hide_attributes, hide_dye]")
+        val result = ItemMetaPayload.parse("flags: [hide_attributes, hide_dye]")
 
         // Then
-        assertEquals(ItemMetaPayload(itemFlags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)), result)
+        assertEquals(ItemMetaPayload(flags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)), result)
     }
 
     @ParameterizedTest
@@ -66,26 +66,24 @@ internal class ItemMetaPayloadTest {
         @JvmStatic
         fun validData(): Stream<Arguments> = Stream.of(
             // Simple cases
-            arguments("{display-name: Name}", ItemMetaPayload(displayName = "Name")),
-            arguments("display-name=Name", ItemMetaPayload(displayName = "Name")),
+            arguments("{name: Name}", ItemMetaPayload(name = "Name")),
+            arguments("name=Name", ItemMetaPayload(name = "Name")),
             arguments(
                 """
-                    display-name = Display,
-                    localized-name = Localized, 
+                    name = Name,
                     lore = [Line1, Line2],
-                    is-unbreakable = true,
+                    unbreakable = true,
                     damage = 42,
                     custom-model-data = 24,
-                    item-flags = [HIDE_ATTRIBUTES, HIDE_DYE]
+                    flags = [HIDE_ATTRIBUTES, HIDE_DYE]
                 """.trimIndent(),
                 ItemMetaPayload(
-                    displayName = "Display",
-                    localizedName = "Localized",
+                    name = "Name",
                     lore = listOf("Line1", "Line2"),
                     isUnbreakable = true,
                     damage = 42,
                     customModelData = 24,
-                    itemFlags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
+                    flags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
                 )
             ),
             // Unknown fields

@@ -22,6 +22,7 @@
 package ru.endlesscode.mimic.impl.vanilla
 
 import com.typesafe.config.ConfigFactory
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.hocon.decodeFromConfig
@@ -35,17 +36,18 @@ import ru.endlesscode.mimic.internal.Log
 /**
  * Payload to configure item's [ItemMeta][org.bukkit.inventory.meta.ItemMeta].
  * @see org.bukkit.inventory.meta.ItemMeta
+ * @see ItemMetaPayload.parse
  */
 @Serializable
 public data class ItemMetaPayload(
-    val displayName: String? = null,
-    val localizedName: String? = null,
+    val name: String? = null,
     val lore: List<String>? = null,
+    @SerialName("unbreakable")
     val isUnbreakable: Boolean = false,
     val damage: Int = 0,
     val customModelData: Int? = null,
-    val enchants: Map<Enchantment, Int> = emptyMap(),
-    val itemFlags: Set<ItemFlag> = emptySet(),
+    val enchantments: Map<Enchantment, Int> = emptyMap(),
+    val flags: Set<ItemFlag> = emptySet(),
 ) {
 
     public companion object {
