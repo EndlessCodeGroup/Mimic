@@ -35,6 +35,14 @@ import ru.endlesscode.mimic.internal.Log
 
 /**
  * Payload to configure item's [ItemMeta][org.bukkit.inventory.meta.ItemMeta].
+ *
+ * @property name Item name. You can specify colors using symbol `&`.
+ * @property lore Item lore. You can specify colors using symbol `&`.
+ * @property isUnbreakable Is item unbreakable. Affects only items that have durability (like weapons or tools).
+ * @property damage Damage to item durability. Affects only items that have durability (like weapons or tools).
+ * @property customModelData A value used to override item model.
+ * @property enchantments Item's enchantments. See [Enchantment].
+ * @property flags Item flags used to hide information about item from lore. See [ItemFlag].
  * @see org.bukkit.inventory.meta.ItemMeta
  * @see ItemMetaPayload.parse
  */
@@ -58,6 +66,17 @@ public data class ItemMetaPayload(
          *
          * Input should be formatted in [HOCON](https://github.com/lightbend/config/blob/main/HOCON.md).
          * Unknown fields are ignored.
+         * ```
+         * {
+         *   name = "&6Item Name"
+         *   lore = [Line1, Line2]
+         *   unbreakable = true
+         *   damage = 42
+         *   custom-model-data = 1
+         *   flags = [hide_attributes, hide_dye]
+         *   enchantments = {unbreaking: 3}
+         * }
+         * ```
          */
         @JvmStatic
         public fun parse(input: String): ItemMetaPayload? {

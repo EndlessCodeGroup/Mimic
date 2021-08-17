@@ -35,9 +35,9 @@ internal object EnchantmentSerializer : KSerializer<Enchantment> {
 
     override fun deserialize(decoder: Decoder): Enchantment {
         val value = decoder.decodeString()
-        val key = NamespacedKey.fromString(value.lowercase())
-            ?: throw SerializationException("$value is not a valid namespaced key, " +
-                    "only latin letters, digits and symbols /._- are allowed")
+        val key = NamespacedKey.fromString(value.replace(" ", "_").lowercase())
+            ?: throw SerializationException("$value is not a valid key for enchantment, " +
+                    "only latin letters, digits and symbol _ are allowed")
         return Enchantment.getByKey(key)
             ?: throw SerializationException("$value is not a valid key for enchantment, " +
                     "must be one of: [${Enchantment.values().joinToString { it.key.toString() }}]")
