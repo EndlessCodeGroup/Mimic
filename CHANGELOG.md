@@ -6,7 +6,7 @@
   ```kotlin
   // Specify here the version required for APIs you use.
   if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_6)) {
-    println("At least Mimic 0.6 is required. Please download it from {link here}")
+      println("At least Mimic 0.6 is required. Please download it from {link here}")
   }
   ```
 - Add optional payload to `ItemsRegistry.getItem`. It may be used to customize item.
