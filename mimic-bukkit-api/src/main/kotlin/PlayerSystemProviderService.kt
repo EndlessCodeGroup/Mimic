@@ -26,6 +26,11 @@ public abstract class PlayerSystemProviderService<T : Any>(final override val id
 
     override val isEnabled: Boolean = true
 
+    /**
+     * Returns new instance of [T] is given [arg] is instance of [Player].
+     * Otherwise, throws [ClassCastException].
+     */
+    @Deprecated("Use getSystem(player) instead", ReplaceWith("this.getSystem(arg)"))
     final override fun get(arg: Any): T = getSystem(arg as Player)
 
     /** Returns new instance of [T] initialized with the given [player] object. */
