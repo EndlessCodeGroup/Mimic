@@ -44,6 +44,7 @@ repositories {
 
 tasks.withType<DokkaTaskPartial>().configureEach {
     dokkaSourceSets.configureEach {
+        reportUndocumented.set(true)
         sourceLink {
             localDirectory.set(file("src/main/kotlin/"))
             remoteUrl.set(URL("https://github.com/EndlessCodeGroup/Mimic/tree/develop/${project.name}/src/main/kotlin/"))
@@ -52,6 +53,7 @@ tasks.withType<DokkaTaskPartial>().configureEach {
             url.set(URL("https://hub.spigotmc.org/javadocs/spigot/"))
             packageListUrl.set(URL("https://gist.githubusercontent.com/osipxd/604c9b3f91c3a6c56050f4a3b027f333/raw/package-list"))
         }
+        pluginsMapConfiguration.put("org.jetbrains.dokka.base.DokkaBase", """{ "separateInheritedMembers": true}""")
     }
 }
 

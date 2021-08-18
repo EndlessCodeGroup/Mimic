@@ -26,6 +26,7 @@ import ru.endlesscode.mimic.util.ExistingWeakReference
 /** [ClassSystem] for Bukkit. */
 public abstract class BukkitClassSystem(player: Player) : ClassSystem {
 
+    /** Player owning this class system. */
     public val player: Player get() = playerRef.get()
 
     private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
