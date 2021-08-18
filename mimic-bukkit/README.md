@@ -32,7 +32,7 @@ No configuration needed.
 
 You can find code of all implementations [here](src/main/kotlin/impl).
 
-#### [Level Systems][BukkitLevelSystem.Provider]
+### [Level Systems][BukkitLevelSystem.Provider]
 
 - **[Minecraft][minecraft-exp]** _(Default)_
 - **[SkillAPI]**
@@ -41,7 +41,7 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 - **[Heroes]**
 - **[QuantumRPG]**
 
-#### [Class Systems][BukkitClassSystem.Provider]
+### [Class Systems][BukkitClassSystem.Provider]
 
 - **Permissions-based** _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
 - **[SkillAPI]**
@@ -49,19 +49,35 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 - **[Heroes]**
 - **[QuantumRPG]**
 
-#### [Items Registries][BukkitItemsRegistry]
+### [Items Registries][BukkitItemsRegistry]
 
-[MimicItemsRegistry] - Items registry combining all others items registries.
-It uses service ID as namespace for items IDs.  
-For example: `acacia_boat -> minecraft:acacia_boat`.  
-If you use item ID without a namespace, it will search over all registries.
+#### [MimicItemsRegistry] 
 
- Registry                            | ID Structure      
--------------------------------------|--------------------------
- [Minecraft][MinecraftItemsRegistry] | `minecraft:[id]`
- [CustomItems]                       | `customitems:[id]`
- [MMOItems]                          | `mmoitems:[id]`
- [QuantumRPG]                        | `quantumrpg:[type]/[id]`
+Items registry combining all others items registries.
+It uses service ID as namespace for items IDs.\
+For example: `acacia_boat -> minecraft:acacia_boat`.
+
+> If you use item ID without a namespace, it will search over all registries.
+
+#### [Minecraft][MinecraftItemsRegistry]
+
+**ID Format:** `minecraft:[id]`\
+**Payload:** [ItemMetaPayload]
+
+#### [CustomItems]
+
+**ID Format:** `customitems:[id]`\
+**Payload:** *Not supported*
+
+#### [MMOItems]
+
+**ID Format:** `mmoitems:[id]`\
+**Payload:** *Not supported*
+
+#### [QuantumRPG]
+
+**ID Format:** `quantumrpg:[type]/[id]`\
+**Payload:** *Not supported*
 
 [minecraft-exp]: https://minecraft.gamepedia.com/Experience
 [skillapi]: https://www.spigotmc.org/resources/4824/
@@ -79,3 +95,4 @@ If you use item ID without a namespace, it will search over all registries.
 [BukkitItemsRegistry]: ../mimic-bukkit-api/src/main/kotlin/items/BukkitItemsRegistry.kt
 [MimicItemsRegistry]: src/main/kotlin/impl/mimic/MimicItemsRegistry.kt
 [MinecraftItemsRegistry]: src/main/kotlin/impl/vanilla/MinecraftItemsRegistry.kt
+[ItemMetaPayload]: src/main/kotlin/impl/vanilla/ItemMetaPayload.kt

@@ -1,3 +1,10 @@
+public final class ru/endlesscode/mimic/MimicApiLevel {
+	public static final field CURRENT I
+	public static final field INSTANCE Lru/endlesscode/mimic/MimicApiLevel;
+	public static final field VERSION_0_6 I
+	public static final fun checkApiLevel (I)Z
+}
+
 public abstract interface class ru/endlesscode/mimic/MimicService {
 	public abstract fun getId ()Ljava/lang/String;
 	public abstract fun isEnabled ()Z
@@ -18,7 +25,9 @@ public abstract interface class ru/endlesscode/mimic/classes/ClassSystem {
 
 public abstract interface class ru/endlesscode/mimic/items/ItemsRegistry : ru/endlesscode/mimic/MimicService {
 	public fun getItem (Ljava/lang/String;)Ljava/lang/Object;
-	public abstract fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getItem (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public abstract fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Ljava/lang/Object;
 	public abstract fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
 	public abstract fun getKnownIds ()Ljava/util/Collection;
 	public abstract fun isItemExists (Ljava/lang/String;)Z

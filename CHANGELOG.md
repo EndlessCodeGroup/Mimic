@@ -1,5 +1,16 @@
 ## [Unreleased]
 
+### API
+
+- Add `MimicApiLevel` class to check current running Mimic API version:
+  ```kotlin
+  // Specify here the version required for APIs you use.
+  if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_6)) {
+      println("At least Mimic 0.6 is required. Please download it from {link here}")
+  }
+  ```
+- Add optional payload to `ItemsRegistry.getItem`. It may be used to customize item.
+
 ### Bukkit Plugin
 
 - More detailed output of command `/mimic items info`:
@@ -12,6 +23,8 @@
     minecraft: 976
   ```
 - Improve integration with Heroes class system (#14)
+- Add statistics about used items registries
+- Add payload support to `MinecraftItemsRegistry`.
 
 ### Housekeeping
 

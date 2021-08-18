@@ -19,10 +19,14 @@
 
 package ru.endlesscode.mimic.internal
 
-import org.bukkit.ChatColor
+import kotlinx.serialization.hocon.Hocon
 
-internal fun List<String>.colorized(): List<String> = map { it.colorized() }
+/** Dependencies available for the whole plugin. */
+internal object DI {
 
-internal fun String.colorized(): String = ChatColor.translateAlternateColorCodes('&', this)
-
-internal fun String.stripColor(): String = checkNotNull(ChatColor.stripColor(this))
+    val hocon: Hocon by lazy {
+        Hocon {
+            useConfigNamingConvention = true
+        }
+    }
+}

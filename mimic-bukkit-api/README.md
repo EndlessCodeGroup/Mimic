@@ -13,10 +13,21 @@ Available services:
 
 ### How to use Mimic APIs?
 
-Firstly you should make sure Mimic is enabled with such method:
+Firstly you should make sure Mimic is enabled:
 ```java
 private boolean checkMimicEnabled() {
-    return getServer().getPluginManager().isPluginEnabled("Mimic");
+    if (!getServer().getPluginManager().isPluginEnabled("Mimic")) {
+        getLogger().severe("Mimic is required for the plugin!");
+        return false;
+    }
+
+    // You can also check if Mimic version is right
+    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_6)) {
+        getLogger().severe("Required at least Mimic 0.6!");
+        return false;
+    }
+
+    return true;
 }
 ```
 
@@ -26,8 +37,7 @@ Another way is to add it to `softdepend` and show a clear error message to the s
 @Override
 public void onEnable() {
     if (!checkMimicEnabled()) {
-        getLogger().severe("Mimic is required for the plugin!");
-        getLogger().severe("Download it: https://www.spigotmc.org/resources/82515/");
+        getLogger().severe("Download latest version here: https://www.spigotmc.org/resources/82515/");
         getServer().getPluginManager().disablePlugin(this);
         return;
     }
@@ -99,17 +109,27 @@ boolean isMagicStickExists = itemsRegistry.isItemExists("customitems:magic_wand"
         @Override
         public void onEnable() {
             if (!checkMimicEnabled()) {
-                getLogger().severe("Mimic is required for the plugin!");
-                getLogger().severe("Download it on https://www.spigotmc.org/resources/82515/");
+                getLogger().severe("Download latest version here: https://www.spigotmc.org/resources/82515/");
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
     
             setupMimic();
         }
-    
+
         private boolean checkMimicEnabled() {
-            return getServer().getPluginManager().isPluginEnabled("Mimic");
+            if (!getServer().getPluginManager().isPluginEnabled("Mimic")) {
+                getLogger().severe("Mimic is required for the plugin!");
+                return false;
+            }
+
+            // You can also check if Mimic version is right
+            if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_6)) {
+                getLogger().severe("Required at least Mimic 0.6!");
+                return false;
+            }
+
+            return true;
         }
     
         private void setupMimic() {

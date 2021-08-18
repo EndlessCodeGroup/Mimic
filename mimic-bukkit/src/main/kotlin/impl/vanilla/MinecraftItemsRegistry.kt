@@ -21,9 +21,16 @@ package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Damageable
+import org.bukkit.inventory.meta.ItemMeta
+import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.colorized
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
-/** Items service implementation using material name as itemId. */
+/**
+ * Items service implementation using material name as itemId.
+ * Supports [ItemMetaPayload] as a payload in [getItem].
+ */
 public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
     public companion object {
@@ -44,14 +51,39 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
     override fun getItemId(item: ItemStack): String = item.type.name.lowercase()
 
-    override fun getItem(itemId: String, amount: Int): ItemStack? {
+    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
         val material = getMaterial(itemId) ?: return null
         val realAmount = amount.coerceIn(1, material.maxStackSize)
-        return ItemStack(material, realAmount)
+
+        val minecraftPayload = ItemMetaPayload.of(payload)
+        if (payload != null && minecraftPayload == null)  {
+            Log.w("[${javaClass.simpleName}] Ignoring unsupported payload for item $itemId:\n$payload")
+        }
+
+        return ItemStack(material, realAmount).apply {
+            if (minecraftPayload != null) itemMeta = itemMeta?.applyPayload(minecraftPayload)
+        }
     }
 
     private fun getMaterial(name: String): Material? {
         return Material.getMaterial(name.uppercase())
             ?.takeIf { it.isItem }
+    }
+
+    private fun ItemMeta.applyPayload(payload: ItemMetaPayload): ItemMeta {
+        // Apply text options
+        setDisplayName(payload.name?.colorized())
+        lore = payload.lore?.colorized()
+
+        // Apply damage and custom model data
+        isUnbreakable = payload.isUnbreakable
+        (this as? Damageable)?.damage = payload.damage
+        setCustomModelData(payload.customModelData)
+
+        // Apply enchants and item flags
+        payload.enchantments.forEach { (enchant, level) -> addEnchant(enchant, level, true) }
+        addItemFlags(*payload.flags.toTypedArray())
+
+        return this
     }
 }

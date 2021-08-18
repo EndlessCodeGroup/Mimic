@@ -21,7 +21,7 @@ package ru.endlesscode.mimic.items
 
 import ru.endlesscode.mimic.MimicService
 
-/** Service for getting items by theirs ID. Also can be used to match ID with item. */
+/** Service for getting items by theirs ID. Also, can be used to match ID with item. */
 public interface ItemsRegistry<ItemStackT : Any> : MimicService {
 
     /** Returns all known item IDs. */
@@ -37,7 +37,14 @@ public interface ItemsRegistry<ItemStackT : Any> : MimicService {
     public fun getItemId(item: ItemStackT): String?
 
     /** Returns item by given [itemId], or `null` if the ID not found in this registry. */
-    public fun getItem(itemId: String): ItemStackT? = getItem(itemId, amount = 1)
+    public fun getItem(itemId: String): ItemStackT? = getItem(itemId, payload = null, amount = 1)
+
+    /**
+     * Returns item stack with specified [payload] by given [itemId], or `null` if the ID not found in this registry.
+     *
+     * If [payload] is not `null`, item will be configured using it.
+     */
+    public fun getItem(itemId: String, payload: Any?): ItemStackT? = getItem(itemId, payload, amount = 1)
 
     /**
      * Returns item stack with specified [amount] by given [itemId], or `null` if ID not found in this registry.
@@ -45,5 +52,16 @@ public interface ItemsRegistry<ItemStackT : Any> : MimicService {
      * If given [amount] is greater than maximum possible, will use maximum possible amount.
      * Amount shouldn't be less than `1`.
      */
-    public fun getItem(itemId: String, amount: Int): ItemStackT?
+    public fun getItem(itemId: String, amount: Int): ItemStackT? = getItem(itemId, payload = null, amount)
+
+    /**
+     * Returns item stack with specified [amount] and [payload] by given [itemId],
+     * or `null` if ID not found in this registry.
+     *
+     * If given [amount] is greater than maximum possible, will use maximum possible amount.
+     * Amount shouldn't be less than `1`.
+     *
+     * Given [payload] may be used to configure item.
+     */
+    public fun getItem(itemId: String, payload: Any?, amount: Int): ItemStackT?
 }

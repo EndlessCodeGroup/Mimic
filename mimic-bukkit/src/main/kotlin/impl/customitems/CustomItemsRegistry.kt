@@ -42,5 +42,5 @@ public class CustomItemsRegistry : BukkitItemsRegistry {
 
     override fun getItemId(item: ItemStack): String? = CustomItemsAPI.getCustomItemID(item)?.lowercase()
 
-    override fun getItem(itemId: String, amount: Int): ItemStack? = CustomItemsAPI.getCustomItem(itemId, amount)
+    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? = CustomItemsAPI.getCustomItem(itemId, amount)
 }

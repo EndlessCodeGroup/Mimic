@@ -19,10 +19,11 @@
 
 package ru.endlesscode.mimic.internal
 
-import org.bukkit.ChatColor
-
-internal fun List<String>.colorized(): List<String> = map { it.colorized() }
-
-internal fun String.colorized(): String = ChatColor.translateAlternateColorCodes('&', this)
-
-internal fun String.stripColor(): String = checkNotNull(ChatColor.stripColor(this))
+/** Returns enum of type [T] associated with given [name], or returns `null`. */
+internal inline fun <reified T : Enum<T>> enumValueOrNull(name: String): T? {
+    return try {
+        enumValueOf<T>(name)
+    } catch (e: IllegalArgumentException) {
+        null
+    }
+}
