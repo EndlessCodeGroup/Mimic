@@ -61,6 +61,20 @@ public data class ItemMetaPayload(
     public companion object {
 
         /**
+         * Returns [ItemMetaPayload] if it can be retrieved from the given [payload] value.
+         *
+         * Supported types are:
+         * - [ItemMetaPayload] - returns itself
+         * - [String] - tries to parse payload using [ItemMetaPayload.parse]
+         */
+        @JvmStatic
+        public fun of(payload: Any?): ItemMetaPayload? = when (payload) {
+            is ItemMetaPayload -> payload
+            is String -> parse(payload)
+            else -> null
+        }
+
+        /**
          * Tries to parse [ItemMetaPayload] from the given [input].
          * Returns `null` if parsing failed or [input] is empty.
          *

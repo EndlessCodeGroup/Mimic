@@ -299,6 +299,7 @@ public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload {
 	public final fun getName ()Ljava/lang/String;
 	public fun hashCode ()I
 	public final fun isUnbreakable ()Z
+	public static final fun of (Ljava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public static final fun parse (Ljava/lang/String;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public fun toString ()Ljava/lang/String;
 	public static final fun write$Self (Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
@@ -317,6 +318,7 @@ public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer
 }
 
 public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$Companion {
+	public final fun of (Ljava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public final fun parse (Ljava/lang/String;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }

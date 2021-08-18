@@ -55,16 +55,14 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
         val material = getMaterial(itemId) ?: return null
         val realAmount = amount.coerceIn(1, material.maxStackSize)
 
-        val minecraftPayload: ItemMetaPayload? = when (payload) {
-            is ItemMetaPayload -> payload
-            is String -> ItemMetaPayload.parse(payload)
-            null -> null
-            else -> unknownPayload(itemId, payload)
+        val minecraftPayload = ItemMetaPayload.of(payload)
+        if (payload != null && minecraftPayload == null)  {
+            Log.w("[${javaClass.simpleName}] Ignoring unsupported payload for item $itemId:\n$payload")
         }
 
-        val item = ItemStack(material, realAmount)
-        item.itemMeta = item.itemMeta?.applyPayload(minecraftPayload)
-        return item
+        return ItemStack(material, realAmount).apply {
+            if (minecraftPayload != null) itemMeta = itemMeta?.applyPayload(minecraftPayload)
+        }
     }
 
     private fun getMaterial(name: String): Material? {
@@ -72,14 +70,7 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
             ?.takeIf { it.isItem }
     }
 
-    private fun unknownPayload(itemId: String, payload: Any): ItemMetaPayload? {
-        Log.w("[${javaClass.simpleName}] Ignoring unsupported payload for item $itemId:\n$payload")
-        return null
-    }
-
-    private fun ItemMeta.applyPayload(payload: ItemMetaPayload?): ItemMeta {
-        if (payload == null) return this
-
+    private fun ItemMeta.applyPayload(payload: ItemMetaPayload): ItemMeta {
         // Apply text options
         setDisplayName(payload.name?.colorized())
         lore = payload.lore?.colorized()
