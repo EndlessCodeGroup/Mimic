@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ internal class LevelSystemSubcommand(
     @Description("Show information about player's level system")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
-        val system = systemProvider.get(player)
+        val system = systemProvider.getSystem(player)
         sender.send(
             "&3System: &7${systemProvider.id}",
             "&3Level: &7%.2f".format(system.level + system.fractionalExp),
@@ -64,8 +64,8 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemProvider.get(player)
-            @Suppress("DEPRECATION") // Allow to use exp setter
+            val system = systemProvider.getSystem(player)
+            @Suppress("DEPRECATION") // Allow using exp setter
             when (type) {
                 ExtendedValueType.LVL -> system.level = amount.toInt()
                 ExtendedValueType.TOTAL -> system.totalExp = amount
@@ -85,7 +85,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemProvider.get(player)
+            val system = systemProvider.getSystem(player)
             when (type) {
                 ValueType.LVL -> system.giveLevels(amount)
                 ValueType.POINTS -> system.giveExp(amount.toDouble())
@@ -104,7 +104,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemProvider.get(player)
+            val system = systemProvider.getSystem(player)
             when (type) {
                 ValueType.LVL -> system.takeLevels(amount)
                 ValueType.POINTS -> system.takeExp(amount.toDouble())
@@ -135,7 +135,7 @@ internal class LevelSystemSubcommand(
         @Default("lvl") type: ExtendedValueType,
         @Optional @Flags("other,defaultself") player: Player
     ) {
-        val system = systemProvider.get(player)
+        val system = systemProvider.getSystem(player)
         val has = when (type) {
             ExtendedValueType.LVL -> system.didReachLevel(value)
             ExtendedValueType.POINTS -> system.hasExp(value.toDouble())

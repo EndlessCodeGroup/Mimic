@@ -1,5 +1,6 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.net.URL
 
 plugins {
     kotlin("jvm")
@@ -28,7 +29,7 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-extensions.configure<KotlinProjectExtension> {
+kotlin {
     explicitApi()
 }
 
@@ -39,6 +40,21 @@ dependencies {
 
 repositories {
     mavenCentral()
+}
+
+tasks.withType<DokkaTaskPartial>().configureEach {
+    dokkaSourceSets.configureEach {
+        reportUndocumented.set(true)
+        sourceLink {
+            localDirectory.set(file("src/main/kotlin/"))
+            remoteUrl.set(URL("https://github.com/EndlessCodeGroup/Mimic/tree/develop/${project.name}/src/main/kotlin/"))
+        }
+        externalDocumentationLink {
+            url.set(URL("https://hub.spigotmc.org/javadocs/spigot/"))
+            packageListUrl.set(URL("https://gist.githubusercontent.com/osipxd/604c9b3f91c3a6c56050f4a3b027f333/raw/package-list"))
+        }
+        pluginsMapConfiguration.put("org.jetbrains.dokka.base.DokkaBase", """{ "separateInheritedMembers": true}""")
+    }
 }
 
 fun DependencyHandlerScope.testingDependencies() {

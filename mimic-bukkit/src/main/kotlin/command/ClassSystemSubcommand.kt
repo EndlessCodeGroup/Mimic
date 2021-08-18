@@ -1,7 +1,7 @@
 /*
  * This file is part of BukkitMimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * BukkitMimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ internal class ClassSystemSubcommand(
     @Description("Show information about player's class system")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
-        val system = systemProvider.get(player)
+        val system = systemProvider.getSystem(player)
         sender.send(
             "&3System: &7${systemProvider.id}",
             "&3Classes: &7${system.classes}",
@@ -57,7 +57,7 @@ internal class ClassSystemSubcommand(
         @Default("all") mode: Mode,
         @Optional @Flags("other,defaultself") player: Player
     ) {
-        val system = systemProvider.get(player)
+        val system = systemProvider.getSystem(player)
         val has = if (mode == Mode.ALL) {
             system.hasAllClasses(classes.asList())
         } else {
