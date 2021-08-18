@@ -130,7 +130,7 @@ public class Mimic : JavaPlugin() {
                 val service = constructor()
                 servicesManager.register(serviceClass.java, service, this, priority)
                 val serviceName = serviceClass.java.name
-                    .replace(Regex(".*\\.Bukkit"), "")
+                    .substringAfterLast(".Bukkit")
                     .substringBefore("$")
                 logger.info("[$serviceName] '${service.id}' found")
             }

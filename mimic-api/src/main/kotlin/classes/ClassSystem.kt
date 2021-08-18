@@ -36,7 +36,7 @@ public interface ClassSystem {
      * @return Primary class name or `null` if player has no any classes.
      */
     public val primaryClass: String?
-        get() = this.classes.firstOrNull()
+        get() = classes.firstOrNull()
 
     /**
      * List of player classes.
@@ -46,7 +46,7 @@ public interface ClassSystem {
      *
      * Never returns `null`, but can return empty [List].
      *
-     * @return List of player system names
+     * @return List of player's classes
      * @throws IllegalStateException If player-related object not exists.
      */
     public val classes: List<String>
@@ -56,17 +56,17 @@ public interface ClassSystem {
 
     /** Returns `true` if player has any of [requiredClasses]. */
     public fun hasAnyOfClasses(requiredClasses: List<String>): Boolean {
-        return requiredClasses.any { this.hasClass(it) }
+        return requiredClasses.any { hasClass(it) }
     }
 
     /** Returns `true` if player has all [requiredClasses]. */
     public fun hasAllClasses(requiredClasses: List<String>): Boolean {
-        return requiredClasses.all { this.hasClass(it) }
+        return requiredClasses.all { hasClass(it) }
     }
 
     /** Returns `true` if player has [requiredClass]. */
     public fun hasClass(requiredClass: String): Boolean {
-        return this.classes.any {
+        return classes.any {
             it.equals(requiredClass, ignoreCase = true)
         }
     }

@@ -43,17 +43,17 @@ public interface LevelSystem {
      */
     public var totalExp: Double
         get() {
-            val levelExp = this.converter.levelToExp(this.level)
-            return levelExp + this.exp
+            val levelExp = converter.levelToExp(level)
+            return levelExp + exp
         }
         set(value) {
             val allowedTotalExperience = value.coerceAtLeast(0.0)
 
-            val level = this.converter.expToFullLevel(allowedTotalExperience)
-            val levelExp = this.converter.levelToExp(level)
+            val fullLevels = converter.expToFullLevel(allowedTotalExperience)
+            val levelExp = converter.levelToExp(fullLevels)
 
-            this.level = level
-            this.exp = allowedTotalExperience - levelExp
+            level = fullLevels
+            exp = allowedTotalExperience - levelExp
         }
 
     /**
@@ -65,16 +65,16 @@ public interface LevelSystem {
     public var fractionalExp: Double
         get() {
             val expToNextLevel = totalExpToNextLevel
-            val exp = this.exp.coerceAtMost(expToNextLevel - 1)
+            val exp = exp.coerceAtMost(expToNextLevel - 1)
             return if (exp <= 0.0) 0.0 else exp / expToNextLevel
         }
         set(value) {
             val allowedExp = value.coerceAtLeast(0.0)
-            if (value < 1.0) {
-                this.exp = converter.getExpToReachNextLevel(this.level) * allowedExp
+            exp = if (value < 1.0) {
+                converter.getExpToReachNextLevel(level) * allowedExp
             } else {
-                this.giveLevels(1)
-                this.exp = 0.0
+                giveLevels(1)
+                0.0
             }
         }
 
@@ -126,8 +126,8 @@ public interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     public fun takeLevels(lvlAmount: Int) {
-        val currentLevel = this.level
-        this.level = currentLevel - lvlAmount.coerceAtMost(currentLevel)
+        val currentLevel = level
+        level = currentLevel - lvlAmount.coerceAtMost(currentLevel)
     }
 
     /**
@@ -139,7 +139,7 @@ public interface LevelSystem {
      * @throws IllegalStateException If player-related object not exists
      */
     public fun giveLevels(lvlAmount: Int) {
-        this.level += lvlAmount
+        level += lvlAmount
     }
 
     /**
@@ -148,7 +148,7 @@ public interface LevelSystem {
      * @param requiredLevel Required experience level. Negative value will be interpreted as 0.
      * @return true if player player did reach required level
      */
-    public fun didReachLevel(requiredLevel: Int): Boolean = requiredLevel.coerceAtLeast(0) <= this.level
+    public fun didReachLevel(requiredLevel: Int): Boolean = requiredLevel.coerceAtLeast(0) <= level
 
     /**
      * Takes away player the amount of experience specified.
@@ -162,8 +162,8 @@ public interface LevelSystem {
      * @see giveExp
      */
     public fun takeExp(expAmount: Double) {
-        val currentTotalExp = this.totalExp
-        this.totalExp = currentTotalExp - expAmount.coerceAtMost(currentTotalExp)
+        val currentTotalExp = totalExp
+        totalExp = currentTotalExp - expAmount.coerceAtMost(currentTotalExp)
     }
 
     /**
@@ -188,7 +188,7 @@ public interface LevelSystem {
      * @return true if player player has required experience
      * @throws IllegalStateException If player-related object not exists
      */
-    public fun hasExp(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.exp
+    public fun hasExp(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= exp
 
     /**
      * Checks player has required total experience.
@@ -196,5 +196,5 @@ public interface LevelSystem {
      * @return true if player player has required total experience
      * @throws IllegalStateException If player-related object not exists
      */
-    public fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= this.totalExp
+    public fun hasExpTotal(requiredExp: Double): Boolean = requiredExp.coerceAtLeast(0.0) <= totalExp
 }
