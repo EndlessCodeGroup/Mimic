@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Fixed
+
+- `MimicApiLevel.checkApiLevel` now works correctly
+
 ## [v0.6] (2021-08-19)
 
 ### API

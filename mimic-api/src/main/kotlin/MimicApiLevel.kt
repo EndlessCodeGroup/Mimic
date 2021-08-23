@@ -49,5 +49,5 @@ public object MimicApiLevel {
      * ```
      */
     @JvmStatic
-    public fun checkApiLevel(apiLevel: Int): Boolean = CURRENT < apiLevel
+    public fun checkApiLevel(requiredApiLevel: Int): Boolean = requiredApiLevel <= CURRENT
 }
