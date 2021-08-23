@@ -47,7 +47,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("ru.endlesscode.mimic:mimic-bukkit-api:0.6")
+    compileOnly("ru.endlesscode.mimic:mimic-bukkit-api:0.6.1")
 }
 ```
 
@@ -56,7 +56,7 @@ dependencies {
 <dependency>
   <groupId>ru.endlesscode.mimic</groupId>
   <artifactId>mimic-bukkit-api</artifactId>
-  <version>0.6</version>
+  <version>0.6.1</version>
   <scope>provided</scope>
 </dependency>
 ```

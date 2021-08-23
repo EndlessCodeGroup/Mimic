@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [v0.6.1] (2021-08-23)
+
 ### Fixed
 
 - `MimicApiLevel.checkApiLevel` now works correctly
@@ -40,5 +42,6 @@
 - Update bukkit-gradle to 0.10.0
 - Update Gradle to 7.2
 
-[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6...develop
+[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.1...develop
+[v0.6.1]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6...v0.6.1
 [v0.6]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.5...v0.6
