@@ -39,8 +39,9 @@ internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) :
     @Subcommand("info")
     @Description("Show information about items service")
     fun info(sender: CommandSender) {
-        val registries = (itemsRegistry as? MimicItemsRegistry)?.services
+        val registries = (itemsRegistry as? MimicItemsRegistry)?.providers
             .orEmpty()
+            .map { it.provider }
             .map { "  &f${it.id}: &7${it.knownIds.size}" }
 
         sender.send(

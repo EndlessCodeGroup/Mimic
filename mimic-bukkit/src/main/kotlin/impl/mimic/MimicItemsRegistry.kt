@@ -21,7 +21,7 @@ package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.ServicesManager
-import ru.endlesscode.mimic.bukkit.loadAll
+import ru.endlesscode.mimic.bukkit.getRegistrations
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 /**
@@ -41,51 +41,56 @@ public class MimicItemsRegistry(private val servicesManager: ServicesManager) : 
     override val id: String = ID
 
     override val knownIds: Collection<String>
-        get() = services.flatMap { service ->
-            service.knownIds.map { service.namespaced(it) }
+        get() = providers.flatMap { provider ->
+            provider.tryGetKnownIds().map { provider.namespaced(it) }
         }
 
-    internal val services: Collection<BukkitItemsRegistry>
-        get() = servicesManager.loadAll<BukkitItemsRegistry>()
-            .filterNot { it == this }
+    internal val providers: List<ItemsRegistryProvider>
+        get() = servicesManager.getRegistrations<BukkitItemsRegistry>()
+            .filterNot { it.registry == this }
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
-        return runOnServices(itemId) { id ->
-            any { service -> service.isSameItem(item, id) }
-        }
+        val (namespace, id) = itemId.splitBySeparator()
+        return getRegistries(namespace)
+            .any { provider -> provider.tryIsSameItem(item, id) }
     }
 
     override fun isItemExists(itemId: String): Boolean {
-        return runOnServices(itemId) { id ->
-            any { service -> service.isItemExists(id) }
-        }
+        val (namespace, id) = itemId.splitBySeparator()
+        return getRegistries(namespace)
+            .any { provider -> provider.tryIsItemExists(id) }
     }
 
     override fun getItemId(item: ItemStack): String? {
-        return services.asSequence()
-            .mapNotNull { service -> service.getItemId(item)?.let { service.namespaced(it) } }
+        return providers.asSequence()
+            .mapNotNull { provider -> provider.tryGetItemId(item)?.let { provider.namespaced(it) } }
             .firstOrNull()
     }
 
     override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
-        return runOnServices(itemId) { id ->
-            mapNotNull { service -> service.getItem(id, payload, amount) }
-                .firstOrNull()
-        }
+        val (namespace, id) = itemId.splitBySeparator()
+        return getRegistries(namespace)
+            .mapNotNull { service -> service.tryGetItem(id, payload, amount) }
+            .firstOrNull()
     }
 
-    private fun <T> runOnServices(itemId: String, block: Sequence<BukkitItemsRegistry>.(id: String) -> T): T {
-        val (namespace, id) = if (':' in itemId) {
-            itemId.split(":", limit = 2)
+    private fun getRegistries(namespace: String): Sequence<ItemsRegistryProvider> {
+        return if (namespace.isEmpty()) {
+            providers.asSequence()
         } else {
-            listOf("", itemId)
+            providers.asSequence()
+                .filter { it.registry.id.equals(namespace, ignoreCase = true) }
         }
-
-        return services.asSequence()
-            .filter { it.namespaceMatches(namespace) }
-            .block(id)
     }
 
-    private fun BukkitItemsRegistry.namespaced(itemId: String) = "$id:$itemId"
-    private fun BukkitItemsRegistry.namespaceMatches(namespace: String) = namespace.isEmpty() || namespace == id
+    private fun String.splitBySeparator(): Pair<String, String> {
+        return if (':' in this) {
+            val parts = split(":", limit = 2)
+            return parts[0] to parts[1];
+        } else {
+            "" to this
+        }
+    }
+
+    private fun ItemsRegistryProvider.namespaced(itemId: String) = "${registry.id}:$itemId"
 }
