@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+### Fixed
+
+- Check plugin exists before registering built-in integrations
+- Isolate `MimicItemsRegistry` from exceptions thrown from other items registries implementations.
+
+### Housekeeping
+
+- Update Gradle to 7.3.3
+
 ## [v0.6.1] (2021-08-23)
 
 ### Fixed
