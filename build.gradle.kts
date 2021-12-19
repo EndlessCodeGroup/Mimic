@@ -2,7 +2,7 @@
 
 plugins {
     id("org.jetbrains.dokka")
-    id("com.github.ben-manes.versions") version "0.36.0"
+    id("com.github.ben-manes.versions") version "0.39.0"
 }
 
 // Common configurations for all Mimic projects
