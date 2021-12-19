@@ -1,21 +1,4 @@
 @file:Suppress("ClassName")
-/*
-* This file is part of RPGInventory.
-* Copyright (C) 2019 EndlessCode Group and contributors
-*
-* RPGInventory is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* RPGInventory is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Affero General Public License for more details.
-*
-* You should have received a copy of the GNU Affero General Public License
-* along with RPGInventory.  If not, see <http://www.gnu.org/licenses/>.
-*/
 
 object rpgplugins {
     const val skillapi = "com.sucy:SkillAPI:3.102"
@@ -24,7 +7,7 @@ object rpgplugins {
     const val mmoLib = "net.Indyuce:MMOLib:1.7.3"
     const val mmoItems = "net.Indyuce:MMOItems:6.5.5"
     const val mythicLib = "io.lumine:MythicLib:1.0.10"
-    const val heroes = "com.herocraftonline.heroes:Heroes:1.9.6-SNAPSHOT:stripped"
+    const val heroes = ":Heroes:1.9.9"
 }
 
 object acf {

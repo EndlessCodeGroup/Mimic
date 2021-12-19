@@ -30,10 +30,11 @@ bukkit {
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
     maven(url = "https://mvn.lumine.io/repository/maven-public/")
-    maven(url = "https://nexus.hc.to/content/repositories/pub_snapshots/")
     aikar()
     codemc()
     flatDir { dir("libs") }
+    // Uncomment if you want to get Heroes from maven repo
+    //maven(url = "https://nexus.hc.to/content/repositories/pub_snapshots/")
 }
 
 dependencies {
