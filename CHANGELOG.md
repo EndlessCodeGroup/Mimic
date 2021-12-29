@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### API Changes
+
+- Added vararg variants of ClassSystem methods
+
 ### Fixed
 
 - Check plugin exists before registering built-in integrations
