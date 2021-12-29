@@ -10,7 +10,7 @@ subprojects {
     apply(plugin = "commons")
     apply(plugin = "publish")
 
-    version = "0.6.1"
+    version = "0.6.2"
     group = "ru.endlesscode.mimic"
 }
 

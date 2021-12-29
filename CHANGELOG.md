@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [v0.6.2] (2021-12-29)
+
 ### API Changes
 
 - Added vararg variants of ClassSystem methods
@@ -57,6 +59,7 @@
 - Update bukkit-gradle to 0.10.0
 - Update Gradle to 7.2
 
-[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.1...develop
+[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.2...develop
+[v0.6.2]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.1...v0.6.2
 [v0.6.1]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6...v0.6.1
 [v0.6]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.5...v0.6
