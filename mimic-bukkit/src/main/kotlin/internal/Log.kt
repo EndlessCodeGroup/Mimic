@@ -54,8 +54,8 @@ internal object Log {
     /**
      * Writes warning exception to log.
      */
-    fun w(throwable: Throwable) {
-        logger?.log(Level.WARNING, throwable.message, throwable)
+    fun w(throwable: Throwable, message: String? = throwable.message) {
+        logger?.log(Level.WARNING, message, throwable)
     }
 
     /**

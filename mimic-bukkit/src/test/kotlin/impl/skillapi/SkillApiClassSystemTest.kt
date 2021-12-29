@@ -19,66 +19,39 @@
 
 package ru.endlesscode.mimic.impl.skillapi
 
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import ru.endlesscode.mimic.classes.ClassSystem
-import kotlin.test.*
+import kotlin.test.Test
 
 class SkillApiClassSystemTest : SkillApiTestBase() {
 
-    private lateinit var classSystem: ClassSystem
-
-    @BeforeTest
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-        classSystem = SkillApiClassSystem(player, skillApi)
-    }
+    private val classSystem: ClassSystem = SkillApiClassSystem(player, skillApi)
 
     @Test
     fun `when get classes - should return right classes`() {
-        // Given
-        val expectedClasses = listOf("Mage", "Cleric")
+        val expectedClasses = setOf("Mage", "Cleric")
         prepareClasses(expectedClasses)
 
-        // When
-        val actualClasses = classSystem.classes
-
-        // Then
-        assertEquals(expectedClasses, actualClasses)
+        classSystem.classes.shouldContainExactly(expectedClasses)
     }
 
     @Test
-    fun `when get classes - and there no classes - should return empty list`() {
-        // Given
-        prepareClasses()
+    fun `when there no classes - should return empty list of classes`() {
+        prepareClasses(/* empty classes list */)
 
-        // When
-        val actualClasses = classSystem.classes
-
-        // Then
-        assertTrue(actualClasses.isEmpty())
+        assertSoftly {
+            classSystem.classes.shouldBeEmpty()
+            classSystem.primaryClass.shouldBeNull()
+        }
     }
 
     @Test
     fun `when get primary class - should return right class`() {
-        // Given
         prepareClasses("Primary", "Secondary", "Third")
-
-        // When
-        val actualPrimaryClass = classSystem.primaryClass
-
-        // Then
-        assertEquals("Primary", actualPrimaryClass)
-    }
-
-    @Test
-    fun `when get primary class - and there no classes - should return null`() {
-        // Given
-        prepareClasses()
-
-        // When
-        val actualPrimaryClass = classSystem.primaryClass
-
-        // Then
-        assertNull(actualPrimaryClass)
+        classSystem.primaryClass shouldBe "Primary"
     }
 }

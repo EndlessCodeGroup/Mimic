@@ -54,9 +54,25 @@ public interface ClassSystem {
     /** Returns `true` if player has any class. */
     public fun hasAnyClass(): Boolean = primaryClass != null
 
+    /**
+     * Returns `true` if player has any of required classes.
+     * @since 0.6.2
+     */
+    public fun hasAnyOfClasses(firstClass: String, vararg restClasses: String): Boolean {
+        return hasAnyOfClasses(listOf(firstClass, *restClasses))
+    }
+
     /** Returns `true` if player has any of [requiredClasses]. */
     public fun hasAnyOfClasses(requiredClasses: List<String>): Boolean {
         return requiredClasses.any { hasClass(it) }
+    }
+
+    /**
+     * Returns `true` if player has all required classes.
+     * @since 0.6.2
+     */
+    public fun hasAllClasses(firstClass: String, vararg restClasses: String): Boolean {
+        return hasAllClasses(listOf(firstClass, *restClasses))
     }
 
     /** Returns `true` if player has all [requiredClasses]. */

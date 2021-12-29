@@ -4,7 +4,7 @@ import ru.endlesscode.bukkitgradle.dependencies.codemc
 import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
     id("ru.endlesscode.bukkitgradle") version "0.10.0"
     kotlin("plugin.serialization")
 }
@@ -30,10 +30,11 @@ bukkit {
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
     maven(url = "https://mvn.lumine.io/repository/maven-public/")
-    maven(url = "https://nexus.hc.to/content/repositories/pub_snapshots/")
     aikar()
     codemc()
     flatDir { dir("libs") }
+    // Uncomment if you want to get Heroes from maven repo
+    //maven(url = "https://nexus.hc.to/content/repositories/pub_snapshots/")
 }
 
 dependencies {
@@ -61,12 +62,6 @@ dependencies {
 
     testImplementation(spigotApi)
     testImplementation(rpgplugins.skillapi)
-
-    // TODO: Remove after this bug will be fixed
-    //  Issue: https://github.com/Kotlin/kotlinx.serialization/issues/1189
-    components {
-        withModule<HoconSerializationRule>("org.jetbrains.kotlinx:kotlinx-serialization-hocon")
-    }
 }
 
 tasks.withType<KotlinCompile>().configureEach {

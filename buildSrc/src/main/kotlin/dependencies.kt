@@ -1,21 +1,4 @@
 @file:Suppress("ClassName")
-/*
-* This file is part of RPGInventory.
-* Copyright (C) 2019 EndlessCode Group and contributors
-*
-* RPGInventory is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* RPGInventory is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Affero General Public License for more details.
-*
-* You should have received a copy of the GNU Affero General Public License
-* along with RPGInventory.  If not, see <http://www.gnu.org/licenses/>.
-*/
 
 object rpgplugins {
     const val skillapi = "com.sucy:SkillAPI:3.102"
@@ -24,7 +7,7 @@ object rpgplugins {
     const val mmoLib = "net.Indyuce:MMOLib:1.7.3"
     const val mmoItems = "net.Indyuce:MMOItems:6.5.5"
     const val mythicLib = "io.lumine:MythicLib:1.0.10"
-    const val heroes = "com.herocraftonline.heroes:Heroes:1.9.6-SNAPSHOT:stripped"
+    const val heroes = ":Heroes:1.9.9"
 }
 
 object acf {
@@ -34,7 +17,8 @@ object acf {
 object misc {
     const val bstats = "org.bstats:bstats-bukkit:1.8"
     const val annotations = "org.jetbrains:annotations:13.0"
-    const val serialization_hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.2.2"
+    const val serialization_hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.3.2"
+    const val mockk = "io.mockk:mockk:1.12.1"
 }
 
 // Testing
@@ -44,7 +28,7 @@ object junit {
     const val jupiter_params = "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
 }
 
-object mockito {
-    const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    const val inline = "org.mockito:mockito-inline:2.23.0"
+object kotest {
+    private const val version = "5.0.3"
+    const val assertions = "io.kotest:kotest-assertions-core:$version"
 }

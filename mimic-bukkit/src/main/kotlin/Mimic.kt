@@ -21,6 +21,7 @@ package ru.endlesscode.mimic
 
 import co.aikar.commands.PaperCommandManager
 import org.bstats.bukkit.Metrics
+import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
 import org.bukkit.plugin.java.JavaPlugin
@@ -71,69 +72,89 @@ public class Mimic : JavaPlugin() {
     }
 
     private fun hookDefaultServices() {
-        // LevelSystem
-        hookLevels(MinecraftLevelSystem::Provider, Lowest)
-        hookLevels(SkillApiLevelSystem::Provider, Normal, "com.sucy.skill.SkillAPI")
-        hookLevels(BattleLevelsLevelSystem::Provider, Normal, "me.robin.battlelevels.api.BattleLevelsAPI")
-        hookLevels(MmoCoreLevelSystem::Provider, Normal, "net.Indyuce.mmocore.MMOCore")
-        hookLevels(HeroesLevelSystem::Provider, Normal, "com.herocraftonline.heroes.Heroes")
-        hookLevels(QuantumRpgLevelSystem::Provider, Normal, "su.nightexpress.quantumrpg.QuantumRPG")
+        // Default systems
+        Log.i(">>> Default systems")
+        hookLevels(MinecraftLevelSystem::Provider, priority = Lowest)
+        hookClasses(PermissionsClassSystem::Provider, priority = Lowest)
+        hookItems(::MinecraftItemsRegistry, priority = Lowest)
+        hookItems({ MimicItemsRegistry(servicesManager) }, priority = Highest)
 
-        // ClassSystem
-        hookClasses(PermissionsClassSystem::Provider, Lowest)
-        hookClasses(SkillApiClassSystem::Provider, Normal, "com.sucy.skill.SkillAPI")
-        hookClasses(MmoCoreClassSystem::Provider, Normal, "net.Indyuce.mmocore.MMOCore")
-        hookClasses(HeroesClassSystem::Provider, Normal, "com.herocraftonline.heroes.Heroes")
-        hookClasses(QuantumRpgClassSystem::Provider, Normal, "su.nightexpress.quantumrpg.QuantumRPG")
+        pluginHooks("SkillAPI", "com.sucy.skill.SkillAPI") {
+            hookLevels(SkillApiLevelSystem::Provider)
+            hookClasses(SkillApiClassSystem::Provider)
+        }
 
-        // ItemsRegistry
-        hookItems(::MinecraftItemsRegistry, Lowest)
-        hookItems(::CustomItemsRegistry, Normal, "com.jojodmo.customitems.api.CustomItemsAPI")
-        hookItems(::MmoItemsRegistry, Normal, "net.Indyuce.mmoitems.MMOItems")
-        hookItems(::QuantumRpgItemsRegistry, Normal, "su.nightexpress.quantumrpg.QuantumRPG")
-        hookItems({ MimicItemsRegistry(servicesManager) }, Highest)
+        pluginHooks("BattleLevels", "me.robin.battlelevels.api.BattleLevelsAPI") {
+            hookLevels(BattleLevelsLevelSystem::Provider)
+        }
+
+        pluginHooks("MMOCore", "net.Indyuce.mmocore.MMOCore") {
+            hookLevels(MmoCoreLevelSystem::Provider)
+            hookClasses(MmoCoreClassSystem::Provider)
+        }
+
+        pluginHooks("Heroes", "com.herocraftonline.heroes.Heroes") {
+            hookLevels(HeroesLevelSystem::Provider)
+            hookClasses(HeroesClassSystem::Provider)
+        }
+
+        pluginHooks("QuantumRPG", "su.nightexpress.quantumrpg.QuantumRPG") {
+            hookLevels(QuantumRpgLevelSystem::Provider)
+            hookClasses(QuantumRpgClassSystem::Provider)
+            hookItems(::QuantumRpgItemsRegistry)
+        }
+
+        pluginHooks("CustomItems", "com.jojodmo.customitems.api.CustomItemsAPI") {
+            hookItems(::CustomItemsRegistry)
+        }
+
+        pluginHooks("MMOItems", "net.Indyuce.mmoitems.MMOItems") {
+            hookItems(::MmoItemsRegistry)
+        }
+    }
+
+    private fun pluginHooks(name: String, vararg requiredClasses: String, hooks: () -> Unit) {
+        val pluginLoaded = Bukkit.getPluginManager().getPlugin(name) != null
+        if (pluginLoaded && checkClassesLoaded(*requiredClasses)) {
+            Log.i(">>> $name hooks")
+            hooks()
+        }
     }
 
     //<editor-fold defaultstate="collapsed" desc="hook* methods">
     private fun hookLevels(
         constructor: () -> BukkitLevelSystem.Provider,
-        priority: ServicePriority,
-        vararg requiredPackages: String
+        priority: ServicePriority = Normal,
     ) {
-        hookService(BukkitLevelSystem.Provider::class, constructor, priority, requiredPackages)
+        hookService(BukkitLevelSystem.Provider::class, constructor, priority)
     }
 
     private fun hookClasses(
         constructor: () -> BukkitClassSystem.Provider,
-        priority: ServicePriority,
-        vararg requiredPackages: String
+        priority: ServicePriority = Normal,
     ) {
-        hookService(BukkitClassSystem.Provider::class, constructor, priority, requiredPackages)
+        hookService(BukkitClassSystem.Provider::class, constructor, priority)
     }
 
     private fun hookItems(
         constructor: () -> BukkitItemsRegistry,
-        priority: ServicePriority,
-        vararg requiredPackages: String
+        priority: ServicePriority = Normal,
     ) {
-        hookService(BukkitItemsRegistry::class, constructor, priority, requiredPackages)
+        hookService(BukkitItemsRegistry::class, constructor, priority)
     }
 
     private fun <ServiceT : MimicService> hookService(
         serviceClass: KClass<ServiceT>,
         constructor: () -> ServiceT,
         priority: ServicePriority,
-        requiredPackages: Array<out String>
     ) {
         try {
-            if (checkClassesLoaded(*requiredPackages)) {
-                val service = constructor()
-                servicesManager.register(serviceClass.java, service, this, priority)
-                val serviceName = serviceClass.java.name
-                    .substringAfterLast(".Bukkit")
-                    .substringBefore("$")
-                logger.info("[$serviceName] '${service.id}' found")
-            }
+            val service = constructor.invoke()
+            servicesManager.register(serviceClass.java, service, this, priority)
+            val serviceName = serviceClass.java.name
+                .substringAfterLast(".Bukkit")
+                .substringBefore("$")
+            logger.info("$serviceName '${service.id}' registered")
         } catch (e: Exception) {
             Log.d(e)
         }

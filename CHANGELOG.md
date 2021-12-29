@@ -1,5 +1,22 @@
 ## [Unreleased]
 
+## [v0.6.2] (2021-12-29)
+
+### API Changes
+
+- Added vararg variants of ClassSystem methods
+
+### Fixed
+
+- Check plugin exists before registering built-in integrations
+- Isolate `MimicItemsRegistry` from exceptions thrown from other items registries implementations.
+
+### Housekeeping
+
+- Update Kotlin to 1.6.10
+- Update Gradle to 7.3.3
+- Migrate tests to MockK and Kotest assertions
+
 ## [v0.6.1] (2021-08-23)
 
 ### Fixed
@@ -42,6 +59,7 @@
 - Update bukkit-gradle to 0.10.0
 - Update Gradle to 7.2
 
-[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.1...develop
+[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.2...develop
+[v0.6.2]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.1...v0.6.2
 [v0.6.1]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6...v0.6.1
 [v0.6]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.5...v0.6

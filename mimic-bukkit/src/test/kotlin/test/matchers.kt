@@ -19,10 +19,10 @@
 
 package ru.endlesscode.mimic.test
 
-import kotlin.math.abs
+import io.kotest.matchers.doubles.ToleranceMatcher
+import io.kotest.matchers.doubles.plusOrMinus
 
 const val EPSILON = 0.0000001
 
-fun assertEqualsDoubles(expected: Double, actual: Double, delta: Double = EPSILON): Boolean {
-    return abs(expected - actual) < delta
-}
+val Double.nearly: ToleranceMatcher
+    get() = plusOrMinus(EPSILON)

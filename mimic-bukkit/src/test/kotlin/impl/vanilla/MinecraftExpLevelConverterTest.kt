@@ -19,16 +19,36 @@
 
 package ru.endlesscode.mimic.impl.vanilla
 
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import ru.endlesscode.mimic.level.ExpLevelConverter
 import java.util.stream.Stream
-import kotlin.test.BeforeTest
-import kotlin.test.assertEquals
 
 class MinecraftExpLevelConverterTest {
+
+    // SUT
+    private val converter: ExpLevelConverter = MinecraftExpLevelConverter.instance
+
+    @ParameterizedTest
+    @MethodSource("levelExp")
+    fun testExpToFullLevel(level: Int, exp: Int) {
+        converter.expToFullLevel(exp.toDouble()) shouldBe level
+    }
+
+    @ParameterizedTest
+    @MethodSource("levelExp")
+    fun testLevelToExp(level: Int, exp: Int) {
+        converter.levelToExp(level) shouldBe exp
+    }
+
+    @ParameterizedTest
+    @MethodSource("levelExpToNext")
+    fun testGetExpToReachNextLevel(level: Int, expToNext: Double) {
+        converter.getExpToReachNextLevel(level) shouldBe expToNext
+    }
 
     @Suppress("unused")
     companion object {
@@ -53,43 +73,5 @@ class MinecraftExpLevelConverterTest {
             arguments(31, 121.0),
             arguments(39, 193.0)
         )
-    }
-
-    // SUT
-    private lateinit var converter: ExpLevelConverter
-
-    @BeforeTest
-    fun setUp() {
-        converter = MinecraftExpLevelConverter.instance
-    }
-
-    @ParameterizedTest
-    @MethodSource("levelExp")
-    fun testExpToFullLevel(level: Int, exp: Int) {
-        // When
-        val fullLevel = converter.expToFullLevel(exp.toDouble())
-
-        // Then
-        assertEquals(level, fullLevel)
-    }
-
-    @ParameterizedTest
-    @MethodSource("levelExp")
-    fun testLevelToExp(level: Int, exp: Int) {
-        // When
-        val actualExp = converter.levelToExp(level)
-
-        // Then
-        assertEquals(exp.toDouble(), actualExp)
-    }
-
-    @ParameterizedTest
-    @MethodSource("levelExpToNext")
-    fun testGetExpToReachNextLevel(level: Int, expToNext: Double) {
-        // When
-        val actualExpToNext = converter.getExpToReachNextLevel(level)
-
-        // Then
-        assertEquals(expToNext, actualExpToNext)
     }
 }

@@ -19,13 +19,12 @@
 
 package ru.endlesscode.mimic.level
 
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
-import kotlin.test.BeforeTest
-import kotlin.test.assertEquals
 
 class ExpLevelConverterTest {
 
@@ -58,40 +57,23 @@ class ExpLevelConverterTest {
     }
 
     // SUT
-    private lateinit var converter: ExpLevelConverter
-
-    @BeforeTest
-    fun setUp() {
-        converter = mockExpLevelConverter()
-    }
+    private val converter: ExpLevelConverter = DummyExpLevelConverter()
 
     @ParameterizedTest
     @MethodSource("expLevel")
     fun `when expToLevel - should return right level`(exp: Double, expectedLevel: Double) {
-        // When
-        val level = converter.expToLevel(exp)
-
-        // Then
-        assertEquals(expectedLevel, level)
+        converter.expToLevel(exp) shouldBe expectedLevel
     }
 
     @ParameterizedTest
     @MethodSource("expFullLevel")
     fun `when expToFullLevel - should return right level`(exp: Double, fullLevel: Int) {
-        // When
-        val level = converter.expToFullLevel(exp)
-
-        // Then
-        assertEquals(fullLevel, level)
+        converter.expToFullLevel(exp) shouldBe fullLevel
     }
 
     @ParameterizedTest
     @MethodSource("fullLevelExp")
     fun `when levelToExp - should return right exp`(fullLevel: Int, fullLevelExp: Double) {
-        // When
-        val exp = converter.levelToExp(fullLevel)
-
-        // Then
-        assertEquals(fullLevelExp, exp)
+        converter.levelToExp(fullLevel) shouldBe fullLevelExp
     }
 }

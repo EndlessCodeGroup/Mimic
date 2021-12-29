@@ -30,6 +30,12 @@ public object MimicApiLevel {
     public const val VERSION_0_6: Int = 1
 
     /**
+     * # Version 0.6.2
+     * - Vararg variants of ClassSystem methods
+     */
+    public const val VERSION_0_6_2: Int = 2
+
+    /**
      * The latest version at the moment of Mimic COMPILATION.
      *
      * Usage of this constant will be inlined by the compiler, so use it only to save the version
@@ -37,7 +43,7 @@ public object MimicApiLevel {
      * Use [checkApiLevel] if you want to check that the current RUNNING Mimic API level meets to
      * the required.
      */
-    public const val CURRENT: Int = VERSION_0_6
+    public const val CURRENT: Int = VERSION_0_6_2
 
     /**
      * Returns 'true' if the current RUNNING Mimic API level meets to  the required, otherwise `false`.

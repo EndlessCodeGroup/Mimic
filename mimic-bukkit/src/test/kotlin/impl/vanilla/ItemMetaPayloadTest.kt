@@ -19,6 +19,8 @@
 
 package ru.endlesscode.mimic.impl.vanilla
 
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import org.bukkit.inventory.ItemFlag
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -27,38 +29,25 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 internal class ItemMetaPayloadTest {
 
     @ParameterizedTest
-    @ValueSource(strings = ["", "{}", "invalid:::", "name: 1"])
+    @ValueSource(strings = ["", "{}", "invalid:::"])
     fun `parse - empty or invalid object - should return null`(input: String) {
-        // When
-        val result = ItemMetaPayload.parse(input)
-
-        // Then
-        assertNull(result)
+        ItemMetaPayload.parse(input).shouldBeNull()
     }
 
     @Test
     fun `parse - flags in lowercase - should be case parsed`() {
-        // When
-        val result = ItemMetaPayload.parse("flags: [hide_attributes, hide_dye]")
-
-        // Then
-        assertEquals(ItemMetaPayload(flags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)), result)
+        ItemMetaPayload.parse("flags: [hide_attributes, hide_dye]")
+            .shouldBe(ItemMetaPayload(flags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)))
     }
 
     @ParameterizedTest
     @MethodSource("validData")
     fun `parse - valid input - should return configured object`(input: String, output: ItemMetaPayload) {
-        // When
-        val result = ItemMetaPayload.parse(input)
-
-        // Then
-        assertEquals(output, result)
+        ItemMetaPayload.parse(input) shouldBe output
     }
 
     companion object {
@@ -76,14 +65,14 @@ internal class ItemMetaPayloadTest {
                     damage = 42,
                     custom-model-data = 24,
                     flags = [HIDE_ATTRIBUTES, HIDE_DYE]
-                """.trimIndent(),
+                """,
                 ItemMetaPayload(
                     name = "Name",
                     lore = listOf("Line1", "Line2"),
                     isUnbreakable = true,
                     damage = 42,
                     customModelData = 24,
-                    flags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE)
+                    flags = setOf(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE),
                 )
             ),
             // Unknown fields
