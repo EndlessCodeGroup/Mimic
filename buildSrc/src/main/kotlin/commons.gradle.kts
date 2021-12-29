@@ -61,6 +61,8 @@ fun DependencyHandlerScope.testingDependencies() {
     testImplementation(kotlin("test-junit5"))
     testImplementation(junit.jupiter)
     testImplementation(junit.jupiter_params)
+    testImplementation(misc.mockk)
+    testImplementation(kotest.assertions)
     testImplementation(mockito.kotlin)
     testImplementation(mockito.inline)
 }
