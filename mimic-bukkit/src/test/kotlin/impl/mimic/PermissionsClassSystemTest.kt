@@ -19,86 +19,50 @@
 
 package ru.endlesscode.mimic.impl.mimic
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
 import org.bukkit.permissions.PermissionAttachmentInfo
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import ru.endlesscode.mimic.BukkitTestBase
 import ru.endlesscode.mimic.classes.ClassSystem
-import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class PermissionsClassSystemTest : BukkitTestBase() {
 
     // SUT
-    private lateinit var classSystem: ClassSystem
+    private val classSystem: ClassSystem = PermissionsClassSystem.Provider().getSystem(player)
 
-    @BeforeTest
-    override fun setUp() {
-        super.setUp()
-        classSystem = PermissionsClassSystem.Provider().getSystem(player)
-    }
-
-    @Test
-    fun `when check existing has class - should return true`() {
-        // Given
+    @ParameterizedTest
+    @CsvSource(
+        "second,    true",
+        "Second,    true",
+        "another,   false",
+    )
+    fun `test hasClass`(theClass: String, hasClass: Boolean) {
         addClasses("first", "second", "third")
-
-        // When
-        val hasClass = classSystem.hasClass("second")
-
-        // Then
-        assertTrue(hasClass)
-    }
-
-    @Test
-    fun `when check has existing class in mixed case - should return true`() {
-        // Given
-        addClasses("first", "second", "third")
-
-        // When
-        val hasClass = classSystem.hasClass("Second")
-
-        // Then
-        assertTrue(hasClass)
-    }
-
-    @Test
-    fun `when check has not existing class - should return false`() {
-        // Given
-        addClasses("first", "second")
-
-        // When
-        val hasClass = classSystem.hasClass("FirstClass")
-
-        // Then
-        assertFalse(hasClass)
+        classSystem.hasClass(theClass) shouldBe hasClass
     }
 
     @Test
     fun `when get classes - should return right list of classes`() {
-        // Given
         val perms = listOf(
-            createClassPermissionMock("first", true),
-            createClassPermissionMock("second", false),
-            createClassPermissionMock("third", true),
-            createPermissionMock("mimic.other.permission", true)
+            createClassPermissionMock("first", value = true),
+            createClassPermissionMock("second", value = false),
+            createClassPermissionMock("third", value = true),
+            createPermissionMock("mimic.other.permission", value = true)
         )
-        whenever(player.effectivePermissions) doReturn HashSet(perms)
+        every { player.effectivePermissions } returns HashSet(perms)
 
-        // When
-        val expected = listOf("first", "third")
-        val actual = classSystem.classes
-
-        // Then
-        assertTrue(actual.containsAll(expected) && expected.containsAll(actual))
+        classSystem.classes.shouldContainExactlyInAnyOrder("first", "third")
     }
 
     private fun addClasses(vararg classes: String) {
+        every { player.hasPermission(any<String>()) } returns false
         for (theClass in classes) {
-            whenever(player.hasPermission(classPermission(theClass))) doReturn true
+            every { player.hasPermission(classPermission(theClass)) } returns true
         }
     }
 
@@ -109,9 +73,9 @@ class PermissionsClassSystemTest : BukkitTestBase() {
     private fun classPermission(theClass: String) = PermissionsClassSystem.PERMISSION_PREFIX + theClass
 
     private fun createPermissionMock(permission: String, value: Boolean): PermissionAttachmentInfo {
-        return mock {
-            on { it.permission } doReturn permission
-            on { it.value } doReturn value
+        return mockk {
+            every { this@mockk.permission } returns permission
+            every { this@mockk.value } returns value
         }
     }
 }

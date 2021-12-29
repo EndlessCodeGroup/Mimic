@@ -17,78 +17,63 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package impl.mimic
+package ru.endlesscode.mimic.impl.mimic
 
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.ServicePriority
+import org.bukkit.plugin.ServicePriority.Highest
+import org.bukkit.plugin.ServicePriority.Lowest
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
-import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
-import kotlin.test.*
+import kotlin.test.Test
 
 internal class MimicItemsRegistryTest : BukkitTestBase() {
 
     // SUT
-    private lateinit var itemsService: BukkitItemsRegistry
+    private val itemsService: BukkitItemsRegistry = MimicItemsRegistry(servicesManager)
 
-    @BeforeTest
-    override fun setUp() {
-        super.setUp()
-        itemsService = MimicItemsRegistry(servicesManager)
-
-        servicesManager.register(BukkitItemsRegistry::class.java, MinecraftItemsRegistry(), plugin, ServicePriority.Lowest)
-        servicesManager.register(BukkitItemsRegistry::class.java, itemsService, plugin, ServicePriority.Highest)
+    init {
+        servicesManager.register(BukkitItemsRegistry::class.java, MinecraftItemsRegistry(), plugin, Lowest)
+        servicesManager.register(BukkitItemsRegistry::class.java, itemsService, plugin, Highest)
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["acacia_boat", "minecraft:acacia_boat"])
     fun `when check is same item - should return true`(itemId: String) {
-        // Given
         val item = ItemStack(Material.ACACIA_BOAT)
-
-        // When
-        val same = itemsService.isSameItem(item, itemId)
-
-        // Then
-        assertTrue(same)
+        itemsService.isSameItem(item, itemId).shouldBeTrue()
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["acacia_boat", "minecraft:acacia_boat"])
     fun `when get item - should return item stack`(itemId: String) {
-        // When
-        val item = itemsService.getItem(itemId)!!
+        val item = itemsService.getItem(itemId).shouldNotBeNull()
 
-        // Then
-        assertEquals(Material.ACACIA_BOAT, item.type)
-        assertEquals(1, item.amount)
+        assertSoftly {
+            item.type shouldBe Material.ACACIA_BOAT
+            item.amount shouldBe 1
+        }
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["ns:acacia_boat", "minecraft:unknown", "42"])
     fun `when get unknown item - should return null`(itemId: String) {
-        // When
-        val item = itemsService.getItem(itemId)
-
-        // Then
-        assertNull(item)
+        itemsService.getItem(itemId).shouldBeNull()
     }
 
     @Test
     fun `when get id - should return id`() {
-        // Given
         val item = ItemStack(Material.ACACIA_BOAT)
-
-        // When
-        val itemId = itemsService.getItemId(item)
-
-        // Then
-        assertEquals("minecraft:acacia_boat", itemId)
+        itemsService.getItemId(item) shouldBe "minecraft:acacia_boat"
     }
 
     @ParameterizedTest
@@ -98,13 +83,9 @@ internal class MimicItemsRegistryTest : BukkitTestBase() {
         "minecraft:air, true",
         "unknown,       false",
         "gold_sword,    false",
-        "golden_sword,  true"
+        "golden_sword,  true",
     )
     fun `when check is item exists`(itemId: String, shouldExist: Boolean) {
-        // When
-        val exists = itemsService.isItemExists(itemId)
-
-        // Then
-        assertEquals(shouldExist, exists)
+        itemsService.isItemExists(itemId) shouldBe shouldExist
     }
 }

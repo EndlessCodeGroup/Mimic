@@ -13,6 +13,7 @@
 
 - Update Kotlin to 1.6.10
 - Update Gradle to 7.3.3
+- Migrate tests to MockK and Kotest assertions
 
 ## [v0.6.1] (2021-08-23)
 

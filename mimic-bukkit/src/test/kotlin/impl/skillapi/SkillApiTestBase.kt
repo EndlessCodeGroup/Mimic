@@ -19,53 +19,45 @@
 
 package ru.endlesscode.mimic.impl.skillapi
 
-import com.nhaarman.mockitokotlin2.*
 import com.sucy.skill.api.classes.RPGClass
 import com.sucy.skill.api.player.PlayerClass
 import com.sucy.skill.api.player.PlayerData
 import com.sucy.skill.data.Settings
+import io.mockk.every
+import io.mockk.mockk
 import ru.endlesscode.mimic.BukkitTestBase
-import kotlin.test.BeforeTest
 
 open class SkillApiTestBase : BukkitTestBase() {
 
-    protected lateinit var data: PlayerData
-    internal lateinit var skillApi: SkillApiWrapper
+    protected val data: PlayerData = mockk()
 
-    @BeforeTest
-    override fun setUp() {
-        super.setUp()
-
-        data = mock()
-        skillApi = mock {
-            val settingsMock = mockSettings()
-            on { settings } doReturn settingsMock
-            on { getPlayerData(player) } doReturn data
-        }
+    internal val skillApi: SkillApiWrapper = mockk {
+        every { settings } returns mockSettings()
+        every { getPlayerData(player) } returns data
     }
 
-    private fun mockSettings(): Settings = mock {
+    private fun mockSettings(): Settings = mockk {
         // Our formula exp to next level is: lvl * 10
-        on { getRequiredExp(any()) } doAnswer { it.getArgument<Int>(0) * 10 }
+        every { getRequiredExp(any()) } answers { firstArg<Int>() * 10 }
     }
 
     protected fun prepareClasses(vararg classNames: String) {
-        prepareClasses(classNames.toList())
+        prepareClasses(classNames.toSet())
     }
 
-    protected fun prepareClasses(classNames: List<String>) {
+    protected fun prepareClasses(classNames: Set<String>) {
         val playerClasses = classNames.map(::mockNamedPlayerClass)
-        whenever(data.classes) doReturn playerClasses
-        whenever(data.mainClass) doReturn playerClasses.firstOrNull()
+        every { data.classes } returns playerClasses
+        every { data.mainClass } returns playerClasses.firstOrNull()
     }
 
     private fun mockNamedPlayerClass(className: String): PlayerClass {
-        val rpgClass = mock<RPGClass> {
-            on { name } doReturn className
+        val rpgClass = mockk<RPGClass> {
+            every { name } returns className
         }
 
-        return mock {
-            on { data } doReturn rpgClass
+        return mockk(relaxUnitFun = true) {
+            every { data } returns rpgClass
         }
     }
 }

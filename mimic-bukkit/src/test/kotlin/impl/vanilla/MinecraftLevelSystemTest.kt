@@ -19,142 +19,92 @@
 
 package ru.endlesscode.mimic.impl.vanilla
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.verify
 import ru.endlesscode.mimic.BukkitTestBase
 import ru.endlesscode.mimic.level.BukkitLevelSystem
-import ru.endlesscode.mimic.test.assertEqualsDoubles
-import kotlin.test.BeforeTest
+import ru.endlesscode.mimic.test.nearly
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @Suppress("DEPRECATION")
 class MinecraftLevelSystemTest : BukkitTestBase() {
 
     // SUT
-    private lateinit var levelSystem: BukkitLevelSystem
-
-    @BeforeTest
-    override fun setUp() {
-        super.setUp()
-        levelSystem = MinecraftLevelSystem.Provider().getSystem(player)
-    }
+    private val levelSystem: BukkitLevelSystem = MinecraftLevelSystem.Provider().getSystem(player)
 
     @Test
     fun `when get level - should return player level`() {
-        // Given
-        val expectedLevel = 10
-        whenever(player.level) doReturn expectedLevel
-
-        // Then
-        assertEquals(expectedLevel, levelSystem.level)
+        set(level = 10)
+        levelSystem.level shouldBe 10
     }
 
     @Test
     fun `when set level - should set right level to player`() {
-        // Given
-        val newLevel = 10
-
-        // Then
-        levelSystem.level = newLevel
-
-        // Then
-        verify(player).level = newLevel
+        levelSystem.level = 10
+        verify { player.level = 10 }
     }
 
     @Test
     fun `when set negative level - should set zero level to player`() {
-        // When
         levelSystem.level = -10
-
-        // Then
-        verify(player).level = 0
+        verify { player.level = 0 }
     }
 
     @Test
     fun `when get exp - should return right player exp`() {
-        // Given
-        whenever(player.level) doReturn 16
-        whenever(player.exp) doReturn 0.5f
-
-        // When
-        val exp = levelSystem.exp
-
-        // Then
-        assertEquals(21.0, exp)
+        set(level = 16, exp = 0.5f)
+        levelSystem.exp shouldBe 21.0
     }
 
     @Test
     fun `when set half level exp - should set right exp value`() {
-        // Given
-        whenever(player.level) doReturn 20
-        val expTo21Level = 62
+        set(level = 20)
+        val expTo21Level = 62.0
 
-        // When
-        levelSystem.exp = expTo21Level / 2.toDouble()
-
-        // Then
-        verify(player).exp = .5f
+        levelSystem.exp = expTo21Level / 2
+        verify { player.exp = .5f }
     }
 
     @Test
     fun `when set negative exp - should set zero exp`() {
-        // When
+        set(level = 1)
         levelSystem.exp = -1.0
-
-        // Then
-        verify(player).exp = 0f
+        verify { player.exp = 0f }
     }
 
     @Test
     fun `when get fractional exp - should return player exp`() {
-        // Given
-        whenever(player.exp) doReturn 0.4f
-
-        // When
-        val exp = levelSystem.fractionalExp
-
-        // Then
-        assertEqualsDoubles(0.4, exp)
+        every { player.exp } returns 0.4f
+        levelSystem.fractionalExp shouldBe 0.4.nearly
     }
 
     @Test
     fun `when set fractional exp - should set player exp`() {
-        // When
         levelSystem.fractionalExp = 0.97
-
-        // Then
-        verify(player).exp = 0.97f
+        verify { player.exp = 0.97f }
     }
 
     @Test
     fun `when set fractional exp more than one - should set exp to one`() {
-        // When
         levelSystem.fractionalExp = 1.2
-
-        // Then
-        verify(player).exp = 1f
+        verify { player.exp = 1f }
     }
 
     @Test
     fun `when set negative fractional exp - should set zero exp`() {
-        // When
         levelSystem.fractionalExp = -1.0
-
-        // Then
-        verify(player).exp = 0f
+        verify { player.exp = 0f }
     }
 
     @Test
-    fun `when get total exp to nex level - should return player exp to level`() {
-        // Given
-        whenever(player.expToLevel) doReturn 7
+    fun `when get total exp to next level - should return player exp to level`() {
+        every { player.expToLevel } returns 7
+        levelSystem.totalExpToNextLevel shouldBe 7.0
+    }
 
-        // When
-        val expToNex = levelSystem.totalExpToNextLevel
-
-        // Then
-        assertEquals(7.0, expToNex)
+    private fun set(level: Int? = null, exp: Float? = null) {
+        if (level != null) every { player.level } returns level
+        if (exp != null) every { player.exp } returns exp
     }
 }

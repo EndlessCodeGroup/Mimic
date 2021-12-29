@@ -32,8 +32,3 @@ object kotest {
     private const val version = "5.0.3"
     const val assertions = "io.kotest:kotest-assertions-core:$version"
 }
-
-object mockito {
-    const val kotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    const val inline = "org.mockito:mockito-inline:2.23.0"
-}

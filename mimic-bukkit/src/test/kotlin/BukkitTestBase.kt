@@ -19,8 +19,9 @@
 
 package ru.endlesscode.mimic
 
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
 import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.entity.Player
@@ -28,40 +29,33 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicesManager
 import org.bukkit.plugin.SimpleServicesManager
 import java.util.*
-import kotlin.test.BeforeTest
 
 /** Base for all Bukkit-related tests. */
 open class BukkitTestBase {
-    protected lateinit var server: Server
-    protected lateinit var plugin: Plugin
-    protected lateinit var player: Player
-    protected val servicesManager: ServicesManager = SimpleServicesManager()
+    protected val server: Server = mockServer()
+    protected val plugin: Plugin = mockPlugin(server)
+    protected val player: Player = mockPlayer()
+    protected val servicesManager: ServicesManager = server.servicesManager
 
-    @BeforeTest
-    open fun setUp() {
-        server = mockServer()
-        plugin = mockPlugin()
-        player = mockPlayer()
-
+    init {
         mockBukkit()
     }
 
-    private fun mockServer(): Server = mock {
-        on { pluginManager } doReturn mock()
-        on { servicesManager } doReturn servicesManager
+    private fun mockServer(): Server = mockk {
+        every { pluginManager } returns mockk(relaxUnitFun = true)
+        every { servicesManager } returns SimpleServicesManager()
     }
 
-    private fun mockPlugin(): Plugin = mock {
-        on { server } doReturn server
+    private fun mockPlugin(mockServer: Server): Plugin = mockk {
+        every { server } returns mockServer
     }
 
-    private fun mockPlayer(): Player = mock {
-        on { uniqueId } doReturn UUID.randomUUID()
+    private fun mockPlayer(): Player = mockk(relaxUnitFun = true) {
+        every { uniqueId } returns UUID.randomUUID()
     }
 
     private fun mockBukkit() {
-        val serverField = Bukkit::class.java.getDeclaredField("server")
-        serverField.isAccessible = true
-        serverField.set(null, server)
+        mockkStatic(Bukkit::class)
+        every { Bukkit.getServer() } returns server
     }
 }

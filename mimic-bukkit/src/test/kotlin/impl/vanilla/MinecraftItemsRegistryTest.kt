@@ -19,43 +19,35 @@
 
 package ru.endlesscode.mimic.impl.vanilla
 
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
-import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class MinecraftItemsRegistryTest {
 
     // SUT
-    private lateinit var itemsService: BukkitItemsRegistry
-
-    @BeforeTest
-    fun setUp() {
-        itemsService = MinecraftItemsRegistry()
-    }
+    private val itemsService: BukkitItemsRegistry = MinecraftItemsRegistry()
 
     @Test
     fun `when get item - should return item stack`() {
-        // When
-        val item = itemsService.getItem("acacia_boat")!!
+        val item = itemsService.getItem("acacia_boat").shouldNotBeNull()
 
-        // Then
-        assertEquals(Material.ACACIA_BOAT, item.type)
-        assertEquals(1, item.amount)
+        assertSoftly {
+            item.type shouldBe Material.ACACIA_BOAT
+            item.amount shouldBe 1
+        }
     }
 
     @Test
     fun `when get unknown item - should return null`() {
-        // When
-        val item = itemsService.getItem("super_duper_item")
-
-        // Then
-        assertNull(item)
+        itemsService.getItem("super_duper_item").shouldBeNull()
     }
 
     @ParameterizedTest
@@ -70,23 +62,15 @@ class MinecraftItemsRegistryTest {
         amount: Int,
         realAmount: Int
     ) {
-        // When
-        val item = itemsService.getItem(itemId, amount)!!
-
-        // Then
-        assertEquals(realAmount, item.amount)
+        itemsService.getItem(itemId, amount)
+            .shouldNotBeNull()
+            .amount shouldBe realAmount
     }
 
     @Test
     fun `when get id - should return id`() {
-        // Given
         val item = ItemStack(Material.ACACIA_BOAT)
-
-        // When
-        val itemId = itemsService.getItemId(item)
-
-        // Then
-        assertEquals("acacia_boat", itemId)
+        itemsService.getItemId(item) shouldBe "acacia_boat"
     }
 
     @ParameterizedTest
@@ -97,10 +81,6 @@ class MinecraftItemsRegistryTest {
         "golden_sword,  true"
     )
     fun `when check is item exists`(itemId: String, shouldExist: Boolean) {
-        // When
-        val exists = itemsService.isItemExists(itemId)
-
-        // Then
-        assertEquals(shouldExist, exists)
+        itemsService.isItemExists(itemId) shouldBe shouldExist
     }
 }
