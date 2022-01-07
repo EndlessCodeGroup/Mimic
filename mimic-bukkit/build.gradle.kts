@@ -50,7 +50,6 @@ dependencies {
     compileOnly(rpgplugins.skillapi)
     compileOnly(rpgplugins.battlelevels)
     compileOnly(rpgplugins.mmoCore)
-    compileOnly(rpgplugins.mmoLib)
     compileOnly(rpgplugins.mythicLib)
     compileOnly(rpgplugins.mmoItems) { isTransitive = false }
     compileOnly(rpgplugins.heroes) { isTransitive = false }

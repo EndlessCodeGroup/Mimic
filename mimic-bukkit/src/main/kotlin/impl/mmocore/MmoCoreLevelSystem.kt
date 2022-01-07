@@ -1,7 +1,7 @@
 package ru.endlesscode.mimic.impl.mmocore
 
-import net.Indyuce.mmocore.api.experience.EXPSource
 import net.Indyuce.mmocore.api.player.PlayerData
+import net.Indyuce.mmocore.experience.EXPSource
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.ExpLevelConverter

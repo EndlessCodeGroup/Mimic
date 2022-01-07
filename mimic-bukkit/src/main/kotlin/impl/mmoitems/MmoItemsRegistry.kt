@@ -53,10 +53,10 @@ public class MmoItemsRegistry private constructor(private val mmoItems: MmoItems
         val template = templates.find { it.id.equals(itemId, ignoreCase = true) } ?: return null
 
         return template.buildItemStack()
-            .also { it.amount = amount.coerceIn(1, it.maxStackSize) }
+            ?.also { it.amount = amount.coerceIn(1, it.maxStackSize) }
     }
 
-    private fun MMOItemTemplate.buildItemStack(): ItemStack {
+    private fun MMOItemTemplate.buildItemStack(): ItemStack? {
         return newBuilder(0, null)
             .build()
             .newBuilder()

@@ -1,9 +1,9 @@
 package ru.endlesscode.mimic.impl.mmocore
 
 import net.Indyuce.mmocore.MMOCore
-import net.Indyuce.mmocore.api.experience.ExpCurve
 import net.Indyuce.mmocore.api.player.PlayerData
 import net.Indyuce.mmocore.api.player.profess.PlayerClass
+import net.Indyuce.mmocore.experience.ExpCurve
 import org.bukkit.OfflinePlayer
 
 internal class MmoCoreWrapper {

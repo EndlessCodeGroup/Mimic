@@ -1,6 +1,6 @@
 package ru.endlesscode.mimic.impl.mmocore
 
-import net.Indyuce.mmocore.api.experience.ExpCurve
+import net.Indyuce.mmocore.experience.ExpCurve
 import org.bukkit.OfflinePlayer
 import ru.endlesscode.mimic.level.ExpLevelConverter
 import ru.endlesscode.mimic.util.ExistingWeakReference
