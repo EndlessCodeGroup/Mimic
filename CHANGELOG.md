@@ -1,6 +1,8 @@
 ## [Unreleased]
 
-### Built-in integrations
+## [v0.6.3] (2022-01-07)
+
+### Fixed
 
 - Update MMOItems and MMOCore to the latest version
 
@@ -63,7 +65,8 @@
 - Update bukkit-gradle to 0.10.0
 - Update Gradle to 7.2
 
-[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.2...develop
+[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.3...develop
+[v0.6.3]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.2...v0.6.3
 [v0.6.2]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.1...v0.6.2
 [v0.6.1]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6...v0.6.1
 [v0.6]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.5...v0.6
