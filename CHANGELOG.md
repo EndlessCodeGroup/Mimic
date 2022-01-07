@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Built-in integrations
+
+- Update MMOItems and MMOCore to the latest version
+
 ## [v0.6.2] (2021-12-29)
 
 ### API Changes

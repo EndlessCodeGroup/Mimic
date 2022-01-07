@@ -1,8 +1,8 @@
 package ru.endlesscode.mimic.impl.mmoitems
 
+import io.lumine.mythic.lib.api.item.NBTItem
 import net.Indyuce.mmoitems.MMOItems
 import net.Indyuce.mmoitems.manager.TemplateManager
-import net.mmogroup.mmolib.api.item.NBTItem
 import org.bukkit.inventory.ItemStack
 
 internal class MmoItemsWrapper {

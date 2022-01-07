@@ -3,10 +3,9 @@
 object rpgplugins {
     const val skillapi = "com.sucy:SkillAPI:3.102"
     const val battlelevels = "me.robin.battlelevels:battlelevels-api:6.9.1"
-    const val mmoCore = "net.Indyuce:MMOCore:1.7.0"
-    const val mmoLib = "net.Indyuce:MMOLib:1.7.3"
-    const val mmoItems = "net.Indyuce:MMOItems:6.5.5"
-    const val mythicLib = "io.lumine:MythicLib:1.0.10"
+    const val mmoCore = "net.Indyuce:MMOCore:1.9"
+    const val mmoItems = "net.Indyuce:MMOItems:6.6.5"
+    const val mythicLib = "io.lumine:MythicLib-dist:1.3-R11"
     const val heroes = ":Heroes:1.9.9"
 }
 
