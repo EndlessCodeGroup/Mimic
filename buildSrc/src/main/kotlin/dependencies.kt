@@ -5,7 +5,7 @@ object rpgplugins {
     const val battlelevels = "me.robin.battlelevels:battlelevels-api:6.9.1"
     const val mmoCore = "net.Indyuce:MMOCore:1.9"
     const val mmoItems = "net.Indyuce:MMOItems:6.7"
-    const val mythicLib = "io.lumine:MythicLib-dist:1.3"
+    const val mythicLib = "io.lumine:MythicLib-dist:1.3" 
     const val heroes = ":Heroes:1.9.9"
 }
 
