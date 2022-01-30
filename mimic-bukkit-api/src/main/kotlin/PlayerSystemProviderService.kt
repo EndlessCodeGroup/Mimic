@@ -22,29 +22,15 @@ package ru.endlesscode.mimic
 import org.bukkit.entity.Player
 
 /** [ProviderService] requiring [Player] to initialize "PlayerSystem" [T]. */
-public abstract class PlayerSystemProviderService<T : Any> : ProviderService<T> {
-
-    override val id: String
-
-    @Deprecated(
-        "Use constructor without parameters, override getId() if you want to use ID different from plugin name.",
-        ReplaceWith("this()")
-    )
-    public constructor(id: String) {
-        @Suppress("LeakingThis")
-        this.id = id
-    }
-
-    @Suppress("DEPRECATION")
-    public constructor() : this(MimicService.USE_PLUGIN_NAME_AS_ID)
+public fun interface PlayerSystemProviderService<T : Any> : ProviderService<T> {
 
     /**
      * Returns new instance of [T] is given [arg] is instance of [Player].
      * Otherwise, throws [ClassCastException].
      */
     @Deprecated("Use getSystem(player) instead", ReplaceWith("this.getSystem(arg)"))
-    final override fun get(arg: Any): T = getSystem(arg as Player)
+    override fun get(arg: Any): T = getSystem(arg as Player)
 
     /** Returns new instance of [T] initialized with the given [player] object. */
-    public abstract fun getSystem(player: Player): T
+    public fun getSystem(player: Player): T
 }
