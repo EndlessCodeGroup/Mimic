@@ -20,9 +20,13 @@ public interface Mimic {
      *                 - if required API level is lower - will be enabled compatibility mode.
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this class system.
-     * @return `true` if provider registered successfully, otherwise `false`.
+     * @return registered class system or `null` if it was not registered.
      */
-    public fun registerClassSystem(provider: BukkitClassSystem.Provider, apiLevel: Int, plugin: Plugin): Boolean
+    public fun registerClassSystem(
+        provider: BukkitClassSystem.Provider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): BukkitClassSystem.Provider?
 
     /**
      * Returns top priority [BukkitClassSystem] for the given [player].
@@ -42,9 +46,13 @@ public interface Mimic {
      *                 - if required API level is lower - will be enabled compatibility mode.
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this item registry.
-     * @return `true` if provider registered successfully, otherwise `false`.
+     * @return registered registry or `null` if it was not registered.
      */
-    public fun registerItemsRegistry(registry: BukkitItemsRegistry, apiLevel: Int, plugin: Plugin): Boolean
+    public fun registerItemsRegistry(
+        registry: BukkitItemsRegistry,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): BukkitItemsRegistry?
 
     /** Returns [BukkitItemsRegistry] implementation. */
     public fun getItemsRegistry(): BukkitItemsRegistry
@@ -58,9 +66,13 @@ public interface Mimic {
      *                 - if required API level is lower - will be enabled compatibility mode.
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this level system.
-     * @return `true` if provider registered successfully, otherwise `false`.
+     * @return registered level system or `null` if it was not registered.
      */
-    public fun registerLevelSystem(provider: BukkitLevelSystem.Provider, apiLevel: Int, plugin: Plugin): Boolean
+    public fun registerLevelSystem(
+        provider: BukkitLevelSystem.Provider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): BukkitLevelSystem.Provider?
 
     /**
      * Returns top priority [BukkitLevelSystem] for the given [player].
