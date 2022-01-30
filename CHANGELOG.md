@@ -1,5 +1,23 @@
 ## [Unreleased]
 
+### New implementations registration API
+
+Registration via `ServiceManager` is deprecated because it was error-prone and not intuitive.
+Since now, you should use class `Mimic` to register or get APIs implementations.
+
+```java
+Mimic mimic = Mimic.getInstance();
+
+// Register ItemsRegistry implementation
+mimic.registerItemsRegistry(new MyItemsRegistry(), plugin);
+
+// Get items registry imlpementation
+BukkitItemsRegistry registry = mimic.getItemsRegistry();
+```
+
+New mechanism allows maintaining better backward compatibility for APIs implementations. 
+It also allows users to select preferred APIs implementation via config.
+
 ## [v0.6.3] (2022-01-07)
 
 ### Fixed
