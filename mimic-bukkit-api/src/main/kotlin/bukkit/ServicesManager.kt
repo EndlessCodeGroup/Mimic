@@ -19,8 +19,19 @@
 
 package ru.endlesscode.mimic.bukkit
 
+import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.RegisteredServiceProvider
+import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicesManager
+
+/** Kotlin-style call of [ServicesManager.register]. */
+public inline fun <reified T : Any> ServicesManager.register(
+    provider: T,
+    plugin: Plugin,
+    priority: ServicePriority = ServicePriority.Normal,
+) {
+    register(T::class.java, provider, plugin, priority)
+}
 
 /** Kotlin-style call of [ServicesManager.load]. */
 public inline fun <reified T : Any> ServicesManager.load(): T? {
