@@ -29,10 +29,6 @@ public class SkillApiClassSystem internal constructor(
     private val skillApi: SkillApiWrapper
 ) : BukkitClassSystem(player) {
 
-    public companion object {
-        public const val ID: String = "skillapi"
-    }
-
     override val classes: List<String>
         get() = playerData.classes.map { it.data.name }
 
@@ -42,13 +38,16 @@ public class SkillApiClassSystem internal constructor(
     private val playerData: PlayerData
         get() = skillApi.getPlayerData(player)
 
-    internal class Provider : BukkitClassSystem.Provider(ID) {
-
+    internal class Provider : BukkitClassSystem.Provider {
         private val skillApi = SkillApiWrapper()
 
-        override val isEnabled: Boolean
-            get() = skillApi.isLoaded
+        override val isEnabled: Boolean get() = skillApi.isLoaded
+        override val id: String = ID
 
         override fun getSystem(player: Player): BukkitClassSystem = SkillApiClassSystem(player, skillApi)
+    }
+
+    public companion object {
+        public const val ID: String = "skillapi"
     }
 }

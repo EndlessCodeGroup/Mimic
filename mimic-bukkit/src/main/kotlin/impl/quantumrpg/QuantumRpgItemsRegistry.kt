@@ -26,12 +26,6 @@ public class QuantumRpgItemsRegistry private constructor(
     private val quantumRpg: QuantumRpgWrapper,
 ) : BukkitItemsRegistry {
 
-    public companion object {
-        public const val ID: String = "quantumrpg"
-
-        private const val SEPARATOR = '/'
-    }
-
     internal constructor() : this(QuantumRpgWrapper())
 
     override val isEnabled: Boolean get() = quantumRpg.isEnabled
@@ -82,4 +76,10 @@ public class QuantumRpgItemsRegistry private constructor(
 
     private fun DropModule.namespaced(itemId: String) = "$id$SEPARATOR$itemId"
     private fun DropModule.namespaceMatches(namespace: String) = namespace.isEmpty() || namespace == id
+
+    public companion object {
+        public const val ID: String = "quantumrpg"
+
+        private const val SEPARATOR = '/'
+    }
 }

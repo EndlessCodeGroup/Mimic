@@ -33,11 +33,6 @@ import java.util.*
  */
 public class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
 
-    public companion object {
-        public const val ID: String = "permissions"
-        public const val PERMISSION_PREFIX: String = "mimic.class."
-    }
-
     override val classes: List<String>
         get() {
             return player.effectivePermissions.asSequence()
@@ -50,7 +45,13 @@ public class PermissionsClassSystem private constructor(player: Player) : Bukkit
         return player.hasPermission(PERMISSION_PREFIX + requiredClass.lowercase(Locale.getDefault()))
     }
 
-    internal class Provider : BukkitClassSystem.Provider(ID) {
+    internal class Provider : BukkitClassSystem.Provider {
+        override val id: String = ID
         override fun getSystem(player: Player): BukkitClassSystem = PermissionsClassSystem(player)
+    }
+
+    public companion object {
+        public const val ID: String = "permissions"
+        public const val PERMISSION_PREFIX: String = "mimic.class."
     }
 }

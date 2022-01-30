@@ -31,10 +31,6 @@ public class SkillApiLevelSystem internal constructor(
     private val skillApi: SkillApiWrapper,
 ) : BukkitLevelSystem(player) {
 
-    public companion object {
-        public const val ID: String = "skillapi"
-    }
-
     override val converter: ExpLevelConverter = SkillApiConverter.getInstance(skillApi)
 
     override var level: Int
@@ -77,12 +73,16 @@ public class SkillApiLevelSystem internal constructor(
         playerClass?.giveExp(expAmount, ExpSource.SPECIAL)
     }
 
-    internal class Provider : BukkitLevelSystem.Provider(ID) {
+    internal class Provider : BukkitLevelSystem.Provider {
         private val skillApi = SkillApiWrapper()
 
-        override val isEnabled: Boolean
-            get() = skillApi.isLoaded
+        override val isEnabled: Boolean get() = skillApi.isLoaded
+        override val id: String = ID
 
         override fun getSystem(player: Player): BukkitLevelSystem = SkillApiLevelSystem(player, skillApi)
+    }
+
+    public companion object {
+        public const val ID: String = "skillapi"
     }
 }
