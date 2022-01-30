@@ -15,7 +15,7 @@ bukkit {
     apiVersion = "1.17.1"
 
     meta {
-        name.set("Mimic")
+        name.set("MimicPlugin")
         apiVersion.set("1.13")
         authors.set(listOf("osipxd", "EndlessCodeGroup"))
         url.set("https://github.com/EndlessCodeGroup/Mimic")
