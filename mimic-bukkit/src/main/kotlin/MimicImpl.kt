@@ -6,8 +6,10 @@ import org.bukkit.plugin.ServicesManager
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.classes.DefaultClassSystemProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.DefaultLevelSystemProvider
 import java.lang.reflect.Constructor
 
 internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
