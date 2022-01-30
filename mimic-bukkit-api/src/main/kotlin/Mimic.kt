@@ -7,20 +7,16 @@ import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import java.util.function.Function
 
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
 
     /**
-     * Registers [BukkitClassSystem] implemented via the given [plugin]
-     * using the default [BukkitClassSystem.Provider] implementation.
-     *
-     * Default provider implementation can be used only if the given
-     * [classSystemClass] has constructor with single parameter of type [Player].
-     * If you need more parameters for system initialization,
-     * you should implement provider manually.
+     * Registers [BukkitClassSystem] implemented via the given [plugin],
+     * uses the given [provider] function to get system instance.
      */
-    public fun registerClassSystem(classSystemClass: Class<out BukkitClassSystem>, plugin: Plugin)
+    public fun registerClassSystem(provider: Function<Player, out BukkitClassSystem>, plugin: Plugin)
 
     /** Registers the given [provider] for [BukkitClassSystem] implemented via the given [plugin]. */
     public fun registerClassSystem(provider: BukkitClassSystem.Provider, plugin: Plugin)
@@ -41,15 +37,10 @@ public interface Mimic {
     public fun getItemsRegistry(): BukkitItemsRegistry
 
     /**
-     * Registers [BukkitLevelSystem] implemented via the given [plugin]
-     * using the default [BukkitLevelSystem.Provider] implementation.
-     *
-     * Default provider implementation can be used only if the given
-     * [levelSystemClass] has constructor with single parameter of type [Player].
-     * If you need more parameters for system initialization,
-     * you should implement provider manually.
+     * Registers [BukkitLevelSystem] implemented via the given [plugin],
+     * uses the given [provider] function to get system instance.
      */
-    public fun registerLevelSystem(levelSystemClass: Class<out BukkitLevelSystem>, plugin: Plugin)
+    public fun registerLevelSystem(provider: Function<Player, out BukkitLevelSystem>, plugin: Plugin)
 
     /** Registers the given [provider] for [BukkitLevelSystem] implemented via the given [plugin]. */
     public fun registerLevelSystem(provider: BukkitLevelSystem.Provider, plugin: Plugin)
@@ -78,14 +69,4 @@ public interface Mimic {
             }
         }
     }
-}
-
-/** Variant of [Mimic.registerClassSystem] method with implementation class specified via type [T]. */
-public inline fun <reified T : BukkitClassSystem> Mimic.registerClassSystem(plugin: Plugin) {
-    registerClassSystem(T::class.java, plugin)
-}
-
-/** Variant of [Mimic.registerLevelSystem] method with implementation class specified via type [T]. */
-public inline fun <reified T : BukkitLevelSystem> Mimic.registerLevelSystem(plugin: Plugin) {
-    registerLevelSystem(T::class.java, plugin)
 }

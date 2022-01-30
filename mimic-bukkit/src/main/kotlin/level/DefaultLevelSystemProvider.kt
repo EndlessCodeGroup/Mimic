@@ -2,11 +2,11 @@ package ru.endlesscode.mimic.level
 
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
-import java.lang.reflect.Constructor
+import java.util.function.Function
 
 internal class DefaultLevelSystemProvider(
     plugin: Plugin,
-    private val constructor: Constructor<out BukkitLevelSystem>,
+    private val provider: Function<Player, out BukkitLevelSystem>,
 ) : BukkitLevelSystem.Provider(plugin.name) {
 
     private val pluginManager = plugin.server.pluginManager
@@ -14,5 +14,5 @@ internal class DefaultLevelSystemProvider(
     override val isEnabled: Boolean
         get() = pluginManager.isPluginEnabled(id)
 
-    override fun getSystem(player: Player): BukkitLevelSystem = constructor.newInstance(player)
+    override fun getSystem(player: Player): BukkitLevelSystem = provider.apply(player)
 }
