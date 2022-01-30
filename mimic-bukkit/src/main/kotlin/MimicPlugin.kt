@@ -53,7 +53,6 @@ import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.util.checkClassesLoaded
-import kotlin.reflect.KClass
 
 /** Main class of the plugin. */
 public class MimicPlugin : JavaPlugin() {
@@ -130,38 +129,46 @@ public class MimicPlugin : JavaPlugin() {
         constructor: () -> BukkitLevelSystem.Provider,
         priority: ServicePriority = Normal,
     ) {
-        hookService(BukkitLevelSystem.Provider::class, constructor, priority)
+        try {
+            val provider = mimic.registerLevelSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+                ?: return
+            reportServiceHooked(provider)
+        } catch (e: Exception) {
+            Log.d(e)
+        }
     }
 
     private fun hookClasses(
         constructor: () -> BukkitClassSystem.Provider,
         priority: ServicePriority = Normal,
     ) {
-        hookService(BukkitClassSystem.Provider::class, constructor, priority)
+        try {
+            val provider = mimic.registerClassSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+                ?: return
+            reportServiceHooked(provider)
+        } catch (e: Exception) {
+            Log.d(e)
+        }
     }
 
     private fun hookItems(
         constructor: () -> BukkitItemsRegistry,
         priority: ServicePriority = Normal,
     ) {
-        hookService(BukkitItemsRegistry::class, constructor, priority)
-    }
-
-    private fun <ServiceT : MimicService> hookService(
-        serviceClass: KClass<ServiceT>,
-        constructor: () -> ServiceT,
-        priority: ServicePriority,
-    ) {
         try {
-            val service = constructor.invoke()
-            servicesManager.register(serviceClass.java, service, this, priority)
-            val serviceName = serviceClass.java.name
-                .substringAfterLast(".Bukkit")
-                .substringBefore("$")
-            logger.info("$serviceName '${service.id}' registered")
+            val provider = mimic.registerItemsRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+                ?: return
+            reportServiceHooked(provider)
         } catch (e: Exception) {
             Log.d(e)
         }
+    }
+
+    private inline fun <reified ServiceT : MimicService> reportServiceHooked(service: ServiceT) {
+        val serviceName = ServiceT::class.java.name
+            .substringAfterLast(".Bukkit")
+            .substringBefore("$")
+        logger.info("$serviceName '${service.id}' registered")
     }
     //</editor-fold>
 
