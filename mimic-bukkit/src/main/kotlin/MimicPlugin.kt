@@ -193,8 +193,8 @@ public class MimicPlugin : JavaPlugin() {
         )
 
         manager.registerCommand(MainCommand(this))
-        manager.registerCommand(LevelSystemSubcommand(loadService()))
-        manager.registerCommand(ClassSystemSubcommand(loadService()))
+        manager.registerCommand(LevelSystemSubcommand(mimic))
+        manager.registerCommand(ClassSystemSubcommand(mimic))
         manager.registerCommand(ItemsSubcommand(loadService()))
     }
 

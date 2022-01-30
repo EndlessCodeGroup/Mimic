@@ -26,6 +26,7 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 
@@ -33,7 +34,7 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 @CommandPermission("%perm")
 @Subcommand("experience|xp")
 internal class LevelSystemSubcommand(
-    private val systemProvider: BukkitLevelSystem.Provider
+    private val mimic: Mimic
 ) : MimicCommand() {
 
     override fun afterRegister(manager: AbstractCommandManager) {
@@ -45,9 +46,10 @@ internal class LevelSystemSubcommand(
     @Description("Show information about player's level system")
     @CommandCompletion("@players")
     fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
-        val system = systemProvider.getSystem(player)
+        val provider = mimic.getLevelSystemProvider()
+        val system = provider.getSystem(player)
         sender.send(
-            "&3System: &7${systemProvider.id}",
+            "&3System: &7${provider.id}",
             "&3Level: &7%.2f".format(system.level + system.fractionalExp),
             "&3Exp: &7%.1f &8| &3To next level: &7%.1f".format(system.exp, system.expToNextLevel),
             "&3Total exp: &7%.1f".format(system.totalExp)
@@ -64,7 +66,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemProvider.getSystem(player)
+            val system = mimic.getLevelSystem(player)
             @Suppress("DEPRECATION") // Allow using exp setter
             when (type) {
                 ExtendedValueType.LVL -> system.level = amount.toInt()
@@ -85,7 +87,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemProvider.getSystem(player)
+            val system = mimic.getLevelSystem(player)
             when (type) {
                 ValueType.LVL -> system.giveLevels(amount)
                 ValueType.POINTS -> system.giveExp(amount.toDouble())
@@ -104,7 +106,7 @@ internal class LevelSystemSubcommand(
         @Optional @Flags("other,defaultself") player: Player
     ) {
         catchUnsupported {
-            val system = systemProvider.getSystem(player)
+            val system = mimic.getLevelSystem(player)
             when (type) {
                 ValueType.LVL -> system.takeLevels(amount)
                 ValueType.POINTS -> system.takeExp(amount.toDouble())
@@ -135,7 +137,7 @@ internal class LevelSystemSubcommand(
         @Default("lvl") type: ExtendedValueType,
         @Optional @Flags("other,defaultself") player: Player
     ) {
-        val system = systemProvider.getSystem(player)
+        val system = mimic.getLevelSystem(player)
         val has = when (type) {
             ExtendedValueType.LVL -> system.didReachLevel(value)
             ExtendedValueType.POINTS -> system.hasExp(value.toDouble())
