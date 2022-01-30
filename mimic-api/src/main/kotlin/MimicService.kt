@@ -27,7 +27,7 @@ public interface MimicService {
 
     /**
      * Returns the ID of the service.
-     * Usually used name of the plugin that implements service.
+     * ID should be unique, so it is recommended to use the name of the plugin as ID.
      */
     public val id: String
 }
