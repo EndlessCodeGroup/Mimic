@@ -22,9 +22,21 @@ package ru.endlesscode.mimic
 import org.bukkit.entity.Player
 
 /** [ProviderService] requiring [Player] to initialize "PlayerSystem" [T]. */
-public abstract class PlayerSystemProviderService<T : Any>(final override val id: String) : ProviderService<T> {
+public abstract class PlayerSystemProviderService<T : Any> : ProviderService<T> {
 
-    override val isEnabled: Boolean = true
+    override val id: String
+
+    @Deprecated(
+        "Use constructor without parameters, override getId() if you want to use ID different from plugin name.",
+        ReplaceWith("this()")
+    )
+    public constructor(id: String) {
+        @Suppress("LeakingThis")
+        this.id = id
+    }
+
+    @Suppress("DEPRECATION")
+    public constructor() : this(MimicService.USE_PLUGIN_NAME_AS_ID)
 
     /**
      * Returns new instance of [T] is given [arg] is instance of [Player].
