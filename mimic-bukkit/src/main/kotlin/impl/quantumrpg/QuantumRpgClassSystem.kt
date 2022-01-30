@@ -10,10 +10,6 @@ public class QuantumRpgClassSystem private constructor(
     private val quantumRpg: QuantumRpgWrapper,
 ) : BukkitClassSystem(player) {
 
-    public companion object {
-        public const val ID: String = "quantumrpg"
-    }
-
     override val primaryClass: String?
         get() = quantumRpg.getPlayerClass(player)?.colorlessName
 
@@ -27,15 +23,18 @@ public class QuantumRpgClassSystem private constructor(
 
     private val RPGClass.colorlessName: String get() = name.stripColor()
 
-    internal class Provider : BukkitClassSystem.Provider(ID) {
-
+    internal class Provider : BukkitClassSystem.Provider {
         private val quantumRpg = QuantumRpgWrapper()
 
-        override val isEnabled: Boolean
-            get() = quantumRpg.isEnabled
+        override val isEnabled: Boolean get() = quantumRpg.isEnabled
+        override val id: String = ID
 
         override fun getSystem(player: Player): BukkitClassSystem {
             return QuantumRpgClassSystem(player, quantumRpg)
         }
+    }
+
+    public companion object {
+        public const val ID: String = "quantumrpg"
     }
 }

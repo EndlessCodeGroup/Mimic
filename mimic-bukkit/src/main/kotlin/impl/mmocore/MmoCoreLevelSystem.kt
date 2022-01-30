@@ -13,10 +13,6 @@ public class MmoCoreLevelSystem private constructor(
     private val mmoCore: MmoCoreWrapper,
 ) : BukkitLevelSystem(player) {
 
-    public companion object {
-        public const val ID: String = "mmocore"
-    }
-
     override val converter: ExpLevelConverter = MmoCoreExpLevelConverter(player, mmoCore)
 
     override var level: Int
@@ -49,13 +45,16 @@ public class MmoCoreLevelSystem private constructor(
     private val playerData: PlayerData
         get() = mmoCore.getData(player)
 
-    internal class Provider : BukkitLevelSystem.Provider(ID) {
-
+    internal class Provider : BukkitLevelSystem.Provider {
         private val mmoCore = MmoCoreWrapper()
 
-        override val isEnabled: Boolean
-            get() = mmoCore.isEnabled
+        override val isEnabled: Boolean get() = mmoCore.isEnabled
+        override val id: String = ID
 
         override fun getSystem(player: Player): BukkitLevelSystem = MmoCoreLevelSystem(player, mmoCore)
+    }
+
+    public companion object {
+        public const val ID: String = "mmocore"
     }
 }

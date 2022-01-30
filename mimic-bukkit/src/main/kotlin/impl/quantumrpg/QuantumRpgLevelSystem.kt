@@ -11,10 +11,6 @@ public class QuantumRpgLevelSystem private constructor(
     private val quantumRpg: QuantumRpgWrapper,
 ) : BukkitLevelSystem(player) {
 
-    public companion object {
-        public const val ID: String = "quantumrpg"
-    }
-
     override val converter: ExpLevelConverter = QuantumRpgExpLevelConverter(player, quantumRpg)
 
     private val classData: UserClassData
@@ -46,10 +42,16 @@ public class QuantumRpgLevelSystem private constructor(
         classData.addExp(expAmount.roundToInt())
     }
 
-    internal class Provider : BukkitLevelSystem.Provider(ID) {
-        override val isEnabled: Boolean get() = quantumRpg.isEnabled
+    internal class Provider : BukkitLevelSystem.Provider {
         private val quantumRpg = QuantumRpgWrapper()
 
+        override val isEnabled: Boolean get() = quantumRpg.isEnabled
+        override val id: String = ID
+
         override fun getSystem(player: Player): BukkitLevelSystem = QuantumRpgLevelSystem(player, quantumRpg)
+    }
+
+    public companion object {
+        public const val ID: String = "quantumrpg"
     }
 }

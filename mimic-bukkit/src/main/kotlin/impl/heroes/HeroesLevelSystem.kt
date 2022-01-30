@@ -10,10 +10,6 @@ public class HeroesLevelSystem private constructor(
     private val heroes: HeroesWrapper,
 ) : BukkitLevelSystem(player) {
 
-    public companion object {
-        public const val ID: String = "heroes"
-    }
-
     override val converter: ExpLevelConverter = HeroesExpLevelConverter(heroes)
 
     override var level: Int
@@ -49,15 +45,18 @@ public class HeroesLevelSystem private constructor(
     private val hero: Hero
         get() = heroes.getHero(player)
 
-    internal class Provider : BukkitLevelSystem.Provider(ID) {
-
+    internal class Provider : BukkitLevelSystem.Provider {
         private val heroes = HeroesWrapper()
 
-        override val isEnabled: Boolean
-            get() = heroes.isEnabled
+        override val isEnabled: Boolean get() = heroes.isEnabled
+        override val id: String = ID
 
         override fun getSystem(player: Player): BukkitLevelSystem {
             return HeroesLevelSystem(player, heroes)
         }
+    }
+
+    public companion object {
+        public const val ID: String = "heroes"
     }
 }

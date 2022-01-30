@@ -33,11 +33,6 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
  */
 public class MimicItemsRegistry(private val servicesManager: ServicesManager) : BukkitItemsRegistry {
 
-    public companion object {
-        public const val ID: String = "mimic"
-    }
-
-    override val isEnabled: Boolean = true
     override val id: String = ID
 
     override val knownIds: Collection<String>
@@ -93,4 +88,8 @@ public class MimicItemsRegistry(private val servicesManager: ServicesManager) : 
     }
 
     private fun ItemsRegistryProvider.namespaced(itemId: String) = "${registry.id}:$itemId"
+
+    public companion object {
+        public const val ID: String = "mimic"
+    }
 }

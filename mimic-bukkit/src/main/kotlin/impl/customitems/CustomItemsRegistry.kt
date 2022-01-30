@@ -25,15 +25,10 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 public class CustomItemsRegistry : BukkitItemsRegistry {
 
-    public companion object {
-        public const val ID: String = "customitems"
-    }
-
+    override val id: String = ID
     override val isEnabled: Boolean get() = CustomItemsAPI.isEnabled()
 
-    override val id: String = ID
-
-    // INFO: CustomItems doesn't support returning list of known ids."
+    // INFO: CustomItems doesn't support returning list of known ids.
     override val knownIds: Collection<String> = emptyList()
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean = CustomItemsAPI.isCustomItem(item, itemId)
@@ -43,4 +38,8 @@ public class CustomItemsRegistry : BukkitItemsRegistry {
     override fun getItemId(item: ItemStack): String? = CustomItemsAPI.getCustomItemID(item)?.lowercase()
 
     override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? = CustomItemsAPI.getCustomItem(itemId, amount)
+
+    public companion object {
+        public const val ID: String = "customitems"
+    }
 }

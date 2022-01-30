@@ -31,10 +31,6 @@ public class BattleLevelsLevelSystem internal constructor(
     private val battleLevelsApi: BattleLevelsApiWrapper,
 ) : BukkitLevelSystem(player) {
 
-    public companion object {
-        public const val ID: String = "battlelevels"
-    }
-
     override val converter: ExpLevelConverter = BattleLevelsConverter.getInstance(battleLevelsApi)
 
     override var level: Int
@@ -120,9 +116,15 @@ public class BattleLevelsLevelSystem internal constructor(
         }
     }
 
-    public class Provider : BukkitLevelSystem.Provider(ID) {
+    public class Provider : BukkitLevelSystem.Provider {
+        override val id: String = ID
+
         override fun getSystem(player: Player): BukkitLevelSystem {
             return BattleLevelsLevelSystem(player, BattleLevelsApiWrapper())
         }
+    }
+
+    public companion object {
+        public const val ID: String = "battlelevels"
     }
 }

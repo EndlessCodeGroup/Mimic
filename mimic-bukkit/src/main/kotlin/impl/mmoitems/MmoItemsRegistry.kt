@@ -25,15 +25,9 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 public class MmoItemsRegistry private constructor(private val mmoItems: MmoItemsWrapper) : BukkitItemsRegistry {
 
-    public companion object {
-        public const val ID: String = "mmoitems"
-    }
-
     internal constructor() : this(MmoItemsWrapper())
 
-    override val isEnabled: Boolean
-        get() = mmoItems.isEnabled
-
+    override val isEnabled: Boolean get() = mmoItems.isEnabled
     override val id: String = ID
 
     override val knownIds: Collection<String>
@@ -61,5 +55,9 @@ public class MmoItemsRegistry private constructor(private val mmoItems: MmoItems
             .build()
             .newBuilder()
             .build()
+    }
+
+    public companion object {
+        public const val ID: String = "mmoitems"
     }
 }

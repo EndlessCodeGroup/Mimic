@@ -14,23 +14,22 @@ public class MmoCoreClassSystem private constructor(
     private val mmoCore: MmoCoreWrapper,
 ) : BukkitClassSystem(player) {
 
-    public companion object {
-        public const val ID: String = "mmocore"
-    }
-
     override val classes: List<String>
         get() = listOf(playerClass.name)
 
     private val playerClass: PlayerClass
         get() = mmoCore.getPlayerClass(player)
 
-    internal class Provider : BukkitClassSystem.Provider(ID) {
-
+    internal class Provider : BukkitClassSystem.Provider {
         private val mmoCore = MmoCoreWrapper()
 
-        override val isEnabled: Boolean
-            get() = mmoCore.isEnabled
+        override val isEnabled: Boolean get() = mmoCore.isEnabled
+        override val id: String = ID
 
         override fun getSystem(player: Player): BukkitClassSystem = MmoCoreClassSystem(player, mmoCore)
+    }
+
+    public companion object {
+        public const val ID: String = "mmocore"
     }
 }

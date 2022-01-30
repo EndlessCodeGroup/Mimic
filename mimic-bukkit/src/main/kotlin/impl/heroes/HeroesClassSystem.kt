@@ -28,10 +28,6 @@ public class HeroesClassSystem private constructor(
     private val heroes: HeroesWrapper,
 ) : BukkitClassSystem(player) {
 
-    public companion object {
-        public const val ID: String = "heroes"
-    }
-
     override val classes: List<String>
         get() {
             return heroes.getClasses()
@@ -45,15 +41,18 @@ public class HeroesClassSystem private constructor(
     private val hero: Hero
         get() = heroes.getHero(player)
 
-    internal class Provider : BukkitClassSystem.Provider(ID) {
-
+    internal class Provider : BukkitClassSystem.Provider {
         private val heroes = HeroesWrapper()
 
-        override val isEnabled: Boolean
-            get() = heroes.isEnabled
+        override val isEnabled: Boolean get() = heroes.isEnabled
+        override val id: String = ID
 
         override fun getSystem(player: Player): BukkitClassSystem {
             return HeroesClassSystem(player, heroes)
         }
+    }
+
+    public companion object {
+        public const val ID: String = "heroes"
     }
 }

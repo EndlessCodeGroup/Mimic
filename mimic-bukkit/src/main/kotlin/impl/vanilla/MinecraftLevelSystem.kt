@@ -25,10 +25,6 @@ import ru.endlesscode.mimic.level.ExpLevelConverter
 /** Vanilla experience bar system. */
 public class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSystem(player) {
 
-    public companion object {
-        public const val ID: String = "minecraft"
-    }
-
     override val converter: ExpLevelConverter
         get() = MinecraftExpLevelConverter.instance
 
@@ -58,7 +54,12 @@ public class MinecraftLevelSystem private constructor(player: Player) : BukkitLe
     override val totalExpToNextLevel: Double
         get() = player.expToLevel.toDouble()
 
-    internal class Provider : BukkitLevelSystem.Provider(ID) {
+    internal class Provider : BukkitLevelSystem.Provider {
+        override val id: String = ID
         override fun getSystem(player: Player): BukkitLevelSystem = MinecraftLevelSystem(player)
+    }
+
+    public companion object {
+        public const val ID: String = "minecraft"
     }
 }

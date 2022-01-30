@@ -33,11 +33,6 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
  */
 public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
-    public companion object {
-        public const val ID: String = "minecraft"
-    }
-
-    override val isEnabled: Boolean = true
     override val id: String = ID
 
     override val knownIds: List<String> by lazy {
@@ -85,5 +80,9 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
         addItemFlags(*payload.flags.toTypedArray())
 
         return this
+    }
+
+    public companion object {
+        public const val ID: String = "minecraft"
     }
 }
