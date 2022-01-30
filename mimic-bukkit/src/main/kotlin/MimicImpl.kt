@@ -2,6 +2,7 @@ package ru.endlesscode.mimic
 
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicesManager
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
@@ -22,10 +23,11 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
         provider: BukkitClassSystem.Provider,
         apiLevel: Int,
         plugin: Plugin,
+        priority: ServicePriority,
     ): BukkitClassSystem.Provider? {
         if (!validateApiLevel<ClassSystem>(apiLevel, plugin)) return null
         val wrappedProvider = WrappedClassSystemProvider(provider, plugin)
-        servicesManager.register(wrappedProvider, plugin)
+        servicesManager.register(wrappedProvider, plugin, priority)
         return wrappedProvider
     }
 
@@ -37,10 +39,11 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
         registry: BukkitItemsRegistry,
         apiLevel: Int,
         plugin: Plugin,
+        priority: ServicePriority,
     ): BukkitItemsRegistry? {
         if (!validateApiLevel<ItemsRegistry<*>>(apiLevel, plugin)) return null
         val wrappedRegistry = WrappedItemsRegistry(registry, plugin)
-        servicesManager.register(wrappedRegistry, plugin)
+        servicesManager.register(wrappedRegistry, plugin, priority)
         return wrappedRegistry
     }
 
@@ -50,10 +53,11 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
         provider: BukkitLevelSystem.Provider,
         apiLevel: Int,
         plugin: Plugin,
+        priority: ServicePriority,
     ): BukkitLevelSystem.Provider? {
         if (!validateApiLevel<LevelSystem>(apiLevel, plugin)) return null
         val wrappedProvider = WrappedLevelSystemProvider(provider, plugin)
-        servicesManager.register(wrappedProvider, plugin)
+        servicesManager.register(wrappedProvider, plugin, priority)
         return wrappedProvider
     }
 
