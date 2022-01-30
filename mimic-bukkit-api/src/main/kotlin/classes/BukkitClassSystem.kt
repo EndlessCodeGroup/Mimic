@@ -32,5 +32,14 @@ public abstract class BukkitClassSystem(player: Player) : ClassSystem {
     private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
 
     /** Provider of Bukkit class systems. */
-    public abstract class Provider(id: String) : PlayerSystemProviderService<BukkitClassSystem>(id)
+    public abstract class Provider : PlayerSystemProviderService<BukkitClassSystem> {
+        @Suppress("DEPRECATION")
+        @Deprecated(
+            "Use constructor without parameters, override getId() if you want to use ID different from plugin name.",
+            ReplaceWith("BukkitClassSystem.Provider()")
+        )
+        public constructor(id: String) : super(id)
+
+        public constructor() : super()
+    }
 }

@@ -18,6 +18,12 @@ BukkitItemsRegistry registry = mimic.getItemsRegistry();
 New mechanism allows maintaining better backward compatibility for APIs implementations. 
 It also allows users to select preferred APIs implementation via config.
 
+### API Changes
+
+- Added default implementations for `MimicService` methods:
+  - `isEnabled()` returns `true` by default
+  - `getId()` returns plugin name by default
+
 ## [v0.6.3] (2022-01-07)
 
 ### Fixed
