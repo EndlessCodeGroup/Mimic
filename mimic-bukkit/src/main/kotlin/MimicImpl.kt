@@ -10,13 +10,12 @@ import ru.endlesscode.mimic.classes.DefaultClassSystemProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.DefaultLevelSystemProvider
-import java.lang.reflect.Constructor
+import java.util.function.Function
 
 internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
 
-    override fun registerClassSystem(classSystemClass: Class<out BukkitClassSystem>, plugin: Plugin) {
-        val constructor = classSystemClass.getPlayerConstructor()
-        registerClassSystem(DefaultClassSystemProvider(plugin, constructor), plugin)
+    override fun registerClassSystem(provider: Function<Player, out BukkitClassSystem>, plugin: Plugin) {
+        registerClassSystem(DefaultClassSystemProvider(plugin, provider), plugin)
     }
 
     override fun registerClassSystem(provider: BukkitClassSystem.Provider, plugin: Plugin) {
@@ -33,9 +32,8 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
 
     override fun getItemsRegistry(): BukkitItemsRegistry = loadService()
 
-    override fun registerLevelSystem(levelSystemClass: Class<out BukkitLevelSystem>, plugin: Plugin) {
-        val constructor = levelSystemClass.getPlayerConstructor()
-        registerLevelSystem(DefaultLevelSystemProvider(plugin, constructor), plugin)
+    override fun registerLevelSystem(provider: Function<Player, out BukkitLevelSystem>, plugin: Plugin) {
+        registerLevelSystem(DefaultLevelSystemProvider(plugin, provider), plugin)
     }
 
     override fun registerLevelSystem(provider: BukkitLevelSystem.Provider, plugin: Plugin) {
@@ -46,19 +44,6 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
 
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService()
 
-    private fun <T : Any> Class<T>.getPlayerConstructor(): Constructor<T> {
-        return try {
-            getConstructor(Player::class.java)
-        } catch (exception: NoSuchMethodException) {
-            error(
-                """
-                $simpleName have not constructor with single parameter of type Player.
-                Please implement provider for it manually.
-                """.trimIndent()
-            )
-        }
-    }
-
     private inline fun <reified T : MimicService> loadService(): T {
         val service = servicesManager.loadAll<T>()
             .firstOrNull { it.isEnabled }
@@ -68,12 +53,6 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
             ${T::class.simpleName} should always have default implementation.
             Please file an issue on GitHub: https://github.com/EndlessCodeGroup/Mimic/issues
             """
-        }
-    }
-
-    companion object {
-        fun register(servicesManager: ServicesManager, plugin: Plugin) {
-            servicesManager.register<Mimic>(MimicImpl(servicesManager), plugin)
         }
     }
 }

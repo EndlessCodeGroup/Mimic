@@ -27,6 +27,7 @@ import org.bukkit.plugin.ServicePriority.*
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.bukkit.loadAll
+import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.command.ItemsSubcommand
@@ -59,11 +60,13 @@ public class MimicPlugin : JavaPlugin() {
 
     private val isReleased = !description.version.endsWith("-SNAPSHOT")
 
+    private val mimic: Mimic by lazy { MimicImpl(servicesManager) }
+
     private inline val servicesManager get() = server.servicesManager
 
     override fun onLoad() {
         Log.init(logger, debug = !isReleased)
-        MimicImpl.register(servicesManager, this)
+        servicesManager.register(mimic, this)
         hookDefaultServices()
     }
 
