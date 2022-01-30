@@ -6,41 +6,33 @@ import org.bukkit.plugin.ServicesManager
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.classes.DefaultClassSystemProvider
 import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
-import ru.endlesscode.mimic.level.DefaultLevelSystemProvider
 import ru.endlesscode.mimic.level.WrappedLevelSystemProvider
-import java.util.function.Function
 
 internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
 
-    override fun registerClassSystem(provider: Function<Player, out BukkitClassSystem>, plugin: Plugin) {
-        registerClassSystem(DefaultClassSystemProvider(provider), plugin)
-    }
-
-    override fun registerClassSystem(provider: BukkitClassSystem.Provider, plugin: Plugin) {
+    override fun registerClassSystem(provider: BukkitClassSystem.Provider, apiLevel: Int, plugin: Plugin): Boolean {
         servicesManager.register(WrappedClassSystemProvider(provider, plugin), plugin)
+        return true
     }
 
     override fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
 
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService()
 
-    override fun registerItemsRegistry(registry: BukkitItemsRegistry, plugin: Plugin) {
+    override fun registerItemsRegistry(registry: BukkitItemsRegistry, apiLevel: Int, plugin: Plugin): Boolean {
         servicesManager.register(WrappedItemsRegistry(registry, plugin), plugin)
+        return true
     }
 
     override fun getItemsRegistry(): BukkitItemsRegistry = loadService()
 
-    override fun registerLevelSystem(provider: Function<Player, out BukkitLevelSystem>, plugin: Plugin) {
-        registerLevelSystem(DefaultLevelSystemProvider(provider), plugin)
-    }
-
-    override fun registerLevelSystem(provider: BukkitLevelSystem.Provider, plugin: Plugin) {
+    override fun registerLevelSystem(provider: BukkitLevelSystem.Provider, apiLevel: Int, plugin: Plugin): Boolean {
         servicesManager.register(WrappedLevelSystemProvider(provider, plugin), plugin)
+        return true
     }
 
     override fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
