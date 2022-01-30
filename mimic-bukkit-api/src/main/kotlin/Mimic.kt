@@ -7,19 +7,22 @@ import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
-import java.util.function.Function
 
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
 
     /**
-     * Registers [BukkitClassSystem] implemented via the given [plugin],
-     * uses the given [provider] function to get system instance.
+     * Registers the given [provider] for [BukkitClassSystem].
+     *
+     * @param provider The provider used to get class system.
+     * @param apiLevel Minimal required API level for this class system implementation:
+     *                 - if required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     * @param plugin The plugin implementing this class system.
+     * @return `true` if provider registered successfully, otherwise `false`.
      */
-    public fun registerClassSystem(provider: Function<Player, out BukkitClassSystem>, plugin: Plugin)
-
-    /** Registers the given [provider] for [BukkitClassSystem] implemented via the given [plugin]. */
-    public fun registerClassSystem(provider: BukkitClassSystem.Provider, plugin: Plugin)
+    public fun registerClassSystem(provider: BukkitClassSystem.Provider, apiLevel: Int, plugin: Plugin): Boolean
 
     /**
      * Returns top priority [BukkitClassSystem] for the given [player].
@@ -30,20 +33,34 @@ public interface Mimic {
     /** Returns top priority [BukkitClassSystem.Provider]. */
     public fun getClassSystemProvider(): BukkitClassSystem.Provider
 
-    /** Registers the given [registry] implemented via the given [plugin]. */
-    public fun registerItemsRegistry(registry: BukkitItemsRegistry, plugin: Plugin)
+    /**
+     * Registers the given [registry].
+     *
+     * @param registry The [BukkitItemsRegistry] implementation
+     * @param apiLevel Minimal required API level for this item registry implementation:
+     *                 - if required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     * @param plugin The plugin implementing this item registry.
+     * @return `true` if provider registered successfully, otherwise `false`.
+     */
+    public fun registerItemsRegistry(registry: BukkitItemsRegistry, apiLevel: Int, plugin: Plugin): Boolean
 
     /** Returns [BukkitItemsRegistry] implementation. */
     public fun getItemsRegistry(): BukkitItemsRegistry
 
     /**
-     * Registers [BukkitLevelSystem] implemented via the given [plugin],
-     * uses the given [provider] function to get system instance.
+     * Registers the given [provider] for [BukkitLevelSystem].
+     *
+     * @param provider The provider used to get level system.
+     * @param apiLevel Minimal required API level for this level system implementation:
+     *                 - if required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     * @param plugin The plugin implementing this level system.
+     * @return `true` if provider registered successfully, otherwise `false`.
      */
-    public fun registerLevelSystem(provider: Function<Player, out BukkitLevelSystem>, plugin: Plugin)
-
-    /** Registers the given [provider] for [BukkitLevelSystem] implemented via the given [plugin]. */
-    public fun registerLevelSystem(provider: BukkitLevelSystem.Provider, plugin: Plugin)
+    public fun registerLevelSystem(provider: BukkitLevelSystem.Provider, apiLevel: Int, plugin: Plugin): Boolean
 
     /**
      * Returns top priority [BukkitLevelSystem] for the given [player].
