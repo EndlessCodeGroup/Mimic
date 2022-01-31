@@ -6,5 +6,5 @@ repositories {
 
 dependencies {
     api(project(":mimic-api"))
-    compileOnly("org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT") { isTransitive = false }
+    compileOnly("org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT") { isTransitive = false }
 }
