@@ -6,10 +6,10 @@ import org.bukkit.plugin.PluginManager
 import ru.endlesscode.mimic.WrappedMimicService
 
 internal class WrappedItemsRegistry(
-    override val delegate: BukkitItemsRegistry,
+    private val delegate: BukkitItemsRegistry,
     pluginName: String,
     pluginManager: PluginManager,
-) : WrappedMimicService(pluginName, pluginManager), BukkitItemsRegistry {
+) : WrappedMimicService(delegate, pluginName, pluginManager), BukkitItemsRegistry {
 
     constructor(delegate: BukkitItemsRegistry, plugin: Plugin)
             : this(delegate, plugin.name, plugin.server.pluginManager)
