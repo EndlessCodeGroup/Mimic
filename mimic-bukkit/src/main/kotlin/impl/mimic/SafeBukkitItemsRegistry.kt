@@ -69,7 +69,7 @@ internal fun ItemsRegistryProvider.tryGetItem(itemId: String, payload: Any?, amo
 
 private fun logImplementationError(provider: ItemsRegistryProvider, throwable: Throwable) {
     Log.w(throwable,
-        "Error in BukkitItemsRegistry with id '${provider.registry.id}' " +
-                "(implemented via ${provider.plugin.name}). " +
+        "Error in ItemsRegistry '${provider.registry.id}' " +
+                "implemented via ${provider.plugin}. " +
                 "Please, report it to ${provider.plugin.description.authors}.")
 }

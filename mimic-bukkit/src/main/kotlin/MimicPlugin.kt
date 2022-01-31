@@ -61,6 +61,7 @@ public class MimicPlugin : JavaPlugin() {
     private val mimic: Mimic by lazy { MimicImpl(servicesManager) }
 
     private inline val servicesManager get() = server.servicesManager
+    private inline val pluginManager get() = server.pluginManager
 
     override fun onLoad() {
         Log.init(logger, debug = !isReleased)
@@ -71,6 +72,7 @@ public class MimicPlugin : JavaPlugin() {
     override fun onEnable() {
         if (isReleased) initMetrics()
         registerCommands()
+        pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 
     private fun hookDefaultServices() {
