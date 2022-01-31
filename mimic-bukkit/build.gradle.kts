@@ -12,10 +12,11 @@ plugins {
 description = "Bukkit plugin with implementations of Mimic APIs"
 
 bukkit {
-    apiVersion = "1.17.1"
+    apiVersion = "1.18.1"
 
     meta {
-        name.set("MimicPlugin")
+        name.set("Mimic")
+        main.set("ru.endlesscode.mimic.MimicPlugin")
         apiVersion.set("1.13")
         authors.set(listOf("osipxd", "EndlessCodeGroup"))
         url.set("https://github.com/EndlessCodeGroup/Mimic")
