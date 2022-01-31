@@ -3,13 +3,11 @@ package ru.endlesscode.mimic
 import org.bukkit.plugin.PluginManager
 
 internal abstract class WrappedMimicService(
+    private val delegate: MimicService,
     private val pluginName: String,
     private val pluginManager: PluginManager,
 ) : MimicService {
 
-    protected abstract val delegate: MimicService
-
-    @Suppress("LeakingThis")
     final override val id: String = serviceId(delegate.id, pluginName)
 
     final override val isEnabled: Boolean

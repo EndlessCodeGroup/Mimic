@@ -150,9 +150,9 @@ public interface Mimic {
         public fun getInstance(): Mimic {
             return checkNotNull(Bukkit.getServer().servicesManager.load()) {
                 """
-                 Your plugin was loaded earlier than Mimic.
-                 Please check you have added Mimic to 'softpend' or 'depend' in the plugin.yml.
-                 """.trimIndent()
+                Your plugin was loaded earlier than Mimic.
+                Please check you have added Mimic to 'softpend' or 'depend' in the plugin.yml.
+                """.trimIndent()
             }
         }
     }

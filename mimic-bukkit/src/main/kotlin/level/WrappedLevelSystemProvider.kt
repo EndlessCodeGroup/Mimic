@@ -6,10 +6,10 @@ import org.bukkit.plugin.PluginManager
 import ru.endlesscode.mimic.WrappedMimicService
 
 internal class WrappedLevelSystemProvider(
-    override val delegate: BukkitLevelSystem.Provider,
+    private val delegate: BukkitLevelSystem.Provider,
     pluginName: String,
     pluginManager: PluginManager,
-) : WrappedMimicService(pluginName, pluginManager), BukkitLevelSystem.Provider {
+) : WrappedMimicService(delegate, pluginName, pluginManager), BukkitLevelSystem.Provider {
 
     constructor(delegate: BukkitLevelSystem.Provider, plugin: Plugin)
             : this(delegate, plugin.name, plugin.server.pluginManager)
