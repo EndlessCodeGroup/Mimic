@@ -47,8 +47,8 @@ internal object Log {
     /**
      * Writes warning messages to log.
      */
-    fun w(vararg messages: String) {
-        for (message in messages) logger?.warning(message)
+    fun w(message: String) {
+        logger?.warning(message)
     }
 
     /**
