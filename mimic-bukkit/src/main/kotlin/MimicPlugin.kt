@@ -25,7 +25,6 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
 import org.bukkit.plugin.java.JavaPlugin
-import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
@@ -129,46 +128,21 @@ public class MimicPlugin : JavaPlugin() {
         constructor: () -> BukkitLevelSystem.Provider,
         priority: ServicePriority = Normal,
     ) {
-        try {
-            val provider = mimic.registerLevelSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
-                ?: return
-            reportServiceHooked(provider)
-        } catch (e: Exception) {
-            Log.d(e)
-        }
+        mimic.registerLevelSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
     private fun hookClasses(
         constructor: () -> BukkitClassSystem.Provider,
         priority: ServicePriority = Normal,
     ) {
-        try {
-            val provider = mimic.registerClassSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
-                ?: return
-            reportServiceHooked(provider)
-        } catch (e: Exception) {
-            Log.d(e)
-        }
+        mimic.registerClassSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
     private fun hookItems(
         constructor: () -> BukkitItemsRegistry,
         priority: ServicePriority = Normal,
     ) {
-        try {
-            val provider = mimic.registerItemsRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
-                ?: return
-            reportServiceHooked(provider)
-        } catch (e: Exception) {
-            Log.d(e)
-        }
-    }
-
-    private inline fun <reified ServiceT : MimicService> reportServiceHooked(service: ServiceT) {
-        val serviceName = ServiceT::class.java.name
-            .substringAfterLast(".Bukkit")
-            .substringBefore("$")
-        logger.info("$serviceName '${service.id}' registered")
+        mimic.registerItemsRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
     //</editor-fold>
 
@@ -176,10 +150,10 @@ public class MimicPlugin : JavaPlugin() {
         val metrics = Metrics(this, 8413)
 
         metrics.addCustomChart(Metrics.SimplePie("level_system") {
-            loadService<BukkitLevelSystem.Provider>().id
+            mimic.getLevelSystemProvider().id
         })
         metrics.addCustomChart(Metrics.SimplePie("class_system") {
-            loadService<BukkitClassSystem.Provider>().id
+            mimic.getClassSystemProvider().id
         })
         metrics.addCustomChart(Metrics.AdvancedPie("items_registry_custom") {
             servicesManager.loadAll<BukkitItemsRegistry>()
@@ -202,10 +176,6 @@ public class MimicPlugin : JavaPlugin() {
         manager.registerCommand(MainCommand(this))
         manager.registerCommand(LevelSystemSubcommand(mimic))
         manager.registerCommand(ClassSystemSubcommand(mimic))
-        manager.registerCommand(ItemsSubcommand(loadService()))
-    }
-
-    private inline fun <reified T : Any> loadService(): T {
-        return checkNotNull(servicesManager.load())
+        manager.registerCommand(ItemsSubcommand(mimic.getItemsRegistry()))
     }
 }

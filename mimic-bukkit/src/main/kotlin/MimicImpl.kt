@@ -7,15 +7,13 @@ import org.bukkit.plugin.ServicesManager
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.classes.ClassSystem
 import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
-import ru.endlesscode.mimic.items.ItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
-import ru.endlesscode.mimic.level.LevelSystem
 import ru.endlesscode.mimic.level.WrappedLevelSystemProvider
+import kotlin.reflect.KClass
 
 internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
 
@@ -24,11 +22,8 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): BukkitClassSystem.Provider? {
-        if (!validateApiLevel<ClassSystem>(apiLevel, plugin)) return null
-        val wrappedProvider = WrappedClassSystemProvider(provider, plugin)
-        servicesManager.register(wrappedProvider, plugin, priority)
-        return wrappedProvider
+    ): BukkitClassSystem.Provider? = tryRegisterService<BukkitClassSystem.Provider>(apiLevel, plugin, priority) {
+        WrappedClassSystemProvider(provider, plugin)
     }
 
     override fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
@@ -40,11 +35,8 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): BukkitItemsRegistry? {
-        if (!validateApiLevel<ItemsRegistry<*>>(apiLevel, plugin)) return null
-        val wrappedRegistry = WrappedItemsRegistry(registry, plugin)
-        servicesManager.register(wrappedRegistry, plugin, priority)
-        return wrappedRegistry
+    ): BukkitItemsRegistry? = tryRegisterService<BukkitItemsRegistry>(apiLevel, plugin, priority) {
+        WrappedItemsRegistry(registry, plugin)
     }
 
     override fun getItemsRegistry(): BukkitItemsRegistry = loadService()
@@ -54,26 +46,50 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): BukkitLevelSystem.Provider? {
-        if (!validateApiLevel<LevelSystem>(apiLevel, plugin)) return null
-        val wrappedProvider = WrappedLevelSystemProvider(provider, plugin)
-        servicesManager.register(wrappedProvider, plugin, priority)
-        return wrappedProvider
+    ): BukkitLevelSystem.Provider? = tryRegisterService<BukkitLevelSystem.Provider>(apiLevel, plugin, priority) {
+        WrappedLevelSystemProvider(provider, plugin)
     }
 
     override fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
 
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService()
 
-    private inline fun <reified T : Any> validateApiLevel(apiLevel: Int, plugin: Plugin): Boolean {
-        if (MimicApiLevel.checkApiLevel(apiLevel)) return true
+    private inline fun <reified Service : MimicService> tryRegisterService(
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+        crossinline createService: () -> Service,
+    ): Service? = runCatching {
+        // Check if service can be registered
+        val apiName = Service::class.getApiName()
+        checkApiLevel(apiLevel, apiName, plugin)
 
-        Log.w(
-            "Can not register ${T::class.simpleName} implemented via ${plugin.name},",
-            "because Mimic version installed on the server is lower than minimal required version.",
-            "You can get the latest Mimic from GitHub: https://github.com/EndlessCodeGroup/Mimic/releases",
-        )
-        return false
+        // Register service
+        val service = createService()
+        servicesManager.register(service, plugin, priority)
+        Log.i("Successfully registered $apiName '${service.id}' by $plugin")
+
+        // Return the registered service or null if service is not registered
+        service
+    }.onFailure(Log::w).getOrNull()
+
+    private fun KClass<out MimicService>.getApiName(): String = when (this) {
+        BukkitClassSystem.Provider::class -> "ClassSystem"
+        BukkitLevelSystem.Provider::class -> "LevelSystem"
+        BukkitItemsRegistry::class -> "ItemsRegistry"
+        else -> error("Unknown service: ${this.java.name}")
+    }
+
+    private fun checkApiLevel(apiLevel: Int, apiName: String, plugin: Plugin) {
+        if (!MimicApiLevel.checkApiLevel(apiLevel)) {
+            error(
+                """
+                Can not register $apiName implemented by $plugin,
+                because Mimic version installed on the server is lower than minimal required version.
+                You can get the latest Mimic from GitHub: https://github.com/EndlessCodeGroup/Mimic/releases
+                """.trimIndent()
+            )
+        }
     }
 
     private inline fun <reified T : MimicService> loadService(): T {
@@ -84,7 +100,7 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
             """
             ${T::class.simpleName} should always have default implementation.
             Please file an issue on GitHub: https://github.com/EndlessCodeGroup/Mimic/issues
-            """
+            """.trimIndent()
         }
     }
 }
