@@ -13,6 +13,10 @@ object acf {
     const val paper = "co.aikar:acf-paper:0.5.0-SNAPSHOT"
 }
 
+object denizenscript {
+    const val denizen = "com.denizenscript:denizen:1.2.3-SNAPSHOT"
+}
+
 object misc {
     const val bstats = "org.bstats:bstats-bukkit:1.8"
     const val annotations = "org.jetbrains:annotations:13.0"
