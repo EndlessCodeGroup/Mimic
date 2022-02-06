@@ -31,7 +31,7 @@ internal class MimicImpl(
     }
 
     override fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
-    override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService()
+    override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService(config.classSystem)
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = loadAllServices()
 
     override fun registerItemsRegistry(
@@ -40,7 +40,7 @@ internal class MimicImpl(
         plugin: Plugin,
         priority: ServicePriority,
     ): BukkitItemsRegistry? = tryRegisterService<BukkitItemsRegistry>(apiLevel, plugin, priority) {
-        WrappedItemsRegistry(registry, plugin)
+        WrappedItemsRegistry(registry, config, plugin)
     }
 
     override fun getItemsRegistry(): BukkitItemsRegistry = loadService()
@@ -56,7 +56,7 @@ internal class MimicImpl(
     }
 
     override fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
-    override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService()
+    override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService(config.levelSystem)
     override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = loadAllServices()
 
     private inline fun <reified Service : MimicService> tryRegisterService(
@@ -97,15 +97,25 @@ internal class MimicImpl(
         }
     }
 
-    private inline fun <reified T : MimicService> loadService(): T {
-        val service = servicesManager.loadAll<T>()
-            .firstOrNull { it.isEnabled }
-
-        return checkNotNull(service) {
+    private inline fun <reified T : MimicService> loadService(preferred: String = ""): T {
+        val services = loadAllServices<T>().filterValues { it.isEnabled }
+        val defaultService = services.values.firstOrNull()
+        checkNotNull(defaultService) {
             """
             ${T::class.simpleName} should always have default implementation.
             Please file an issue on GitHub: https://github.com/EndlessCodeGroup/Mimic/issues
             """.trimIndent()
+        }
+
+        return when {
+            preferred.isEmpty() -> defaultService
+            preferred in services -> services.getValue(preferred)
+
+            else -> {
+                Log.w("${T::class.simpleName} with id '$preferred' not found, will be used '${defaultService.id}' instead.")
+                Log.w("Please specify any of known implementations: ${services.keys}.")
+                defaultService
+            }
         }
     }
 
