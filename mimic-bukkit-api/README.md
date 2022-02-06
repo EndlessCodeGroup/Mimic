@@ -22,8 +22,8 @@ private boolean checkMimicEnabled() {
     }
 
     // You can also check if Mimic version is right
-    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_6)) {
-        getLogger().severe("Required at least Mimic 0.6!");
+    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_7)) {
+        getLogger().severe("Required at least Mimic 0.7!");
         return false;
     }
 
@@ -47,23 +47,20 @@ public void onEnable() {
 Mimic uses `ServicesManager` to hold API implementations and each API implements interface [MimicService].
 You can load needed APIs in `onEnable` of your plugin:
 ```java
-ServicesManager sm = getServer().getServicesManager();
-// Services will never be null because there always exists default
-// implementation for each service
-levelSystemProvider = sm.load(BukkitLevelSystem.Provider.class);
-classSystemProvider = sm.load(BukkitClassSystem.Provider.class);
-itemsRegistry = sm.load(BukkitItemsRegistry.class);
+Mimic mimic = Mimic.getInstance();
+
+BukkitLevelSystem levelSystem = mimic.getLevelSystem(player);
+BukkitClassSystem classSystem = mimic.getClassSystem(player);
+BukkitItemsRegistry itemsRegistry = mimic.getItemsRegistry();
 ```
 
 Now you can use APIs:
 ```java
-// System got from the provider holds a weak reference to a player object
+// LevelSystem and ClassSystem holds a weak reference to a player object
 // and should not live a long time.
-BukkitLevelSystem levelSystem = levelSystemProvider.get(player);
 int playerLevel = levelSystem.getLevel();
 levelSystem.giveExp(42);
 
-BukkitClassSystem classSystem = classSystemProvider.get(player);
 String playerPrimaryClass = classSystem.getPrimaryClass();
 boolean isMage = classSystem.hasOneOfClasses(Arrays.asList("Mage", "Druid", "Necromancer"));
 
@@ -89,21 +86,18 @@ boolean isMagicStickExists = itemsRegistry.isItemExists("customitems:magic_wand"
     
     public class MyPlugin extends JavaPlugin {
     
-        // Declare field for needed APIs
-        private static BukkitLevelSystem.Provider levelSystemProvider = null;
-        private static BukkitClassSystem.Provider classSystemProvider = null;
-        private static BukkitItemsRegistry itemsRegistry = null;
+        private static Mimic mimic = null;
     
         public static BukkitLevelSystem getLevelSystem(Player player) {
-            return levelSystemProvider.get(player);
+            return mimic.getLevelSystem(player);
         }
     
         public static BukkitClassSystem getClassSystem(Player player) {
-            return classSystemProvider.get(player);
+            return mimic.getClassSystem(player);
         }
     
         public static BukkitItemsRegistry getItemsRegistry() {
-            return itemsRegistry;
+            return mimic.getItemsRegistry();
         }
     
         @Override
@@ -114,7 +108,7 @@ boolean isMagicStickExists = itemsRegistry.isItemExists("customitems:magic_wand"
                 return;
             }
     
-            setupMimic();
+            mimic = Mimic.getInstance();
         }
 
         private boolean checkMimicEnabled() {
@@ -132,27 +126,19 @@ boolean isMagicStickExists = itemsRegistry.isItemExists("customitems:magic_wand"
             return true;
         }
     
-        private void setupMimic() {
-            ServicesManager sm = getServer().getServicesManager();
-            // Services will never be null because there always exists default
-            // implementation for each service
-            levelSystemProvider = sm.load(BukkitLevelSystem.Provider.class);
-            classSystemProvider = sm.load(BukkitClassSystem.Provider.class);
-            itemsRegistry = sm.load(BukkitItemsRegistry.class);
-        }
-    
         // Method to demonstrate usage
         private void useApis(Player player) {
-            // System got from provider holds weak reference to player object and should not live a long time.
-            BukkitLevelSystem levelSystem = levelSystemProvider.get(player);
+            // LevelSystem and ClassSystem holds holds weak reference to player object and should not live a long time.
+            BukkitLevelSystem levelSystem = getLevelSystem(player);
             int playerLevel = levelSystem.getLevel();
             levelSystem.giveExp(42);
     
-            BukkitClassSystem classSystem = classSystemProvider.get(player);
+            BukkitClassSystem classSystem = getClassSystem(player);
             String playerPrimaryClass = classSystem.getPrimaryClass();
             boolean isMage = classSystem.hasAnyOfClasses(Arrays.asList("Mage", "Druid", "Necromancer"));
     
             // ItemsRegistry is not related to player so it can be used without provider
+            BukkitItemsRegistry itemsRegistry = getItemsRegistry();
             ItemStack stick = itemsRegistry.getItem("minecraft:stick");
             boolean isStickMagical = itemsRegistry.isSameItem(stick, "customitems:magic_wand");
             boolean isMagicStickExists = itemsRegistry.isItemExists("customitems:magic_wand");
@@ -190,35 +176,21 @@ public class MyClassSystem extends BukkitClassSystem {
     public List<String> getClasses() {
         return playersClassesMap.get(getPlayer().getUniqueId());
     }
-
-    // Level and Class systems are bounded to players so you need to create provider.
-    // It will provide instance of your implementation initialized with player when need.
-    static class Provider extends BukkitClassSystem.Provider {
-
-        public Provider() {
-            super(ID); // Specify your implementation ID here
-        }
-
-        @NotNull
-        @Override
-        public BukkitClassSystem getSystem(@NotNull Player player) {
-            return new MyClassSystem(player);
-        }
-    }
 }
 ```
 
 When you've implemented API, register it in method **`onLoad`** of your plugin:
+
 ```java
 @Override
 public void onLoad() {
-    ServicesManager sm = getServer().getServicesManager();
+    Mimic mimic = Mimic.getInstance();
     
-    // Register you Provider in service manager with priority you want.
-    // Services with higher priority will be used first.
-    sm.register(BukkitClassSystem.Provider.class, new MyClassSystem.Provider(), this, ServicePriority.High);
+    // Register your implementations and specify minimal required Mimic version for it.
+    mimic.registerClassSystem(MyClassSystem::new, MimicApiLevel.CURRENT, this);
 }
 ```
+
 > Don't use **`onEnable`** to register services.
 > Plugins should be able to get services in **`onEnable`** and all services should be already registered.
 
