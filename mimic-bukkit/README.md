@@ -36,25 +36,29 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 
 - **[Minecraft][minecraft-exp]** _(Default)_
 - **[SkillAPI]**
+- **[ProSkillAPI]**
 - **[BattleLevels]**
 - **[MMOCore]**
 - **[Heroes]**
 - **[QuantumRPG]**
+- **[ProRPGItems]**
 
 ### [Class Systems][BukkitClassSystem.Provider]
 
 - **Permissions-based** _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
 - **[SkillAPI]**
+- **[ProSkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**
 - **[QuantumRPG]**
+- **[ProRPGItems]**
 
 ### [Items Registries][BukkitItemsRegistry]
 
 #### [MimicItemsRegistry] 
 
 Items registry combining all others items registries.
-It uses service ID as namespace for items IDs.\
+It uses service ID as a namespace for items IDs.\
 For example: `acacia_boat -> minecraft:acacia_boat`.
 
 > If you use item ID without a namespace, it will search over all registries.
@@ -79,14 +83,33 @@ For example: `acacia_boat -> minecraft:acacia_boat`.
 **ID Format:** `quantumrpg:[type]/[id]`\
 **Payload:** *Not supported*
 
+#### [ProRPGItems]
+
+**ID Format:** `prorpgitems:[type]/[id]`\
+**Payload:** *Not supported*
+
+#### [RPGInventory]
+
+**ID Format:** `rpginventory:[id]`\
+**Payload:** *Not supported*
+
+#### [ItemsAdder]
+
+**ID Format:** `ia:[id]`\
+**Payload:** *Not supported*
+
 [minecraft-exp]: https://minecraft.gamepedia.com/Experience
 [skillapi]: https://www.spigotmc.org/resources/4824/
+[proskillapi]: https://www.spigotmc.org/resources/91913/
 [battlelevels]: https://www.spigotmc.org/resources/2218/
 [customitems]: https://www.spigotmc.org/resources/63848/
 [mmocore]: https://www.spigotmc.org/resources/70575/
 [mmoitems]: https://www.spigotmc.org/resources/39267/
 [heroes]: https://www.spigotmc.org/resources/24734/
 [quantumrpg]: https://www.spigotmc.org/resources/40007/
+[prorpgitems]: https://www.spigotmc.org/resources/91386/
+[rpginventory]: https://www.spigotmc.org/resources/12498/
+[itemsadder]: https://www.spigotmc.org/resources/73355/
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 
