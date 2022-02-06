@@ -39,7 +39,8 @@ internal class ClassSystemSubcommand(
     @Subcommand("info")
     @Description("Show information about player's class system")
     @CommandCompletion("@players")
-    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
+    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player?) {
+        if (player == null) return
         val provider = mimic.getClassSystemProvider()
         val system = provider.getSystem(player)
         sender.send(
@@ -56,8 +57,9 @@ internal class ClassSystemSubcommand(
         sender: CommandSender,
         @Split classes: Array<String>,
         @Default("all") mode: Mode,
-        @Optional @Flags("other,defaultself") player: Player,
+        @Optional @Flags("other,defaultself") player: Player?,
     ) {
+        if (player == null) return
         val system = mimic.getClassSystem(player)
         val has = if (mode == Mode.ALL) {
             system.hasAllClasses(classes.asList())
