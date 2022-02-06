@@ -45,7 +45,8 @@ internal class LevelSystemSubcommand(
     @Subcommand("info")
     @Description("Show information about player's level system")
     @CommandCompletion("@players")
-    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player) {
+    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player?) {
+        if (player == null) return
         val provider = mimic.getLevelSystemProvider()
         val system = provider.getSystem(player)
         sender.send(
@@ -63,8 +64,9 @@ internal class LevelSystemSubcommand(
         sender: CommandSender,
         amount: Double,
         @Default("lvl") type: ExtendedValueType,
-        @Optional @Flags("other,defaultself") player: Player
+        @Optional @Flags("other,defaultself") player: Player?,
     ) {
+        if (player == null) return
         catchUnsupported {
             val system = mimic.getLevelSystem(player)
             @Suppress("DEPRECATION") // Allow using exp setter
@@ -84,8 +86,9 @@ internal class LevelSystemSubcommand(
         sender: CommandSender,
         amount: Int,
         @Default("lvl") type: ValueType,
-        @Optional @Flags("other,defaultself") player: Player
+        @Optional @Flags("other,defaultself") player: Player?,
     ) {
+        if (player == null) return
         catchUnsupported {
             val system = mimic.getLevelSystem(player)
             when (type) {
@@ -103,8 +106,9 @@ internal class LevelSystemSubcommand(
         sender: CommandSender,
         amount: Int,
         @Default("lvl") type: ValueType,
-        @Optional @Flags("other,defaultself") player: Player
+        @Optional @Flags("other,defaultself") player: Player?,
     ) {
+        if (player == null) return
         catchUnsupported {
             val system = mimic.getLevelSystem(player)
             when (type) {
@@ -135,8 +139,9 @@ internal class LevelSystemSubcommand(
         sender: CommandSender,
         value: Int,
         @Default("lvl") type: ExtendedValueType,
-        @Optional @Flags("other,defaultself") player: Player
+        @Optional @Flags("other,defaultself") player: Player?,
     ) {
+        if (player == null) return
         val system = mimic.getLevelSystem(player)
         val has = when (type) {
             ExtendedValueType.LVL -> system.didReachLevel(value)
