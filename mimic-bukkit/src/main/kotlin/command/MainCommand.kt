@@ -5,15 +5,15 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.Plugin
+import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.MimicService
-import ru.endlesscode.mimic.bukkit.loadAll
-import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.items.BukkitItemsRegistry
-import ru.endlesscode.mimic.level.BukkitLevelSystem
 
 @CommandAlias("%command")
 @CommandPermission("%perm")
-internal class MainCommand(private val plugin: Plugin) : MimicCommand() {
+internal class MainCommand(
+    private val plugin: Plugin,
+    private val mimic: Mimic,
+) : MimicCommand() {
 
     @HelpCommand
     @Description("Show help")
@@ -24,22 +24,21 @@ internal class MainCommand(private val plugin: Plugin) : MimicCommand() {
     @Subcommand("info")
     @Description("Show info about Mimic and loaded services")
     fun info(sender: CommandSender) {
-        val servicesManager = plugin.server.servicesManager
-        val levelSystems = servicesManager.loadAll<BukkitLevelSystem.Provider>()
-        val classSystems = servicesManager.loadAll<BukkitClassSystem.Provider>()
-        val itemsRegistries = servicesManager.loadAll<BukkitItemsRegistry>()
+        val levelSystems = mimic.getAllLevelSystemProviders()
+        val classSystems = mimic.getAllClassSystemProviders()
+        val itemsRegistries = mimic.getAllItemsRegistries()
 
         sender.send(
             "&2${plugin.description.fullName}",
             "&3Level Systems: &7${levelSystems.toMessage()}",
             "&3Class Systems: &7${classSystems.toMessage()}",
-            "&3Items Registries: &7${itemsRegistries.toMessage()}"
+            "&3Items Registries: &7${itemsRegistries.toMessage()}",
         )
     }
 }
 
-private fun <ServiceT : MimicService> Collection<ServiceT>.toMessage(): String {
-    return joinToString { service ->
+private fun <ServiceT : MimicService> Map<String, ServiceT>.toMessage(): String {
+    return values.joinToString { service ->
         val color = if (service.isEnabled) "&a" else "&c"
         "$color${service.id}&7"
     }
