@@ -78,13 +78,6 @@ internal class MimicImpl(
         service
     }.onFailure(Log::w).getOrNull()
 
-    private fun KClass<out MimicService>.getApiName(): String = when (this) {
-        BukkitClassSystem.Provider::class -> "ClassSystem"
-        BukkitLevelSystem.Provider::class -> "LevelSystem"
-        BukkitItemsRegistry::class -> "ItemsRegistry"
-        else -> error("Unknown service: ${this.java.name}")
-    }
-
     private fun checkApiLevel(apiLevel: Int, apiName: String, plugin: Plugin) {
         if (!MimicApiLevel.checkApiLevel(apiLevel)) {
             error(
@@ -102,7 +95,7 @@ internal class MimicImpl(
         val defaultService = services.values.firstOrNull()
         checkNotNull(defaultService) {
             """
-            ${T::class.simpleName} should always have default implementation.
+            ${T::class.getApiName()} should always have default implementation.
             Please file an issue on GitHub: https://github.com/EndlessCodeGroup/Mimic/issues
             """.trimIndent()
         }
@@ -112,7 +105,7 @@ internal class MimicImpl(
             preferred in services -> services.getValue(preferred)
 
             else -> {
-                Log.w("${T::class.simpleName} with id '$preferred' not found, will be used '${defaultService.id}' instead.")
+                Log.w("${T::class.getApiName()} with id '$preferred' not found, will be used '${defaultService.id}' instead.")
                 Log.w("Please specify any of known implementations: ${services.keys}.")
                 defaultService
             }
@@ -121,5 +114,12 @@ internal class MimicImpl(
 
     private inline fun <reified T : MimicService> loadAllServices(): Map<String, T> {
         return servicesManager.loadAll<T>().associateBy { it.id }
+    }
+
+    private fun KClass<out MimicService>.getApiName(): String = when (this) {
+        BukkitClassSystem.Provider::class -> "ClassSystem"
+        BukkitLevelSystem.Provider::class -> "LevelSystem"
+        BukkitItemsRegistry::class -> "ItemsRegistry"
+        else -> error("Unknown service: ${this.java.name}")
     }
 }
