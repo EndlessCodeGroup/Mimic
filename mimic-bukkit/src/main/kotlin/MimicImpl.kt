@@ -27,8 +27,8 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
     }
 
     override fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
-
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService()
+    override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = loadAllServices()
 
     override fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
@@ -40,6 +40,7 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
     }
 
     override fun getItemsRegistry(): BukkitItemsRegistry = loadService()
+    override fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry> = loadAllServices()
 
     override fun registerLevelSystem(
         provider: BukkitLevelSystem.Provider,
@@ -51,8 +52,8 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
     }
 
     override fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
-
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService()
+    override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = loadAllServices()
 
     private inline fun <reified Service : MimicService> tryRegisterService(
         apiLevel: Int,
@@ -102,5 +103,9 @@ internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
             Please file an issue on GitHub: https://github.com/EndlessCodeGroup/Mimic/issues
             """.trimIndent()
         }
+    }
+
+    private inline fun <reified T : MimicService> loadAllServices(): Map<String, T> {
+        return servicesManager.loadAll<T>().associateBy { it.id }
     }
 }

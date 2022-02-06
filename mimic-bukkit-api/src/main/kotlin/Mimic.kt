@@ -57,6 +57,9 @@ public interface Mimic {
     /** Returns top priority [BukkitClassSystem.Provider]. */
     public fun getClassSystemProvider(): BukkitClassSystem.Provider
 
+    /** Returns map containing all known [BukkitClassSystem.Provider]s, where key is a provider ID. */
+    public fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider>
+
     /**
      * Registers the given [registry] with normal priority.
      *
@@ -95,6 +98,9 @@ public interface Mimic {
 
     /** Returns [BukkitItemsRegistry] implementation. */
     public fun getItemsRegistry(): BukkitItemsRegistry
+
+    /** Returns map containing all known [BukkitItemsRegistry], where key is an item registry ID. */
+    public fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry>
 
     /**
      * Registers the given [provider] for [BukkitLevelSystem] with normal priority.
@@ -140,6 +146,9 @@ public interface Mimic {
 
     /** Returns top priority [BukkitLevelSystem.Provider]. */
     public fun getLevelSystemProvider(): BukkitLevelSystem.Provider
+
+    /** Returns map containing all known [BukkitLevelSystem.Provider]s, where key is a provider ID. */
+    public fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider>
 
     public companion object {
         /**
