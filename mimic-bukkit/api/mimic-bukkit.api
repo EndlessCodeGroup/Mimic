@@ -1,4 +1,4 @@
-public final class ru/endlesscode/mimic/Mimic : org/bukkit/plugin/java/JavaPlugin {
+public final class ru/endlesscode/mimic/MimicPlugin : org/bukkit/plugin/java/JavaPlugin {
 	public fun <init> ()V
 	public fun onEnable ()V
 	public fun onLoad ()V
@@ -36,6 +36,7 @@ public final class ru/endlesscode/mimic/impl/battlelevels/BattleLevelsLevelSyste
 
 public final class ru/endlesscode/mimic/impl/battlelevels/BattleLevelsLevelSystem$Provider : ru/endlesscode/mimic/level/BukkitLevelSystem$Provider {
 	public fun <init> ()V
+	public fun getId ()Ljava/lang/String;
 	public synthetic fun getSystem (Lorg/bukkit/entity/Player;)Ljava/lang/Object;
 	public fun getSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/BukkitLevelSystem;
 }
@@ -105,7 +106,6 @@ public final class ru/endlesscode/mimic/impl/mimic/MimicItemsRegistry : ru/endle
 	public synthetic fun getItemId (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
 	public fun getKnownIds ()Ljava/util/Collection;
-	public fun isEnabled ()Z
 	public fun isItemExists (Ljava/lang/String;)Z
 	public synthetic fun isSameItem (Ljava/lang/Object;Ljava/lang/String;)Z
 	public fun isSameItem (Lorg/bukkit/inventory/ItemStack;Ljava/lang/String;)Z
@@ -347,7 +347,6 @@ public final class ru/endlesscode/mimic/impl/vanilla/MinecraftItemsRegistry : ru
 	public fun getItemId (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
 	public synthetic fun getKnownIds ()Ljava/util/Collection;
 	public fun getKnownIds ()Ljava/util/List;
-	public fun isEnabled ()Z
 	public fun isItemExists (Ljava/lang/String;)Z
 }
 
