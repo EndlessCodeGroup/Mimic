@@ -47,7 +47,7 @@ publishing {
 
     repositories {
         if (isReleaseVersion) {
-            maven("https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+            maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
                 name = "ossrh"
                 credentials(PasswordCredentials::class)
             }
