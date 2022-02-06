@@ -12,7 +12,7 @@ There you'll find a guide on how to use MimicAPI and how to create your own impl
 ### For Server Owners
 
 If some plugin requires Mimic, just put it into `plugins/` folder.
-No configuration needed.
+You can configure in `config.yml` what APIs implementations should be used.
 
 #### Permissions
 

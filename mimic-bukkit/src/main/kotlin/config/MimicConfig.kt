@@ -30,9 +30,7 @@ internal class MimicConfig(
                 pluginName,
                 "",
                 "Here you can configure Mimic APIs.",
-                "Guide: https://github.com/EndlessCodeGroup/Mimic",
-                "",
-                "Use command '/mimic info' to list available implementations."
+                "Use command '/mimic info' to list available implementations.",
             ))
             addDefault(LEVEL_SYSTEM, "")
             addDefault(CLASS_SYSTEM, "")
@@ -52,10 +50,12 @@ internal class MimicConfig(
     }
 
     private fun readConfigValues() {
-        levelSystem = configuration.getString(LEVEL_SYSTEM).orEmpty()
-        classSystem = configuration.getString(CLASS_SYSTEM).orEmpty()
+        levelSystem = configuration.getString(LEVEL_SYSTEM).orEmpty().lowercase()
+        classSystem = configuration.getString(CLASS_SYSTEM).orEmpty().lowercase()
 
-        val disabledItemsRegistries = configuration.getStringList(DISABLED_ITEMS_REGISTRIES).toSet()
+        val disabledItemsRegistries = configuration.getStringList(DISABLED_ITEMS_REGISTRIES)
+            .map { it.lowercase() }
+            .toSet()
         this.disabledItemsRegistries = disabledItemsRegistries - DEFAULT_ITEMS_REGISTRIES
 
         val notDisabledRegistries = disabledItemsRegistries - this.disabledItemsRegistries
