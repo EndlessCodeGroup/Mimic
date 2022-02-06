@@ -4,6 +4,7 @@ import com.denizenscript.denizen.objects.PlayerTag
 import com.denizenscript.denizencore.objects.Mechanism
 import com.denizenscript.denizencore.objects.ObjectTag
 import com.denizenscript.denizencore.objects.core.ElementTag
+import com.denizenscript.denizencore.objects.core.ListTag
 import com.denizenscript.denizencore.objects.properties.Property
 import com.denizenscript.denizencore.objects.properties.PropertyParser
 import com.denizenscript.denizencore.tags.Attribute
@@ -93,13 +94,49 @@ public class DenizenScriptBridge {
                 }
 
                 // <--[tag]
-                // @attribute <PlayerTag.mimic.class_give_exp[class, int]>
+                // @attribute <PlayerTag.mimic.give_exp[int]>
                 // @returns ElementTag(String)
                 // @description
                 // Returns level after exp were given
                 // -->
                 if (attribute.startsWith("class_give_exp")) {
-                    return ElementTag(levelSystem().level).getAttribute(attribute.fulfill(1));
+                    val levelSystem = levelSystem();
+                    levelSystem.giveExp(attribute.doubleParam)
+                    return ElementTag(levelSystem.level).getAttribute(attribute.fulfill(1));
+                }
+
+                // <--[tag]
+                // @attribute <PlayerTag.mimic.give_level[int]>
+                // @returns ElementTag(String)
+                // @description
+                // Returns level after exp were given
+                // -->
+                if (attribute.startsWith("give_level")) {
+                    val levelSystem = levelSystem();
+                    levelSystem.giveLevels(attribute.intParam)
+                    return ElementTag(levelSystem.level).getAttribute(attribute.fulfill(1));
+                }
+
+                // <--[tag]
+                // @attribute <PlayerTag.mimic.total_exp>
+                // @returns ElementTag(String)
+                // @description
+                // Returns players total exp
+                // -->
+                if (attribute.startsWith("total_exp")) {
+                    val levelSystem = levelSystem();
+                    return ElementTag(levelSystem.totalExp).getAttribute(attribute.fulfill(1));
+                }
+
+                // <--[tag]
+                // @attribute <PlayerTag.mimic.classes>
+                // @returns List(String)
+                // @description
+                // Returns list of player classes
+                // -->
+                if (attribute.startsWith("classes")) {
+                    val classSystem = classSystem()!!;
+                    return ListTag(classSystem.classes).getAttribute(attribute.fulfill(1));
                 }
             }
 
