@@ -32,6 +32,7 @@ import ru.endlesscode.mimic.command.ClassSystemSubcommand
 import ru.endlesscode.mimic.command.ItemsSubcommand
 import ru.endlesscode.mimic.command.LevelSystemSubcommand
 import ru.endlesscode.mimic.command.MainCommand
+import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
@@ -58,7 +59,8 @@ public class MimicPlugin : JavaPlugin() {
 
     private val isReleased = !description.version.endsWith("-SNAPSHOT")
 
-    private val mimic: Mimic by lazy { MimicImpl(servicesManager) }
+    private val config: MimicConfig by lazy { MimicConfig(this) }
+    private val mimic: Mimic by lazy { MimicImpl(servicesManager, config) }
 
     private inline val servicesManager get() = server.servicesManager
     private inline val pluginManager get() = server.pluginManager

@@ -8,6 +8,7 @@ import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
+import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
@@ -15,7 +16,10 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.WrappedLevelSystemProvider
 import kotlin.reflect.KClass
 
-internal class MimicImpl(private val servicesManager: ServicesManager) : Mimic {
+internal class MimicImpl(
+    private val servicesManager: ServicesManager,
+    private val config: MimicConfig,
+) : Mimic {
 
     override fun registerClassSystem(
         provider: BukkitClassSystem.Provider,
