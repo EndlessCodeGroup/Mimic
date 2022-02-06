@@ -23,10 +23,15 @@ It also allows users to select preferred APIs implementation via config.
 - Added default implementations for `MimicService` methods:
   - `isEnabled()` returns `true` by default
   - `getId()` returns lowercase plugin name by default
-- **Breaking change!** ID should contain only lowercase Latin letters and digits (a-z, 0-9)
+- **Breaking change!** ID should contain only lowercase Latin letters and digits (a-z, 0-9).
 - **Breaking change!** `BukkitClassSystem.Provider` and `BukkitLevelSystem.Provider` converted to interface instead of abstract classes.
   If you want to use ID different from plugin name, you should override `getId()` method.
 - `BukkitClassSystem.Provider` and `BukkitLevelSystem.Provider` are functional interfaces since now.
+
+### Plugin changes
+
+- Added config file allowing to specify preferred APIs implementations.
+- Fixed errors in case when commands used from console.
 
 ## [v0.6.3] (2022-01-07)
 
