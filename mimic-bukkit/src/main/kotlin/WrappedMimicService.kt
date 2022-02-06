@@ -10,8 +10,8 @@ internal abstract class WrappedMimicService(
 
     final override val id: String = serviceId(delegate.id, pluginName)
 
-    final override val isEnabled: Boolean
-        get() = pluginManager.isPluginEnabled(pluginName) || delegate.isEnabled
+    override val isEnabled: Boolean
+        get() = pluginManager.isPluginEnabled(pluginName) && delegate.isEnabled
 
     private companion object {
         val ID_REGEX by lazy { Regex("[a-z0-9_]+") }

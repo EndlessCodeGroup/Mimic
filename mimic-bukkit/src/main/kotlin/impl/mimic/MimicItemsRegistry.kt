@@ -42,7 +42,7 @@ public class MimicItemsRegistry(private val servicesManager: ServicesManager) : 
 
     internal val providers: List<ItemsRegistryProvider>
         get() = servicesManager.getRegistrations<BukkitItemsRegistry>()
-            .filterNot { it.registry.id == id }
+            .filter { it.registry.id != id && it.registry.isEnabled }
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
         val (namespace, id) = itemId.splitBySeparator()
