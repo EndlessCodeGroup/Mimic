@@ -26,7 +26,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 
@@ -35,7 +34,7 @@ internal object EnchantmentSerializer : KSerializer<Enchantment> {
 
     override fun deserialize(decoder: Decoder): Enchantment {
         val value = decoder.decodeString()
-        val key = NamespacedKey.fromString(value.replace(" ", "_").lowercase())
+        val key = namespacedKeyOf(value.replace(" ", "_").lowercase())
             ?: throw SerializationException("$value is not a valid key for enchantment, " +
                     "only latin letters, digits and symbol _ are allowed")
         return Enchantment.getByKey(key)

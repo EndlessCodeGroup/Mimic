@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.callCompat
 import ru.endlesscode.mimic.internal.colorized
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
@@ -73,13 +74,21 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
         // Apply damage and custom model data
         isUnbreakable = payload.isUnbreakable
         (this as? Damageable)?.damage = payload.damage
-        setCustomModelData(payload.customModelData)
+        if (payload.customModelData != null) trySetCustomModelData(payload.customModelData)
 
         // Apply enchants and item flags
         payload.enchantments.forEach { (enchant, level) -> addEnchant(enchant, level, true) }
         addItemFlags(*payload.flags.toTypedArray())
 
         return this
+    }
+
+    private fun ItemMeta.trySetCustomModelData(data: Int) {
+        callCompat(
+            "ItemMeta.setCustomModelData",
+            block = { setCustomModelData(data) },
+            compat = { Log.w("Payload field 'custom-model-data' supported only since Minecraft 1.14") },
+        )
     }
 
     public companion object {

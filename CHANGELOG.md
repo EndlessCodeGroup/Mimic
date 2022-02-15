@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Fixed
+
+- Compatibility with Minecraft 1.13 - 1.16.5
+
 ## [v0.7] (2022-02-06)
 
 ### New implementations registration API

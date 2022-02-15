@@ -1,6 +1,15 @@
 package ru.endlesscode.mimic.internal
 
 import org.bukkit.configuration.Configuration
+import org.bukkit.configuration.file.FileConfigurationOptions
+
+internal fun FileConfigurationOptions.setHeader(vararg lines: String) {
+    callCompat(
+        "FileConfigurationOptions.setHeader",
+        block =  { setHeader(lines.toList()) },
+        compat = { header(lines.joinToString("\n")) },
+    )
+}
 
 internal fun Configuration.applyDefaults() {
     val defaults = defaults ?: return
@@ -8,5 +17,9 @@ internal fun Configuration.applyDefaults() {
 }
 
 internal fun Configuration.setComments(path: String, vararg comments: String) {
-    setComments(path, comments.toList())
+    callCompat(
+        "Configuration.setComments",
+        block = { setComments(path, comments.toList()) },
+        compat = { /* no-op */ },
+    )
 }

@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.applyDefaults
 import ru.endlesscode.mimic.internal.setComments
+import ru.endlesscode.mimic.internal.setHeader
 import java.io.File
 
 internal class MimicConfig(
@@ -26,12 +27,12 @@ internal class MimicConfig(
 
     init {
         with(configuration) {
-            options().setHeader(listOf(
+            options().setHeader(
                 pluginName,
                 "",
                 "Here you can configure Mimic APIs.",
                 "Use command '/mimic info' to list available implementations.",
-            ))
+            )
             addDefault(LEVEL_SYSTEM, "")
             addDefault(CLASS_SYSTEM, "")
             addDefault(DISABLED_ITEMS_REGISTRIES, emptyList<String>())
