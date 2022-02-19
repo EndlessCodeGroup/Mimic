@@ -42,6 +42,10 @@ internal class MimicConfig(
 
     fun reload() {
         try {
+            if (!file.exists()) {
+                file.parentFile.mkdirs()
+                file.createNewFile()
+            }
             configuration.load(file)
             readConfigValues()
         } catch (e: Exception) {

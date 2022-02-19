@@ -3,6 +3,7 @@
 ### Fixed
 
 - Compatibility with Minecraft 1.13 - 1.16.5
+- FileNotFoundException on config initialization
 
 ## [v0.7] (2022-02-06)
 
