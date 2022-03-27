@@ -6,6 +6,7 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 
@@ -59,6 +60,60 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitClassSystem.Provider]s, where key is a provider ID. */
     public fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider>
+
+    /**
+     * Registers the given [provider] for [BukkitPlayerInventory] with normal priority.
+     *
+     * @param provider The provider used to get player inventory.
+     * @param apiLevel Minimal required API level for this level system implementation:
+     *                 - if required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     * @param plugin The plugin implementing this player inventory.
+     * @return registered level system or `null` if it was not registered.
+     */
+    @ExperimentalMimicApi
+    public fun registerPlayerInventoryProvider(
+        provider: BukkitPlayerInventory.Provider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): BukkitPlayerInventory.Provider? = registerPlayerInventoryProvider(provider, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [provider] for [BukkitPlayerInventory].
+     *
+     * @param provider The provider used to get player inventory.
+     * @param apiLevel Minimal required API level for this level system implementation:
+     *                 - if required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     * @param plugin The plugin implementing this player inventory.
+     * @param priority Default priority.
+     * @return registered level system or `null` if it was not registered.
+     */
+    @ExperimentalMimicApi
+    public fun registerPlayerInventoryProvider(
+        provider: BukkitPlayerInventory.Provider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): BukkitPlayerInventory.Provider?
+
+    /**
+     * Returns top priority [BukkitPlayerInventory] for the given [player].
+     * It is a shorthand for `getPlayerInventoryProvider().getSystem(player)`.
+     */
+    @ExperimentalMimicApi
+    public fun getPlayerInventory(player: Player): BukkitPlayerInventory =
+        getPlayerInventoryProvider().getSystem(player)
+
+    /** Returns top priority [BukkitPlayerInventory.Provider]. */
+    @ExperimentalMimicApi
+    public fun getPlayerInventoryProvider(): BukkitPlayerInventory.Provider
+
+    /** Returns map containing all known [BukkitPlayerInventory.Provider]s, where key is a provider ID. */
+    @ExperimentalMimicApi
+    public fun getAllPlayerInventoryProviders(): Map<String, BukkitPlayerInventory.Provider>
 
     /**
      * Registers the given [registry] with normal priority.

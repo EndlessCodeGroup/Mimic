@@ -10,11 +10,13 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.WrappedLevelSystemProvider
 import kotlin.reflect.KClass
+import ru.endlesscode.mimic.inventory.BukkitPlayerInventory.Provider as PlayerInventoryProvider
 
 internal class MimicImpl(
     private val servicesManager: ServicesManager,
@@ -33,6 +35,22 @@ internal class MimicImpl(
     override fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService(config.classSystem)
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = loadAllServices()
+
+    @ExperimentalMimicApi
+    override fun registerPlayerInventoryProvider(
+        provider: PlayerInventoryProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): PlayerInventoryProvider? = tryRegisterService<PlayerInventoryProvider>(apiLevel, plugin, priority) {
+        WrappedPlayerInventoryProvider(provider, plugin)
+    }
+
+    @ExperimentalMimicApi
+    override fun getPlayerInventoryProvider(): PlayerInventoryProvider = loadService()
+
+    @ExperimentalMimicApi
+    override fun getAllPlayerInventoryProviders(): Map<String, PlayerInventoryProvider> = loadAllServices()
 
     override fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
