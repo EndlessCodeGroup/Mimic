@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+### Fixed
+
+- Catch not only Exceptions from `ItemsRegistry` implementations but also Errors.
+  `ItemsRegistry` will not crash other plugins.
+
 ## [v0.7.1] (2022-02-19)
 
 ### Fixed

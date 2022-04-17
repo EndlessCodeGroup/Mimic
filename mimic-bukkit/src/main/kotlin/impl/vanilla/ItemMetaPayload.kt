@@ -96,7 +96,7 @@ public data class ItemMetaPayload(
         public fun parse(input: String): ItemMetaPayload? {
             return try {
                 DI.hocon.decodeFromConfig(ConfigFactory.parseString(input))
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 Log.w(e)
                 null
             }

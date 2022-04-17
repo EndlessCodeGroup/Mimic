@@ -21,12 +21,12 @@
 
 package ru.endlesscode.mimic.util
 
-/** Checks that classes are exist. */
+/** Checks that the given [classes] are existing. */
 public fun checkClassesLoaded(vararg classes: String): Boolean {
     return try {
         classes.forEach { Class.forName(it) }
         true
-    } catch (e: ClassNotFoundException) {
+    } catch (_: ClassNotFoundException) {
         false
     }
 }

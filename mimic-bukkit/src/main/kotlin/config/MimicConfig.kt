@@ -48,7 +48,7 @@ internal class MimicConfig(
             }
             configuration.load(file)
             readConfigValues()
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.w(e, "Failed to load config.")
         }
         save()
@@ -74,7 +74,7 @@ internal class MimicConfig(
             configuration.applyDefaults()
             configuration.addComments()
             configuration.save(file)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.w(e, "Failed to save config.")
         }
     }
