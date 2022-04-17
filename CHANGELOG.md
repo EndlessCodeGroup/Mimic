@@ -24,6 +24,11 @@ List<ItemStack> allItems = inventory.getItems();
 > It also means I'm open for ideas how to improve this API to make it more useful.
 > Please, [write me in Discord](https://discord.gg/HUtb4v8NFy) or [file an issue](https://github.com/EndlessCodeGroup/Mimic/issues) if you have any ideas.
 
+### API changes
+
+- Make implementations ID validation less strict.
+  Since now, it may contain more special symbols: `._-`
+
 ### Plugin changes
 
 - Added command `/mimic inventory info` to get info about current player inventory provider
