@@ -1,5 +1,29 @@
 ## [Unreleased]
 
+### PlayerInventory API
+
+This version introduces new *experimental* PlayerInventory API.
+For now, it can be used only to get player's inventory content and equipped items.
+It can be useful for integration with plugins providing custom player inventory.
+
+```java
+// Get player's inventory
+Mimic mimic = Mimic.getInstance();
+BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
+
+// Get items equipped on the player
+List<ItemStack> equippedItems = inventory.getEquippedItems();
+// Get not equipped items stored in the inventory
+List<ItemStack> storedItems = inventory.getStoredItems();
+// Get both equpped and not equipped items
+List<ItemStack> allItems = inventory.getItems();
+```
+
+> This API is **experimental**, so it can be changed further.
+> I'll do my best to save backward compatibility but in some cases it is not possible.
+> It also means I'm open for ideas how to improve this API to make it more useful.
+> Please, [write me in Discord](https://discord.gg/HUtb4v8NFy) or [file an issue](https://github.com/EndlessCodeGroup/Mimic/issues) if you have any ideas.
+
 ### Fixed
 
 - Catch not only Exceptions from `ItemsRegistry` implementations but also Errors.
