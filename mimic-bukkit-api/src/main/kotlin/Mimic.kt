@@ -39,7 +39,8 @@ public interface Mimic {
      *                 - if required API level is lower - will be enabled compatibility mode.
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this class system.
-     * @param priority Default priority. User may override it though config.
+     * @param priority Default priority. Service with higher priority will be used if user have not configured
+     *                 preferred service in config.
      * @return registered class system or `null` if it was not registered.
      */
     public fun registerClassSystem(
@@ -88,7 +89,8 @@ public interface Mimic {
      *                 - if required API level is lower - will be enabled compatibility mode.
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this player inventory.
-     * @param priority Default priority.
+     * @param priority Default priority. Service with higher priority will be used if user have not configured
+     *                 preferred service in config.
      * @return registered level system or `null` if it was not registered.
      */
     @ExperimentalMimicApi
@@ -141,7 +143,8 @@ public interface Mimic {
      *                 - if required API level is lower - will be enabled compatibility mode.
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this item registry.
-     * @param priority Default priority. User may override it though config.
+     * @param priority Default priority. Service with higher priority will be used if user have not configured
+     *                 preferred service in config.
      * @return registered registry or `null` if it was not registered.
      */
     public fun registerItemsRegistry(
@@ -183,7 +186,8 @@ public interface Mimic {
      *                 - if required API level is lower - will be enabled compatibility mode.
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this level system.
-     * @param priority Default priority. User may override it though config.
+     * @param priority Default priority. Service with higher priority will be used if user have not configured
+     *                 preferred service in config.
      * @return registered level system or `null` if it was not registered.
      */
     public fun registerLevelSystem(
