@@ -28,10 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.command.ClassSystemSubcommand
-import ru.endlesscode.mimic.command.ItemsSubcommand
-import ru.endlesscode.mimic.command.LevelSystemSubcommand
-import ru.endlesscode.mimic.command.MainCommand
+import ru.endlesscode.mimic.command.*
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
@@ -193,6 +190,7 @@ public class MimicPlugin : JavaPlugin() {
         manager.registerCommand(MainCommand(this, mimic))
         manager.registerCommand(LevelSystemSubcommand(mimic))
         manager.registerCommand(ClassSystemSubcommand(mimic))
+        manager.registerCommand(InventorySubcommand(mimic))
         manager.registerCommand(ItemsSubcommand(mimic.getItemsRegistry()))
     }
 }
