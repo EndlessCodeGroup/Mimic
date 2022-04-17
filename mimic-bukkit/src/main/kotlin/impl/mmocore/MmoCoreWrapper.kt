@@ -11,5 +11,5 @@ internal class MmoCoreWrapper {
 
     fun getData(player: OfflinePlayer): PlayerData = PlayerData.get(player)
     fun getPlayerClass(player: OfflinePlayer): PlayerClass = PlayerData.get(player).profess
-    fun getExpCurve(player: OfflinePlayer): ExpCurve = PlayerData.get(player).profess.expCurve
+    fun getExpCurve(player: OfflinePlayer): ExpCurve = PlayerData.get(player).profess.expCurve ?: ExpCurve.DEFAULT
 }
