@@ -10,6 +10,7 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
@@ -134,9 +135,11 @@ internal class MimicImpl(
         return servicesManager.loadAll<T>().associateBy { it.id }
     }
 
+    @OptIn(ExperimentalMimicApi::class)
     private fun KClass<out MimicService>.getApiName(): String = when (this) {
         BukkitClassSystem.Provider::class -> "ClassSystem"
         BukkitLevelSystem.Provider::class -> "LevelSystem"
+        BukkitPlayerInventory.Provider::class -> "PlayerInventory"
         BukkitItemsRegistry::class -> "ItemsRegistry"
         else -> error("Unknown service: ${this.java.name}")
     }

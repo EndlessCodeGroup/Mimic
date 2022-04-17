@@ -49,7 +49,9 @@ import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
+import ru.endlesscode.mimic.impl.vanilla.MinecraftPlayerInventory
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.util.checkClassesLoaded
@@ -77,11 +79,13 @@ public class MimicPlugin : JavaPlugin() {
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 
+    @OptIn(ExperimentalMimicApi::class)
     private fun hookDefaultServices() {
         // Default systems
         Log.i(">>> Default systems")
         hookLevels(MinecraftLevelSystem::Provider, priority = Lowest)
         hookClasses(PermissionsClassSystem::Provider, priority = Lowest)
+        hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
         hookItems({ MimicItemsRegistry(servicesManager) }, priority = Highest)
 
@@ -140,6 +144,15 @@ public class MimicPlugin : JavaPlugin() {
         priority: ServicePriority = Normal,
     ) {
         mimic.registerClassSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+    }
+
+    @Suppress("SameParameterValue")
+    @OptIn(ExperimentalMimicApi::class)
+    private fun hookInventory(
+        constructor: () -> BukkitPlayerInventory.Provider,
+        priority: ServicePriority = Normal,
+    ) {
+        mimic.registerPlayerInventoryProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
     private fun hookItems(
