@@ -25,7 +25,7 @@ import ru.endlesscode.mimic.internal.Log
 internal fun ItemsRegistryProvider.tryGetKnownIds(): Collection<String> {
     return try {
         registry.knownIds
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         logImplementationError(this, e)
         emptyList()
     }
@@ -34,7 +34,7 @@ internal fun ItemsRegistryProvider.tryGetKnownIds(): Collection<String> {
 internal fun ItemsRegistryProvider.tryIsSameItem(itemStack: ItemStack, itemId: String): Boolean {
     return try {
         registry.isSameItem(itemStack, itemId)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         logImplementationError(this, e)
         false
     }
@@ -43,7 +43,7 @@ internal fun ItemsRegistryProvider.tryIsSameItem(itemStack: ItemStack, itemId: S
 internal fun ItemsRegistryProvider.tryIsItemExists(itemId: String): Boolean {
     return try {
         registry.isItemExists(itemId)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         logImplementationError(this, e)
         false
     }
@@ -52,7 +52,7 @@ internal fun ItemsRegistryProvider.tryIsItemExists(itemId: String): Boolean {
 internal fun ItemsRegistryProvider.tryGetItemId(itemStack: ItemStack): String? {
     return try {
         registry.getItemId(itemStack)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         logImplementationError(this, e)
         null
     }
@@ -61,7 +61,7 @@ internal fun ItemsRegistryProvider.tryGetItemId(itemStack: ItemStack): String? {
 internal fun ItemsRegistryProvider.tryGetItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
     return try {
         registry.getItem(itemId, payload, amount)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         logImplementationError(this, e)
         null
     }
@@ -71,5 +71,5 @@ private fun logImplementationError(provider: ItemsRegistryProvider, throwable: T
     Log.w(throwable,
         "Error in ItemsRegistry '${provider.registry.id}' " +
                 "implemented via ${provider.plugin}. " +
-                "Please, report it to ${provider.plugin.description.authors}.")
+                "Please, report it to ${provider.plugin.description.authors.joinToString()}.")
 }
