@@ -88,12 +88,14 @@ internal class MimicConfig(
         )
         setComments(
             path = CLASS_SYSTEM,
+            null,
             "[ClassSystem API]",
             "Specify here the preferred class system implementation.",
             "If the value is empty, will be used implementation with the highest priority.",
         )
         setComments(
             path = DISABLED_ITEMS_REGISTRIES,
+            null,
             "[ItemsRegistry API]",
             "List here disabled items registry implementations.",
             "You can't disable 'mimic' and 'minecraft' items registries.",

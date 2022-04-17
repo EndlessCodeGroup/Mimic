@@ -3,10 +3,11 @@ package ru.endlesscode.mimic.internal
 import org.bukkit.configuration.Configuration
 import org.bukkit.configuration.file.FileConfigurationOptions
 
-internal fun FileConfigurationOptions.setHeader(vararg lines: String) {
+@Suppress("DEPRECATION")
+internal fun FileConfigurationOptions.setHeader(vararg lines: String?) {
     callCompat(
         "FileConfigurationOptions.setHeader",
-        block =  { setHeader(lines.toList()) },
+        block =  { setHeader(lines.asList()) },
         compat = { header(lines.joinToString("\n")) },
     )
 }
@@ -16,10 +17,10 @@ internal fun Configuration.applyDefaults() {
     for (key in defaults.getKeys(true)) set(key, get(key))
 }
 
-internal fun Configuration.setComments(path: String, vararg comments: String) {
+internal fun Configuration.setComments(path: String, vararg comments: String?) {
     callCompat(
         "Configuration.setComments",
-        block = { setComments(path, comments.toList()) },
+        block = { setComments(path, comments.asList()) },
         compat = { /* no-op */ },
     )
 }
