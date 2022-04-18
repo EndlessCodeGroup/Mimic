@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [v0.8.0] (2022-04-18)
+
 ### PlayerInventory API
 
 This version introduces new *experimental* PlayerInventory API.
@@ -41,6 +43,8 @@ List<ItemStack> allItems = inventory.getItems();
 
 ### Housekeeping
 
+- Versioning strategy changed.
+  Now version always includes `PATCH` version according to SemVer. 
 - Update Kotlin to 1.6.20
 - Update bStats to 3.0.0
 - Update ACF to 0.5.1-SNAPSHOT
@@ -156,7 +160,8 @@ It also allows users to select preferred APIs implementation via config.
 - Update bukkit-gradle to 0.10.0
 - Update Gradle to 7.2
 
-[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.7.1...develop
+[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.8.0...develop
+[v0.8.0]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.7.1...v0.8.0
 [v0.7.1]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.7...v0.7.1
 [v0.7]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.3...v0.7
 [v0.6.3]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.6.2...v0.6.3
