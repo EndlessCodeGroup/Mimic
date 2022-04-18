@@ -22,8 +22,12 @@ Inspired by [Vault], I wrote MimicAPI to avoid this problem.
 With Mimic, you don't need to download all RPG plugins and write specific code for each plugin to support them, just use Mimic as a dependency.
 
 ### Available APIs
-- [LevelSystem] - API to work with player's level and experience points. Makes it possible to use in plugins levels and exp from another plugin
-- [ClassSystem] - API to work with player's classes. Enables plugins to check player class.
+
+- [LevelSystem] - API to work with player's level and experience points.
+  Makes it possible to use in plugins levels and exp from another plugin.
+- [ClassSystem] - API to work with player's classes.
+  Enables plugins to check player class.
+- [PlayerInventory] *(experimental)* - API to access player's inventories content.
 - [ItemsRegistry] - API adding the possibility to create and validate custom items created with plugins.
 
 ### Implementations
@@ -82,4 +86,5 @@ Please make sure to update tests as appropriate.
 
 [LevelSystem]: mimic-api/src/main/kotlin/level/LevelSystem.kt
 [ClassSystem]: mimic-api/src/main/kotlin/classes/ClassSystem.kt
+[PlayerInventory]: mimic-api/src/main/kotlin/inventory/PlayerInventory.kt
 [ItemsRegistry]: mimic-api/src/main/kotlin/items/ItemsRegistry.kt

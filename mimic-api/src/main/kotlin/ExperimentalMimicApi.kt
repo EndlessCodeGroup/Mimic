@@ -1,7 +1,7 @@
 /*
  * This file is part of Mimic.
- * Copyright (C) 2020 Osip Fatkullin
- * Copyright (C) 2020 EndlessCode Group and contributors
+ * Copyright (C) 2021 Osip Fatkullin
+ * Copyright (C) 2021 EndlessCode Group and contributors
  *
  * Mimic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,16 +17,15 @@
  * along with Mimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:JvmName("Requirements")
+package ru.endlesscode.mimic
 
-package ru.endlesscode.mimic.util
+import kotlin.annotation.AnnotationTarget.*
 
-/** Checks that the given [classes] are existing. */
-public fun checkClassesLoaded(vararg classes: String): Boolean {
-    return try {
-        classes.forEach { Class.forName(it) }
-        true
-    } catch (_: ClassNotFoundException) {
-        false
-    }
-}
+/**
+ * This annotation marks that the API is considered experimental.
+ * Such API may (or may not) be changed, or it may be removed in any further release.
+ */
+@Target(CLASS, FUNCTION, PROPERTY)
+@MustBeDocumented
+@RequiresOptIn(level = RequiresOptIn.Level.WARNING)
+public annotation class ExperimentalMimicApi

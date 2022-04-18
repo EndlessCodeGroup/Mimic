@@ -5,6 +5,7 @@ import co.aikar.commands.MimicCommand
 import co.aikar.commands.annotation.*
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.Plugin
+import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.MimicService
 
@@ -21,17 +22,20 @@ internal class MainCommand(
         help.showHelp()
     }
 
+    @OptIn(ExperimentalMimicApi::class)
     @Subcommand("info")
     @Description("Show info about Mimic and loaded services")
     fun info(sender: CommandSender) {
         val levelSystems = mimic.getAllLevelSystemProviders()
         val classSystems = mimic.getAllClassSystemProviders()
+        val playerInventories = mimic.getAllPlayerInventoryProviders()
         val itemsRegistries = mimic.getAllItemsRegistries()
 
         sender.send(
             "&2${plugin.description.fullName}",
             "&3Level Systems: &7${levelSystems.toMessage()}",
             "&3Class Systems: &7${classSystems.toMessage()}",
+            "&3Inventory Providers: &7${playerInventories.toMessage()}",
             "&3Items Registries: &7${itemsRegistries.toMessage()}",
         )
     }

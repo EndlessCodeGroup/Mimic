@@ -25,8 +25,8 @@ internal class ServicesRegistrationListener(
             val plugin = event.provider.plugin
             Log.w(
                 """
-                Service ${serviceClass.name} '${service.id}' registered in deprecated way.
-                Please ask the ${plugin.name} authors ${plugin.description.authors} to migrate
+                Service ${serviceClass.name} with id '${service.id}' registered in deprecated way.
+                Please ask the ${plugin.name} authors (${plugin.description.authors.joinToString()}) to migrate
                 to the new service registration API introduced in Mimic v0.7:
                    https://github.com/EndlessCodeGroup/Mimic/releases/tag/v0.7
                 """.trimIndent()

@@ -12,7 +12,7 @@ plugins {
 description = "Bukkit plugin with implementations of Mimic APIs"
 
 bukkit {
-    apiVersion = "1.18.1"
+    apiVersion = "1.18.2"
 
     meta {
         name.set("Mimic")

@@ -20,17 +20,18 @@ You can configure in `config.yml` what APIs implementations should be used.
 
 #### Commands
 
- Command                | Description                          
-------------------------|--------------------------------------
- `/mimic help <search>` | Print help                           
- `/mimic info`          | Show mimic status                    
- `/mimic experience`    | Manage player's level and experience 
- `/mimic class`         | Check player's classes               
- `/mimic items`         | Deal with items                      
+| Command                | Description                          |
+|------------------------|--------------------------------------|
+| `/mimic help <search>` | Print help                           |
+| `/mimic info`          | Show mimic status                    |
+| `/mimic experience`    | Manage player's level and experience |
+| `/mimic class`         | Check player's classes               |
+| `/mimic inventory`     | Player's inventory info              |
+| `/mimic items`         | Deal with items                      |
 
 ## Supported Implementations 
 
-You can find code of all implementations [here](src/main/kotlin/impl).
+You can find code of all built-in implementations [here](src/main/kotlin/impl).
 
 ### [Level Systems][BukkitLevelSystem.Provider]
 
@@ -52,6 +53,11 @@ You can find code of all implementations [here](src/main/kotlin/impl).
 - **[Heroes]**
 - **[QuantumRPG]**
 - **[ProRPGItems]**
+
+### [Player Inventory Providers][BukkitPlayerInventory.Provider]
+
+- **[Minecraft][minecraft-inv]** _(Default)_
+- **[RPGInventory]**
 
 ### [Items Registries][BukkitItemsRegistry]
 
@@ -98,7 +104,8 @@ For example: `acacia_boat -> minecraft:acacia_boat`.
 **ID Format:** `ia:[id]`\
 **Payload:** *Not supported*
 
-[minecraft-exp]: https://minecraft.gamepedia.com/Experience
+[minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
+[minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
 [skillapi]: https://www.spigotmc.org/resources/4824/
 [proskillapi]: https://www.spigotmc.org/resources/91913/
 [battlelevels]: https://www.spigotmc.org/resources/2218/
@@ -115,6 +122,7 @@ For example: `acacia_boat -> minecraft:acacia_boat`.
 
 [BukkitLevelSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/level/BukkitLevelSystem.kt
 [BukkitClassSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/classes/BukkitClassSystem.kt
+[BukkitPlayerInventory.Provider]: ../mimic-bukkit-api/src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: ../mimic-bukkit-api/src/main/kotlin/items/BukkitItemsRegistry.kt
 [MimicItemsRegistry]: src/main/kotlin/impl/mimic/MimicItemsRegistry.kt
 [MinecraftItemsRegistry]: src/main/kotlin/impl/vanilla/MinecraftItemsRegistry.kt

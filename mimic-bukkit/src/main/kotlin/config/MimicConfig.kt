@@ -20,6 +20,8 @@ internal class MimicConfig(
         private set
     var classSystem: String = ""
         private set
+    var inventoryProvider: String = ""
+        private set
     var disabledItemsRegistries: Set<String> = emptySet()
         private set
 
@@ -35,6 +37,7 @@ internal class MimicConfig(
             )
             addDefault(LEVEL_SYSTEM, "")
             addDefault(CLASS_SYSTEM, "")
+            addDefault(INVENTORY_PROVIDER, "")
             addDefault(DISABLED_ITEMS_REGISTRIES, emptyList<String>())
         }
         reload()
@@ -48,7 +51,7 @@ internal class MimicConfig(
             }
             configuration.load(file)
             readConfigValues()
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.w(e, "Failed to load config.")
         }
         save()
@@ -57,6 +60,7 @@ internal class MimicConfig(
     private fun readConfigValues() {
         levelSystem = configuration.getString(LEVEL_SYSTEM).orEmpty().lowercase()
         classSystem = configuration.getString(CLASS_SYSTEM).orEmpty().lowercase()
+        inventoryProvider = configuration.getString(INVENTORY_PROVIDER).orEmpty().lowercase()
 
         val disabledItemsRegistries = configuration.getStringList(DISABLED_ITEMS_REGISTRIES)
             .map { it.lowercase() }
@@ -74,7 +78,7 @@ internal class MimicConfig(
             configuration.applyDefaults()
             configuration.addComments()
             configuration.save(file)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.w(e, "Failed to save config.")
         }
     }
@@ -84,16 +88,25 @@ internal class MimicConfig(
             path = LEVEL_SYSTEM,
             "[LevelSystem API]",
             "Specify here the preferred level system implementation.",
-            "If the value is empty, will be used implementation with the highest priority.",
+            EMPTY_VALUE_MESSAGE,
         )
         setComments(
             path = CLASS_SYSTEM,
+            null,
             "[ClassSystem API]",
             "Specify here the preferred class system implementation.",
-            "If the value is empty, will be used implementation with the highest priority.",
+            EMPTY_VALUE_MESSAGE,
+        )
+        setComments(
+            path = INVENTORY_PROVIDER,
+            null,
+            "[PlayerInventory API]",
+            "Specify here the preferred player inventory provider implementation.",
+            EMPTY_VALUE_MESSAGE,
         )
         setComments(
             path = DISABLED_ITEMS_REGISTRIES,
+            null,
             "[ItemsRegistry API]",
             "List here disabled items registry implementations.",
             "You can't disable 'mimic' and 'minecraft' items registries.",
@@ -104,7 +117,10 @@ internal class MimicConfig(
     private companion object {
         const val LEVEL_SYSTEM = "level-system"
         const val CLASS_SYSTEM = "class-system"
+        const val INVENTORY_PROVIDER = "inventory-provider"
         const val DISABLED_ITEMS_REGISTRIES = "disabled-items-registries"
+
+        const val EMPTY_VALUE_MESSAGE = "If the value is empty, will be used implementation with the highest priority."
 
         val DEFAULT_ITEMS_REGISTRIES = setOf("mimic", "minecraft")
     }

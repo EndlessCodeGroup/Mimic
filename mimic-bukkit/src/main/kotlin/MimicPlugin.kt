@@ -28,10 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.command.ClassSystemSubcommand
-import ru.endlesscode.mimic.command.ItemsSubcommand
-import ru.endlesscode.mimic.command.LevelSystemSubcommand
-import ru.endlesscode.mimic.command.MainCommand
+import ru.endlesscode.mimic.command.*
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
@@ -49,7 +46,9 @@ import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
+import ru.endlesscode.mimic.impl.vanilla.MinecraftPlayerInventory
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.util.checkClassesLoaded
@@ -82,6 +81,7 @@ public class MimicPlugin : JavaPlugin() {
         Log.i(">>> Default systems")
         hookLevels(MinecraftLevelSystem::Provider, priority = Lowest)
         hookClasses(PermissionsClassSystem::Provider, priority = Lowest)
+        hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
         hookItems({ MimicItemsRegistry(servicesManager) }, priority = Highest)
 
@@ -142,6 +142,15 @@ public class MimicPlugin : JavaPlugin() {
         mimic.registerClassSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
+    @Suppress("SameParameterValue")
+    @OptIn(ExperimentalMimicApi::class)
+    private fun hookInventory(
+        constructor: () -> BukkitPlayerInventory.Provider,
+        priority: ServicePriority = Normal,
+    ) {
+        mimic.registerPlayerInventoryProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+    }
+
     private fun hookItems(
         constructor: () -> BukkitItemsRegistry,
         priority: ServicePriority = Normal,
@@ -180,6 +189,7 @@ public class MimicPlugin : JavaPlugin() {
         manager.registerCommand(MainCommand(this, mimic))
         manager.registerCommand(LevelSystemSubcommand(mimic))
         manager.registerCommand(ClassSystemSubcommand(mimic))
+        manager.registerCommand(InventorySubcommand(mimic))
         manager.registerCommand(ItemsSubcommand(mimic.getItemsRegistry()))
     }
 }

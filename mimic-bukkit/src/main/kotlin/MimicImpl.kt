@@ -10,11 +10,14 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
+import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.WrappedLevelSystemProvider
 import kotlin.reflect.KClass
+import ru.endlesscode.mimic.inventory.BukkitPlayerInventory.Provider as PlayerInventoryProvider
 
 internal class MimicImpl(
     private val servicesManager: ServicesManager,
@@ -33,6 +36,22 @@ internal class MimicImpl(
     override fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService(config.classSystem)
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = loadAllServices()
+
+    @ExperimentalMimicApi
+    override fun registerPlayerInventoryProvider(
+        provider: PlayerInventoryProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): PlayerInventoryProvider? = tryRegisterService<PlayerInventoryProvider>(apiLevel, plugin, priority) {
+        WrappedPlayerInventoryProvider(provider, plugin)
+    }
+
+    @ExperimentalMimicApi
+    override fun getPlayerInventoryProvider(): PlayerInventoryProvider = loadService(config.inventoryProvider)
+
+    @ExperimentalMimicApi
+    override fun getAllPlayerInventoryProviders(): Map<String, PlayerInventoryProvider> = loadAllServices()
 
     override fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
@@ -116,9 +135,11 @@ internal class MimicImpl(
         return servicesManager.loadAll<T>().associateBy { it.id }
     }
 
+    @OptIn(ExperimentalMimicApi::class)
     private fun KClass<out MimicService>.getApiName(): String = when (this) {
         BukkitClassSystem.Provider::class -> "ClassSystem"
         BukkitLevelSystem.Provider::class -> "LevelSystem"
+        BukkitPlayerInventory.Provider::class -> "PlayerInventory"
         BukkitItemsRegistry::class -> "ItemsRegistry"
         else -> error("Unknown service: ${this.java.name}")
     }

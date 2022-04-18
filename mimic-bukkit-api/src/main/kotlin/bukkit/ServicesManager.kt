@@ -17,6 +17,8 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+@file:JvmSynthetic
+
 package ru.endlesscode.mimic.bukkit
 
 import org.bukkit.plugin.Plugin

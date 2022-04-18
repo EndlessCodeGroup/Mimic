@@ -31,5 +31,5 @@ import java.lang.ref.WeakReference
 public class ExistingWeakReference<T : Any>(referent: T) : WeakReference<T>(referent) {
 
     /** Throws [IllegalStateException] if reference object has been cleared. */
-    override fun get(): T = super.get() ?: error("Referent object is null.")
+    override fun get(): T = checkNotNull(super.get()) { "Referent object is null." }
 }

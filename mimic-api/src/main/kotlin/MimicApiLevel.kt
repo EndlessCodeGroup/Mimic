@@ -42,14 +42,20 @@ public object MimicApiLevel {
     public const val VERSION_0_7: Int = 3
 
     /**
-     * The latest version at the moment of Mimic COMPILATION.
+     * # Version 0.8
+     * - Experimental API to get PlayerInventory content
+     */
+    public const val VERSION_0_8: Int = 4
+
+    /**
+     * The latest version at the moment of Mimic **COMPILATION**.
      *
      * Usage of this constant will be inlined by the compiler, so use it only to save the version
-     * which was used at your plugin COMPILE TIME.
-     * Use [checkApiLevel] if you want to check that the current RUNNING Mimic API level meets to
+     * which was used at your plugin **COMPILE TIME**.
+     * Use [checkApiLevel] if you want to check that the current **RUNNING** Mimic API level meets to
      * the required.
      */
-    public const val CURRENT: Int = VERSION_0_7
+    public const val CURRENT: Int = VERSION_0_8
 
     /**
      * Returns 'true' if the current RUNNING Mimic API level meets to  the required, otherwise `false`.

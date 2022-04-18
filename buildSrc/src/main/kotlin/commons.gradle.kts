@@ -23,7 +23,10 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "1.8"
         apiVersion = "1.6"
         languageVersion = "1.6"
-        freeCompilerArgs = listOf("-Xjvm-default=all")
+        freeCompilerArgs = listOf(
+            "-Xjvm-default=all",
+            "-opt-in=kotlin.RequiresOptIn",
+        )
         allWarningsAsErrors = System.getProperty("warningsAsErrors") == "true"
         javaParameters = true
     }

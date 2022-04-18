@@ -370,3 +370,14 @@ public final class ru/endlesscode/mimic/impl/vanilla/MinecraftLevelSystem : ru/e
 public final class ru/endlesscode/mimic/impl/vanilla/MinecraftLevelSystem$Companion {
 }
 
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftPlayerInventory : ru/endlesscode/mimic/inventory/BukkitPlayerInventory {
+	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/MinecraftPlayerInventory$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun <init> (Lorg/bukkit/entity/Player;)V
+	public fun getEquippedItems ()Ljava/util/List;
+	public fun getStoredItems ()Ljava/util/List;
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftPlayerInventory$Companion {
+}
+
