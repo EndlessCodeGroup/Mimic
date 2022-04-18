@@ -28,6 +28,7 @@ List<ItemStack> allItems = inventory.getItems();
 
 - Make implementations ID validation less strict.
   Since now, it may contain more special symbols: `._-`
+- Make `ServicesManager` extensions inaccessible from Java
 
 ### Plugin changes
 
