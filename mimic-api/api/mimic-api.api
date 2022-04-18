@@ -1,9 +1,13 @@
+public abstract interface annotation class ru/endlesscode/mimic/ExperimentalMimicApi : java/lang/annotation/Annotation {
+}
+
 public final class ru/endlesscode/mimic/MimicApiLevel {
 	public static final field CURRENT I
 	public static final field INSTANCE Lru/endlesscode/mimic/MimicApiLevel;
 	public static final field VERSION_0_6 I
 	public static final field VERSION_0_6_2 I
 	public static final field VERSION_0_7 I
+	public static final field VERSION_0_8 I
 	public static final fun checkApiLevel (I)Z
 }
 
@@ -31,6 +35,12 @@ public abstract interface class ru/endlesscode/mimic/classes/ClassSystem {
 	public fun hasAnyOfClasses (Ljava/lang/String;[Ljava/lang/String;)Z
 	public fun hasAnyOfClasses (Ljava/util/List;)Z
 	public fun hasClass (Ljava/lang/String;)Z
+}
+
+public abstract interface class ru/endlesscode/mimic/inventory/PlayerInventory {
+	public abstract fun getEquippedItems ()Ljava/util/List;
+	public fun getItems ()Ljava/util/List;
+	public abstract fun getStoredItems ()Ljava/util/List;
 }
 
 public abstract interface class ru/endlesscode/mimic/items/ItemsRegistry : ru/endlesscode/mimic/MimicService {
