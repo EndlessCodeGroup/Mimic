@@ -21,6 +21,8 @@ package ru.endlesscode.mimic
 
 import co.aikar.commands.PaperCommandManager
 import org.bstats.bukkit.Metrics
+import org.bstats.charts.AdvancedPie
+import org.bstats.charts.SimplePie
 import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
@@ -162,13 +164,13 @@ public class MimicPlugin : JavaPlugin() {
     private fun initMetrics() {
         val metrics = Metrics(this, 8413)
 
-        metrics.addCustomChart(Metrics.SimplePie("level_system") {
+        metrics.addCustomChart(SimplePie("level_system") {
             mimic.getLevelSystemProvider().id
         })
-        metrics.addCustomChart(Metrics.SimplePie("class_system") {
+        metrics.addCustomChart(SimplePie("class_system") {
             mimic.getClassSystemProvider().id
         })
-        metrics.addCustomChart(Metrics.AdvancedPie("items_registry_custom") {
+        metrics.addCustomChart(AdvancedPie("items_registry_custom") {
             servicesManager.loadAll<BukkitItemsRegistry>()
                 .map { it.id }
                 .filterNot { it == MimicItemsRegistry.ID || it == MinecraftItemsRegistry.ID }

@@ -10,24 +10,24 @@ object rpgplugins {
 }
 
 object acf {
-    const val paper = "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    const val paper = "co.aikar:acf-paper:0.5.1-SNAPSHOT"
 }
 
 object misc {
-    const val bstats = "org.bstats:bstats-bukkit:1.8"
-    const val annotations = "org.jetbrains:annotations:13.0"
+    const val bstats = "org.bstats:bstats-bukkit:3.0.0"
+    const val annotations = "org.jetbrains:annotations:23.0.0"
     const val serialization_hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.3.2"
-    const val mockk = "io.mockk:mockk:1.12.1"
+    const val mockk = "io.mockk:mockk:1.12.3"
 }
 
 // Testing
 object junit {
-    private const val jupiter_version = "5.7.0"
+    private const val jupiter_version = "5.7.2"
     const val jupiter = "org.junit.jupiter:junit-jupiter:$jupiter_version"
     const val jupiter_params = "org.junit.jupiter:junit-jupiter-params:$jupiter_version"
 }
 
 object kotest {
-    private const val version = "5.0.3"
+    private const val version = "5.2.3"
     const val assertions = "io.kotest:kotest-assertions-core:$version"
 }

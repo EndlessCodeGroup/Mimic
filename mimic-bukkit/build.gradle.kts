@@ -65,7 +65,7 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    kotlinOptions.freeCompilerArgs += "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
 }
 
 tasks.shadowJar {
@@ -77,7 +77,7 @@ tasks.shadowJar {
     relocate("co.aikar.commands", "$shadePackage.acf.commands")
     relocate("co.aikar.locales", "$shadePackage.acf.locales")
     relocate("kotlin", "$shadePackage.kotlin")
-    relocate("org.bstats.bukkit", "$shadePackage.bstats")
+    relocate("org.bstats", "$shadePackage.bstats")
     relocate("com.typesafe.config", "$shadePackage.hocon")
 
     exclude("META-INF/*.kotlin_module")
