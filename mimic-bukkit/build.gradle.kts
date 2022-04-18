@@ -70,7 +70,7 @@ tasks.withType<KotlinCompile>().configureEach {
 
 tasks.shadowJar {
     dependencies {
-        exclude(dependency(misc.annotations))
+        exclude(dependency(misc.annotations.replaceAfterLast(delimiter = ':', replacement = ".*")))
     }
 
     val shadePackage = "${project.group}.shade"
