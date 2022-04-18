@@ -1,156 +1,187 @@
+<!doctype html>
 <html>
-  <head>
+<head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>BukkitPlayerInventory</title>
-</head><body><link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
-    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script><script type="text/javascript" src="../../../scripts/main.js" async></script><script type="text/javascript" src="../../../scripts/prism.js" async></script><script>const storage = localStorage.getItem("dokka-dark-mode")
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
 const savedDarkMode = storage ? JSON.parse(storage) : false
 if(savedDarkMode === true){
     document.getElementsByTagName("html")[0].classList.add("theme-dark")
 }</script>
-
-  
-    <div class="navigation-wrapper" id="navigation-wrapper">
-      <div id="leftToggler"><span class="icon-toggler"></span></div>
-      <div class="library-name"><a href="../../../index.html"><span>mimic</span></a></div>
-      <div></div>
-      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
-        <div id="searchBar"></div>
-      </div>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>mimic</span>            </a>    </div>
+    <div>
     </div>
-    <div id="container">
-      <div id="leftColumn">
+    <div class="pull-right d-flex">
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
         <div id="sideMenu"></div>
-      </div>
-      <div id="main"><script type="text/javascript" src="../../../scripts/main.js"></script>
-        <div class="main-content" id="content" pageids="mimic-bukkit-api::ru.endlesscode.mimic.inventory/BukkitPlayerInventory///PointingToDeclaration//-1568319717">
-          <div class="breadcrumbs"><a href="../../index.html">mimic-bukkit-api</a>/<a href="../index.html">ru.endlesscode.mimic.inventory</a>/<a href="index.html">BukkitPlayerInventory</a></div>
-          <div class="cover ">
-            <h1 class="cover"><span>Bukkit</span><wbr><span>Player</span><wbr><span><span>Inventory</span></span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../../mimic-api/ru.endlesscode.mimic/-experimental-mimic-api/index.html"><span class="token annotation">ExperimentalMimicApi</span></a></div><div class="block"><span class="token annotation">@</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.Experimental///PointingToDeclaration/"><span class="token annotation">ApiStatus.Experimental</span></span></div></div><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">BukkitPlayerInventory</a><span class="token punctuation">(</span>player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">)</span> : <a href="../../../mimic-api/ru.endlesscode.mimic.inventory/-player-inventory/index.html">PlayerInventory</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph"><a href="../../../mimic-api/ru.endlesscode.mimic.inventory/-player-inventory/index.html">PlayerInventory</a> for Bukkit.</p></div></div>
-          </div>
-          <div class="tabbedcontent">
-            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Inherited properties">Inherited properties</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
-            <div class="tabs-section-body">
-              <h2 class="tabbedcontent">Constructors</h2>
-              <div class="table" data-togglable="Constructors"><a data-name="1558062650%2FConstructors%2F-1568319717" anchor-label="BukkitPlayerInventory" id="1558062650%2FConstructors%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-bukkit-player-inventory.html">BukkitPlayerInventory</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1558062650%2FConstructors%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-bukkit-player-inventory.html"><span class="token function">BukkitPlayerInventory</span></a><span class="token punctuation">(</span>player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Types</h2>
-              <div class="table" data-togglable="Types"><a data-name="924671937%2FClasslikes%2F-1568319717" anchor-label="Provider" id="924671937%2FClasslikes%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="-provider/index.html"><span><span>Provider</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="924671937%2FClasslikes%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-provider/index.html">Provider</a> : <a href="../../ru.endlesscode.mimic/-player-system-provider-service/index.html">PlayerSystemProviderService</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">BukkitPlayerInventory</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Provider for <a href="index.html">BukkitPlayerInventory</a>.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Properties</h2>
-              <div class="table" data-togglable="Properties"><a data-name="1854927516%2FProperties%2F-1568319717" anchor-label="player" id="1854927516%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="player.html">player</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1854927516%2FProperties%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="1854927516%2FProperties%2F-1568319717" anchor-label="player" id="1854927516%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="player.html">player</a><span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1854927516%2FProperties%2F-1568319717" anchor-label="player" id="1854927516%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><p class="paragraph">The player owning this inventory.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Inherited properties</h2>
-              <div class="table" data-togglable="Inherited properties"><a data-name="616998814%2FProperties%2F-1568319717" anchor-label="equippedItems" id="616998814%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#616998814%2FProperties%2F-1568319717">equippedItems</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="616998814%2FProperties%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Inherited properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="616998814%2FProperties%2F-1568319717" anchor-label="equippedItems" id="616998814%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html#616998814%2FProperties%2F-1568319717">equippedItems</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1798902495%2FProperties%2F-1568319717" anchor-label="items" id="1798902495%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1798902495%2FProperties%2F-1568319717">items</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1798902495%2FProperties%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Inherited properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="1798902495%2FProperties%2F-1568319717" anchor-label="items" id="1798902495%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html#1798902495%2FProperties%2F-1568319717">items</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-<a data-name="1006752226%2FProperties%2F-1568319717" anchor-label="storedItems" id="1006752226%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="index.html#1006752226%2FProperties%2F-1568319717">storedItems</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1006752226%2FProperties%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Inherited properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="1006752226%2FProperties%2F-1568319717" anchor-label="storedItems" id="1006752226%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html#1006752226%2FProperties%2F-1568319717">storedItems</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Functions</h2>
-              <div class="table" data-togglable="Functions"><a data-name="-170769580%2FFunctions%2F-1568319717" anchor-label="collectEquippedItems" id="-170769580%2FFunctions%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="collect-equipped-items.html"><span>collect</span><wbr><span>Equipped</span><wbr><span><span>Items</span></span></a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-170769580%2FFunctions%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div>
-                      <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation">JvmOverloads</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="collect-equipped-items.html"><span class="token function">collectEquippedItems</span></a><span class="token punctuation">(</span>additionalItems<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Helper method to get list of player's equipped items. Includes armor and items in hands. Doesn't contain <code class="lang-kotlin">null</code> or AIR.</p></div></div></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <h2 class="">Sources</h2>
-              <div class="table" data-togglable="Sources"><a data-name="-1513403294%2FSource%2F-1568319717" anchor-label="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//inventory/BukkitPlayerInventory.kt#L11" id="-1513403294%2FSource%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
-                <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
-                  <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//inventory/BukkitPlayerInventory.kt#L11">jvm source</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1513403294%2FSource%2F-1568319717"></span>
-                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                        </span></span></div>
-                    <div></div>
-                  </div>
-                </div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageids="mimic-bukkit-api::ru.endlesscode.mimic.inventory/BukkitPlayerInventory///PointingToDeclaration//-1568319717">
+  <div class="breadcrumbs"><a href="../../index.html">mimic-bukkit-api</a><span class="delimiter">/</span><a href="../index.html">ru.endlesscode.mimic.inventory</a><span class="delimiter">/</span><a href="index.html">BukkitPlayerInventory</a></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Bukkit</span><wbr><span>Player</span><wbr><span><span>Inventory</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="../../../mimic-api/ru.endlesscode.mimic/-experimental-mimic-api/index.html"><span class="token annotation">ExperimentalMimicApi</span></a></div><div class="block"><span class="token annotation">@</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.Experimental///PointingToDeclaration/"><span class="token annotation">ApiStatus.Experimental</span></span></div></div><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="index.html">BukkitPlayerInventory</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a></span></span><span class="token punctuation">)</span> : <a href="../../../mimic-api/ru.endlesscode.mimic.inventory/-player-inventory/index.html">PlayerInventory</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph"><a href="../../../mimic-api/ru.endlesscode.mimic.inventory/-player-inventory/index.html">PlayerInventory</a> for Bukkit.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button><button class="section-tab" data-togglable="Inherited properties">Inherited properties</button><button class="section-tab" data-togglable="Sources">Sources</button></div>
+    <div class="tabs-section-body">
+      <h2 class="tabbedcontent">Constructors</h2>
+      <div class="table" data-togglable="Constructors"><a data-name="1558062650%2FConstructors%2F-1568319717" anchor-label="BukkitPlayerInventory" id="1558062650%2FConstructors%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue TabbedContent">
+            <div class=""><span class="inline-flex">
+                <div><a href="-bukkit-player-inventory.html"><span>Bukkit</span><wbr><span>Player</span><wbr><span><span>Inventory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1558062650%2FConstructors%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="-bukkit-player-inventory.html"><span class="token function">BukkitPlayerInventory</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a></span></span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+      <h2 class="">Types</h2>
+      <div class="table" data-togglable="Types"><a data-name="924671937%2FClasslikes%2F-1568319717" anchor-label="Provider" id="924671937%2FClasslikes%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="-provider/index.html"><span><span>Provider</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="924671937%2FClasslikes%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token keyword">interface </span><a href="-provider/index.html">Provider</a> : <a href="../../ru.endlesscode.mimic/-player-system-provider-service/index.html">PlayerSystemProviderService</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html">BukkitPlayerInventory</a><span class="token operator">&gt; </span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Provider for <a href="index.html">BukkitPlayerInventory</a>.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Properties</h2>
+      <div class="table" data-togglable="Properties"><a data-name="1854927516%2FProperties%2F-1568319717" anchor-label="player" id="1854927516%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="player.html">player</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1854927516%2FProperties%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="1854927516%2FProperties%2F-1568319717" anchor-label="player" id="1854927516%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="player.html">player</a><span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1854927516%2FProperties%2F-1568319717" anchor-label="player" id="1854927516%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><p class="paragraph">The player owning this inventory.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Inherited properties</h2>
+      <div class="table" data-togglable="Inherited properties"><a data-name="616998814%2FProperties%2F-1568319717" anchor-label="equippedItems" id="616998814%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="index.html#616998814%2FProperties%2F-1568319717">equippedItems</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="616998814%2FProperties%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Inherited properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="616998814%2FProperties%2F-1568319717" anchor-label="equippedItems" id="616998814%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html#616998814%2FProperties%2F-1568319717">equippedItems</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1798902495%2FProperties%2F-1568319717" anchor-label="items" id="1798902495%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="index.html#1798902495%2FProperties%2F-1568319717">items</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1798902495%2FProperties%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Inherited properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="1798902495%2FProperties%2F-1568319717" anchor-label="items" id="1798902495%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html#1798902495%2FProperties%2F-1568319717">items</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+<a data-name="1006752226%2FProperties%2F-1568319717" anchor-label="storedItems" id="1006752226%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="index.html#1006752226%2FProperties%2F-1568319717">storedItems</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1006752226%2FProperties%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Inherited properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><a data-name="1006752226%2FProperties%2F-1568319717" anchor-label="storedItems" id="1006752226%2FProperties%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">val </span><a href="index.html#1006752226%2FProperties%2F-1568319717">storedItems</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Functions</h2>
+      <div class="table" data-togglable="Functions"><a data-name="-170769580%2FFunctions%2F-1568319717" anchor-label="collectEquippedItems" id="-170769580%2FFunctions%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="collect-equipped-items.html"><span>collect</span><wbr><span>Equipped</span><wbr><span><span>Items</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-170769580%2FFunctions%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div>
+              <div class="title">
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":mimic-bukkit-api:dokkaHtmlPartial/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation">JvmOverloads</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="collect-equipped-items.html"><span class="token function">collectEquippedItems</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">additionalItems<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemStack.html">ItemStack</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Helper method to get list of player's equipped items. Includes armor and items in hands. Doesn't contain <code class="lang-kotlin">null</code> or AIR.</p></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="">Sources</h2>
+      <div class="table" data-togglable="Sources"><a data-name="-1513403294%2FSource%2F-1568319717" anchor-label="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//inventory/BukkitPlayerInventory.kt#L11" id="-1513403294%2FSource%2F-1568319717" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main"></a>
+        <div class="table-row" data-filterable-current=":mimic-bukkit-api:dokkaHtmlPartial/main" data-filterable-set=":mimic-bukkit-api:dokkaHtmlPartial/main">
+          <div class="main-subrow keyValue ">
+            <div class=""><span class="inline-flex">
+                <div><a href="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//inventory/BukkitPlayerInventory.kt#L11">jvm source</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1513403294%2FSource%2F-1568319717"></span>
+                  <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                </span></span></div>
+            <div></div>
+          </div>
+        </div>
       </div>
     </div>
-  
-</body></html>
+  </div>
+</div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+        </div>
+    </div>
+</div>
 
+</body></html>
 
