@@ -4,6 +4,7 @@ $dokka.linkExtension:html
 module:mimic-api
 ru.endlesscode.mimic
 ru.endlesscode.mimic.classes
+ru.endlesscode.mimic.inventory
 ru.endlesscode.mimic.items
 ru.endlesscode.mimic.level
 ru.endlesscode.mimic.util
@@ -22,5 +23,6 @@ module:mimic-bukkit-api
 ru.endlesscode.mimic
 ru.endlesscode.mimic.bukkit
 ru.endlesscode.mimic.classes
+ru.endlesscode.mimic.inventory
 ru.endlesscode.mimic.items
 ru.endlesscode.mimic.level
