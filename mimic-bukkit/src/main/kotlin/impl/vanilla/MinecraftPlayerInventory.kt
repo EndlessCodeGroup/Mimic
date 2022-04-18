@@ -20,22 +20,17 @@ package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.PlayerInventory
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
-import ru.endlesscode.mimic.inventory.equippedItems
-import ru.endlesscode.mimic.inventory.storedItems
 
 @OptIn(ExperimentalMimicApi::class)
 public class MinecraftPlayerInventory(player: Player) : BukkitPlayerInventory(player) {
 
-    private val inventory: PlayerInventory get() = player.inventory
-
     override val equippedItems: List<ItemStack>
-        get() = inventory.equippedItems
+        get() = collectEquippedItems()
 
     override val storedItems: List<ItemStack>
-        get() = inventory.storedItems
+        get() = collectStoredItems()
 
     internal class Provider : BukkitPlayerInventory.Provider {
         override val id: String = ID

@@ -24,6 +24,7 @@ internal class InventorySubcommand(private val mimic: Mimic) : MimicCommand() {
             "&3Inventory provider: &7${provider.id}",
             "&3Count of Equipped: &7%d".format(inventory.equippedItems.size),
             "&3Count of Stored: &7%d".format(inventory.storedItems.size),
+            "&3Total Count: &7%d".format(inventory.items.size),
         )
     }
 }
