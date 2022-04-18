@@ -48,7 +48,7 @@ internal class MimicImpl(
     }
 
     @ExperimentalMimicApi
-    override fun getPlayerInventoryProvider(): PlayerInventoryProvider = loadService()
+    override fun getPlayerInventoryProvider(): PlayerInventoryProvider = loadService(config.inventoryProvider)
 
     @ExperimentalMimicApi
     override fun getAllPlayerInventoryProviders(): Map<String, PlayerInventoryProvider> = loadAllServices()
