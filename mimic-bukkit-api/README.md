@@ -9,6 +9,7 @@ Mimic uses [ServicesManager] to store [MimicServices][MimicService].
 Available services:
 - [BukkitLevelSystem.Provider]
 - [BukkitClassSystem.Provider]
+- [BukkitPlayerInventory.Provider] *(experimental)*
 - [BukkitItemsRegistry]
 
 ### How to use Mimic APIs?
@@ -51,6 +52,7 @@ Mimic mimic = Mimic.getInstance();
 
 BukkitLevelSystem levelSystem = mimic.getLevelSystem(player);
 BukkitClassSystem classSystem = mimic.getClassSystem(player);
+BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
 BukkitItemsRegistry itemsRegistry = mimic.getItemsRegistry();
 ```
 
@@ -199,6 +201,7 @@ public void onLoad() {
 [MimicService]: ../mimic-api/src/main/kotlin/MimicService.kt
 [BukkitLevelSystem.Provider]: src/main/kotlin/level/BukkitLevelSystem.kt
 [BukkitClassSystem.Provider]: src/main/kotlin/classes/BukkitClassSystem.kt
+[BukkitPlayerInventory.Provider]: src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: src/main/kotlin/items/BukkitItemsRegistry.kt
 
 [impl]: ../mimic-bukkit/src/main/kotlin/impl/
