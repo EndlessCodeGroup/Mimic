@@ -2,12 +2,14 @@ package ru.endlesscode.mimic.inventory
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.jetbrains.annotations.ApiStatus
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.PlayerSystemProviderService
 import ru.endlesscode.mimic.util.ExistingWeakReference
 
 /** [PlayerInventory] for Bukkit. */
 @ExperimentalMimicApi
+@ApiStatus.Experimental
 public abstract class BukkitPlayerInventory(player: Player) : PlayerInventory<ItemStack> {
 
     /** The player owning this inventory. */

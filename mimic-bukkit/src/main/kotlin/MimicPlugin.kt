@@ -76,7 +76,6 @@ public class MimicPlugin : JavaPlugin() {
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 
-    @OptIn(ExperimentalMimicApi::class)
     private fun hookDefaultServices() {
         // Default systems
         Log.i(">>> Default systems")

@@ -1,5 +1,6 @@
 package ru.endlesscode.mimic.inventory
 
+import org.jetbrains.annotations.ApiStatus
 import ru.endlesscode.mimic.ExperimentalMimicApi
 
 /**
@@ -7,13 +8,13 @@ import ru.endlesscode.mimic.ExperimentalMimicApi
  * Use [items], [equippedItems] or [storedItems] to get items from inventory.
  */
 @ExperimentalMimicApi
+@ApiStatus.Experimental
 public interface PlayerInventory<ItemStackT : Any> {
 
     /**
      * Returns list containing all items from the inventory.
      * Items may not be null.
      */
-    @ExperimentalMimicApi
     public val items: List<ItemStackT>
         get() = equippedItems + storedItems
 
@@ -21,13 +22,11 @@ public interface PlayerInventory<ItemStackT : Any> {
      * Returns list containing all equipped items.
      * Items may not be null.
      */
-    @ExperimentalMimicApi
     public val equippedItems: List<ItemStackT>
 
     /**
      * Returns list containing all not equipped items.
      * Items may not be null.
      */
-    @ExperimentalMimicApi
     public val storedItems: List<ItemStackT>
 }

@@ -26,7 +26,7 @@ import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.inventory.equippedItems
 import ru.endlesscode.mimic.inventory.storedItems
 
-@ExperimentalMimicApi
+@OptIn(ExperimentalMimicApi::class)
 public class MinecraftPlayerInventory(player: Player) : BukkitPlayerInventory(player) {
 
     private val inventory: PlayerInventory get() = player.inventory

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
+import org.jetbrains.annotations.ApiStatus
 import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
@@ -74,6 +75,7 @@ public interface Mimic {
      * @return registered level system or `null` if it was not registered.
      */
     @ExperimentalMimicApi
+    @ApiStatus.Experimental
     public fun registerPlayerInventoryProvider(
         provider: BukkitPlayerInventory.Provider,
         apiLevel: Int,
@@ -94,6 +96,7 @@ public interface Mimic {
      * @return registered level system or `null` if it was not registered.
      */
     @ExperimentalMimicApi
+    @ApiStatus.Experimental
     public fun registerPlayerInventoryProvider(
         provider: BukkitPlayerInventory.Provider,
         apiLevel: Int,
@@ -106,15 +109,18 @@ public interface Mimic {
      * It is a shorthand for `getPlayerInventoryProvider().getSystem(player)`.
      */
     @ExperimentalMimicApi
+    @ApiStatus.Experimental
     public fun getPlayerInventory(player: Player): BukkitPlayerInventory =
         getPlayerInventoryProvider().getSystem(player)
 
     /** Returns top priority [BukkitPlayerInventory.Provider]. */
     @ExperimentalMimicApi
+    @ApiStatus.Experimental
     public fun getPlayerInventoryProvider(): BukkitPlayerInventory.Provider
 
     /** Returns map containing all known [BukkitPlayerInventory.Provider]s, where key is a provider ID. */
     @ExperimentalMimicApi
+    @ApiStatus.Experimental
     public fun getAllPlayerInventoryProviders(): Map<String, BukkitPlayerInventory.Provider>
 
     /**
