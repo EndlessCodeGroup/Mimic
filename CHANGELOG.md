@@ -39,6 +39,16 @@ List<ItemStack> allItems = inventory.getItems();
 - Catch not only Exceptions from `ItemsRegistry` implementations but also Errors.
   `ItemsRegistry` will not crash other plugins.
 
+### Housekeeping
+
+- Update Kotlin to 1.6.20
+- Update bStats to 3.0.0
+- Update ACF to 0.5.1-SNAPSHOT
+- Update Gradle to 7.4.2
+- Update Dokka to 1.6.20
+- Update binary-compatibility-validator to 0.9.0
+- Update gradle-download-task to 5.0.5
+
 ## [v0.7.1] (2022-02-19)
 
 ### Fixed
