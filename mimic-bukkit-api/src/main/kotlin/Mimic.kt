@@ -73,6 +73,7 @@ public interface Mimic {
      *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
      * @param plugin The plugin implementing this player inventory.
      * @return registered level system or `null` if it was not registered.
+     * @since 0.8.0
      */
     @ExperimentalMimicApi
     @ApiStatus.Experimental
@@ -94,6 +95,7 @@ public interface Mimic {
      * @param priority Default priority. Service with higher priority will be used if user have not configured
      *                 preferred service in config.
      * @return registered level system or `null` if it was not registered.
+     * @since 0.8.0
      */
     @ExperimentalMimicApi
     @ApiStatus.Experimental
@@ -107,18 +109,26 @@ public interface Mimic {
     /**
      * Returns top priority [BukkitPlayerInventory] for the given [player].
      * It is a shorthand for `getPlayerInventoryProvider().getSystem(player)`.
+     * @since 0.8.0
      */
     @ExperimentalMimicApi
     @ApiStatus.Experimental
     public fun getPlayerInventory(player: Player): BukkitPlayerInventory =
         getPlayerInventoryProvider().getSystem(player)
 
-    /** Returns top priority [BukkitPlayerInventory.Provider]. */
+    /**
+     * Returns top priority [BukkitPlayerInventory.Provider].
+     * @since 0.8.0
+     */
     @ExperimentalMimicApi
     @ApiStatus.Experimental
     public fun getPlayerInventoryProvider(): BukkitPlayerInventory.Provider
 
-    /** Returns map containing all known [BukkitPlayerInventory.Provider]s, where key is a provider ID. */
+    /**
+     * Returns map containing all known [BukkitPlayerInventory.Provider]s,
+     * where key is a provider ID.
+     * @since 0.8.0
+     */
     @ExperimentalMimicApi
     @ApiStatus.Experimental
     public fun getAllPlayerInventoryProviders(): Map<String, BukkitPlayerInventory.Provider>

@@ -6,6 +6,7 @@ import ru.endlesscode.mimic.ExperimentalMimicApi
 /**
  * API to access player's inventory.
  * Use [items], [equippedItems] or [storedItems] to get items from inventory.
+ * @since 0.8.0
  */
 @ExperimentalMimicApi
 @ApiStatus.Experimental

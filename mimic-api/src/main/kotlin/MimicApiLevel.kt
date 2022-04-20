@@ -19,7 +19,12 @@
 
 package ru.endlesscode.mimic
 
-/** Utility to check Mimic API level. */
+/**
+ * Utility to check Mimic API level.
+ *
+ * It is safe to use any version constant with any Mimic release because
+ * it will be inlined during compilation.
+ */
 public object MimicApiLevel {
 
     /**
@@ -50,15 +55,17 @@ public object MimicApiLevel {
     /**
      * The latest version at the moment of Mimic **COMPILATION**.
      *
-     * Usage of this constant will be inlined by the compiler, so use it only to save the version
-     * which was used at your plugin **COMPILE TIME**.
-     * Use [checkApiLevel] if you want to check that the current **RUNNING** Mimic API level meets to
-     * the required.
+     * Usage of this constant will be inlined by the compiler, so use it only
+     * to save the version which was used at your plugin **COMPILE TIME**.
+     * Use [checkApiLevel] if you want to check that the current **RUNNING**
+     * Mimic API level meets to the required API level.
      */
     public const val CURRENT: Int = VERSION_0_8
 
     /**
-     * Returns 'true' if the current RUNNING Mimic API level meets to  the required, otherwise `false`.
+     * Returns `true` if the current **RUNNING** Mimic API level is equal
+     * or higher than [requiredApiLevel], otherwise `false`.
+     *
      * ```
      * // Specify here the version required for APIs you use.
      * if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_6)) {
