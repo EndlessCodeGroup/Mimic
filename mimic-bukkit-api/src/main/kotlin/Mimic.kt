@@ -55,7 +55,7 @@ public interface Mimic {
      * Returns top priority [BukkitClassSystem] for the given [player].
      * It is a shorthand for `getClassSystemProvider().getSystem(player)`.
      */
-    public fun getClassSystem(player: Player): BukkitClassSystem
+    public fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
 
     /** Returns top priority [BukkitClassSystem.Provider]. */
     public fun getClassSystemProvider(): BukkitClassSystem.Provider
@@ -81,7 +81,8 @@ public interface Mimic {
         provider: BukkitPlayerInventory.Provider,
         apiLevel: Int,
         plugin: Plugin,
-    ): BukkitPlayerInventory.Provider? = registerPlayerInventoryProvider(provider, apiLevel, plugin, ServicePriority.Normal)
+    ): BukkitPlayerInventory.Provider? =
+        registerPlayerInventoryProvider(provider, apiLevel, plugin, ServicePriority.Normal)
 
     /**
      * Registers the given [provider] for [BukkitPlayerInventory].
@@ -217,7 +218,7 @@ public interface Mimic {
      * Returns top priority [BukkitLevelSystem] for the given [player].
      * It is a shorthand for `getLevelSystemProvider().getSystem(player)`.
      */
-    public fun getLevelSystem(player: Player): BukkitLevelSystem
+    public fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
 
     /** Returns top priority [BukkitLevelSystem.Provider]. */
     public fun getLevelSystemProvider(): BukkitLevelSystem.Provider

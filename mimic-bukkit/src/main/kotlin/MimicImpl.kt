@@ -1,6 +1,5 @@
 package ru.endlesscode.mimic
 
-import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicesManager
@@ -33,7 +32,6 @@ internal class MimicImpl(
         WrappedClassSystemProvider(provider, plugin)
     }
 
-    override fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService(config.classSystem)
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = loadAllServices()
 
@@ -74,7 +72,6 @@ internal class MimicImpl(
         WrappedLevelSystemProvider(provider, plugin)
     }
 
-    override fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService(config.levelSystem)
     override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = loadAllServices()
 
