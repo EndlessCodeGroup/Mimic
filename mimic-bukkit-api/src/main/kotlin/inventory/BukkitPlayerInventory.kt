@@ -8,7 +8,10 @@ import ru.endlesscode.mimic.PlayerSystemProviderService
 import ru.endlesscode.mimic.internal.filterNotNullOrEmpty
 import ru.endlesscode.mimic.util.ExistingWeakReference
 
-/** [PlayerInventory] for Bukkit. */
+/**
+ * [PlayerInventory] for Bukkit.
+ * @since 0.8.0
+ */
 @ExperimentalMimicApi
 @ApiStatus.Experimental
 public abstract class BukkitPlayerInventory(player: Player) : PlayerInventory<ItemStack> {
@@ -42,7 +45,7 @@ public abstract class BukkitPlayerInventory(player: Player) : PlayerInventory<It
      * Appends the given [additionalItems] to this list. Be careful, to avoid items duplicates.
      */
     @JvmOverloads
-    public fun collectEquippedItems(additionalItems: List<ItemStack?> = emptyList()): List<ItemStack> {
+    protected fun collectEquippedItems(additionalItems: List<ItemStack?> = emptyList()): List<ItemStack> {
         val playerInventory = player.inventory
         return sequenceOf(playerInventory.itemInMainHand, playerInventory.itemInOffHand)
             .plus(playerInventory.armorContents)

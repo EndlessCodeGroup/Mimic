@@ -41,8 +41,8 @@ public abstract interface class ru/endlesscode/mimic/classes/BukkitClassSystem$P
 
 public abstract class ru/endlesscode/mimic/inventory/BukkitPlayerInventory : ru/endlesscode/mimic/inventory/PlayerInventory {
 	public fun <init> (Lorg/bukkit/entity/Player;)V
-	public final fun collectEquippedItems ()Ljava/util/List;
-	public final fun collectEquippedItems (Ljava/util/List;)Ljava/util/List;
+	protected final fun collectEquippedItems ()Ljava/util/List;
+	protected final fun collectEquippedItems (Ljava/util/List;)Ljava/util/List;
 	public static synthetic fun collectEquippedItems$default (Lru/endlesscode/mimic/inventory/BukkitPlayerInventory;Ljava/util/List;ILjava/lang/Object;)Ljava/util/List;
 	protected final fun collectStoredItems ()Ljava/util/List;
 	protected final fun collectStoredItems (Ljava/util/List;)Ljava/util/List;

@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+### API changes
+
+- Added tag `@since 0.8.0` to all new APIs
+- Make `BukkitPlayerInventory.collectEquippedItems` protected. It was public by an accident.
+
 ## [v0.8.0] (2022-04-18)
 
 ### PlayerInventory API
