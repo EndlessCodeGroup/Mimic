@@ -4,11 +4,11 @@ public abstract interface class ru/endlesscode/mimic/Mimic {
 	public abstract fun getAllItemsRegistries ()Ljava/util/Map;
 	public abstract fun getAllLevelSystemProviders ()Ljava/util/Map;
 	public abstract fun getAllPlayerInventoryProviders ()Ljava/util/Map;
-	public abstract fun getClassSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/classes/BukkitClassSystem;
+	public fun getClassSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/classes/BukkitClassSystem;
 	public abstract fun getClassSystemProvider ()Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;
 	public static fun getInstance ()Lru/endlesscode/mimic/Mimic;
 	public abstract fun getItemsRegistry ()Lru/endlesscode/mimic/items/BukkitItemsRegistry;
-	public abstract fun getLevelSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/BukkitLevelSystem;
+	public fun getLevelSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/BukkitLevelSystem;
 	public abstract fun getLevelSystemProvider ()Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;
 	public fun getPlayerInventory (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory;
 	public abstract fun getPlayerInventoryProvider ()Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
