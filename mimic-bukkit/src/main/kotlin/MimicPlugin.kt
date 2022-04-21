@@ -78,6 +78,7 @@ public class MimicPlugin : JavaPlugin() {
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 
+    @OptIn(ExperimentalMimicApi::class)
     private fun hookDefaultServices() {
         // Default systems
         Log.i(">>> Default systems")
@@ -145,7 +146,7 @@ public class MimicPlugin : JavaPlugin() {
     }
 
     @Suppress("SameParameterValue")
-    @OptIn(ExperimentalMimicApi::class)
+    @ExperimentalMimicApi
     private fun hookInventory(
         constructor: () -> BukkitPlayerInventory.Provider,
         priority: ServicePriority = Normal,
