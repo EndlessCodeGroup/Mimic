@@ -76,7 +76,7 @@ internal class MimicConfig(
             setComments(
                 path = property.path,
                 *lineBreak,
-                "[${property.title}]",
+                property.formattedTitle,
                 *property.comments,
             )
         }

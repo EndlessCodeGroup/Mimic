@@ -33,6 +33,8 @@ internal sealed interface ConfigProperty<T : Any> {
     val comments: Array<String>
     val defaultValue: Any
 
+    val formattedTitle: String get() = "[$title]"
+
     fun ConfigurationSection.get(): T
     fun ConfigurationSection.set(value: T)
 }

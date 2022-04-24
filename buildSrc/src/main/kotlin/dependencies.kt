@@ -18,6 +18,7 @@ object misc {
     const val annotations = "org.jetbrains:annotations:23.0.0"
     const val serialization_hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.3.2"
     const val mockk = "io.mockk:mockk:1.12.3"
+    const val adventure = "net.kyori:adventure-platform-bukkit:4.3.1"
 }
 
 // Testing
