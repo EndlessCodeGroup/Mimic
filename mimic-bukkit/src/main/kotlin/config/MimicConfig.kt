@@ -35,10 +35,7 @@ internal class MimicConfig(
                 "Here you can configure Mimic APIs.",
                 "Use command '/mimic info' to list available implementations.",
             )
-            addDefault(LEVEL_SYSTEM, "")
-            addDefault(CLASS_SYSTEM, "")
-            addDefault(INVENTORY_PROVIDER, "")
-            addDefault(DISABLED_ITEMS_REGISTRIES, emptyList<String>())
+            properties.forEach(::addDefault)
         }
         reload()
     }
@@ -58,18 +55,16 @@ internal class MimicConfig(
     }
 
     private fun readConfigValues() {
-        levelSystem = configuration.getString(LEVEL_SYSTEM).orEmpty().lowercase()
-        classSystem = configuration.getString(CLASS_SYSTEM).orEmpty().lowercase()
-        inventoryProvider = configuration.getString(INVENTORY_PROVIDER).orEmpty().lowercase()
+        levelSystem = configuration[LEVEL_SYSTEM]
+        classSystem = configuration[CLASS_SYSTEM]
+        inventoryProvider = configuration[INVENTORY_PROVIDER]
 
-        val disabledItemsRegistries = configuration.getStringList(DISABLED_ITEMS_REGISTRIES)
-            .map { it.lowercase() }
-            .toSet()
+        val disabledItemsRegistries = configuration[DISABLED_ITEMS_REGISTRIES]
         this.disabledItemsRegistries = disabledItemsRegistries - DEFAULT_ITEMS_REGISTRIES
 
         val notDisabledRegistries = disabledItemsRegistries - this.disabledItemsRegistries
         if (notDisabledRegistries.isNotEmpty()) {
-            Log.w("Config: Items registries $notDisabledRegistries can not be disabled.")
+            Log.w("Config: Items registries $notDisabledRegistries can not be disabled. It will be removed from config.")
         }
     }
 
@@ -84,44 +79,62 @@ internal class MimicConfig(
     }
 
     private fun Configuration.addComments() {
-        setComments(
-            path = LEVEL_SYSTEM,
-            "[LevelSystem API]",
-            "Specify here the preferred level system implementation.",
-            EMPTY_VALUE_MESSAGE,
-        )
-        setComments(
-            path = CLASS_SYSTEM,
-            null,
-            "[ClassSystem API]",
-            "Specify here the preferred class system implementation.",
-            EMPTY_VALUE_MESSAGE,
-        )
-        setComments(
-            path = INVENTORY_PROVIDER,
-            null,
-            "[PlayerInventory API]",
-            "Specify here the preferred player inventory provider implementation.",
-            EMPTY_VALUE_MESSAGE,
-        )
-        setComments(
-            path = DISABLED_ITEMS_REGISTRIES,
-            null,
-            "[ItemsRegistry API]",
-            "List here disabled items registry implementations.",
-            "You can't disable 'mimic' and 'minecraft' items registries.",
-            "By default, all implementations are enabled.",
-        )
+        properties.forEachIndexed { index, property ->
+            val lineBreak: Array<String?> = if (index != 0) arrayOf(null) else emptyArray()
+            setComments(
+                path = property.path,
+                *lineBreak,
+                "[${property.title}]",
+                *property.comments,
+            )
+        }
     }
 
-    private companion object {
-        const val LEVEL_SYSTEM = "level-system"
-        const val CLASS_SYSTEM = "class-system"
-        const val INVENTORY_PROVIDER = "inventory-provider"
-        const val DISABLED_ITEMS_REGISTRIES = "disabled-items-registries"
-
-        const val EMPTY_VALUE_MESSAGE = "If the value is empty, will be used implementation with the highest priority."
+    internal companion object {
+        private const val EMPTY_VALUE_MESSAGE =
+            "If the value is empty, will be used implementation with the highest priority."
 
         val DEFAULT_ITEMS_REGISTRIES = setOf("mimic", "minecraft")
+
+        val LEVEL_SYSTEM = StringConfigProperty(
+            path = "level-system",
+            title = "LevelSystem API",
+            comments = arrayOf(
+                "Specify here the preferred level system implementation.",
+                EMPTY_VALUE_MESSAGE,
+            )
+        )
+        val CLASS_SYSTEM = StringConfigProperty(
+            path = "class-system",
+            title = "ClassSystem API",
+            comments = arrayOf(
+                "Specify here the preferred class system implementation.",
+                EMPTY_VALUE_MESSAGE,
+            ),
+        )
+        val INVENTORY_PROVIDER = StringConfigProperty(
+            path = "inventory-provider",
+            title = "PlayerInventory API",
+            comments = arrayOf(
+                "Specify here the preferred player inventory provider implementation.",
+                EMPTY_VALUE_MESSAGE,
+            ),
+        )
+        val DISABLED_ITEMS_REGISTRIES = StringSetConfigProperty(
+            path = "disabled-items-registries",
+            title = "ItemsRegistry API",
+            comments = arrayOf(
+                "List here disabled items registry implementations.",
+                "You can't disable 'mimic' and 'minecraft' items registries.",
+                "By default, all implementations are enabled.",
+            ),
+        )
+
+        private val properties = listOf(
+            LEVEL_SYSTEM,
+            CLASS_SYSTEM,
+            INVENTORY_PROVIDER,
+            DISABLED_ITEMS_REGISTRIES,
+        )
     }
 }
