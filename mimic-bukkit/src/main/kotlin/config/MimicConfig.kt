@@ -16,14 +16,10 @@ internal class MimicConfig(
     private val configuration: FileConfiguration = YamlConfiguration(),
 ) {
 
-    var levelSystem: String = ""
-        private set
-    var classSystem: String = ""
-        private set
-    var inventoryProvider: String = ""
-        private set
-    var disabledItemsRegistries: Set<String> = emptySet()
-        private set
+    var levelSystem: String by configuration.property(LEVEL_SYSTEM)
+    var classSystem: String by configuration.property(CLASS_SYSTEM)
+    var inventoryProvider: String by configuration.property(INVENTORY_PROVIDER)
+    var disabledItemsRegistries: Set<String> by configuration.property(DISABLED_ITEMS_REGISTRIES)
 
     constructor(plugin: Plugin) : this(plugin.toString(), File(plugin.dataFolder, "config.yml"))
 
@@ -47,28 +43,24 @@ internal class MimicConfig(
                 file.createNewFile()
             }
             configuration.load(file)
-            readConfigValues()
+            validateConfigValues()
         } catch (e: Throwable) {
             Log.w(e, "Failed to load config.")
         }
         save()
     }
 
-    private fun readConfigValues() {
-        levelSystem = configuration[LEVEL_SYSTEM]
-        classSystem = configuration[CLASS_SYSTEM]
-        inventoryProvider = configuration[INVENTORY_PROVIDER]
+    private fun validateConfigValues() {
+        val configuredDisabledItemsRegistries = disabledItemsRegistries
+        disabledItemsRegistries = configuredDisabledItemsRegistries - DEFAULT_ITEMS_REGISTRIES
 
-        val disabledItemsRegistries = configuration[DISABLED_ITEMS_REGISTRIES]
-        this.disabledItemsRegistries = disabledItemsRegistries - DEFAULT_ITEMS_REGISTRIES
-
-        val notDisabledRegistries = disabledItemsRegistries - this.disabledItemsRegistries
+        val notDisabledRegistries = configuredDisabledItemsRegistries - disabledItemsRegistries
         if (notDisabledRegistries.isNotEmpty()) {
             Log.w("Config: Items registries $notDisabledRegistries can not be disabled. It will be removed from config.")
         }
     }
 
-    private fun save() {
+    fun save() {
         try {
             configuration.applyDefaults()
             configuration.addComments()
