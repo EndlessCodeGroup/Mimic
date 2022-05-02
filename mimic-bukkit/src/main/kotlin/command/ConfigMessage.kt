@@ -9,7 +9,6 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
-import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.config.ConfigProperty
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.config.StringConfigProperty
@@ -22,32 +21,33 @@ import ru.endlesscode.mimic.internal.buildTextComponent
 internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponent = buildTextComponent {
     appendSelectablePropertyConfig(
         property = MimicConfig.LEVEL_SYSTEM,
-        selectedId = mimic.getLevelSystemProvider().id,
-        services = mimic.getAllLevelSystemProviders(),
+        selectedOption = mimic.getLevelSystemProvider().id,
+        options = mimic.getAllLevelSystemProviders().keys,
     )
     appendSelectablePropertyConfig(
         property = MimicConfig.CLASS_SYSTEM,
-        selectedId = mimic.getClassSystemProvider().id,
-        services = mimic.getAllClassSystemProviders(),
+        selectedOption = mimic.getClassSystemProvider().id,
+        options = mimic.getAllClassSystemProviders().keys,
     )
     appendSelectablePropertyConfig(
         property = MimicConfig.INVENTORY_PROVIDER,
-        selectedId = mimic.getPlayerInventoryProvider().id,
-        services = mimic.getAllPlayerInventoryProviders(),
+        selectedOption = mimic.getPlayerInventoryProvider().id,
+        options = mimic.getAllPlayerInventoryProviders().keys,
     )
     appendSetPropertyConfig(
         property = MimicConfig.DISABLED_ITEMS_REGISTRIES,
         values = config.disabledItemsRegistries,
-        services = mimic.getAllItemsRegistries(),
+        options = mimic.getAllItemsRegistries().keys,
+        permanentOptions = MimicConfig.DEFAULT_ITEMS_REGISTRIES,
     )
 }
 
 private fun TextComponent.Builder.appendSelectablePropertyConfig(
     property: StringConfigProperty,
-    selectedId: String,
-    services: Map<String, MimicService>,
+    selectedOption: String,
+    options: Set<String>,
 ) = appendProperty(property) {
-    val availableOptions = services.keys - selectedId
+    val availableOptions = options - selectedOption
     if (availableOptions.isNotEmpty()) {
         appendLine()
         appendComment("Options: ")
@@ -61,15 +61,16 @@ private fun TextComponent.Builder.appendSelectablePropertyConfig(
 
     appendLine()
     appendPropertyPath(property)
-    append(selectedId)
+    append(selectedOption)
 }
 
 private fun TextComponent.Builder.appendSetPropertyConfig(
     property: StringSetConfigProperty,
     values: Set<String>,
-    services: Map<String, MimicService>,
+    options: Set<String>,
+    permanentOptions: Set<String>,
 ) = appendProperty(property) {
-    val selectableIds = services.keys - values
+    val selectableIds = options - values
     appendLine()
     appendComment("Options: ")
     appendSelectableOptions(
@@ -77,6 +78,7 @@ private fun TextComponent.Builder.appendSetPropertyConfig(
         hint = "Click to add",
         command = "/mimic info",
         color = NamedTextColor.GRAY,
+        nonClickableOptions = permanentOptions,
     )
 
     appendLine()
@@ -102,12 +104,17 @@ private fun TextComponent.Builder.appendSelectableOptions(
     hint: String,
     command: String,
     color: TextColor? = null,
+    nonClickableOptions: Collection<String> = emptySet(),
 ) = append(
     options.mapIndexed { index, option ->
         buildTextComponent {
             color(color)
             if (index != 0) append(", ")
-            appendClickable(option, hint, command)
+            if (option !in nonClickableOptions) {
+                appendClickable(option, hint, command)
+            } else {
+                append(option)
+            }
         }
     }
 )
