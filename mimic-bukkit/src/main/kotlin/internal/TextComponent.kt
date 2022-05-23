@@ -2,6 +2,8 @@ package ru.endlesscode.mimic.internal
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.event.ClickEvent
+import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 
@@ -25,4 +27,10 @@ internal fun TextComponent.Builder.append(
 
 internal fun TextComponent.Builder.append(text: String, vararg decorations: TextDecoration): TextComponent.Builder {
     return append(Component.text(text, null, *decorations))
+}
+
+internal fun TextComponent.Builder.appendClickable(text: String, hint: String, command: String) {
+    append(text, TextDecoration.UNDERLINED)
+    hoverEvent(HoverEvent.showText(Component.text(hint)))
+    clickEvent(ClickEvent.runCommand(command))
 }

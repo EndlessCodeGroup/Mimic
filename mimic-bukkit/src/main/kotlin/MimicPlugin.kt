@@ -20,6 +20,7 @@
 package ru.endlesscode.mimic
 
 import co.aikar.commands.PaperCommandManager
+import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bstats.bukkit.Metrics
 import org.bstats.charts.AdvancedPie
 import org.bstats.charts.SimplePie
@@ -62,6 +63,7 @@ public class MimicPlugin : JavaPlugin() {
 
     private val config: MimicConfig by lazy { MimicConfig(this) }
     private val mimic: Mimic by lazy { MimicImpl(servicesManager, config) }
+    private var audiences: BukkitAudiences? = null
 
     private inline val servicesManager get() = server.servicesManager
     private inline val pluginManager get() = server.pluginManager
@@ -73,6 +75,8 @@ public class MimicPlugin : JavaPlugin() {
     }
 
     override fun onEnable() {
+        audiences = BukkitAudiences.create(this)
+
         if (isReleased) initMetrics()
         registerCommands()
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
@@ -189,10 +193,16 @@ public class MimicPlugin : JavaPlugin() {
             "perm", "mimic.admin"
         )
 
-        manager.registerCommand(MainCommand(this, mimic))
+        manager.registerCommand(MainCommand(this, checkNotNull(audiences)))
+        manager.registerCommand(ConfigCommand(mimic, config, checkNotNull(audiences)))
         manager.registerCommand(LevelSystemSubcommand(mimic))
         manager.registerCommand(ClassSystemSubcommand(mimic))
         manager.registerCommand(InventorySubcommand(mimic))
         manager.registerCommand(ItemsSubcommand(mimic.getItemsRegistry()))
+    }
+
+    override fun onDisable() {
+        audiences?.close()
+        audiences = null
     }
 }

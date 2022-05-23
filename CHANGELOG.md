@@ -1,5 +1,18 @@
 ## [Unreleased]
 
+### Added command `/mimic config`
+
+Since now, it is possible to change Mimic config using commands in two ways:
+
+1. Using interactive config `/mimic config`.
+   Every option in the output is interactive, so you can change it just by mouse click.
+2. Change options by commands:
+   - `/mimic config level-system [value]` - set the specified level system as preferred for Mimic
+   - `/mimic config class-system [value]` - set the specified class system as preferred for Mimic
+   - `/mimic config inventory-provider [value]` - set the specified inventory provider as preferred for Mimic
+   - `/mimic config disabled-items-registries add [item-registry]` - disable the specified item registry for Mimic
+   - `/mimic config disabled-items-registries remove [item-registry]` - enable the specified item registry for Mimic
+
 ### API changes
 
 - Added tag `@since 0.8.0` to all new APIs
