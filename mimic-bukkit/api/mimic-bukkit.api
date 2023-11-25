@@ -1,5 +1,6 @@
 public final class ru/endlesscode/mimic/MimicPlugin : org/bukkit/plugin/java/JavaPlugin {
 	public fun <init> ()V
+	public fun onDisable ()V
 	public fun onEnable ()V
 	public fun onLoad ()V
 }
