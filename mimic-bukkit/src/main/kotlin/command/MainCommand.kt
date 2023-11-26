@@ -4,6 +4,7 @@ import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.kyori.adventure.text.format.NamedTextColor
+import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
@@ -11,12 +12,15 @@ import ru.endlesscode.mimic.internal.buildTextComponent
 
 /** Registers command '/mimic' and all subcommands. */
 internal fun registerCommand(
+    mimic: Mimic,
     pluginFullName: String,
     audiences: BukkitAudiences,
 ) = commandAPICommand("mimic") {
     withPermission("mimic.admin")
     withShortDescription("Show info about Mimic")
     executes(infoExecutor(audiences, pluginFullName))
+
+    classSystemSubcommand(mimic)
 }
 
 private fun infoExecutor(audiences: BukkitAudiences, pluginFullName: String) = CommandExecutor { sender, _ ->

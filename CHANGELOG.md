@@ -21,6 +21,7 @@ Since now, it is possible to change Mimic config using commands in two ways:
 ### Plugin changes
 
 - Command `/mimic info` replaced with command `/mimic`
+- Command `/mimic class has` replaced with command `/mimic class check` with slightly simpler syntax
 
 ### Housekeeping
 
