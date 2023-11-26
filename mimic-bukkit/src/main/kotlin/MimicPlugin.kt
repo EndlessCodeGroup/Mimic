@@ -82,7 +82,10 @@ public class MimicPlugin : JavaPlugin() {
         audiences = BukkitAudiences.create(this)
 
         if (isReleased) initMetrics()
-        registerCommands()
+        registerCommand(
+            pluginFullName = description.fullName,
+            audiences = checkNotNull(audiences),
+        )
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 

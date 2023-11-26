@@ -18,6 +18,10 @@ Since now, it is possible to change Mimic config using commands in two ways:
 - Added tag `@since 0.8.0` to all new APIs
 - Make `BukkitPlayerInventory.collectEquippedItems` protected. It was public by an accident.
 
+### Plugin changes
+
+- Command `/mimic info` replaced with command `/mimic`
+
 ### Housekeeping
 
 - Update Kotlin 1.6.20 → 1.9.20
