@@ -84,6 +84,7 @@ public class MimicPlugin : JavaPlugin() {
         if (isReleased) initMetrics()
         registerCommand(
             mimic = mimic,
+            config = config,
             pluginFullName = description.fullName,
             audiences = checkNotNull(audiences),
         )

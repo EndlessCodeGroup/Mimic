@@ -5,6 +5,7 @@ import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.kyori.adventure.text.format.NamedTextColor
 import ru.endlesscode.mimic.Mimic
+import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
@@ -13,6 +14,7 @@ import ru.endlesscode.mimic.internal.buildTextComponent
 /** Registers command '/mimic' and all subcommands. */
 internal fun registerCommand(
     mimic: Mimic,
+    config: MimicConfig,
     pluginFullName: String,
     audiences: BukkitAudiences,
 ) = commandAPICommand("mimic") {
@@ -20,6 +22,7 @@ internal fun registerCommand(
     withShortDescription("Show info about Mimic")
     executes(infoExecutor(audiences, pluginFullName))
 
+    configSubcommand(mimic, config, audiences)
     classSystemSubcommand(mimic)
 }
 
