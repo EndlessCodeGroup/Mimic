@@ -44,7 +44,6 @@ dependencies {
     compileOnly(spigotApi) { isTransitive = false }
     compileOnly(misc.annotations)
 
-    implementation(acf.paper)
     implementation(misc.bstats)
     implementation(misc.serialization_hocon)
     implementation(misc.commandapi)
@@ -77,8 +76,6 @@ tasks.shadowJar {
     }
 
     val shadePackage = "${project.group}.shade"
-    relocate("co.aikar.commands", "$shadePackage.acf.commands")
-    relocate("co.aikar.locales", "$shadePackage.acf.locales")
     relocate("kotlin", "$shadePackage.kotlin")
     relocate("org.bstats", "$shadePackage.bstats")
     relocate("com.typesafe.config", "$shadePackage.hocon")

@@ -9,10 +9,6 @@ object rpgplugins {
     const val heroes = ":Heroes:1.9.9"
 }
 
-object acf {
-    const val paper = "co.aikar:acf-paper:0.5.1-SNAPSHOT"
-}
-
 object misc {
     const val bstats = "org.bstats:bstats-bukkit:3.0.0"
     const val annotations = "org.jetbrains:annotations:23.0.0"
