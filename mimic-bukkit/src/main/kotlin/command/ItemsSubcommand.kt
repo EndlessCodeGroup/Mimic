@@ -19,85 +19,106 @@
 
 package ru.endlesscode.mimic.command
 
-import co.aikar.commands.AbstractCommandManager
-import co.aikar.commands.MimicCommand
-import co.aikar.commands.annotation.*
-import org.bukkit.command.CommandSender
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.arguments.ArgumentSuggestions
+import dev.jorel.commandapi.executors.CommandExecutor
+import dev.jorel.commandapi.kotlindsl.*
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
-@CommandAlias("%command")
-@CommandPermission("%perm")
-@Subcommand("items")
-internal class ItemsSubcommand(private val itemsRegistry: BukkitItemsRegistry) : MimicCommand() {
-
-    override fun afterRegister(manager: AbstractCommandManager) {
-        manager.commandCompletions.registerAsyncCompletion("item") { itemsRegistry.knownIds }
+/**
+ * Commands to deal with items registries
+ * ```
+ * /mimic items info
+ * /mimic items give [target] [amount] [item] (payload)
+ * /mimic items compare [item]
+ * /mimic items id
+ * /mimic items find [item]
+ * ```
+ */
+internal fun CommandAPICommand.itemsSubcommand(itemsRegistry: BukkitItemsRegistry) = subcommand("items") {
+    subcommand("info") {
+        withShortDescription("Show information about items service")
+        executes(infoExecutor(itemsRegistry))
     }
 
-    @Subcommand("info")
-    @Description("Show information about items service")
-    fun info(sender: CommandSender) {
-        val registries = (itemsRegistry as? MimicItemsRegistry)?.providers
-            .orEmpty()
-            .map { it.provider }
-            .map { "  &f${it.id}: &7${it.knownIds.size}" }
-
-        sender.send(
-            "&3Items Service: &7${itemsRegistry.id}",
-            "&3Known IDs amount: &7${itemsRegistry.knownIds.size}"
-        )
-        sender.send(registries)
+    subcommand("give") {
+        withShortDescription("Give item to player")
+        playerArgument(TARGET)
+        integerArgument(AMOUNT, min = 1, max = 64) {
+            replaceSuggestions(ArgumentSuggestions.strings("1", "64"))
+        }
+        itemArgument(itemsRegistry)
+        executes(giveExecutor(itemsRegistry))
     }
 
-    @Subcommand("give")
-    @Description("Give item to player")
-    @CommandCompletion("@players @item @nothing")
-    fun give(
-        sender: CommandSender,
-        @Flags("other") player: Player,
-        item: String,
-        @Default("1") amount: Int,
-        @Optional payload: String?,
-    ) {
-        val itemStack = itemsRegistry.getItem(item, payload, amount)
-        if (itemStack != null) {
-            player.inventory.addItem(itemStack)
-            sender.send("&6Gave ${itemStack.amount} [$item] to ${player.name}.")
-        } else {
-            sender.send("&cUnknown item '$item'.")
+    subcommand("compare") {
+        withShortDescription("Compare item in hand corresponds and given item")
+        itemArgument(itemsRegistry)
+        playerExecutor { sender, args ->
+            val item: String by args
+            val isSame = itemsRegistry.isSameItem(sender.inventory.itemInMainHand, item)
+            sender.send("&6Item in hand and '$item' %s same.".format(if (isSame) "are" else "aren't"))
         }
     }
 
-    @Subcommand("compare")
-    @Description("Compare item in hand corresponds and given item")
-    @CommandCompletion("@item")
-    fun compare(
-        @Flags("itemheld") player: Player,
-        @Single item: String,
-    ) {
-        val isSame = itemsRegistry.isSameItem(player.inventory.itemInMainHand, item)
-        player.send("&6Item in hand and '$item' are%s same.".format(if (isSame) "" else "n't"))
+    subcommand("id") {
+        withShortDescription("Prints ID of item in hand")
+        playerExecutor { sender, _ ->
+            val id = itemsRegistry.getItemId(sender.inventory.itemInMainHand)
+            sender.send("&6Id of item in hand is '$id'")
+        }
     }
 
-    @Subcommand("id")
-    @Description("Prints ID of item in hand")
-    fun id(
-        @Flags("itemheld") player: Player,
-    ) {
-        val id = itemsRegistry.getItemId(player.inventory.itemInMainHand)
-        player.send("&6Id of item in hand is '$id'")
-    }
-
-    @Subcommand("find")
-    @Description("Check that item with given ID exists")
-    @CommandCompletion("@item")
-    fun find(
-        sender: CommandSender,
-        @Single item: String,
-    ) {
-        val itemExists = itemsRegistry.isItemExists(item)
-        sender.send("&6Item with id '$item'%s exists".format(if (itemExists) "" else " isn't"))
+    subcommand("find") {
+        withShortDescription("Check that item with given ID exists")
+        itemArgument(itemsRegistry)
+        anyExecutor { sender, args ->
+            val item: String by args
+            val itemExists = itemsRegistry.isItemExists(item)
+            sender.send("&6Item with id '$item'%s exists".format(if (itemExists) "" else " isn't"))
+        }
     }
 }
+
+// We can use only greedy string if we need to allow colons because it requires quoting in non-greedy strings.
+// https://github.com/Mojang/brigadier/blob/cf754c4ef654160dca946889c11941634c5db3d5/src/main/java/com/mojang/brigadier/StringReader.java#L169
+private fun CommandAPICommand.itemArgument(itemsRegistry: BukkitItemsRegistry) = greedyStringArgument(ITEM) {
+    replaceSuggestions(ArgumentSuggestions.stringCollection { itemsRegistry.knownIds })
+}
+
+private fun infoExecutor(itemsRegistry: BukkitItemsRegistry) = CommandExecutor { sender, _ ->
+    val registries = (itemsRegistry as? MimicItemsRegistry)?.providers
+        .orEmpty()
+        .map { it.provider }
+        .map { "  &f${it.id}: &7${it.knownIds.size}" }
+
+    sender.send(
+        "&3Items Service: &7${itemsRegistry.id}",
+        "&3Known IDs amount: &7${itemsRegistry.knownIds.size}"
+    )
+    sender.send(registries)
+}
+
+private fun giveExecutor(itemsRegistry: BukkitItemsRegistry) = CommandExecutor { sender, args ->
+    val target: Player by args
+    val amount = args.getOrDefaultUnchecked(AMOUNT, 1)
+    // We can use only one greedy string at the end, so we read item and its payload from the same argument
+    val itemParts = args.getRaw(ITEM).orEmpty().split(" ", limit = 2)
+    val item = itemParts.first()
+    val payload = itemParts.getOrNull(1)
+
+    val itemStack = itemsRegistry.getItem(item, payload, amount)
+    if (itemStack != null) {
+        target.inventory.addItem(itemStack)
+        sender.send("&6Gave ${itemStack.amount} [$item] to ${target.name}.")
+    } else {
+        sender.send("&cUnknown item '$item'.")
+    }
+}
+
+private const val TARGET = "target"
+private const val ITEM = "item"
+private const val AMOUNT = "amount"
+private const val PAYLOAD = "payload"

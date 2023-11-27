@@ -26,6 +26,7 @@ internal fun registerCommand(
     levelSystemSubcommand(mimic)
     classSystemSubcommand(mimic)
     inventorySubcommand(mimic)
+    itemsSubcommand(mimic.getItemsRegistry())
 }
 
 private fun infoExecutor(audiences: BukkitAudiences, pluginFullName: String) = CommandExecutor { sender, _ ->
