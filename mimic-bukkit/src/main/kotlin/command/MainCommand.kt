@@ -23,6 +23,7 @@ internal fun registerCommand(
     executes(infoExecutor(audiences, pluginFullName))
 
     configSubcommand(mimic, config, audiences)
+    levelSystemSubcommand(mimic)
     classSystemSubcommand(mimic)
 }
 
