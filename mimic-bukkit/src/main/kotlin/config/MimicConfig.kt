@@ -16,14 +16,10 @@ internal class MimicConfig(
     private val configuration: FileConfiguration = YamlConfiguration(),
 ) {
 
-    var levelSystem: String = ""
-        private set
-    var classSystem: String = ""
-        private set
-    var inventoryProvider: String = ""
-        private set
-    var disabledItemsRegistries: Set<String> = emptySet()
-        private set
+    var levelSystem: String by configuration.property(LEVEL_SYSTEM)
+    var classSystem: String by configuration.property(CLASS_SYSTEM)
+    var inventoryProvider: String by configuration.property(INVENTORY_PROVIDER)
+    var disabledItemsRegistries: Set<String> by configuration.property(DISABLED_ITEMS_REGISTRIES)
 
     constructor(plugin: Plugin) : this(plugin.toString(), File(plugin.dataFolder, "config.yml"))
 
@@ -35,10 +31,7 @@ internal class MimicConfig(
                 "Here you can configure Mimic APIs.",
                 "Use command '/mimic info' to list available implementations.",
             )
-            addDefault(LEVEL_SYSTEM, "")
-            addDefault(CLASS_SYSTEM, "")
-            addDefault(INVENTORY_PROVIDER, "")
-            addDefault(DISABLED_ITEMS_REGISTRIES, emptyList<String>())
+            properties.forEach(::addDefault)
         }
         reload()
     }
@@ -50,30 +43,24 @@ internal class MimicConfig(
                 file.createNewFile()
             }
             configuration.load(file)
-            readConfigValues()
+            validateConfigValues()
         } catch (e: Throwable) {
             Log.w(e, "Failed to load config.")
         }
         save()
     }
 
-    private fun readConfigValues() {
-        levelSystem = configuration.getString(LEVEL_SYSTEM).orEmpty().lowercase()
-        classSystem = configuration.getString(CLASS_SYSTEM).orEmpty().lowercase()
-        inventoryProvider = configuration.getString(INVENTORY_PROVIDER).orEmpty().lowercase()
+    private fun validateConfigValues() {
+        val configuredDisabledItemsRegistries = disabledItemsRegistries
+        disabledItemsRegistries = configuredDisabledItemsRegistries - DEFAULT_ITEMS_REGISTRIES
 
-        val disabledItemsRegistries = configuration.getStringList(DISABLED_ITEMS_REGISTRIES)
-            .map { it.lowercase() }
-            .toSet()
-        this.disabledItemsRegistries = disabledItemsRegistries - DEFAULT_ITEMS_REGISTRIES
-
-        val notDisabledRegistries = disabledItemsRegistries - this.disabledItemsRegistries
+        val notDisabledRegistries = configuredDisabledItemsRegistries - disabledItemsRegistries
         if (notDisabledRegistries.isNotEmpty()) {
-            Log.w("Config: Items registries $notDisabledRegistries can not be disabled.")
+            Log.w("Config: Items registries $notDisabledRegistries can not be disabled. It will be removed from config.")
         }
     }
 
-    private fun save() {
+    fun save() {
         try {
             configuration.applyDefaults()
             configuration.addComments()
@@ -84,44 +71,62 @@ internal class MimicConfig(
     }
 
     private fun Configuration.addComments() {
-        setComments(
-            path = LEVEL_SYSTEM,
-            "[LevelSystem API]",
-            "Specify here the preferred level system implementation.",
-            EMPTY_VALUE_MESSAGE,
-        )
-        setComments(
-            path = CLASS_SYSTEM,
-            null,
-            "[ClassSystem API]",
-            "Specify here the preferred class system implementation.",
-            EMPTY_VALUE_MESSAGE,
-        )
-        setComments(
-            path = INVENTORY_PROVIDER,
-            null,
-            "[PlayerInventory API]",
-            "Specify here the preferred player inventory provider implementation.",
-            EMPTY_VALUE_MESSAGE,
-        )
-        setComments(
-            path = DISABLED_ITEMS_REGISTRIES,
-            null,
-            "[ItemsRegistry API]",
-            "List here disabled items registry implementations.",
-            "You can't disable 'mimic' and 'minecraft' items registries.",
-            "By default, all implementations are enabled.",
-        )
+        properties.forEachIndexed { index, property ->
+            val lineBreak: Array<String?> = if (index != 0) arrayOf(null) else emptyArray()
+            setComments(
+                path = property.path,
+                *lineBreak,
+                property.formattedTitle,
+                *property.comments,
+            )
+        }
     }
 
-    private companion object {
-        const val LEVEL_SYSTEM = "level-system"
-        const val CLASS_SYSTEM = "class-system"
-        const val INVENTORY_PROVIDER = "inventory-provider"
-        const val DISABLED_ITEMS_REGISTRIES = "disabled-items-registries"
-
-        const val EMPTY_VALUE_MESSAGE = "If the value is empty, will be used implementation with the highest priority."
+    internal companion object {
+        private const val EMPTY_VALUE_MESSAGE =
+            "If the value is empty, will be used implementation with the highest priority."
 
         val DEFAULT_ITEMS_REGISTRIES = setOf("mimic", "minecraft")
+
+        val LEVEL_SYSTEM = StringConfigProperty(
+            path = "level-system",
+            title = "LevelSystem API",
+            comments = arrayOf(
+                "Specify here the preferred level system implementation.",
+                EMPTY_VALUE_MESSAGE,
+            )
+        )
+        val CLASS_SYSTEM = StringConfigProperty(
+            path = "class-system",
+            title = "ClassSystem API",
+            comments = arrayOf(
+                "Specify here the preferred class system implementation.",
+                EMPTY_VALUE_MESSAGE,
+            ),
+        )
+        val INVENTORY_PROVIDER = StringConfigProperty(
+            path = "inventory-provider",
+            title = "PlayerInventory API",
+            comments = arrayOf(
+                "Specify here the preferred player inventory provider implementation.",
+                EMPTY_VALUE_MESSAGE,
+            ),
+        )
+        val DISABLED_ITEMS_REGISTRIES = StringSetConfigProperty(
+            path = "disabled-items-registries",
+            title = "ItemsRegistry API",
+            comments = arrayOf(
+                "List here disabled items registry implementations.",
+                "You can't disable 'mimic' and 'minecraft' items registries.",
+                "By default, all implementations are enabled.",
+            ),
+        )
+
+        private val properties = listOf(
+            LEVEL_SYSTEM,
+            CLASS_SYSTEM,
+            INVENTORY_PROVIDER,
+            DISABLED_ITEMS_REGISTRIES,
+        )
     }
 }

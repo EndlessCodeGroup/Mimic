@@ -5,7 +5,7 @@ import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("ru.endlesscode.bukkitgradle") version "0.10.0"
+    id("ru.endlesscode.bukkitgradle") version "0.10.1"
     kotlin("plugin.serialization")
 }
 
@@ -47,6 +47,7 @@ dependencies {
     implementation(acf.paper)
     implementation(misc.bstats)
     implementation(misc.serialization_hocon)
+    implementation(misc.adventure)
 
     compileOnly(rpgplugins.skillapi)
     compileOnly(rpgplugins.battlelevels)
@@ -79,6 +80,8 @@ tasks.shadowJar {
     relocate("kotlin", "$shadePackage.kotlin")
     relocate("org.bstats", "$shadePackage.bstats")
     relocate("com.typesafe.config", "$shadePackage.hocon")
+    relocate("net.kyori.adventure", "$shadePackage.adventure")
+    relocate("net.kyori.examination", "$shadePackage.examination")
 
     exclude("META-INF/*.kotlin_module")
     exclude("META-INF/maven/**")
