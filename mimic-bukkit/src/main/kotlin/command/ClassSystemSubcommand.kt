@@ -18,57 +18,61 @@
  */
 package ru.endlesscode.mimic.command
 
-import co.aikar.commands.AbstractCommandManager
-import co.aikar.commands.MimicCommand
-import co.aikar.commands.annotation.*
-import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.kotlindsl.greedyStringArgument
+import dev.jorel.commandapi.kotlindsl.playerArgument
+import dev.jorel.commandapi.kotlindsl.subcommand
 import ru.endlesscode.mimic.Mimic
 
-@CommandAlias("%command")
-@CommandPermission("%perm")
-@Subcommand("class")
-internal class ClassSystemSubcommand(
-    private val mimic: Mimic,
-) : MimicCommand() {
-
-    override fun afterRegister(manager: AbstractCommandManager) {
-        manager.commandCompletions.registerEnumCompletion<Mode>()
+/**
+ * Commands to deal with class systems.
+ * ```
+ * /mimic class info [player]
+ * /mimic class check [player] (classes...)
+ * ```
+ */
+internal fun CommandAPICommand.classSystemSubcommand(mimic: Mimic) = subcommand("class") {
+    subcommand("info") {
+        withShortDescription("Show information about player's class system")
+        playerArgument(TARGET, optional = true)
+        executesPlayer(infoCommandExecutor(mimic))
     }
 
-    @Subcommand("info")
-    @Description("Show information about player's class system")
-    @CommandCompletion("@players")
-    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player?) {
-        if (player == null) return
-        val provider = mimic.getClassSystemProvider()
-        val system = provider.getSystem(player)
-        sender.send(
-            "&3System: &7${provider.id}",
-            "&3Classes: &7${system.classes}",
-            "&3Primary: &7${system.primaryClass}"
-        )
+    subcommand("check") {
+        withShortDescription("Check that player has the given classes")
+        playerArgument(TARGET)
+        greedyStringArgument(CLASSES)
+        executesPlayer(checkCommandExecutor(mimic))
     }
-
-    @Subcommand("has")
-    @Description("Check that player has given classes")
-    @CommandCompletion("@nothing @mode @players")
-    fun has(
-        sender: CommandSender,
-        @Split classes: Array<String>,
-        @Default("all") mode: Mode,
-        @Optional @Flags("other,defaultself") player: Player?,
-    ) {
-        if (player == null) return
-        val system = mimic.getClassSystem(player)
-        val has = if (mode == Mode.ALL) {
-            system.hasAllClasses(classes.asList())
-        } else {
-            system.hasAnyOfClasses(classes.asList())
-        }
-        sender.send("&6Player '${player.name}' has%s given classes.".format(if (has) "" else " not"))
-    }
-
-    @Suppress("UNUSED")
-    internal enum class Mode { ONE, ALL }
 }
+
+private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player, args ->
+    val target = args.getOrDefaultUnchecked(TARGET, player)
+    val provider = mimic.getClassSystemProvider()
+    val system = provider.getSystem(target)
+    player.send(
+        "&3System: &7${provider.id}",
+        "&3Classes: &7${system.classes}",
+        "&3Primary: &7${system.primaryClass}",
+    )
+}
+
+private fun checkCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player, args ->
+    val target = args.getOrDefaultUnchecked(TARGET, player)
+    val classes = args.getOrDefaultRaw(CLASSES, "").split(" ")
+
+    val system = mimic.getClassSystem(target)
+    val hasAllClasses = system.hasAllClasses(classes)
+    val hasAnyOfClasses = system.hasAnyOfClasses(classes)
+    target.send(
+        "&6Player '${target.name}':",
+        "&6- has any of: ${hasAnyOfClasses.toChatMessage()}",
+        "&6- has all: ${hasAllClasses.toChatMessage()}",
+    )
+}
+
+private fun Boolean.toChatMessage(): String = if (this) "&ayes" else "&cno"
+
+private const val TARGET = "target"
+private const val CLASSES = "classes"

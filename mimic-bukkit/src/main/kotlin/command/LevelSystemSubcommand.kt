@@ -19,144 +19,172 @@
 
 package ru.endlesscode.mimic.command
 
-import co.aikar.commands.AbstractCommandManager
-import co.aikar.commands.InvalidCommandArgument
-import co.aikar.commands.MessageKeys
-import co.aikar.commands.MimicCommand
-import co.aikar.commands.annotation.*
+import dev.jorel.commandapi.CommandAPI
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.arguments.ArgumentSuggestions
+import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.kotlindsl.*
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import kotlin.math.roundToInt
 
-@CommandAlias("%command")
-@CommandPermission("%perm")
-@Subcommand("experience|xp")
-internal class LevelSystemSubcommand(
-    private val mimic: Mimic
-) : MimicCommand() {
+/**
+ * Commands to deal with level systems.
+ * ```
+ * /mimic xp info (player)
+ * /mimic xp set [amount] (lvl|points|total) (player)
+ * /mimic xp give [amount] (lvl|points) (player)
+ * /mimic xp take [amount] (lvl|points) (player)
+ * /mimic xp has [amount] (lvl|points|total) (player)
+ * ```
+ */
+internal fun CommandAPICommand.levelSystemSubcommand(mimic: Mimic) = subcommand("experience") {
+    withAliases("xp")
 
-    override fun afterRegister(manager: AbstractCommandManager) {
-        manager.commandCompletions.registerEnumCompletion<ExtendedValueType>("extype")
-        manager.commandCompletions.registerEnumCompletion<ValueType>("type")
+    subcommand("info") {
+        withShortDescription("Show information about player's level system")
+        playerArgument(TARGET, optional = true)
+        executesPlayer(infoCommandExecutor(mimic))
     }
 
-    @Subcommand("info")
-    @Description("Show information about player's level system")
-    @CommandCompletion("@players")
-    fun info(sender: CommandSender, @Optional @Flags("other,defaultself") player: Player?) {
-        if (player == null) return
-        val provider = mimic.getLevelSystemProvider()
-        val system = provider.getSystem(player)
-        sender.send(
-            "&3System: &7${provider.id}",
-            "&3Level: &7%.2f".format(system.level + system.fractionalExp),
-            "&3Exp: &7%.1f &8| &3To next level: &7%.1f".format(system.exp, system.expToNextLevel),
-            "&3Total exp: &7%.1f".format(system.totalExp)
-        )
+    subcommand("set") {
+        withShortDescription("Set player's level or exp")
+        amountArgument()
+        valueTypeArgument(allowTotal = true)
+        playerArgument(TARGET, optional = true)
+        executesPlayer(setCommandExecutor(mimic))
     }
 
-    @Subcommand("set")
-    @Description("Set player's level or exp")
-    @CommandCompletion("@nothing @extype @players")
-    fun set(
-        sender: CommandSender,
-        amount: Double,
-        @Default("lvl") type: ExtendedValueType,
-        @Optional @Flags("other,defaultself") player: Player?,
-    ) {
-        if (player == null) return
-        catchUnsupported {
-            val system = mimic.getLevelSystem(player)
-            @Suppress("DEPRECATION") // Allow using exp setter
-            when (type) {
-                ExtendedValueType.LVL -> system.level = amount.toInt()
-                ExtendedValueType.TOTAL -> system.totalExp = amount
-                ExtendedValueType.POINTS -> system.exp = amount
-            }
-            system.printNewStats(sender)
-        }
+    subcommand("give") {
+        withShortDescription("Give level or exp to player")
+        amountArgument()
+        valueTypeArgument()
+        playerArgument(TARGET, optional = true)
+        executesPlayer(giveCommandExecutor(mimic))
     }
 
-    @Subcommand("give")
-    @Description("Give level or exp to player")
-    @CommandCompletion("@nothing @type @players")
-    fun give(
-        sender: CommandSender,
-        amount: Int,
-        @Default("lvl") type: ValueType,
-        @Optional @Flags("other,defaultself") player: Player?,
-    ) {
-        if (player == null) return
-        catchUnsupported {
-            val system = mimic.getLevelSystem(player)
-            when (type) {
-                ValueType.LVL -> system.giveLevels(amount)
-                ValueType.POINTS -> system.giveExp(amount.toDouble())
-            }
-            system.printNewStats(sender)
-        }
+    subcommand("take") {
+        withShortDescription("Take level or exp from player")
+        amountArgument()
+        valueTypeArgument()
+        playerArgument(TARGET, optional = true)
+        executesPlayer(takeCommandExecutor(mimic))
     }
 
-    @Subcommand("take")
-    @Description("Take level or exp from player")
-    @CommandCompletion("@nothing @type @players")
-    fun take(
-        sender: CommandSender,
-        amount: Int,
-        @Default("lvl") type: ValueType,
-        @Optional @Flags("other,defaultself") player: Player?,
-    ) {
-        if (player == null) return
-        catchUnsupported {
-            val system = mimic.getLevelSystem(player)
-            when (type) {
-                ValueType.LVL -> system.takeLevels(amount)
-                ValueType.POINTS -> system.takeExp(amount.toDouble())
-            }
-            system.printNewStats(sender)
-        }
-    }
-
-    private inline fun catchUnsupported(block: () -> Unit) {
-        try {
-            block()
-        } catch (e: UnsupportedOperationException) {
-            Log.d(e, quiet = true)
-            throw InvalidCommandArgument(MessageKeys.ERROR_PREFIX, false, "{message}", e.message.toString())
-        }
-    }
-
-    private fun BukkitLevelSystem.printNewStats(sender: CommandSender) {
-        sender.send("&6New ${player.name}'s stats: $level LVL, %.1f XP".format(exp))
-    }
-
-    @Subcommand("has")
-    @Description("Check that player did reach level or has exp")
-    @CommandCompletion("@nothing @extype @players")
-    fun has(
-        sender: CommandSender,
-        value: Int,
-        @Default("lvl") type: ExtendedValueType,
-        @Optional @Flags("other,defaultself") player: Player?,
-    ) {
-        if (player == null) return
-        val system = mimic.getLevelSystem(player)
-        val has = when (type) {
-            ExtendedValueType.LVL -> system.didReachLevel(value)
-            ExtendedValueType.POINTS -> system.hasExp(value.toDouble())
-            ExtendedValueType.TOTAL -> system.hasExpTotal(value.toDouble())
-        }
-        sender.send("&6${player.name} has%s $value ${type.stringValue}."
-            .format(if (has) "" else " not"))
-    }
-
-    internal enum class ValueType { LVL, POINTS }
-
-    internal enum class ExtendedValueType(val stringValue: String) {
-        LVL("level"),
-        POINTS("points"),
-        TOTAL("total experience")
+    subcommand("has") {
+        withShortDescription("Check that player did reach level or has exp")
+        amountArgument()
+        valueTypeArgument(allowTotal = true)
+        playerArgument(TARGET, optional = true)
+        executesPlayer(hasCommandExecutor(mimic))
     }
 }
+
+private fun CommandAPICommand.amountArgument() = doubleArgument(AMOUNT, min = 0.0) {
+    replaceSuggestions(ArgumentSuggestions.strings("1", "10", "100"))
+}
+
+private fun CommandAPICommand.valueTypeArgument(
+    allowTotal: Boolean = false,
+) = stringArgument(TYPE, optional = true) {
+    val values = listOfNotNull(TYPE_LVL, TYPE_POINTS, TYPE_TOTAL.takeIf { allowTotal })
+    replaceSuggestions(ArgumentSuggestions.stringCollection { values })
+}
+
+private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
+    val target = args.getOrDefaultUnchecked(TARGET, sender)
+    val provider = mimic.getLevelSystemProvider()
+    val system = provider.getSystem(target)
+    sender.send(
+        "&3System: &7${provider.id}",
+        "&3Level: &7%.2f".format(system.level + system.fractionalExp),
+        "&3Exp: &7%.1f &8| &3To next level: &7%.1f".format(system.exp, system.expToNextLevel),
+        "&3Total exp: &7%.1f".format(system.totalExp)
+    )
+}
+
+private fun setCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
+    val amount: Double by args
+    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
+    val target = args.getOrDefaultUnchecked(TARGET, sender)
+    catchUnsupported {
+        val system = mimic.getLevelSystem(target)
+        @Suppress("DEPRECATION") // Allow using exp setter
+        when (type) {
+            TYPE_LVL -> system.level = amount.roundToInt()
+            TYPE_POINTS -> system.exp = amount
+            TYPE_TOTAL -> system.totalExp = amount
+        }
+        system.printNewStats(sender)
+    }
+}
+
+private fun giveCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
+    val amount: Double by args
+    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
+    val target = args.getOrDefaultUnchecked(TARGET, sender)
+    catchUnsupported {
+        val system = mimic.getLevelSystem(target)
+        when (type) {
+            TYPE_LVL -> system.giveLevels(amount.toInt())
+            TYPE_POINTS -> system.giveExp(amount)
+        }
+        system.printNewStats(sender)
+    }
+}
+
+private fun takeCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
+    val amount: Double by args
+    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
+    val target = args.getOrDefaultUnchecked(TARGET, sender)
+    catchUnsupported {
+        val system = mimic.getLevelSystem(target)
+        when (type) {
+            TYPE_LVL -> system.takeLevels(amount.toInt())
+            TYPE_POINTS -> system.takeExp(amount)
+        }
+        system.printNewStats(sender)
+    }
+}
+
+private inline fun catchUnsupported(block: () -> Unit) {
+    try {
+        block()
+    } catch (e: UnsupportedOperationException) {
+        Log.d(e, quiet = true)
+        throw CommandAPI.failWithString(e.message.toString())
+    }
+}
+
+private fun BukkitLevelSystem.printNewStats(sender: CommandSender) {
+    sender.send("&6New ${player.name}'s stats: $level LVL, %.1f XP".format(exp))
+}
+
+private fun hasCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
+    val amount: Double by args
+    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
+    val target = args.getOrDefaultUnchecked(TARGET, sender)
+
+    fun buildMessage(has: Boolean, valueType: String): String {
+        val hasOrNot = if (has) "has" else "has not"
+        return "&6${target.name} $hasOrNot $amount $valueType."
+    }
+
+    val system = mimic.getLevelSystem(target)
+    val message = when (type) {
+        TYPE_LVL -> buildMessage(system.didReachLevel(amount.toInt()), "level")
+        TYPE_POINTS -> buildMessage(system.hasExp(amount), "points")
+        TYPE_TOTAL -> buildMessage(system.hasExpTotal(amount), "total experience")
+        else -> error("Unexpected type: $type")
+    }
+    sender.send(message)
+}
+
+private const val TARGET = "target"
+private const val AMOUNT = "amount"
+private const val TYPE = "type"
+private const val TYPE_LVL = "lvl"
+private const val TYPE_POINTS = "points"
+private const val TYPE_TOTAL = "total"

@@ -1,78 +1,96 @@
 package ru.endlesscode.mimic.command
 
-import co.aikar.commands.AbstractCommandManager
-import co.aikar.commands.MimicCommand
-import co.aikar.commands.annotation.*
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.arguments.ArgumentSuggestions
+import dev.jorel.commandapi.kotlindsl.anyExecutor
+import dev.jorel.commandapi.kotlindsl.multiLiteralArgument
+import dev.jorel.commandapi.kotlindsl.stringArgument
+import dev.jorel.commandapi.kotlindsl.subcommand
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
 
-@OptIn(ExperimentalMimicApi::class)
-@CommandAlias("%command")
-@CommandPermission("%perm")
-@Subcommand("config")
-internal class ConfigCommand(
-    private val mimic: Mimic,
-    private val config: MimicConfig,
-    private val audiences: BukkitAudiences,
-) : MimicCommand() {
-
-    override fun afterRegister(manager: AbstractCommandManager) {
-        manager.commandCompletions.registerAsyncCompletion("level-system") {
-            mimic.getAllLevelSystemProviders().keys
-        }
-        manager.commandCompletions.registerAsyncCompletion("class-system") {
-            mimic.getAllClassSystemProviders().keys
-        }
-        manager.commandCompletions.registerAsyncCompletion("inventory-provider") {
-            mimic.getAllPlayerInventoryProviders().keys
-        }
-        manager.commandCompletions.registerAsyncCompletion("items-registry") {
-            mimic.getAllItemsRegistries().keys - MimicConfig.DEFAULT_ITEMS_REGISTRIES
-        }
-    }
-
-    @Default
-    @Description("Show config")
-    fun showConfig(sender: CommandSender) {
+/**
+ * Commands to see and change Mimic config.
+ *
+ * ```
+ * /mimic config
+ * /mimic config [single-property] [value]
+ * /mimic config [collection-property] add|remove [value]
+ * ```
+ */
+internal fun CommandAPICommand.configSubcommand(
+    mimic: Mimic,
+    config: MimicConfig,
+    audiences: BukkitAudiences,
+) = subcommand("config") {
+    val showConfig = { sender: CommandSender ->
         val message = buildConfigMessage(mimic, config)
         audiences.sender(sender).sendMessage(message)
     }
 
-    @Subcommand("level-system")
-    @CommandCompletion("@level-system")
-    fun setLevelSystem(sender: CommandSender, levelSystem: String) {
-        config.levelSystem = levelSystem
-        showConfig(sender)
+    withShortDescription("Show Mimic config")
+    anyExecutor { sender, _ -> showConfig(sender) }
+
+    subcommand("level-system") {
+        withShortDescription("Change the preferred level system")
+        stringSetArgument(VALUE) { mimic.getAllLevelSystemProviders().keys }
+        anyExecutor { sender, args ->
+            config.levelSystem = args[VALUE] as String
+            showConfig(sender)
+        }
     }
 
-    @Subcommand("class-system")
-    @CommandCompletion("@class-system")
-    fun setClassSystem(sender: CommandSender, classSystem: String) {
-        config.classSystem = classSystem
-        showConfig(sender)
+    subcommand("class-system") {
+        withShortDescription("Change the preferred class system")
+        stringSetArgument(VALUE) { mimic.getAllClassSystemProviders().keys }
+        anyExecutor { sender, args ->
+            config.classSystem = args[VALUE] as String
+            showConfig(sender)
+        }
     }
 
-    @Subcommand("inventory-provider")
-    @CommandCompletion("@inventory-provider")
-    fun setInventoryProvider(sender: CommandSender, inventoryProvider: String) {
-        config.inventoryProvider = inventoryProvider
-        showConfig(sender)
+    @OptIn(ExperimentalMimicApi::class)
+    subcommand("inventory-provider") {
+        withShortDescription("Change the preferred inventory provider")
+        stringSetArgument(VALUE) { mimic.getAllPlayerInventoryProviders().keys }
+        anyExecutor { sender, args ->
+            config.inventoryProvider = args[VALUE] as String
+            showConfig(sender)
+        }
     }
 
-    @Subcommand("disabled-items-registries add")
-    @CommandCompletion("@items-registry")
-    fun disableItemsRegistry(sender: CommandSender, inventoryProvider: String) {
-        config.disabledItemsRegistries += inventoryProvider
-        showConfig(sender)
-    }
+    subcommand("disabled-items-registries") {
+        withShortDescription("Enable/Disable an item registry in Mimic")
+        multiLiteralArgument(nodeName = ACTION, ACTION_ADD, ACTION_REMOVE)
+        stringSetArgument(ITEMS_REGISTRY) {
+            mimic.getAllItemsRegistries().keys - MimicConfig.DEFAULT_ITEMS_REGISTRIES
+        }
 
-    @Subcommand("disabled-items-registries remove")
-    @CommandCompletion("@items-registry")
-    fun enableItemsRegistry(sender: CommandSender, inventoryProvider: String) {
-        config.disabledItemsRegistries -= inventoryProvider
-        showConfig(sender)
+        anyExecutor { sender, args ->
+            val action = args[ACTION] as String
+            val itemsRegistry = args[ITEMS_REGISTRY] as String
+            if (action == ACTION_ADD) {
+                config.disabledItemsRegistries += itemsRegistry
+            } else {
+                config.disabledItemsRegistries -= itemsRegistry
+            }
+            showConfig(sender)
+        }
     }
 }
+
+private fun CommandAPICommand.stringSetArgument(
+    nodeName: String,
+    provideOptions: () -> Set<String>
+) = stringArgument(nodeName) {
+    replaceSuggestions(ArgumentSuggestions.stringCollection { provideOptions() })
+}
+
+private const val VALUE = "value"
+private const val ITEMS_REGISTRY = "items-registry"
+private const val ACTION = "action"
+private const val ACTION_ADD = "add"
+private const val ACTION_REMOVE = "remove"

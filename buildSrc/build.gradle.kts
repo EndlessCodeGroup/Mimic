@@ -8,7 +8,7 @@ java {
 }
 
 dependencies {
-    val kotlinVersion = "1.6.20"
+    val kotlinVersion = "1.9.20"
     implementation(kotlin("gradle-plugin", version = kotlinVersion))
     implementation(kotlin("serialization", version = kotlinVersion))
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.6.20")

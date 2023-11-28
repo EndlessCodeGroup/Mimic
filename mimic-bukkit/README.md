@@ -22,8 +22,8 @@ You can configure in `config.yml` what APIs implementations should be used.
 
 | Command                | Description                          |
 |------------------------|--------------------------------------|
+| `/mimic`               | Show mimic status                    |
 | `/mimic help <search>` | Print help                           |
-| `/mimic info`          | Show mimic status                    |
 | `/mimic experience`    | Manage player's level and experience |
 | `/mimic class`         | Check player's classes               |
 | `/mimic inventory`     | Player's inventory info              |

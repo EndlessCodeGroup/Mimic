@@ -19,7 +19,8 @@
 
 package ru.endlesscode.mimic
 
-import co.aikar.commands.PaperCommandManager
+import dev.jorel.commandapi.CommandAPI
+import dev.jorel.commandapi.CommandAPIBukkitConfig
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bstats.bukkit.Metrics
 import org.bstats.charts.AdvancedPie
@@ -31,7 +32,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.command.*
+import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
@@ -70,15 +71,23 @@ public class MimicPlugin : JavaPlugin() {
 
     override fun onLoad() {
         Log.init(logger, debug = !isReleased)
+        CommandAPI.onLoad(CommandAPIBukkitConfig(this))
+
         servicesManager.register(mimic, this)
         hookDefaultServices()
     }
 
     override fun onEnable() {
+        CommandAPI.onEnable()
         audiences = BukkitAudiences.create(this)
 
         if (isReleased) initMetrics()
-        registerCommands()
+        registerCommand(
+            mimic = mimic,
+            config = config,
+            pluginFullName = description.fullName,
+            audiences = checkNotNull(audiences),
+        )
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 
@@ -183,25 +192,9 @@ public class MimicPlugin : JavaPlugin() {
         })
     }
 
-    @Suppress("DEPRECATION") // Yes. I want to use unstable API
-    private fun registerCommands() {
-        val manager = PaperCommandManager(this)
-        manager.enableUnstableAPI("help")
-        manager.enableUnstableAPI("brigadier")
-        manager.commandReplacements.addReplacements(
-            "command", "mimic",
-            "perm", "mimic.admin"
-        )
-
-        manager.registerCommand(MainCommand(this, checkNotNull(audiences)))
-        manager.registerCommand(ConfigCommand(mimic, config, checkNotNull(audiences)))
-        manager.registerCommand(LevelSystemSubcommand(mimic))
-        manager.registerCommand(ClassSystemSubcommand(mimic))
-        manager.registerCommand(InventorySubcommand(mimic))
-        manager.registerCommand(ItemsSubcommand(mimic.getItemsRegistry()))
-    }
-
     override fun onDisable() {
+        CommandAPI.unregister("mimic")
+        CommandAPI.onDisable()
         audiences?.close()
         audiences = null
     }

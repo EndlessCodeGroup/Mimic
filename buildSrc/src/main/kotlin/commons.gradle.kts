@@ -8,9 +8,16 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
 
+// TODO: Remove after fix in BukkitGradle
+//   https://github.com/EndlessCodeGroup/BukkitGradle/issues/60
+afterEvaluate {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_16
+        targetCompatibility = JavaVersion.VERSION_16
+    }
+}
+
 tasks.withType<JavaCompile> {
-    sourceCompatibility = "1.8"
-    targetCompatibility = "1.8"
     options.encoding = "UTF-8"
 }
 
@@ -20,7 +27,7 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "16"
         apiVersion = "1.6"
         languageVersion = "1.6"
         freeCompilerArgs = listOf(

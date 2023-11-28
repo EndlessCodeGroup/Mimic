@@ -9,16 +9,16 @@ object rpgplugins {
     const val heroes = ":Heroes:1.9.9"
 }
 
-object acf {
-    const val paper = "co.aikar:acf-paper:0.5.1-SNAPSHOT"
-}
-
 object misc {
     const val bstats = "org.bstats:bstats-bukkit:3.0.0"
     const val annotations = "org.jetbrains:annotations:23.0.0"
     const val serialization_hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.3.2"
     const val mockk = "io.mockk:mockk:1.12.3"
     const val adventure = "net.kyori:adventure-platform-bukkit:4.3.1"
+
+    private const val commandapi_version = "9.2.0"
+    const val commandapi = "dev.jorel:commandapi-bukkit-shade:$commandapi_version"
+    const val commandapi_kotlin = "dev.jorel:commandapi-bukkit-kotlin:$commandapi_version"
 }
 
 // Testing

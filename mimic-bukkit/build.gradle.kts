@@ -44,9 +44,10 @@ dependencies {
     compileOnly(spigotApi) { isTransitive = false }
     compileOnly(misc.annotations)
 
-    implementation(acf.paper)
     implementation(misc.bstats)
     implementation(misc.serialization_hocon)
+    implementation(misc.commandapi)
+    implementation(misc.commandapi_kotlin)
     implementation(misc.adventure)
 
     compileOnly(rpgplugins.skillapi)
@@ -75,11 +76,10 @@ tasks.shadowJar {
     }
 
     val shadePackage = "${project.group}.shade"
-    relocate("co.aikar.commands", "$shadePackage.acf.commands")
-    relocate("co.aikar.locales", "$shadePackage.acf.locales")
     relocate("kotlin", "$shadePackage.kotlin")
     relocate("org.bstats", "$shadePackage.bstats")
     relocate("com.typesafe.config", "$shadePackage.hocon")
+    relocate("dev.jorel.commandapi", "$shadePackage.commandapi")
     relocate("net.kyori.adventure", "$shadePackage.adventure")
     relocate("net.kyori.examination", "$shadePackage.examination")
 
