@@ -279,7 +279,6 @@ public final class ru/endlesscode/mimic/impl/skillapi/SkillApiLevelSystem$Compan
 public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload {
 	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$Companion;
 	public fun <init> ()V
-	public synthetic fun <init> (ILjava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Ljava/lang/String;
@@ -303,12 +302,10 @@ public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload {
 	public static final fun of (Ljava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public static final fun parse (Ljava/lang/String;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public fun toString ()Ljava/lang/String;
-	public static final fun write$Self (Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
 }
 
 public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer;
-	public static final synthetic field descriptor Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
 	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
