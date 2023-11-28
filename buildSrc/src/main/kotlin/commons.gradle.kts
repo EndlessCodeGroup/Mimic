@@ -67,6 +67,7 @@ tasks.withType<DokkaTaskPartial>().configureEach {
 
 fun DependencyHandlerScope.testingDependencies() {
     testImplementation(kotlin("test-junit5"))
+    testImplementation(platform(junit.bom))
     testImplementation(junit.jupiter)
     testImplementation(junit.jupiter_params)
     testImplementation(misc.mockk)

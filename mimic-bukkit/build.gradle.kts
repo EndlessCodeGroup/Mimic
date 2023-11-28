@@ -3,7 +3,7 @@ import ru.endlesscode.bukkitgradle.dependencies.codemc
 import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("ru.endlesscode.bukkitgradle") version "0.10.1"
     kotlin("plugin.serialization")
 }
@@ -85,7 +85,10 @@ tasks.shadowJar {
     relocate("net.kyori.examination", "$shadePackage.examination")
 
     exclude("META-INF/*.kotlin_module")
+    exclude("META-INF/com.android.tools/**")
+    exclude("META-INF/proguard/**")
     exclude("META-INF/maven/**")
+    exclude("META-INF/**/module-info.class")
 
     minimize()
 }
