@@ -14,11 +14,11 @@ bukkit {
     apiVersion = "1.18.2"
 
     meta {
-        name.set("Mimic")
-        main.set("ru.endlesscode.mimic.MimicPlugin")
-        apiVersion.set("1.13")
-        authors.set(listOf("osipxd", "EndlessCodeGroup"))
-        url.set("https://github.com/EndlessCodeGroup/Mimic")
+        name = "Mimic"
+        main = "ru.endlesscode.mimic.MimicPlugin"
+        apiVersion = "1.13"
+        authors = listOf("osipxd", "EndlessCodeGroup")
+        url = "https://github.com/EndlessCodeGroup/Mimic"
     }
 
     server {
