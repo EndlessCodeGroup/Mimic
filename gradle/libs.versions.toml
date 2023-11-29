@@ -16,11 +16,11 @@ commandapi = { module = "dev.jorel:commandapi-bukkit-shade", version.ref = "comm
 commandapi-kotlin = { module = "dev.jorel:commandapi-bukkit-kotlin", version.ref = "commandapi" }
 
 rpgplugins-skillapi = "com.sucy:SkillAPI:3.102"
-rpgplugins-battlelevels = "me.robin.battlelevels:battlelevels-api:6.9.1"
-rpgplugins-mmocore = "net.Indyuce:MMOCore:1.9"
-rpgplugins-mmoitems = "net.Indyuce:MMOItems:6.7"
-rpgplugins-mythiclib = "io.lumine:MythicLib-dist:1.3"
-rpgplugins-heroes = "com.herocraftonline.heroes:Heroes:1.9.9"
+rpgplugins-battlelevels = "me.robin:BattleLevels:6.9.1"
+rpgplugins-mmocore = "net.Indyuce:MMOCore:1.9.2"
+rpgplugins-mmoitems = "net.Indyuce:MMOItems:6.7.2"
+rpgplugins-mythiclib = "io.lumine:MythicLib-dist:1.4"
+rpgplugins-heroes = "com.herocraftonline.heroes:Heroes:1.9.30-RELEASE"
 
 # Test dependencies
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }

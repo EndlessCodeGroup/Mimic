@@ -29,7 +29,7 @@ internal class HeroesWrapper {
 
     val isEnabled: Boolean get() = Heroes.getInstance().isEnabled
 
-    fun getClasses(): Set<HeroClass> = Heroes.getInstance().classManager.classes.orEmpty()
+    fun getClasses(): Set<HeroClass> = Heroes.getInstance().classManager.classes
     fun getHero(player: Player): Hero = Heroes.getInstance().characterManager.getHero(player)
     fun getExp(level: Int): Int = Properties.getExp(level)
     fun getTotalExp(level: Int): Int = Properties.getTotalExp(level)

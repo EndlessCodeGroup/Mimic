@@ -28,11 +28,17 @@ bukkit {
 
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
-    maven(url = "https://mvn.lumine.io/repository/maven-public/")
+    maven(url = "https://mvn.lumine.io/repository/maven-public/") {
+        content {
+            includeModule("me.robin", "BattleLevels")
+            includeGroup("net.Indyuce")
+            includeModule("io.lumine", "MythicLib-dist")
+        }
+    }
     aikar()
     codemc()
     // Uncomment if you want to get Heroes from maven repo
-    //maven(url = "https://nexus.hc.to/content/repositories/pub_snapshots/")
+    //maven(url = "https://nexus.hc.to/content/repositories/pub_releases/")
     flatDir { dir("libs") }
 }
 
@@ -53,7 +59,7 @@ dependencies {
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
     compileOnly(":QuantumRPG:5.10.2")
-    compileOnly(":NexEngine:2.0.3")
+    compileOnly(":NexEngine:2.0.3") // Do not update NexEngine. QuantumRpgWrapper cannot compile with higher version
 
     testImplementation(libs.spigot.api)
     testImplementation(libs.rpgplugins.skillapi)

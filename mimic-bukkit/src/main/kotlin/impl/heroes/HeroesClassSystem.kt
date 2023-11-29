@@ -35,8 +35,8 @@ public class HeroesClassSystem private constructor(
                 .map { it.name }
         }
 
-    override val primaryClass: String?
-        get() = hero.heroClass?.name
+    override val primaryClass: String
+        get() = hero.heroClass.name
 
     private val hero: Hero
         get() = heroes.getHero(player)
