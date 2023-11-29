@@ -2,14 +2,11 @@
 
 plugins {
     id("org.jetbrains.dokka")
-    id("com.github.ben-manes.versions") version "0.42.0"
+    alias(libs.plugins.versions)
 }
 
 // Common configurations for all Mimic projects
 subprojects {
-    apply(plugin = "commons")
-    apply(plugin = "publish")
-
     version = "0.8.0"
     group = "ru.endlesscode.mimic"
 }

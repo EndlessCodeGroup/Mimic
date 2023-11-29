@@ -30,6 +30,7 @@ Since now, it is possible to change Mimic config using commands in two ways:
 - Replace ACF with CommandAPI
 - Update Gradle 7.4.2 → 8.5
 - Update dependencies
+- Migrate to version catalogs
 
 ## [v0.8.0] (2022-04-18)
 

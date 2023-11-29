@@ -1,7 +1,6 @@
-import gradle.kotlin.dsl.accessors._d9d11ce8afa724c118c42c2e749bba6f.java
+import internal.libs
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URL
 
 plugins {
@@ -67,9 +66,9 @@ tasks.withType<DokkaTaskPartial>().configureEach {
 
 fun DependencyHandlerScope.testingDependencies() {
     testImplementation(kotlin("test-junit5"))
-    testImplementation(platform(junit.bom))
-    testImplementation(junit.jupiter)
-    testImplementation(junit.jupiter_params)
-    testImplementation(misc.mockk)
-    testImplementation(kotest.assertions)
+    testImplementation(platform(libs.junit_bom))
+    testImplementation(libs.junit_jupiter)
+    testImplementation(libs.junit_jupiter_params)
+    testImplementation(libs.kotest_assertions)
+    testImplementation(libs.mockk)
 }
