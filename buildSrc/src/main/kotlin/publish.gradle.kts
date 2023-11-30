@@ -17,28 +17,28 @@ publishing {
 
             pom {
                 val gitHubProject = "EndlessCodeGroup/Mimic"
-                name.set(provider { project.name })
-                description.set(provider { project.description })
-                url.set("https://github.com/$gitHubProject/")
+                name = provider { project.name }
+                description = provider { project.description }
+                url = "https://github.com/$gitHubProject/"
 
                 scm {
-                    url.set("https://github.com/$gitHubProject/")
-                    connection.set("scm:git:git://github.com/$gitHubProject.git")
-                    developerConnection.set("scm:git:ssh://git@github.com:$gitHubProject.git")
+                    url = "https://github.com/$gitHubProject/"
+                    connection = "scm:git:git://github.com/$gitHubProject.git"
+                    developerConnection = "scm:git:ssh://git@github.com:$gitHubProject.git"
                 }
 
                 licenses {
                     license {
-                        name.set("GNU Affero General Public License v3.0")
-                        url.set("https://choosealicense.com/licenses/agpl-3.0/")
+                        name = "GNU Affero General Public License v3.0"
+                        url = "https://choosealicense.com/licenses/agpl-3.0/"
                     }
                 }
 
                 developers {
                     developer {
-                        id.set("osipxd")
-                        name.set("Osip Fatkullin")
-                        email.set("osip.fatkullin@gmail.com")
+                        id = "osipxd"
+                        name = "Osip Fatkullin"
+                        email = "osip.fatkullin@gmail.com"
                     }
                 }
             }

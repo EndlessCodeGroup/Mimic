@@ -1,3 +1,8 @@
+plugins {
+    commons
+    publish
+}
+
 description = "Abstraction API for Bukkit RPG plugins"
 
 repositories {
@@ -5,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":mimic-api"))
-    compileOnly(misc.annotations)
-    compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT") { isTransitive = false }
+    api(projects.mimicApi)
+    compileOnly(libs.annotations)
+    compileOnly(libs.spigot.api) { isTransitive = false }
 }

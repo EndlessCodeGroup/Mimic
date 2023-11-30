@@ -1,25 +1,23 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import ru.endlesscode.bukkitgradle.dependencies.aikar
 import ru.endlesscode.bukkitgradle.dependencies.codemc
-import ru.endlesscode.bukkitgradle.dependencies.spigotApi
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("ru.endlesscode.bukkitgradle") version "0.10.1"
+    commons
+    publish
+    alias(libs.plugins.shadow)
+    alias(libs.plugins.bukkitgradle)
     kotlin("plugin.serialization")
 }
 
 description = "Bukkit plugin with implementations of Mimic APIs"
 
 bukkit {
-    apiVersion = "1.18.2"
-
     meta {
-        name.set("Mimic")
-        main.set("ru.endlesscode.mimic.MimicPlugin")
-        apiVersion.set("1.13")
-        authors.set(listOf("osipxd", "EndlessCodeGroup"))
-        url.set("https://github.com/EndlessCodeGroup/Mimic")
+        name = "Mimic"
+        main = "ru.endlesscode.mimic.MimicPlugin"
+        apiVersion = "1.13"
+        authors = listOf("osipxd", "EndlessCodeGroup")
+        url = "https://github.com/EndlessCodeGroup/Mimic"
     }
 
     server {
@@ -30,49 +28,52 @@ bukkit {
 
 repositories {
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
-    maven(url = "https://mvn.lumine.io/repository/maven-public/")
+    maven(url = "https://mvn.lumine.io/repository/maven-public/") {
+        content {
+            includeModule("me.robin", "BattleLevels")
+            includeGroup("net.Indyuce")
+            includeModule("io.lumine", "MythicLib-dist")
+        }
+    }
     aikar()
     codemc()
-    flatDir { dir("libs") }
     // Uncomment if you want to get Heroes from maven repo
-    //maven(url = "https://nexus.hc.to/content/repositories/pub_snapshots/")
+    //maven(url = "https://nexus.hc.to/content/repositories/pub_releases/")
+    flatDir { dir("libs") }
 }
 
 dependencies {
-    api(project(":mimic-bukkit-api"))
+    api(projects.mimicBukkitApi)
 
-    compileOnly(spigotApi) { isTransitive = false }
-    compileOnly(misc.annotations)
+    compileOnly(libs.spigot.api) { isTransitive = false }
+    compileOnly(libs.annotations)
 
-    implementation(misc.bstats)
-    implementation(misc.serialization_hocon)
-    implementation(misc.commandapi)
-    implementation(misc.commandapi_kotlin)
-    implementation(misc.adventure)
+    implementation(libs.bstats)
+    implementation(libs.serialization.hocon)
+    implementation(libs.commandapi)
+    implementation(libs.commandapi.kotlin)
+    implementation(libs.adventure)
 
-    compileOnly(rpgplugins.skillapi)
-    compileOnly(rpgplugins.battlelevels)
-    compileOnly(rpgplugins.mmoCore)
-    compileOnly(rpgplugins.mythicLib)
-    compileOnly(rpgplugins.mmoItems) { isTransitive = false }
-    compileOnly(rpgplugins.heroes) { isTransitive = false }
+    compileOnly(libs.bundles.rpgplugins) { isTransitive = false }
 
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
     compileOnly(":QuantumRPG:5.10.2")
-    compileOnly(":NexEngine:2.0.3")
+    compileOnly(":NexEngine:2.0.3") // Do not update NexEngine. QuantumRpgWrapper cannot compile with higher version
 
-    testImplementation(spigotApi)
-    testImplementation(rpgplugins.skillapi)
+    testImplementation(libs.spigot.api)
+    testImplementation(libs.rpgplugins.skillapi)
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs += "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+kotlin {
+    compilerOptions {
+        optIn.add("kotlinx.serialization.ExperimentalSerializationApi")
+    }
 }
 
 tasks.shadowJar {
     dependencies {
-        exclude(dependency(misc.annotations.replaceAfterLast(delimiter = ':', replacement = ".*")))
+        exclude(dependency("org.jetbrains:annotations:.*"))
     }
 
     val shadePackage = "${project.group}.shade"
@@ -84,7 +85,11 @@ tasks.shadowJar {
     relocate("net.kyori.examination", "$shadePackage.examination")
 
     exclude("META-INF/*.kotlin_module")
+    exclude("META-INF/com.android.tools/**")
+    exclude("META-INF/proguard/**")
     exclude("META-INF/maven/**")
+    exclude("META-INF/**/module-info.class")
+    exclude("LICENSE")
 
     minimize()
 }

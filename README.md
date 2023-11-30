@@ -1,7 +1,7 @@
 # Mimic
 [![Version](https://img.shields.io/maven-central/v/ru.endlesscode.mimic/mimic-api?style=flat-square)][mavenCentral]
-[![Build Status](https://img.shields.io/github/workflow/status/EndlessCodeGroup/Mimic/CI?style=flat-square)][ci]
-[![Code Quality](https://img.shields.io/codacy/grade/cfb98bfdf2b44b9d97f719f051e943a9.svg?style=flat-square)][codacy]
+[![Build Status](https://img.shields.io/github/actions/workflow/status/EndlessCodeGroup/Mimic/main.yml?branch=develop&style=flat-square)][ci]
+[![Code Quality](https://img.shields.io/codacy/grade/2509a9f8d248484d9cfd6376eb9426a1.svg?style=flat-square)][codacy]
 [![license](https://img.shields.io/github/license/EndlessCodeGroup/Mimic.svg?style=flat-square)][license]
 
 [![Logo](images/logo.png)](#)
