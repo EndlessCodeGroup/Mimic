@@ -23,6 +23,7 @@ internal class MimicImpl(
     private val config: MimicConfig,
 ) : Mimic {
 
+    // region Class System
     override fun registerClassSystem(
         provider: BukkitClassSystem.Provider,
         apiLevel: Int,
@@ -34,7 +35,9 @@ internal class MimicImpl(
 
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService(config.classSystem)
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = loadAllServices()
+    // endregion
 
+    // region Inventory Provider
     @ExperimentalMimicApi
     override fun registerPlayerInventoryProvider(
         provider: PlayerInventoryProvider,
@@ -50,7 +53,9 @@ internal class MimicImpl(
 
     @ExperimentalMimicApi
     override fun getAllPlayerInventoryProviders(): Map<String, PlayerInventoryProvider> = loadAllServices()
+    // endregion
 
+    // region Items Registry
     override fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
         apiLevel: Int,
@@ -62,7 +67,9 @@ internal class MimicImpl(
 
     override fun getItemsRegistry(): BukkitItemsRegistry = loadService()
     override fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry> = loadAllServices()
+    // endregion
 
+    // region Level System
     override fun registerLevelSystem(
         provider: BukkitLevelSystem.Provider,
         apiLevel: Int,
@@ -74,6 +81,7 @@ internal class MimicImpl(
 
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService(config.levelSystem)
     override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = loadAllServices()
+    // endregion
 
     private inline fun <reified Service : MimicService> tryRegisterService(
         apiLevel: Int,

@@ -14,6 +14,7 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
 
+    // region Class System
     /**
      * Registers the given [provider] for [BukkitClassSystem] with normal priority.
      *
@@ -62,7 +63,9 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitClassSystem.Provider]s, where key is a provider ID. */
     public fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider>
+    // endregion
 
+    // region Inventory Provider
     /**
      * Registers the given [provider] for [BukkitPlayerInventory] with normal priority.
      *
@@ -133,7 +136,9 @@ public interface Mimic {
     @ExperimentalMimicApi
     @ApiStatus.Experimental
     public fun getAllPlayerInventoryProviders(): Map<String, BukkitPlayerInventory.Provider>
+    // endregion
 
+    // region Items Registry
     /**
      * Registers the given [registry] with normal priority.
      *
@@ -176,7 +181,9 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitItemsRegistry], where key is an item registry ID. */
     public fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry>
+    // endregion
 
+    // region Level System
     /**
      * Registers the given [provider] for [BukkitLevelSystem] with normal priority.
      *
@@ -225,6 +232,7 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitLevelSystem.Provider]s, where key is a provider ID. */
     public fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider>
+    // endregion
 
     public companion object {
         /**
