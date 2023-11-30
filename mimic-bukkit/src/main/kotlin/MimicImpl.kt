@@ -3,6 +3,7 @@ package ru.endlesscode.mimic
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicesManager
+import ru.endlesscode.mimic.blocks.BukkitBlocksRegistry
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
@@ -22,6 +23,25 @@ internal class MimicImpl(
     private val servicesManager: ServicesManager,
     private val config: MimicConfig,
 ) : Mimic {
+
+    // region Blocks Registry
+    @ExperimentalMimicApi
+    override fun registerBlocksRegistry(
+        registry: BukkitBlocksRegistry,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority
+    ): BukkitBlocksRegistry? = tryRegisterService<BukkitBlocksRegistry>(apiLevel, plugin, priority) {
+        TODO("Not implemented yet")
+        // WrappedBlocksRegistry(registry, config, plugin)
+    }
+
+    @ExperimentalMimicApi
+    override fun getBlocksRegistry(): BukkitBlocksRegistry = loadService()
+
+    @ExperimentalMimicApi
+    override fun getAllBlocksRegistries(): Map<String, BukkitBlocksRegistry> = loadAllServices()
+    // endregion
 
     // region Class System
     override fun registerClassSystem(
@@ -146,6 +166,7 @@ internal class MimicImpl(
         BukkitLevelSystem.Provider::class -> "LevelSystem"
         BukkitPlayerInventory.Provider::class -> "PlayerInventory"
         BukkitItemsRegistry::class -> "ItemsRegistry"
+        BukkitBlocksRegistry::class -> "BlocksRegistry"
         else -> error("Unknown service: ${this.java.name}")
     }
 }
