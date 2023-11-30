@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":mimic-bukkit-api"))
+    api(projects.mimicBukkitApi)
 
     compileOnly(libs.spigot.api) { isTransitive = false }
     compileOnly(libs.annotations)

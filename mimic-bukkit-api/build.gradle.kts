@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    api(project(":mimic-api"))
+    api(projects.mimicApi)
     compileOnly(libs.annotations)
     compileOnly(libs.spigot.api) { isTransitive = false }
 }
