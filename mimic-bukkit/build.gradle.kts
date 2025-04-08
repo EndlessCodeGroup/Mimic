@@ -31,6 +31,10 @@ repositories {
     maven(url = "https://mvn.lumine.io/repository/maven-public/") {
         content {
             includeModule("me.robin", "BattleLevels")
+        }
+    }
+    maven("https://nexus.phoenixdevt.fr/repository/maven-public/") {
+        content {
             includeGroup("net.Indyuce")
             includeModule("io.lumine", "MythicLib-dist")
         }

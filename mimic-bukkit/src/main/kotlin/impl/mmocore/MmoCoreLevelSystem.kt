@@ -5,7 +5,6 @@ import net.Indyuce.mmocore.experience.EXPSource
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.ExpLevelConverter
-import kotlin.math.roundToInt
 
 /** Implementation of LevelSystem using MMOCore. */
 public class MmoCoreLevelSystem private constructor(
@@ -22,9 +21,9 @@ public class MmoCoreLevelSystem private constructor(
         }
 
     override var exp: Double
-        get() = playerData.experience.toDouble()
+        get() = playerData.experience
         set(value) {
-            playerData.experience = value.roundToInt()
+            playerData.experience = value
         }
 
     override val totalExpToNextLevel: Double
@@ -39,7 +38,7 @@ public class MmoCoreLevelSystem private constructor(
     }
 
     override fun giveExp(expAmount: Double) {
-        playerData.giveExperience(expAmount.roundToInt(), EXPSource.OTHER)
+        playerData.giveExperience(expAmount, EXPSource.OTHER)
     }
 
     private val playerData: PlayerData
