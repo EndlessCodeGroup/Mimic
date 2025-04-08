@@ -17,9 +17,9 @@ commandapi-kotlin = { module = "dev.jorel:commandapi-bukkit-kotlin", version.ref
 
 rpgplugins-skillapi = "com.sucy:SkillAPI:3.102"
 rpgplugins-battlelevels = "me.robin:BattleLevels:6.9.1"
-rpgplugins-mmocore = "net.Indyuce:MMOCore:1.9.2"
-rpgplugins-mmoitems = "net.Indyuce:MMOItems:6.7.2"
-rpgplugins-mythiclib = "io.lumine:MythicLib-dist:1.4"
+rpgplugins-mmocore = "net.Indyuce:MMOCore-API:1.12.1-SNAPSHOT"
+rpgplugins-mmoitems = "net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT"
+rpgplugins-mythiclib = "io.lumine:MythicLib-dist:1.6.2-SNAPSHOT"
 rpgplugins-heroes = "com.herocraftonline.heroes:Heroes:1.9.30-RELEASE"
 
 # Test dependencies
