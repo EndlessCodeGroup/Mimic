@@ -3,7 +3,7 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(16)
+    jvmToolchain(17)
     compilerOptions {
         freeCompilerArgs.add("-Xcontext-receivers")
     }
