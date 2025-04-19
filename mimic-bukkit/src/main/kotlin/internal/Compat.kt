@@ -10,7 +10,7 @@ internal inline fun <T> callCompat(
     if (key !in notSupportedCalls) {
         try {
             return block()
-        } catch (_: NoSuchMethodError) {
+        } catch (_: IncompatibleClassChangeError) {
             notSupportedCalls.add(key)
         }
     }

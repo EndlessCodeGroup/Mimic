@@ -57,7 +57,7 @@ import ru.endlesscode.mimic.util.checkClassesLoaded
 /** Main class of the plugin. */
 public class MimicPlugin : JavaPlugin() {
 
-    private val isReleased = !description.version.endsWith("-SNAPSHOT")
+    private val isReleased = !pluginMeta.version.endsWith("-SNAPSHOT")
 
     private val config: MimicConfig by lazy { MimicConfig(this) }
     private val mimic: Mimic by lazy { MimicImpl(servicesManager, config) }

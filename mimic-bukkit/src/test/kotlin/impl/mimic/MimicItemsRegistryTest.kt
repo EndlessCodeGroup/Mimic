@@ -32,7 +32,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
-import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import kotlin.test.Test
 
@@ -42,19 +41,19 @@ internal class MimicItemsRegistryTest : BukkitTestBase() {
     private val itemsService: BukkitItemsRegistry = MimicItemsRegistry(servicesManager)
 
     init {
-        servicesManager.register(BukkitItemsRegistry::class.java, MinecraftItemsRegistry(), plugin, Lowest)
+        servicesManager.register(BukkitItemsRegistry::class.java, TestItemRegistry(), plugin, Lowest)
         servicesManager.register(BukkitItemsRegistry::class.java, itemsService, plugin, Highest)
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["acacia_boat", "minecraft:acacia_boat"])
+    @ValueSource(strings = ["acacia_boat", "test:acacia_boat"])
     fun `when check is same item - should return true`(itemId: String) {
         val item = ItemStack(Material.ACACIA_BOAT)
         itemsService.isSameItem(item, itemId).shouldBeTrue()
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["acacia_boat", "minecraft:acacia_boat"])
+    @ValueSource(strings = ["acacia_boat", "test:acacia_boat"])
     fun `when get item - should return item stack`(itemId: String) {
         val item = itemsService.getItem(itemId).shouldNotBeNull()
 
@@ -65,7 +64,7 @@ internal class MimicItemsRegistryTest : BukkitTestBase() {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["ns:acacia_boat", "minecraft:unknown", "42"])
+    @ValueSource(strings = ["ns:acacia_boat", "test:unknown", "42"])
     fun `when get unknown item - should return null`(itemId: String) {
         itemsService.getItem(itemId).shouldBeNull()
     }
@@ -73,19 +72,33 @@ internal class MimicItemsRegistryTest : BukkitTestBase() {
     @Test
     fun `when get id - should return id`() {
         val item = ItemStack(Material.ACACIA_BOAT)
-        itemsService.getItemId(item) shouldBe "minecraft:acacia_boat"
+        itemsService.getItemId(item) shouldBe "test:acacia_boat"
     }
 
     @ParameterizedTest
     @CsvSource(
         "air,           true",
         "ns:air,        false",
-        "minecraft:air, true",
+        "test:air,      true",
         "unknown,       false",
         "gold_sword,    false",
         "golden_sword,  true",
     )
     fun `when check is item exists`(itemId: String, shouldExist: Boolean) {
         itemsService.isItemExists(itemId) shouldBe shouldExist
+    }
+}
+
+private class TestItemRegistry : BukkitItemsRegistry {
+    override val id = "test"
+    override val knownIds = Material.entries.map { it.name.lowercase() }
+
+    override fun isItemExists(itemId: String): Boolean = itemId in knownIds
+
+    override fun getItemId(item: ItemStack): String = item.type.name.lowercase()
+
+    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack {
+        val material = Material.valueOf(itemId.uppercase())
+        return ItemStack(material, amount)
     }
 }

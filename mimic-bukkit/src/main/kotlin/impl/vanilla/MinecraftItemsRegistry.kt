@@ -37,7 +37,7 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
     override val id: String = ID
 
     override val knownIds: List<String> by lazy {
-        Material.values().asSequence()
+        Material.entries.asSequence()
             .filter { it.isItem }
             .map { it.name.lowercase() }
             .toList()

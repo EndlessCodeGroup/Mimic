@@ -71,5 +71,5 @@ private fun logImplementationError(provider: ItemsRegistryProvider, throwable: T
     Log.w(throwable,
         "Error in ItemsRegistry '${provider.registry.id}' " +
                 "implemented via ${provider.plugin}. " +
-                "Please, report it to ${provider.plugin.description.authors.joinToString()}.")
+                "Please, report it to ${provider.plugin.pluginMeta.authors.joinToString()}.")
 }
