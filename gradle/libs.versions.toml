@@ -3,6 +3,7 @@
 kotlin = "1.9.20"
 commandapi = "9.2.0"
 junit = "5.10.1"
+bukkitgradle = "1.0.0"
 
 [libraries]
 
@@ -32,11 +33,10 @@ mockk = "io.mockk:mockk:1.13.8"
 # Build dependencies
 dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.9.10"
 kotlinx-binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.13.2"
-gradleDownloadTask = "de.undercouch:gradle-download-task:5.5.0"
 
 [plugins]
 
-bukkitgradle = "ru.endlesscode.bukkitgradle:0.10.1"
+bukkitgradle = { id = "ru.endlesscode.bukkitgradle", version.ref="bukkitgradle" }
 shadow = "com.github.johnrengelman.shadow:8.1.1"
 versions = "com.github.ben-manes.versions:0.50.0"
 

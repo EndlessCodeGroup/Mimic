@@ -1,0 +1,20 @@
+<component name='ProjectRunConfigurationManager'>
+  <configuration default='false' name='Run Server [mimic-bukkit]' type='GradleRunConfiguration' factoryName='Gradle' singleton='true'>
+    <ExternalSystemSettings>
+      <option name='externalProjectPath' value='$PROJECT_DIR$/mimic-bukkit' />
+      <option name='externalSystemIdString' value='GRADLE' />
+      <option name='vmOptions' value='' />
+      <option name='scriptParameters' value='' />
+      <option name='taskNames'>
+        <list>
+          <option value='runServer' />
+        </list>
+      </option>
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <RunAsTest>false</RunAsTest>
+    <method v='2' />
+  </configuration>
+</component>
