@@ -12,16 +12,26 @@ plugins {
 description = "Bukkit plugin with implementations of Mimic APIs"
 
 bukkit {
-    meta {
+    apiVersion = "1.16.5"
+
+    plugin {
         name = "Mimic"
         main = "ru.endlesscode.mimic.MimicPlugin"
-        apiVersion = "1.13"
         authors = listOf("osipxd", "EndlessCodeGroup")
-        url = "https://github.com/EndlessCodeGroup/Mimic"
+        website = "https://github.com/EndlessCodeGroup/Mimic"
+        loadBefore = listOf(
+            "SkillAPI",
+            "BattleLevels",
+            "CustomItems",
+            "MMOCore",
+            "MMOItems",
+            "Heroes",
+            "QuantumRPG",
+        )
     }
 
     server {
-        setCore("paper")
+        version = "1.21.5"
         eula = true
     }
 }

@@ -31,15 +31,6 @@ kotlin {
     }
 }
 
-// TODO: Remove after fix in BukkitGradle
-//   https://github.com/EndlessCodeGroup/BukkitGradle/issues/62
-afterEvaluate {
-    java {
-        sourceCompatibility = JavaVersion.VERSION_16
-        targetCompatibility = JavaVersion.VERSION_16
-    }
-}
-
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     testingDependencies()

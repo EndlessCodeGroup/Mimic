@@ -1,8 +1,0 @@
-loadbefore:
-  - SkillAPI
-  - BattleLevels
-  - CustomItems
-  - MMOCore
-  - MMOItems
-  - Heroes
-  - QuantumRPG
