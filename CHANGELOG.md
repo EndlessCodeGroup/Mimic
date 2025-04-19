@@ -2,7 +2,10 @@
 
 ### Added command `/mimic config`
 
-Since now, it is possible to change Mimic config using commands in two ways:
+> [!NOTE]
+> This feature requires the CommandAPI plugin to be installed.
+
+Now it is possible to change Mimic config using commands in two ways:
 
 1. Using interactive config `/mimic config`.
    Every option in the output is interactive, so you can change it just by mouse click.

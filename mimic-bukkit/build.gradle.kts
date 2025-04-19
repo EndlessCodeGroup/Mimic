@@ -19,6 +19,7 @@ bukkit {
         main = "ru.endlesscode.mimic.MimicPlugin"
         authors = listOf("osipxd", "EndlessCodeGroup")
         website = "https://github.com/EndlessCodeGroup/Mimic"
+        softDepend = listOf("CommandAPI")
         loadBefore = listOf(
             "SkillAPI",
             "BattleLevels",
@@ -33,6 +34,12 @@ bukkit {
     server {
         version = "1.21.5"
         eula = true
+    }
+}
+
+tasks.runServer {
+    downloadPlugins {
+        github("CommandAPI", "CommandAPI", "10.0.0", "CommandAPI-10.0.0.jar")
     }
 }
 
@@ -64,10 +71,10 @@ dependencies {
 
     implementation(libs.bstats)
     implementation(libs.serialization.hocon)
-    implementation(libs.commandapi)
-    implementation(libs.commandapi.kotlin)
     implementation(libs.adventure)
 
+    compileOnly(libs.commandapi)
+    compileOnly(libs.commandapi.kotlin)
     compileOnly(libs.bundles.rpgplugins) { isTransitive = false }
 
     // From libs/ directory
@@ -94,7 +101,6 @@ tasks.shadowJar {
     relocate("kotlin", "$shadePackage.kotlin")
     relocate("org.bstats", "$shadePackage.bstats")
     relocate("com.typesafe.config", "$shadePackage.hocon")
-    relocate("dev.jorel.commandapi", "$shadePackage.commandapi")
     relocate("net.kyori.adventure", "$shadePackage.adventure")
     relocate("net.kyori.examination", "$shadePackage.examination")
 

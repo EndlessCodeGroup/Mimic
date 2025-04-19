@@ -1,7 +1,7 @@
 [versions]
 
 kotlin = "1.9.20"
-commandapi = "9.2.0"
+commandapi = "9.7.0"
 junit = "5.10.1"
 bukkitgradle = "1.0.0"
 
@@ -13,7 +13,7 @@ annotations = "org.jetbrains:annotations:24.1.0"
 serialization-hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.6.1"
 adventure = "net.kyori:adventure-platform-bukkit:4.3.1"
 
-commandapi = { module = "dev.jorel:commandapi-bukkit-shade", version.ref = "commandapi" }
+commandapi = { module = "dev.jorel:commandapi-bukkit-core", version.ref = "commandapi" }
 commandapi-kotlin = { module = "dev.jorel:commandapi-bukkit-kotlin", version.ref = "commandapi" }
 
 rpgplugins-skillapi = "com.sucy:SkillAPI:3.102"
