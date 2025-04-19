@@ -6,7 +6,6 @@ import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.multiLiteralArgument
 import dev.jorel.commandapi.kotlindsl.stringArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
-import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
@@ -24,11 +23,10 @@ import ru.endlesscode.mimic.config.MimicConfig
 internal fun CommandAPICommand.configSubcommand(
     mimic: Mimic,
     config: MimicConfig,
-    audiences: BukkitAudiences,
 ) = subcommand("config") {
     val showConfig = { sender: CommandSender ->
         val message = buildConfigMessage(mimic, config)
-        audiences.sender(sender).sendMessage(message)
+        sender.sendMessage(message)
     }
 
     withShortDescription("Show Mimic config")

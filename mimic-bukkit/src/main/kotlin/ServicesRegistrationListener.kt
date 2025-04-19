@@ -26,7 +26,7 @@ internal class ServicesRegistrationListener(
             Log.w(
                 """
                 Service ${serviceClass.name} with id '${service.id}' registered in deprecated way.
-                Please ask the ${plugin.name} authors (${plugin.description.authors.joinToString()}) to migrate
+                Please ask the ${plugin.name} authors (${plugin.pluginMeta.authors.joinToString()}) to migrate
                 to the new service registration API introduced in Mimic v0.7:
                    https://github.com/EndlessCodeGroup/Mimic/releases/tag/v0.7
                 """.trimIndent()

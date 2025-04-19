@@ -1,5 +1,6 @@
 [versions]
 
+paper = "1.20-R0.1-SNAPSHOT"
 kotlin = "2.1.20"
 kotlinx-binaryCompatibilityValidator = "0.17.0"
 kotlinx-serialization = "1.8.1"
@@ -7,7 +8,6 @@ dokka = "1.9.10"
 annotations = "26.0.2"
 
 commandapi = "9.7.0"
-adventure = "4.3.1"
 bstats = "3.1.0"
 
 skillapi = "3.102"
@@ -27,13 +27,12 @@ gradlePlugin-versions = "0.50.0"
 
 [libraries]
 
-spigot-api = "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT"
+paperApi = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-serialization" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 commandapi = { module = "dev.jorel:commandapi-bukkit-core", version.ref = "commandapi" }
 commandapi-kotlin = { module = "dev.jorel:commandapi-bukkit-kotlin", version.ref = "commandapi" }
-adventure = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure" }
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 
 rpgplugins-skillapi = { module = "com.sucy:SkillAPI", version.ref = "skillapi" }

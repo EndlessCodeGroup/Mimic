@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+### Paper-first
+
+Keeping the plugin compatible both with Paper and Spigot consumes a lot of time.
+Now, Mimic is Paper-first as it is the most popular platform.
+This means that compatibility with Spigot is not guaranteed.
+
+To reduce the maintenance burden, support for versions older than 1.20 has been dropped.
+Java 17 is required.
+
 ### Added command `/mimic config`
 
 > [!NOTE]

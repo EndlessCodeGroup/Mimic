@@ -2,7 +2,6 @@ package ru.endlesscode.mimic.command
 
 import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
-import net.kyori.adventure.platform.bukkit.BukkitAudiences
 import net.kyori.adventure.text.format.NamedTextColor
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
@@ -16,20 +15,19 @@ internal fun registerCommand(
     mimic: Mimic,
     config: MimicConfig,
     pluginFullName: String,
-    audiences: BukkitAudiences,
 ) = commandAPICommand("mimic") {
     withPermission("mimic.admin")
     withShortDescription("Show info about Mimic")
-    executes(infoExecutor(audiences, pluginFullName))
+    executes(infoExecutor(pluginFullName))
 
-    configSubcommand(mimic, config, audiences)
+    configSubcommand(mimic, config)
     levelSystemSubcommand(mimic)
     classSystemSubcommand(mimic)
     inventorySubcommand(mimic)
     itemsSubcommand(mimic.getItemsRegistry())
 }
 
-private fun infoExecutor(audiences: BukkitAudiences, pluginFullName: String) = CommandExecutor { sender, _ ->
+private fun infoExecutor(pluginFullName: String) = CommandExecutor { sender, _ ->
     val message = buildTextComponent {
         appendLine(pluginFullName, NamedTextColor.GREEN)
         color(NamedTextColor.GRAY)
@@ -37,7 +35,7 @@ private fun infoExecutor(audiences: BukkitAudiences, pluginFullName: String) = C
         append(createClickableCommand())
         append(" to see or change configs")
     }
-    audiences.sender(sender).sendMessage(message)
+    sender.sendMessage(message)
 }
 
 private fun createClickableCommand() = buildTextComponent {

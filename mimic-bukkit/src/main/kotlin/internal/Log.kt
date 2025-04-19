@@ -26,13 +26,20 @@ internal object Log {
 
     private const val DEBUG_TAG = "[DEBUG]"
 
-    private var logger: Logger? = null
+    private var logger: SimpleLogger? = null
     private var debug = false
 
     /**
      * Initializes Log with the given logger and specified debug mode.
      */
     fun init(logger: Logger, debug: Boolean = false) {
+        init(logger::log, debug)
+    }
+
+    /**
+     * Initializes Log with the given logger and specified debug mode.
+     */
+    fun init(logger: SimpleLogger, debug: Boolean = false) {
         this.logger = logger
         this.debug = debug
     }
@@ -41,14 +48,14 @@ internal object Log {
      * Write info message to log.
      */
     fun i(message: String) {
-        logger?.info(message)
+        logger?.log(Level.INFO, message)
     }
 
     /**
      * Writes warning messages to log.
      */
     fun w(message: String) {
-        logger?.warning(message)
+        logger?.log(Level.WARNING, message)
     }
 
     /**
@@ -65,7 +72,7 @@ internal object Log {
      */
     fun d(message: String) {
         if (debug) {
-            logger?.info("$DEBUG_TAG $message")
+            logger?.log(Level.INFO, "$DEBUG_TAG $message")
         }
     }
 
@@ -88,7 +95,12 @@ internal object Log {
         if (debug) {
             logger?.log(Level.FINE, "$DEBUG_TAG Yay! Long-awaited exception!", throwable)
         } else if (!quiet) {
-            logger?.warning("Error occurred. Enable debug mode to see it.")
+            logger?.log(Level.WARNING, "Error occurred. Enable debug mode to see it.")
         }
     }
+}
+
+internal fun interface SimpleLogger {
+    fun log(level: Level, message: String) = log(level, message, null)
+    fun log(level: Level, message: String?, throwable: Throwable?)
 }

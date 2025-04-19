@@ -1,5 +1,6 @@
 import ru.endlesscode.bukkitgradle.dependencies.aikar
 import ru.endlesscode.bukkitgradle.dependencies.codemc
+import ru.endlesscode.bukkitgradle.dependencies.papermc
 
 plugins {
     commons
@@ -9,10 +10,10 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-description = "Bukkit plugin with implementations of Mimic APIs"
+description = "Bukkit plugin implementing Mimic APIs"
 
 bukkit {
-    apiVersion = "1.16.5"
+    apiVersion = "1.20"
 
     plugin {
         name = "Mimic"
@@ -44,6 +45,7 @@ tasks.runServer {
 }
 
 repositories {
+    papermc()
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
     maven(url = "https://mvn.lumine.io/repository/maven-public/") {
         content {
@@ -66,12 +68,11 @@ repositories {
 dependencies {
     api(projects.mimicBukkitApi)
 
-    compileOnly(libs.spigot.api) { isTransitive = false }
+    compileOnly(libs.paperApi)
     compileOnly(libs.annotations)
 
     implementation(libs.bstats)
     implementation(libs.serialization.hocon)
-    implementation(libs.adventure)
 
     compileOnly(libs.commandapi)
     compileOnly(libs.commandapi.kotlin)
@@ -80,15 +81,21 @@ dependencies {
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
     compileOnly(":QuantumRPG:5.10.2")
-    compileOnly(":NexEngine:2.0.3") // Do not update NexEngine. QuantumRpgWrapper cannot compile with higher version
+    compileOnly(":NexEngine:2.0.3") // Do not update NexEngine. QuantumRpgWrapper cannot compile with a higher version
 
-    testImplementation(libs.spigot.api)
+    testImplementation(libs.paperApi)
     testImplementation(libs.rpgplugins.skillapi)
 }
 
 kotlin {
     compilerOptions {
         optIn.add("kotlinx.serialization.ExperimentalSerializationApi")
+    }
+}
+
+tasks.test {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -101,8 +108,6 @@ tasks.shadowJar {
     relocate("kotlin", "$shadePackage.kotlin")
     relocate("org.bstats", "$shadePackage.bstats")
     relocate("com.typesafe.config", "$shadePackage.hocon")
-    relocate("net.kyori.adventure", "$shadePackage.adventure")
-    relocate("net.kyori.examination", "$shadePackage.examination")
 
     exclude("META-INF/*.kotlin_module")
     exclude("META-INF/com.android.tools/**")
