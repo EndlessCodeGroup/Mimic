@@ -1,44 +1,64 @@
 [versions]
 
 kotlin = "2.1.20"
+kotlinx-binaryCompatibilityValidator = "0.17.0"
+kotlinx-serialization = "1.8.1"
+dokka = "1.9.10"
+annotations = "26.0.2"
+
 commandapi = "9.7.0"
+adventure = "4.3.1"
+bstats = "3.1.0"
+
+skillapi = "3.102"
+battlelevels = "6.9.1"
+mmocore = "1.12.1-SNAPSHOT"
+mmoitems = "6.9.5-SNAPSHOT"
+mythiclib = "1.6.2-SNAPSHOT"
+heroes = "1.9.30-RELEASE"
+
 junit = "5.10.1"
-bukkitgradle = "1.0.0"
+kotest = "5.8.0"
+mockk = "1.13.8"
+
+gradlePlugin-bukkitgradle = "1.0.0"
+gradlePlugin-shadow = "8.1.1"
+gradlePlugin-versions = "0.50.0"
 
 [libraries]
 
 spigot-api = "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT"
-bstats = "org.bstats:bstats-bukkit:3.0.2"
-annotations = "org.jetbrains:annotations:24.1.0"
-serialization-hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.8.1"
-adventure = "net.kyori:adventure-platform-bukkit:4.3.1"
+serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-serialization" }
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 commandapi = { module = "dev.jorel:commandapi-bukkit-core", version.ref = "commandapi" }
 commandapi-kotlin = { module = "dev.jorel:commandapi-bukkit-kotlin", version.ref = "commandapi" }
+adventure = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure" }
+bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 
-rpgplugins-skillapi = "com.sucy:SkillAPI:3.102"
-rpgplugins-battlelevels = "me.robin:BattleLevels:6.9.1"
-rpgplugins-mmocore = "net.Indyuce:MMOCore-API:1.12.1-SNAPSHOT"
-rpgplugins-mmoitems = "net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT"
-rpgplugins-mythiclib = "io.lumine:MythicLib-dist:1.6.2-SNAPSHOT"
-rpgplugins-heroes = "com.herocraftonline.heroes:Heroes:1.9.30-RELEASE"
+rpgplugins-skillapi = { module = "com.sucy:SkillAPI", version.ref = "skillapi" }
+rpgplugins-battlelevels = { module = "me.robin:BattleLevels", version.ref = "battlelevels" }
+rpgplugins-mmocore = { module = "net.Indyuce:MMOCore-API", version.ref = "mmocore" }
+rpgplugins-mmoitems = { module = "net.Indyuce:MMOItems-API", version.ref = "mmoitems" }
+rpgplugins-mythiclib = { module = "io.lumine:MythicLib-dist", version.ref = "mythiclib" }
+rpgplugins-heroes = { module = "com.herocraftonline.heroes:Heroes", version.ref = "heroes" }
 
 # Test dependencies
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
-kotest-assertions = "io.kotest:kotest-assertions-core:5.8.0"
-mockk = "io.mockk:mockk:1.13.8"
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 # Build dependencies
-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.9.10"
-kotlinx-binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.17.0"
+dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+kotlinx-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlinx-binaryCompatibilityValidator" }
 
 [plugins]
 
-bukkitgradle = { id = "ru.endlesscode.bukkitgradle", version.ref="bukkitgradle" }
-shadow = "com.github.johnrengelman.shadow:8.1.1"
-versions = "com.github.ben-manes.versions:0.50.0"
+bukkitgradle = { id = "ru.endlesscode.bukkitgradle", version.ref = "gradlePlugin-bukkitgradle" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "gradlePlugin-shadow" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "gradlePlugin-versions" }
 
 [bundles]
 
