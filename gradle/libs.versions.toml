@@ -1,6 +1,6 @@
 [versions]
 
-kotlin = "1.9.20"
+kotlin = "2.1.20"
 commandapi = "9.7.0"
 junit = "5.10.1"
 bukkitgradle = "1.0.0"
@@ -10,7 +10,7 @@ bukkitgradle = "1.0.0"
 spigot-api = "org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT"
 bstats = "org.bstats:bstats-bukkit:3.0.2"
 annotations = "org.jetbrains:annotations:24.1.0"
-serialization-hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.6.1"
+serialization-hocon = "org.jetbrains.kotlinx:kotlinx-serialization-hocon:1.8.1"
 adventure = "net.kyori:adventure-platform-bukkit:4.3.1"
 
 commandapi = { module = "dev.jorel:commandapi-bukkit-core", version.ref = "commandapi" }
@@ -32,7 +32,7 @@ mockk = "io.mockk:mockk:1.13.8"
 
 # Build dependencies
 dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.9.10"
-kotlinx-binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.13.2"
+kotlinx-binaryCompatibilityValidator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.17.0"
 
 [plugins]
 

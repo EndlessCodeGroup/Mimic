@@ -25,14 +25,12 @@ kotlin {
         apiVersion = KotlinVersion.KOTLIN_1_9
         languageVersion = KotlinVersion.KOTLIN_1_9
         freeCompilerArgs.add("-Xjvm-default=all")
-        optIn.add("kotlin.RequiresOptIn")
         allWarningsAsErrors = System.getProperty("warningsAsErrors") == "true"
-        javaParameters = true
     }
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib"))
     testingDependencies()
 }
 

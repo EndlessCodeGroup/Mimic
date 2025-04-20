@@ -29,7 +29,7 @@ Now it is possible to change Mimic config using commands in two ways:
 ### Housekeeping
 
 - Update required Java 1.8 → 16
-- Update Kotlin 1.6.20 → 1.9.20
+- Update Kotlin 1.6.20 → 2.1.20
 - Replace ACF with CommandAPI
 - Update Gradle 7.4.2 → 8.13
 - Update dependencies
