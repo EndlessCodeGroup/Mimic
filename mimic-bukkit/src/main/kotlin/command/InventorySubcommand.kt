@@ -6,6 +6,7 @@ import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.jorel.commandapi.kotlindsl.subcommand
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
+import ru.endlesscode.mimic.internal.text
 
 /**
  * Commands to deal with inventory provider.
@@ -24,12 +25,16 @@ internal fun CommandAPICommand.inventorySubcommand(mimic: Mimic) = subcommand("i
             val target = args.getOrDefaultUnchecked(TARGET, sender)
             val provider = mimic.getPlayerInventoryProvider()
             val inventory = provider.getSystem(target)
-            sender.send(
-                "&3Inventory provider: &7${provider.id}",
-                "&3Count of Equipped: &7%d".format(inventory.equippedItems.size),
-                "&3Count of Stored: &7%d".format(inventory.storedItems.size),
-                "&3Total Count: &7%d".format(inventory.items.size),
-            )
+
+            val message = text {
+                appendStats(
+                    "Inventory provider" to provider.id,
+                    "Count of Equipped" to inventory.equippedItems.size.toString(),
+                    "Count of Stored" to inventory.storedItems.size.toString(),
+                    "Total Count" to inventory.items.size.toString(),
+                )
+            }
+            sender.sendMessage(message)
         }
     }
 }

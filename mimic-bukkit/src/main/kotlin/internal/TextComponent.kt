@@ -17,7 +17,7 @@ internal fun TextComponent.Builder.appendLine(
     vararg decorations: TextDecoration,
 ): TextComponent.Builder = append(text, color, *decorations).appendLine()
 
-internal fun TextComponent.Builder.appendLine(): TextComponent.Builder = append("\n")
+internal fun TextComponent.Builder.appendLine(): TextComponent.Builder = append(Component.newline())
 
 internal fun TextComponent.Builder.append(
     text: String,
