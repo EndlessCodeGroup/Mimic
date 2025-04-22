@@ -8,16 +8,19 @@ import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
-import ru.endlesscode.mimic.internal.buildTextComponent
+import ru.endlesscode.mimic.internal.text
+
+internal const val COMMAND_NAME = "mimic"
+internal const val COMMAND_INFO_DESCRIPTION = "Show info about Mimic"
 
 /** Registers command '/mimic' and all subcommands. */
 internal fun registerCommand(
     mimic: Mimic,
     config: MimicConfig,
     pluginFullName: String,
-) = commandAPICommand("mimic") {
+) = commandAPICommand(COMMAND_NAME) {
     withPermission("mimic.admin")
-    withShortDescription("Show info about Mimic")
+    withShortDescription(COMMAND_INFO_DESCRIPTION)
     executes(infoExecutor(pluginFullName))
 
     configSubcommand(mimic, config)
@@ -28,7 +31,7 @@ internal fun registerCommand(
 }
 
 private fun infoExecutor(pluginFullName: String) = CommandExecutor { sender, _ ->
-    val message = buildTextComponent {
+    val message = text {
         appendLine(pluginFullName, NamedTextColor.GREEN)
         color(NamedTextColor.GRAY)
         append("Use ")
@@ -38,9 +41,9 @@ private fun infoExecutor(pluginFullName: String) = CommandExecutor { sender, _ -
     sender.sendMessage(message)
 }
 
-private fun createClickableCommand() = buildTextComponent {
+private fun createClickableCommand() = text {
     color(NamedTextColor.YELLOW)
     appendClickable(CONFIG_COMMAND, "Click to execute", CONFIG_COMMAND)
 }
 
-private const val CONFIG_COMMAND = "/mimic config"
+private const val CONFIG_COMMAND = "/$COMMAND_NAME config"

@@ -19,9 +19,11 @@ internal class MimicCommands {
         if (commandApiPlugin == null) {
             Log.w("CommandAPI not found. Mimic commands won't be registered.")
             Log.w("Consider installing CommandAPI: https://docs.commandapi.dev/")
+            registerFallbackCommand(plugin)
             return
         } else if (!commandApiPlugin.isEnabled) {
             Log.w("CommandAPI loaded, but not enabled. Mimic commands won't be registered.")
+            registerFallbackCommand(plugin)
             return
         }
 
@@ -30,6 +32,13 @@ internal class MimicCommands {
             mimic = mimic,
             config = config,
             pluginFullName = plugin.pluginMeta.displayName,
+        )
+    }
+
+    private fun registerFallbackCommand(plugin: JavaPlugin) {
+        plugin.server.commandMap.register(
+            plugin.name.lowercase(),
+            FallbackCommand(plugin.pluginMeta.displayName),
         )
     }
 
