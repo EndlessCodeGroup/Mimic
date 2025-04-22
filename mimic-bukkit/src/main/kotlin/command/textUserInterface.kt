@@ -18,19 +18,19 @@
  */
 package ru.endlesscode.mimic.command
 
-import org.bukkit.ChatColor
-import org.bukkit.command.CommandSender
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.format.NamedTextColor
+import ru.endlesscode.mimic.internal.append
+import ru.endlesscode.mimic.internal.appendLine
 
-internal fun CommandSender.send(vararg messages: String) {
-    for (message in messages) {
-        sendMessage(message.colored())
+internal fun successText(text: String) = Component.text(text, NamedTextColor.GOLD)
+internal fun errorText(text: String) = Component.text(text, NamedTextColor.RED)
+
+internal fun TextComponent.Builder.appendStats(vararg stats: Pair<String, String>) {
+    for ((key, value) in stats) {
+        append("$key: ", NamedTextColor.DARK_AQUA)
+        append(value, NamedTextColor.GRAY)
+        appendLine()
     }
 }
-
-internal fun CommandSender.send(messages: Collection<String>) {
-    for (message in messages) {
-        sendMessage(message.colored())
-    }
-}
-
-private fun String.colored(): String = ChatColor.translateAlternateColorCodes('&', this)

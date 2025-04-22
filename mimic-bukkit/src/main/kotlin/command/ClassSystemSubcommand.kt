@@ -23,7 +23,12 @@ import dev.jorel.commandapi.executors.PlayerCommandExecutor
 import dev.jorel.commandapi.kotlindsl.greedyStringArgument
 import dev.jorel.commandapi.kotlindsl.playerArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
+import net.kyori.adventure.text.TextComponent
+import net.kyori.adventure.text.format.NamedTextColor
 import ru.endlesscode.mimic.Mimic
+import ru.endlesscode.mimic.internal.append
+import ru.endlesscode.mimic.internal.appendLine
+import ru.endlesscode.mimic.internal.text
 
 /**
  * Commands to deal with class systems.
@@ -51,11 +56,15 @@ private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player, 
     val target = args.getOrDefaultUnchecked(TARGET, player)
     val provider = mimic.getClassSystemProvider()
     val system = provider.getSystem(target)
-    player.send(
-        "&3System: &7${provider.id}",
-        "&3Classes: &7${system.classes}",
-        "&3Primary: &7${system.primaryClass}",
-    )
+
+    val message = text {
+        appendStats(
+            "System" to provider.id,
+            "Classes" to system.classes.toString(),
+            "Primary" to system.primaryClass.toString(),
+        )
+    }
+    player.sendMessage(message)
 }
 
 private fun checkCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player, args ->
@@ -65,14 +74,26 @@ private fun checkCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player,
     val system = mimic.getClassSystem(target)
     val hasAllClasses = system.hasAllClasses(classes)
     val hasAnyOfClasses = system.hasAnyOfClasses(classes)
-    target.send(
-        "&6Player '${target.name}':",
-        "&6- has any of: ${hasAnyOfClasses.toChatMessage()}",
-        "&6- has all: ${hasAllClasses.toChatMessage()}",
-    )
+
+    val message = text {
+        color(NamedTextColor.GOLD)
+        appendLine("Player '${target.name}':")
+        append("- has any of: ")
+        appendStatus(hasAnyOfClasses)
+        appendLine()
+        append("- has all: ")
+        appendStatus(hasAllClasses)
+    }
+    target.sendMessage(message)
 }
 
-private fun Boolean.toChatMessage(): String = if (this) "&ayes" else "&cno"
+private fun TextComponent.Builder.appendStatus(status: Boolean) {
+    if (status) {
+        append("yes", NamedTextColor.GREEN)
+    } else {
+        append("no", NamedTextColor.RED)
+    }
+}
 
 private const val TARGET = "target"
 private const val CLASSES = "classes"

@@ -24,9 +24,11 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
 import dev.jorel.commandapi.kotlindsl.*
+import net.kyori.adventure.text.TextComponent
 import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.text
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import kotlin.math.roundToInt
 
@@ -97,12 +99,17 @@ private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, 
     val target = args.getOrDefaultUnchecked(TARGET, sender)
     val provider = mimic.getLevelSystemProvider()
     val system = provider.getSystem(target)
-    sender.send(
-        "&3System: &7${provider.id}",
-        "&3Level: &7%.2f".format(system.level + system.fractionalExp),
-        "&3Exp: &7%.1f &8| &3To next level: &7%.1f".format(system.exp, system.expToNextLevel),
-        "&3Total exp: &7%.1f".format(system.totalExp)
-    )
+
+    val message = text {
+        appendStats(
+            "System" to provider.id,
+            "Level" to "%.2f".format(system.level + system.fractionalExp),
+            "Exp" to "%.1f".format(system.exp),
+            "Exp to next level" to "%.1f".format(system.expToNextLevel),
+            "Total exp" to "%.1f".format(system.totalExp)
+        )
+    }
+    target.sendMessage(message)
 }
 
 private fun setCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
@@ -159,7 +166,7 @@ private inline fun catchUnsupported(block: () -> Unit) {
 }
 
 private fun BukkitLevelSystem.printNewStats(sender: CommandSender) {
-    sender.send("&6New ${player.name}'s stats: $level LVL, %.1f XP".format(exp))
+    sender.sendMessage(successText("New ${player.name}'s stats: $level LVL, %.1f XP".format(exp)))
 }
 
 private fun hasCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
@@ -167,9 +174,9 @@ private fun hasCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, a
     val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
     val target = args.getOrDefaultUnchecked(TARGET, sender)
 
-    fun buildMessage(has: Boolean, valueType: String): String {
+    fun buildMessage(has: Boolean, valueType: String): TextComponent {
         val hasOrNot = if (has) "has" else "has not"
-        return "&6${target.name} $hasOrNot $amount $valueType."
+        return successText("${target.name} $hasOrNot $amount $valueType.")
     }
 
     val system = mimic.getLevelSystem(target)
@@ -179,7 +186,7 @@ private fun hasCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, a
         TYPE_TOTAL -> buildMessage(system.hasExpTotal(amount), "total experience")
         else -> error("Unexpected type: $type")
     }
-    sender.send(message)
+    sender.sendMessage(message)
 }
 
 private const val TARGET = "target"

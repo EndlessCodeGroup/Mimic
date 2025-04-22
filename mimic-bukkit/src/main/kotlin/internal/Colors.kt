@@ -17,6 +17,9 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Keep it for now
+@file:Suppress("DEPRECATION")
+
 package ru.endlesscode.mimic.internal
 
 import org.bukkit.ChatColor

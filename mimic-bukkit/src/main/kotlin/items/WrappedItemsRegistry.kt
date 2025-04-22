@@ -7,7 +7,7 @@ import ru.endlesscode.mimic.WrappedMimicService
 import ru.endlesscode.mimic.config.MimicConfig
 
 internal class WrappedItemsRegistry(
-    private val delegate: BukkitItemsRegistry,
+    internal val delegate: BukkitItemsRegistry,
     private val config: MimicConfig,
     pluginName: String,
     pluginManager: PluginManager,
@@ -27,3 +27,5 @@ internal class WrappedItemsRegistry(
 
     override fun getItem(itemId: String, payload: Any?, amount: Int) = delegate.getItem(itemId, payload, amount)
 }
+
+internal fun BukkitItemsRegistry.unwrap() = if (this is WrappedItemsRegistry) delegate else this

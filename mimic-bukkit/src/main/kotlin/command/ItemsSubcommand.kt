@@ -23,9 +23,14 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.arguments.ArgumentSuggestions
 import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.kotlindsl.*
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
+import ru.endlesscode.mimic.internal.append
+import ru.endlesscode.mimic.internal.appendLine
+import ru.endlesscode.mimic.internal.text
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.unwrap
 
 /**
  * Commands to deal with items registries
@@ -59,7 +64,7 @@ internal fun CommandAPICommand.itemsSubcommand(itemsRegistry: BukkitItemsRegistr
         playerExecutor { sender, args ->
             val item: String by args
             val isSame = itemsRegistry.isSameItem(sender.inventory.itemInMainHand, item)
-            sender.send("&6Item in hand and '$item' %s same.".format(if (isSame) "are" else "aren't"))
+            sender.sendMessage(successText("Item in hand and '$item' %s same.".format(if (isSame) "are" else "aren't")))
         }
     }
 
@@ -67,7 +72,7 @@ internal fun CommandAPICommand.itemsSubcommand(itemsRegistry: BukkitItemsRegistr
         withShortDescription("Prints ID of item in hand")
         playerExecutor { sender, _ ->
             val id = itemsRegistry.getItemId(sender.inventory.itemInMainHand)
-            sender.send("&6Id of item in hand is '$id'")
+            sender.sendMessage(successText("Id of item in hand is '$id'"))
         }
     }
 
@@ -77,31 +82,35 @@ internal fun CommandAPICommand.itemsSubcommand(itemsRegistry: BukkitItemsRegistr
         anyExecutor { sender, args ->
             val item: String by args
             val itemExists = itemsRegistry.isItemExists(item)
-            sender.send("&6Item with id '$item'%s exists".format(if (itemExists) "" else " isn't"))
+            sender.sendMessage(successText("Item with id '$item'%s exists".format(if (itemExists) "" else " isn't")))
         }
     }
 }
 
 // We can use only greedy string if we need to allow colons because it requires quoting in non-greedy strings.
 // https://github.com/Mojang/brigadier/blob/cf754c4ef654160dca946889c11941634c5db3d5/src/main/java/com/mojang/brigadier/StringReader.java#L169
-private fun CommandAPICommand.itemArgument(itemsRegistry: BukkitItemsRegistry) = greedyStringArgument(ITEM) {
-    replaceSuggestions(ArgumentSuggestions.stringCollection { itemsRegistry.knownIds })
+private fun CommandAPICommand.itemArgument(itemRegistry: BukkitItemsRegistry) = greedyStringArgument(ITEM) {
+    replaceSuggestions(ArgumentSuggestions.stringCollection { itemRegistry.knownIds })
 }
 
-private fun infoExecutor(itemsRegistry: BukkitItemsRegistry) = CommandExecutor { sender, _ ->
-    val registries = (itemsRegistry as? MimicItemsRegistry)?.providers
-        .orEmpty()
-        .map { it.provider }
-        .map { "  &f${it.id}: &7${it.knownIds.size}" }
+private fun infoExecutor(itemRegistry: BukkitItemsRegistry) = CommandExecutor { sender, _ ->
+    val providers = (itemRegistry.unwrap() as? MimicItemsRegistry)?.providers.orEmpty().map { it.provider }
 
-    sender.send(
-        "&3Items Service: &7${itemsRegistry.id}",
-        "&3Known IDs amount: &7${itemsRegistry.knownIds.size}"
-    )
-    sender.send(registries)
+    val message = text {
+        appendStats(
+            "Item Registry" to itemRegistry.id,
+            "Known IDs amount" to itemRegistry.knownIds.size.toString(),
+        )
+
+        for (provider in providers) {
+            append("  ${provider.id}: ", NamedTextColor.WHITE)
+            appendLine(provider.knownIds.size.toString(), NamedTextColor.GRAY)
+        }
+    }
+    sender.sendMessage(message)
 }
 
-private fun giveExecutor(itemsRegistry: BukkitItemsRegistry) = CommandExecutor { sender, args ->
+private fun giveExecutor(itemRegistry: BukkitItemsRegistry) = CommandExecutor { sender, args ->
     val target: Player by args
     val amount = args.getOrDefaultUnchecked(AMOUNT, 1)
     // We can use only one greedy string at the end, so we read item and its payload from the same argument
@@ -109,16 +118,15 @@ private fun giveExecutor(itemsRegistry: BukkitItemsRegistry) = CommandExecutor {
     val item = itemParts.first()
     val payload = itemParts.getOrNull(1)
 
-    val itemStack = itemsRegistry.getItem(item, payload, amount)
+    val itemStack = itemRegistry.getItem(item, payload, amount)
     if (itemStack != null) {
         target.inventory.addItem(itemStack)
-        sender.send("&6Gave ${itemStack.amount} [$item] to ${target.name}.")
+        sender.sendMessage(successText("Gave ${itemStack.amount} [$item] to ${target.name}."))
     } else {
-        sender.send("&cUnknown item '$item'.")
+        sender.sendMessage(errorText("Unknown item '$item'"))
     }
 }
 
 private const val TARGET = "target"
 private const val ITEM = "item"
 private const val AMOUNT = "amount"
-private const val PAYLOAD = "payload"
