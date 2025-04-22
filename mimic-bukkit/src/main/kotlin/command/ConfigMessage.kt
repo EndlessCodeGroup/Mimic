@@ -12,10 +12,10 @@ import ru.endlesscode.mimic.config.StringSetConfigProperty
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
-import ru.endlesscode.mimic.internal.buildTextComponent
+import ru.endlesscode.mimic.internal.text
 
 @OptIn(ExperimentalMimicApi::class)
-internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponent = buildTextComponent {
+internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponent = text {
     appendLine("----[ Mimic Config ]----")
     appendSelectablePropertyConfig(
         property = MimicConfig.LEVEL_SYSTEM,
@@ -53,7 +53,7 @@ private fun TextComponent.Builder.appendSelectablePropertyConfig(
             availableOptions,
             hint = "Click to select",
             color = NamedTextColor.GRAY,
-            resolveCommand = { "/mimic config ${property.path} $it" },
+            resolveCommand = { "/$COMMAND_NAME config ${property.path} $it" },
         )
     }
 
@@ -76,14 +76,14 @@ private fun TextComponent.Builder.appendSetPropertyConfig(
         hint = "Click to add",
         color = NamedTextColor.GRAY,
         nonClickableOptions = permanentOptions,
-        resolveCommand = { "/mimic config ${property.path} add $it" },
+        resolveCommand = { "/$COMMAND_NAME config ${property.path} add $it" },
     )
 
     appendLine()
     appendPropertyPath(property)
     append("[")
     appendSelectableOptions(values, hint = "Click to remove") {
-        "/mimic config ${property.path} remove $it"
+        "/$COMMAND_NAME config ${property.path} remove $it"
     }
     append("]")
 }
@@ -103,7 +103,7 @@ private fun TextComponent.Builder.appendSelectableOptions(
     resolveCommand: (String) -> String,
 ) = append(
     options.mapIndexed { index, option ->
-        buildTextComponent {
+        text {
             color(color)
             if (index != 0) append(", ")
             if (option !in nonClickableOptions) {

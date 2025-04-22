@@ -7,7 +7,9 @@ import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 
-internal fun buildTextComponent(builder: TextComponent.Builder.() -> Unit): TextComponent = Component.text(builder)
+// See: https://github.com/KyoriPowered/adventure/tree/main/4/extra-kotlin
+
+internal fun text(builder: TextComponent.Builder.() -> Unit): TextComponent = Component.text(builder)
 
 internal fun TextComponent.Builder.appendLine(
     text: String,
