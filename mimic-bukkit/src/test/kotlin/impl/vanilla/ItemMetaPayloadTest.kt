@@ -21,6 +21,7 @@ package ru.endlesscode.mimic.impl.vanilla
 
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import net.kyori.adventure.text.Component.text
 import org.bukkit.inventory.ItemFlag
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -55,8 +56,8 @@ internal class ItemMetaPayloadTest {
         @JvmStatic
         fun validData(): Stream<Arguments> = Stream.of(
             // Simple cases
-            arguments("{name: Name}", ItemMetaPayload(name = "Name")),
-            arguments("name=Name", ItemMetaPayload(name = "Name")),
+            arguments("{name: Name}", ItemMetaPayload(name = text("Name"))),
+            arguments("name=Name", ItemMetaPayload(name = text("Name"))),
             arguments(
                 """
                     name = Name,
@@ -67,8 +68,8 @@ internal class ItemMetaPayloadTest {
                     flags = [HIDE_ATTRIBUTES, HIDE_DYE]
                 """,
                 ItemMetaPayload(
-                    name = "Name",
-                    lore = listOf("Line1", "Line2"),
+                    name = text("Name"),
+                    lore = listOf(text("Line1"), text("Line2")),
                     isUnbreakable = true,
                     damage = 42,
                     customModelData = 24,

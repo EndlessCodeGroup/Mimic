@@ -21,8 +21,4 @@ package ru.endlesscode.mimic.internal
 
 import org.bukkit.ChatColor
 
-internal fun List<String>.colorized(): List<String> = map { it.colorized() }
-
-internal fun String.colorized(): String = ChatColor.translateAlternateColorCodes('&', this)
-
 internal fun String.stripColor(): String = checkNotNull(ChatColor.stripColor(this))
