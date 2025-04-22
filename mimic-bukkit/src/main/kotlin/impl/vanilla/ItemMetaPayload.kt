@@ -17,7 +17,7 @@
  * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@file:UseSerializers(EnchantmentSerializer::class, ItemFlagsSerializer::class)
+@file:UseSerializers(EnchantmentSerializer::class, ItemFlagsSerializer::class, MiniMessageComponentSerializer::class)
 
 package ru.endlesscode.mimic.impl.vanilla
 
@@ -26,18 +26,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.hocon.decodeFromConfig
+import net.kyori.adventure.text.Component
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
-import ru.endlesscode.mimic.internal.DI
-import ru.endlesscode.mimic.internal.EnchantmentSerializer
-import ru.endlesscode.mimic.internal.ItemFlagsSerializer
-import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.*
 
 /**
  * Payload to configure item's [ItemMeta][org.bukkit.inventory.meta.ItemMeta].
  *
- * @property name Item name. You can specify colors using symbol `&`.
- * @property lore Item lore. You can specify colors using symbol `&`.
+ * @property name Item name. Supports MiniMessage formatting.
+ * @property lore Item lore. Supports MiniMessage formatting.
  * @property isUnbreakable Is item unbreakable. Affects only items that have durability (like weapons or tools).
  * @property damage Damage to item durability. Affects only items that have durability (like weapons or tools).
  * @property customModelData A value used to override item model.
@@ -48,8 +46,8 @@ import ru.endlesscode.mimic.internal.Log
  */
 @Serializable
 public data class ItemMetaPayload(
-    val name: String? = null,
-    val lore: List<String>? = null,
+    val name: Component? = null,
+    val lore: List<Component>? = null,
     @SerialName("unbreakable")
     val isUnbreakable: Boolean = false,
     val damage: Int = 0,

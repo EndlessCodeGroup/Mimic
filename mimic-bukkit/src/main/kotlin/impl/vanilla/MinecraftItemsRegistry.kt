@@ -25,7 +25,6 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.callCompat
-import ru.endlesscode.mimic.internal.colorized
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 /**
@@ -68,8 +67,8 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
     private fun ItemMeta.applyPayload(payload: ItemMetaPayload): ItemMeta {
         // Apply text options
-        setDisplayName(payload.name?.colorized())
-        lore = payload.lore?.colorized()
+        displayName(payload.name)
+        lore(payload.lore)
 
         // Apply damage and custom model data
         isUnbreakable = payload.isUnbreakable

@@ -279,24 +279,24 @@ public final class ru/endlesscode/mimic/impl/skillapi/SkillApiLevelSystem$Compan
 public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload {
 	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$Companion;
 	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun component1 ()Ljava/lang/String;
+	public fun <init> (Lnet/kyori/adventure/text/Component;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;)V
+	public synthetic fun <init> (Lnet/kyori/adventure/text/Component;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lnet/kyori/adventure/text/Component;
 	public final fun component2 ()Ljava/util/List;
 	public final fun component3 ()Z
 	public final fun component4 ()I
 	public final fun component5 ()Ljava/lang/Integer;
 	public final fun component6 ()Ljava/util/Map;
 	public final fun component7 ()Ljava/util/Set;
-	public final fun copy (Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
-	public static synthetic fun copy$default (Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;Ljava/lang/String;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;ILjava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public final fun copy (Lnet/kyori/adventure/text/Component;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public static synthetic fun copy$default (Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;Lnet/kyori/adventure/text/Component;Ljava/util/List;ZILjava/lang/Integer;Ljava/util/Map;Ljava/util/Set;ILjava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCustomModelData ()Ljava/lang/Integer;
 	public final fun getDamage ()I
 	public final fun getEnchantments ()Ljava/util/Map;
 	public final fun getFlags ()Ljava/util/Set;
 	public final fun getLore ()Ljava/util/List;
-	public final fun getName ()Ljava/lang/String;
+	public final fun getName ()Lnet/kyori/adventure/text/Component;
 	public fun hashCode ()I
 	public final fun isUnbreakable ()Z
 	public static final fun of (Ljava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
