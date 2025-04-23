@@ -3,6 +3,7 @@ package ru.endlesscode.mimic
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicesManager
+import ru.endlesscode.mimic.blocks.BukkitBlocksRegistry
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
@@ -23,6 +24,26 @@ internal class MimicImpl(
     private val config: MimicConfig,
 ) : Mimic {
 
+    // region Blocks Registry
+    @ExperimentalMimicApi
+    override fun registerBlocksRegistry(
+        registry: BukkitBlocksRegistry,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority
+    ): BukkitBlocksRegistry? = tryRegisterService<BukkitBlocksRegistry>(apiLevel, plugin, priority) {
+        TODO("Not implemented yet")
+        // WrappedBlocksRegistry(registry, config, plugin)
+    }
+
+    @ExperimentalMimicApi
+    override fun getBlocksRegistry(): BukkitBlocksRegistry = loadService()
+
+    @ExperimentalMimicApi
+    override fun getAllBlocksRegistries(): Map<String, BukkitBlocksRegistry> = loadAllServices()
+    // endregion
+
+    // region Class System
     override fun registerClassSystem(
         provider: BukkitClassSystem.Provider,
         apiLevel: Int,
@@ -34,7 +55,9 @@ internal class MimicImpl(
 
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = loadService(config.classSystem)
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = loadAllServices()
+    // endregion
 
+    // region Inventory Provider
     @ExperimentalMimicApi
     override fun registerPlayerInventoryProvider(
         provider: PlayerInventoryProvider,
@@ -50,7 +73,9 @@ internal class MimicImpl(
 
     @ExperimentalMimicApi
     override fun getAllPlayerInventoryProviders(): Map<String, PlayerInventoryProvider> = loadAllServices()
+    // endregion
 
+    // region Items Registry
     override fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
         apiLevel: Int,
@@ -62,7 +87,9 @@ internal class MimicImpl(
 
     override fun getItemsRegistry(): BukkitItemsRegistry = loadService()
     override fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry> = loadAllServices()
+    // endregion
 
+    // region Level System
     override fun registerLevelSystem(
         provider: BukkitLevelSystem.Provider,
         apiLevel: Int,
@@ -74,6 +101,7 @@ internal class MimicImpl(
 
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = loadService(config.levelSystem)
     override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = loadAllServices()
+    // endregion
 
     private inline fun <reified Service : MimicService> tryRegisterService(
         apiLevel: Int,
@@ -138,6 +166,7 @@ internal class MimicImpl(
         BukkitLevelSystem.Provider::class -> "LevelSystem"
         BukkitPlayerInventory.Provider::class -> "PlayerInventory"
         BukkitItemsRegistry::class -> "ItemsRegistry"
+        BukkitBlocksRegistry::class -> "BlocksRegistry"
         else -> error("Unknown service: ${this.java.name}")
     }
 }

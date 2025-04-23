@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import org.jetbrains.annotations.ApiStatus
+import ru.endlesscode.mimic.blocks.BukkitBlocksRegistry
 import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
@@ -14,6 +15,68 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
 
+    // region Blocks Registry
+    /**
+     * Registers the given [registry] with normal priority.
+     *
+     * @param registry The [BukkitBlocksRegistry] implementation
+     * @param apiLevel Minimal required API level for this item registry implementation:
+     *                 - if required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     * @param plugin The plugin implementing this item registry.
+     * @return registered registry or `null` if it was not registered.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun registerBlocksRegistry(
+        registry: BukkitBlocksRegistry,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): BukkitBlocksRegistry? = registerBlocksRegistry(registry, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [registry].
+     *
+     * @param registry The [BukkitBlocksRegistry] implementation
+     * @param apiLevel Minimal required API level for this item registry implementation:
+     *                 - if required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     * @param plugin The plugin implementing this item registry.
+     * @param priority Default priority. Service with higher priority will be used if user have not configured
+     *                 preferred service in config.
+     * @return registered registry or `null` if it was not registered.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun registerBlocksRegistry(
+        registry: BukkitBlocksRegistry,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): BukkitBlocksRegistry?
+
+    /**
+     * Returns [BukkitBlocksRegistry] implementation.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun getBlocksRegistry(): BukkitBlocksRegistry
+
+    /**
+     * Returns map containing all known [BukkitBlocksRegistry], where key is an item registry ID.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun getAllBlocksRegistries(): Map<String, BukkitBlocksRegistry>
+    // endregion
+
+    // region Class System
     /**
      * Registers the given [provider] for [BukkitClassSystem] with normal priority.
      *
@@ -62,7 +125,9 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitClassSystem.Provider]s, where key is a provider ID. */
     public fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider>
+    // endregion
 
+    // region Inventory Provider
     /**
      * Registers the given [provider] for [BukkitPlayerInventory] with normal priority.
      *
@@ -133,7 +198,9 @@ public interface Mimic {
     @ExperimentalMimicApi
     @ApiStatus.Experimental
     public fun getAllPlayerInventoryProviders(): Map<String, BukkitPlayerInventory.Provider>
+    // endregion
 
+    // region Items Registry
     /**
      * Registers the given [registry] with normal priority.
      *
@@ -176,7 +243,9 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitItemsRegistry], where key is an item registry ID. */
     public fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry>
+    // endregion
 
+    // region Level System
     /**
      * Registers the given [provider] for [BukkitLevelSystem] with normal priority.
      *
@@ -225,6 +294,7 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitLevelSystem.Provider]s, where key is a provider ID. */
     public fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider>
+    // endregion
 
     public companion object {
         /**

@@ -53,6 +53,12 @@ public object MimicApiLevel {
     public const val VERSION_0_8: Int = 4
 
     /**
+     * # Version 0.9
+     * - Experimental API: BlocksRegistry
+     */
+    public const val VERSION_0_9: Int = 5
+
+    /**
      * The latest version at the moment of Mimic **COMPILATION**.
      *
      * Usage of this constant will be inlined by the compiler, so use it only
@@ -60,7 +66,7 @@ public object MimicApiLevel {
      * Use [checkApiLevel] if you want to check that the current **RUNNING**
      * Mimic API level meets to the required API level.
      */
-    public const val CURRENT: Int = VERSION_0_8
+    public const val CURRENT: Int = VERSION_0_9
 
     /**
      * Returns `true` if the current **RUNNING** Mimic API level is equal
