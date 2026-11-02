@@ -15,6 +15,7 @@ dependencies {
     implementation(kotlin("serialization", version = kotlinVersion))
     implementation(libs.dokka)
     implementation(libs.kotlinx.binaryCompatibilityValidator)
+    implementation(libs.mavenPublish)
 }
 
 repositories {

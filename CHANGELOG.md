@@ -43,6 +43,7 @@ Now it is possible to change Mimic config using commands in two ways:
 - Update Gradle 7.4.2 → 9.8.2
 - Update dependencies
 - Migrate to version catalogs
+- Publish to Maven Central via Central Portal
 
 ## [v0.8.0] (2022-04-18)
 
