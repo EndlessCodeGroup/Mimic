@@ -52,7 +52,7 @@ public interface ClassSystem {
     public val classes: List<String>
 
     /** Returns `true` if player has any class. */
-    public fun hasAnyClass(): Boolean = primaryClass != null
+    public fun hasAnyClass(): Boolean = classes.isNotEmpty()
 
     /**
      * Returns `true` if player has any of required classes.
