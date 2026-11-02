@@ -26,6 +26,7 @@ public class HeroesLevelSystem private constructor(
             giveExp(expDelta)
         }
 
+    @Suppress("OVERRIDE_DEPRECATION") // Ok for implementation
     override var exp: Double
         get() = totalExp - converter.levelToExp(level)
         set(value) {

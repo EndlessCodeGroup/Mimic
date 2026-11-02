@@ -304,14 +304,14 @@ public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+public final synthetic class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
 	public static final field INSTANCE Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$$serializer;
-	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
-	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;)V
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;)V
 }
 
 public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$Companion {

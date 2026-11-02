@@ -20,7 +20,7 @@ internal class FallbackCommand(
     emptyList(),
 ) {
 
-    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>?): Boolean {
+    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
         val message = text {
             appendLine(pluginFullName, NamedTextColor.GREEN)
             color(NamedTextColor.GRAY)

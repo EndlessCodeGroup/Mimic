@@ -14,3 +14,9 @@ subprojects {
 repositories {
     mavenCentral()
 }
+
+dependencies {
+    dokka(projects.mimicApi)
+    dokka(projects.mimicBukkitApi)
+    dokka(projects.mimicBukkit)
+}

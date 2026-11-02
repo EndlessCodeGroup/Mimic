@@ -13,18 +13,16 @@ jobs:
 
     steps:
     - name: Checkout sources
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Setup Java
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v6
       with:
         java-version: 17
         distribution: temurin
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v6
     - name: Run Check
-      uses: eskatos/gradle-command-action@v2
-      with:
-        arguments: check
-      env:
-        warningsAsErrors: true
+      run: ./gradlew check -PwarningsAsErrors=true
 
   docs:
     name: Publish Docs
@@ -33,18 +31,18 @@ jobs:
 
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v6
         with:
           java-version: 17
           distribution: temurin
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
       - name: Generate docs
-        uses: eskatos/gradle-command-action@v2
-        with:
-          arguments: dokkaHtmlMultiModule
+        run: ./gradlew dokkaGenerate
       - name: Deploy docs
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: build/dokka/htmlMultiModule
+          folder: build/dokka/html
