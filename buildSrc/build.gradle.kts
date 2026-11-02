@@ -14,7 +14,6 @@ dependencies {
     implementation(kotlin("gradle-plugin", version = kotlinVersion))
     implementation(kotlin("serialization", version = kotlinVersion))
     implementation(libs.dokka)
-    implementation(libs.kotlinx.binaryCompatibilityValidator)
     implementation(libs.mavenPublish)
 }
 
