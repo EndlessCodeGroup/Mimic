@@ -22,8 +22,9 @@ kotest = "6.0.0.M3"
 mockk = "1.14.0"
 
 gradlePlugin-bukkitgradle = "1.0.0"
-gradlePlugin-shadow = "8.3.6"
-gradlePlugin-versions = "0.52.0"
+gradlePlugin-shadow = "9.6.1"
+gradlePlugin-versions = "0.67.0"
+gradlePlugin-mavenPublish = "0.37.0"
 
 [libraries]
 
@@ -51,13 +52,14 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 # Build dependencies
 dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "gradlePlugin-mavenPublish" }
 kotlinx-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlinx-binaryCompatibilityValidator" }
 
 [plugins]
 
 bukkitgradle = { id = "ru.endlesscode.bukkitgradle", version.ref = "gradlePlugin-bukkitgradle" }
 shadow = { id = "com.gradleup.shadow", version.ref = "gradlePlugin-shadow" }
-versions = { id = "com.github.ben-manes.versions", version.ref = "gradlePlugin-versions" }
+versions = { id = "io.github.ben-manes.versions", version.ref = "gradlePlugin-versions" }
 
 [bundles]
 
