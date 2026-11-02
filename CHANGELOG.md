@@ -29,6 +29,8 @@ Now it is possible to change Mimic config using commands in two ways:
 
 - Added tag `@since 0.8.0` to all new APIs
 - Make `BukkitPlayerInventory.collectEquippedItems` protected. It was public by an accident.
+- Default implementation of `ClassSystem.hasAnyClass()` changed.
+  Now it checks if `getClasses()` returns a non-empty list instead of checking `getPrimaryClass() != null`.
 
 ### Plugin changes
 
