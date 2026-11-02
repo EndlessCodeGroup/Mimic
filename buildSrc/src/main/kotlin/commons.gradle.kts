@@ -1,10 +1,10 @@
 import internal.libs
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 plugins {
     kotlin("jvm")
     id("org.jetbrains.dokka")
-    id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
 
 tasks.withType<JavaCompile> {
@@ -18,6 +18,9 @@ tasks.test {
 kotlin {
     jvmToolchain(17)
     explicitApi()
+
+    @OptIn(ExperimentalAbiValidation::class)
+    abiValidation()
 
     compilerOptions {
         jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
