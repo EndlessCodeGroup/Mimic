@@ -19,6 +19,9 @@
 build/
 local.properties
 
+### Kotlin
+.kotlin/
+
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
 

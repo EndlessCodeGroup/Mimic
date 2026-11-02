@@ -1,7 +1,5 @@
 import internal.libs
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import java.net.URL
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 
 plugins {
     kotlin("jvm")
@@ -22,10 +20,8 @@ kotlin {
     explicitApi()
 
     compilerOptions {
-        apiVersion = KotlinVersion.KOTLIN_1_9
-        languageVersion = KotlinVersion.KOTLIN_1_9
-        freeCompilerArgs.add("-Xjvm-default=all")
-        allWarningsAsErrors = System.getProperty("warningsAsErrors") == "true"
+        jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
+        allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").map { it.toBoolean() }.orElse(false)
     }
 }
 
@@ -38,18 +34,20 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType<DokkaTaskPartial>().configureEach {
+dokka {
     dokkaSourceSets.configureEach {
         reportUndocumented = true
         sourceLink {
             localDirectory = file("src/main/kotlin/")
-            remoteUrl = URL("https://github.com/EndlessCodeGroup/Mimic/tree/develop/${project.name}/src/main/kotlin/")
+            remoteUrl("https://github.com/EndlessCodeGroup/Mimic/tree/develop/${project.name}/src/main/kotlin/")
         }
-        externalDocumentationLink {
-            url = URL("https://hub.spigotmc.org/javadocs/spigot/")
-            packageListUrl = URL("https://gist.githubusercontent.com/osipxd/604c9b3f91c3a6c56050f4a3b027f333/raw/package-list")
+        externalDocumentationLinks.register("spigot") {
+            url("https://hub.spigotmc.org/javadocs/spigot/")
+            packageListUrl("https://gist.githubusercontent.com/osipxd/604c9b3f91c3a6c56050f4a3b027f333/raw/package-list")
         }
-        pluginsMapConfiguration.put("org.jetbrains.dokka.base.DokkaBase", """{ "separateInheritedMembers": true}""")
+    }
+    pluginsConfiguration.html {
+        separateInheritedMembers = true
     }
 }
 

@@ -20,6 +20,7 @@ public class MmoCoreLevelSystem private constructor(
             playerData.level = value
         }
 
+    @Suppress("OVERRIDE_DEPRECATION") // Ok for implementation
     override var exp: Double
         get() = playerData.experience
         set(value) {

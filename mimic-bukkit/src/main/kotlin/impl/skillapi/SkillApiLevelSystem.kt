@@ -39,6 +39,7 @@ public class SkillApiLevelSystem internal constructor(
             playerClass?.level = value
         }
 
+    @Suppress("OVERRIDE_DEPRECATION") // Ok for implementation
     override var exp: Double
         get() = playerClass?.exp ?: 0.0
         set(value) {

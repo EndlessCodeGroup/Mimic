@@ -55,7 +55,7 @@ public class BattleLevelsLevelSystem internal constructor(
             }
         }
 
-    @Suppress("OverridingDeprecatedMember") // Ok for implementation
+    @Suppress("OVERRIDE_DEPRECATION") // Ok for implementation
     override var exp: Double
         get() = (totalExp - converter.levelToExp(level)).coerceAtLeast(0.0)
         set(value) {

@@ -34,6 +34,7 @@ public class MinecraftLevelSystem private constructor(player: Player) : BukkitLe
             player.level = value.coerceAtLeast(0)
         }
 
+    @Suppress("OVERRIDE_DEPRECATION") // Ok for implementation
     override var exp: Double
         get() {
             val expToNextLevel = converter.getExpToReachNextLevel(level)

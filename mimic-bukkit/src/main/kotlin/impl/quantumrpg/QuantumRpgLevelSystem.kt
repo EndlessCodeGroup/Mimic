@@ -22,6 +22,7 @@ public class QuantumRpgLevelSystem private constructor(
             classData.level = value
         }
 
+    @Suppress("OVERRIDE_DEPRECATION") // Ok for implementation
     override var exp: Double
         get() = classData.exp.toDouble()
         set(value) {

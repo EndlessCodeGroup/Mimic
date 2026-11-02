@@ -11,25 +11,25 @@ import org.gradle.api.provider.Provider
 @Suppress("ClassName")
 internal object libs {
 
-    context(Project)
+    context(project: Project)
     val junit_bom
-        get() = lib("junit-bom")
+        get() = project.lib("junit-bom")
 
-    context(Project)
+    context(project: Project)
     val junit_jupiter
-        get() = lib("junit-jupiter")
+        get() = project.lib("junit-jupiter")
 
-    context(Project)
+    context(project: Project)
     val junit_jupiter_params
-        get() = lib("junit-jupiter-params")
+        get() = project.lib("junit-jupiter-params")
 
-    context(Project)
+    context(project: Project)
     val kotest_assertions
-        get() = lib("kotest-assertions")
+        get() = project.lib("kotest-assertions")
 
-    context(Project)
+    context(project: Project)
     val mockk
-        get() = lib("mockk")
+        get() = project.lib("mockk")
 
     private fun Project.lib(alias: String): Provider<MinimalExternalModuleDependency> =
         versionCatalogs.named("libs").findLibrary(alias).get()
