@@ -47,7 +47,7 @@ internal fun CommandAPICommand.levelSystemSubcommand(mimic: Mimic) = subcommand(
 
     subcommand("info") {
         withShortDescription("Show information about player's level system")
-        playerArgument(TARGET, optional = true)
+        entitySelectorArgumentOnePlayer(TARGET, optional = true)
         executesPlayer(infoCommandExecutor(mimic))
     }
 
@@ -55,7 +55,7 @@ internal fun CommandAPICommand.levelSystemSubcommand(mimic: Mimic) = subcommand(
         withShortDescription("Set player's level or exp")
         amountArgument()
         valueTypeArgument(allowTotal = true)
-        playerArgument(TARGET, optional = true)
+        entitySelectorArgumentOnePlayer(TARGET, optional = true)
         executesPlayer(setCommandExecutor(mimic))
     }
 
@@ -63,7 +63,7 @@ internal fun CommandAPICommand.levelSystemSubcommand(mimic: Mimic) = subcommand(
         withShortDescription("Give level or exp to player")
         amountArgument()
         valueTypeArgument()
-        playerArgument(TARGET, optional = true)
+        entitySelectorArgumentOnePlayer(TARGET, optional = true)
         executesPlayer(giveCommandExecutor(mimic))
     }
 
@@ -71,7 +71,7 @@ internal fun CommandAPICommand.levelSystemSubcommand(mimic: Mimic) = subcommand(
         withShortDescription("Take level or exp from player")
         amountArgument()
         valueTypeArgument()
-        playerArgument(TARGET, optional = true)
+        entitySelectorArgumentOnePlayer(TARGET, optional = true)
         executesPlayer(takeCommandExecutor(mimic))
     }
 
@@ -79,7 +79,7 @@ internal fun CommandAPICommand.levelSystemSubcommand(mimic: Mimic) = subcommand(
         withShortDescription("Check that player did reach level or has exp")
         amountArgument()
         valueTypeArgument(allowTotal = true)
-        playerArgument(TARGET, optional = true)
+        entitySelectorArgumentOnePlayer(TARGET, optional = true)
         executesPlayer(hasCommandExecutor(mimic))
     }
 }

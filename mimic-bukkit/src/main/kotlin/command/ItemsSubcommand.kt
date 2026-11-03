@@ -50,7 +50,7 @@ internal fun CommandAPICommand.itemsSubcommand(itemsRegistry: BukkitItemsRegistr
 
     subcommand("give") {
         withShortDescription("Give item to player")
-        playerArgument(TARGET)
+        entitySelectorArgumentOnePlayer(TARGET)
         integerArgument(AMOUNT, min = 1, max = 64) {
             replaceSuggestions(ArgumentSuggestions.strings("1", "64"))
         }

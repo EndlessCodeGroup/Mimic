@@ -40,7 +40,7 @@ bukkit {
 
 tasks.runServer {
     downloadPlugins {
-        github("CommandAPI", "CommandAPI", "10.0.0", "CommandAPI-10.0.0.jar")
+        github("CommandAPI", "CommandAPI", "10.1.2", "CommandAPI-10.1.2.jar")
     }
 }
 

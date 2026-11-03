@@ -20,8 +20,8 @@ package ru.endlesscode.mimic.command
 
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
+import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.greedyStringArgument
-import dev.jorel.commandapi.kotlindsl.playerArgument
 import dev.jorel.commandapi.kotlindsl.subcommand
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
@@ -40,13 +40,13 @@ import ru.endlesscode.mimic.internal.text
 internal fun CommandAPICommand.classSystemSubcommand(mimic: Mimic) = subcommand("class") {
     subcommand("info") {
         withShortDescription("Show information about player's class system")
-        playerArgument(TARGET, optional = true)
+        entitySelectorArgumentOnePlayer(TARGET, optional = true)
         executesPlayer(infoCommandExecutor(mimic))
     }
 
     subcommand("check") {
         withShortDescription("Check that player has the given classes")
-        playerArgument(TARGET)
+        entitySelectorArgumentOnePlayer(TARGET)
         greedyStringArgument(CLASSES)
         executesPlayer(checkCommandExecutor(mimic))
     }
