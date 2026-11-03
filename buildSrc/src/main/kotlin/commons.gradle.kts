@@ -1,5 +1,6 @@
 import internal.libs
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 
 plugins {
@@ -18,11 +19,14 @@ tasks.test {
 kotlin {
     jvmToolchain(17)
     explicitApi()
+    coreLibrariesVersion = "2.2.21"
 
     @OptIn(ExperimentalAbiValidation::class)
     abiValidation()
 
     compilerOptions {
+        apiVersion = KotlinVersion.KOTLIN_2_2
+        languageVersion = KotlinVersion.KOTLIN_2_2
         jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").map { it.toBoolean() }.orElse(false)
     }
