@@ -11,9 +11,9 @@ bstats = "3.2.1"
 
 skillapi = "3.102"
 battlelevels = "6.9.1"
-mmocore = "1.12.1-SNAPSHOT"
-mmoitems = "6.9.5-SNAPSHOT"
-mythiclib = "1.6.2-SNAPSHOT"
+mmocore = "1.13.1-SNAPSHOT"
+mmoitems = "6.10.1-SNAPSHOT"
+mythiclib = "1.7.1-SNAPSHOT"
 heroes = "1.9.30-RELEASE"
 
 junit = "6.1.3"

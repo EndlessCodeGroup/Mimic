@@ -1,5 +1,6 @@
 package ru.endlesscode.mimic.impl.mmocore
 
+import net.Indyuce.mmocore.api.event.PlayerLevelChangeEvent
 import net.Indyuce.mmocore.api.player.PlayerData
 import net.Indyuce.mmocore.experience.EXPSource
 import org.bukkit.entity.Player
@@ -17,7 +18,7 @@ public class MmoCoreLevelSystem private constructor(
     override var level: Int
         get() = playerData.level
         set(value) {
-            playerData.level = value
+            playerData.setLevel(value, PlayerLevelChangeEvent.Reason.OTHER)
         }
 
     @Suppress("OVERRIDE_DEPRECATION") // Ok for implementation
@@ -31,7 +32,7 @@ public class MmoCoreLevelSystem private constructor(
         get() = playerData.levelUpExperience.toDouble()
 
     override fun takeLevels(lvlAmount: Int) {
-        playerData.takeLevels(lvlAmount)
+        level -= lvlAmount
     }
 
     override fun giveLevels(lvlAmount: Int) {

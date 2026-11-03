@@ -3,7 +3,7 @@ package ru.endlesscode.mimic.impl.mmocore
 import net.Indyuce.mmocore.MMOCore
 import net.Indyuce.mmocore.api.player.PlayerData
 import net.Indyuce.mmocore.api.player.profess.PlayerClass
-import net.Indyuce.mmocore.experience.ExpCurve
+import net.Indyuce.mmocore.experience.curve.ExperienceCurve
 import org.bukkit.OfflinePlayer
 
 internal class MmoCoreWrapper {
@@ -11,5 +11,5 @@ internal class MmoCoreWrapper {
 
     fun getData(player: OfflinePlayer): PlayerData = PlayerData.get(player)
     fun getPlayerClass(player: OfflinePlayer): PlayerClass = PlayerData.get(player).profess
-    fun getExpCurve(player: OfflinePlayer): ExpCurve = PlayerData.get(player).profess.expCurve ?: ExpCurve.DEFAULT
+    fun getExpCurve(player: OfflinePlayer): ExperienceCurve = PlayerData.get(player).profess.expCurve ?: ExperienceCurve.DEFAULT
 }
