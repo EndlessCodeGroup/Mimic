@@ -1,1 +1,1 @@
-sourceset_dependencies = '{":mimic-bukkit:dokkaHtmlPartial/main":[],":mimic-api:dokkaHtmlPartial/main":[],":mimic-bukkit-api:dokkaHtmlPartial/main":[]}'
+sourceset_dependencies = '{":mimic-bukkit/main":[],":mimic-api/main":[],":mimic-bukkit-api/main":[]}'
