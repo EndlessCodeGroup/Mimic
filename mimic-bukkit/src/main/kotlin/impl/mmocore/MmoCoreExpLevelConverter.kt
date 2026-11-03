@@ -1,6 +1,6 @@
 package ru.endlesscode.mimic.impl.mmocore
 
-import net.Indyuce.mmocore.experience.ExpCurve
+import net.Indyuce.mmocore.experience.curve.ExperienceCurve
 import org.bukkit.OfflinePlayer
 import ru.endlesscode.mimic.level.ExpLevelConverter
 import ru.endlesscode.mimic.util.ExistingWeakReference
@@ -16,10 +16,10 @@ public class MmoCoreExpLevelConverter internal constructor(
     }
 
     private val playerRef = ExistingWeakReference(player)
-    private val expCurve: ExpCurve
+    private val expCurve: ExperienceCurve
         get() = mmoCore.getExpCurve(playerRef.get())
 
     override fun getExpToReachLevel(level: Int): Double {
-        return if (level <= 1) 0.0 else expCurve.getExperience(level).toDouble()
+        return if (level <= 1) 0.0 else expCurve.getExperience(mmoCore.getData(playerRef.get()), level).toDouble()
     }
 }
