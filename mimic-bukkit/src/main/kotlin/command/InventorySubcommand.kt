@@ -1,7 +1,7 @@
 package ru.endlesscode.mimic.command
 
 import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.kotlindsl.playerArgument
+import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.jorel.commandapi.kotlindsl.subcommand
 import ru.endlesscode.mimic.ExperimentalMimicApi
@@ -20,7 +20,7 @@ internal fun CommandAPICommand.inventorySubcommand(mimic: Mimic) = subcommand("i
 
     subcommand("info") {
         withShortDescription("Show information about player's inventory provider")
-        playerArgument(TARGET, optional = true)
+        entitySelectorArgumentOnePlayer(TARGET, optional = true)
         playerExecutor { sender, args ->
             val target = args.getOrDefaultUnchecked(TARGET, sender)
             val provider = mimic.getPlayerInventoryProvider()
