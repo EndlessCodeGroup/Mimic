@@ -13,7 +13,7 @@ plugins {
 description = "Bukkit plugin implementing Mimic APIs"
 
 bukkit {
-    apiVersion = "1.20"
+    apiVersion = "1.20.6"
 
     plugin {
         name = "Mimic"
@@ -88,6 +88,8 @@ dependencies {
 }
 
 kotlin {
+    jvmToolchain(21)
+
     compilerOptions {
         optIn.add("kotlinx.serialization.ExperimentalSerializationApi")
     }
@@ -95,7 +97,7 @@ kotlin {
 
 tasks.test {
     javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 

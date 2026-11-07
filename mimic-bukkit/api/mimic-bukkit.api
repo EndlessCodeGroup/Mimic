@@ -94,6 +94,29 @@ public final class ru/endlesscode/mimic/impl/heroes/HeroesLevelSystem : ru/endle
 public final class ru/endlesscode/mimic/impl/heroes/HeroesLevelSystem$Companion {
 }
 
+public final class ru/endlesscode/mimic/impl/mimic/MimicBlockRegistry : ru/endlesscode/mimic/blocks/BukkitBlockRegistry {
+	public static final field Companion Lru/endlesscode/mimic/impl/mimic/MimicBlockRegistry$Companion;
+	public static final field ID Ljava/lang/String;
+	public synthetic fun breakBlock (Ljava/lang/Object;Ljava/lang/Object;Lru/endlesscode/mimic/blocks/DropsConsumer;)Z
+	public fun breakBlock (Lorg/bukkit/block/Block;Lorg/bukkit/inventory/ItemStack;Lru/endlesscode/mimic/blocks/DropsConsumer;)Z
+	public synthetic fun getBlockId (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getBlockId (Lorg/bukkit/block/Block;)Ljava/lang/String;
+	public synthetic fun getBlockIdFromItem (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getBlockIdFromItem (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public fun getKnownIds ()Ljava/util/Collection;
+	public fun isBlockExists (Ljava/lang/String;)Z
+	public synthetic fun isSameBlock (Ljava/lang/Object;Ljava/lang/String;)Z
+	public fun isSameBlock (Lorg/bukkit/block/Block;Ljava/lang/String;)Z
+	public synthetic fun isSameBlockItem (Ljava/lang/Object;Ljava/lang/String;)Z
+	public fun isSameBlockItem (Lorg/bukkit/inventory/ItemStack;Ljava/lang/String;)Z
+	public synthetic fun setBlock (Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;)Z
+	public fun setBlock (Lorg/bukkit/block/Block;Ljava/lang/String;Ljava/lang/Object;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/mimic/MimicBlockRegistry$Companion {
+}
+
 public final class ru/endlesscode/mimic/impl/mimic/MimicItemsRegistry : ru/endlesscode/mimic/items/BukkitItemsRegistry {
 	public static final field Companion Lru/endlesscode/mimic/impl/mimic/MimicItemsRegistry$Companion;
 	public static final field ID Ljava/lang/String;
@@ -310,6 +333,27 @@ public final class ru/endlesscode/mimic/impl/vanilla/ItemMetaPayload$Companion {
 	public final fun of (Ljava/lang/Object;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public final fun parse (Ljava/lang/String;)Lru/endlesscode/mimic/impl/vanilla/ItemMetaPayload;
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftBlockRegistry : ru/endlesscode/mimic/blocks/BukkitBlockRegistry {
+	public static final field Companion Lru/endlesscode/mimic/impl/vanilla/MinecraftBlockRegistry$Companion;
+	public static final field ID Ljava/lang/String;
+	public fun <init> ()V
+	public synthetic fun breakBlock (Ljava/lang/Object;Ljava/lang/Object;Lru/endlesscode/mimic/blocks/DropsConsumer;)Z
+	public fun breakBlock (Lorg/bukkit/block/Block;Lorg/bukkit/inventory/ItemStack;Lru/endlesscode/mimic/blocks/DropsConsumer;)Z
+	public synthetic fun getBlockId (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getBlockId (Lorg/bukkit/block/Block;)Ljava/lang/String;
+	public synthetic fun getBlockIdFromItem (Ljava/lang/Object;)Ljava/lang/String;
+	public fun getBlockIdFromItem (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public fun getId ()Ljava/lang/String;
+	public synthetic fun getKnownIds ()Ljava/util/Collection;
+	public fun getKnownIds ()Ljava/util/List;
+	public fun isBlockExists (Ljava/lang/String;)Z
+	public synthetic fun setBlock (Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;)Z
+	public fun setBlock (Lorg/bukkit/block/Block;Ljava/lang/String;Ljava/lang/Object;)Z
+}
+
+public final class ru/endlesscode/mimic/impl/vanilla/MinecraftBlockRegistry$Companion {
 }
 
 public final class ru/endlesscode/mimic/impl/vanilla/MinecraftExpLevelConverter : ru/endlesscode/mimic/level/ExpLevelConverter {

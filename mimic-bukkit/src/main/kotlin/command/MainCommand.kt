@@ -3,6 +3,7 @@ package ru.endlesscode.mimic.command
 import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import net.kyori.adventure.text.format.NamedTextColor
+import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.append
@@ -28,6 +29,8 @@ internal fun registerCommand(
     classSystemSubcommand(mimic)
     inventorySubcommand(mimic)
     itemsSubcommand(mimic.getItemsRegistry())
+    @OptIn(ExperimentalMimicApi::class)
+    blocksSubcommand(mimic.getBlockRegistry())
 }
 
 private fun infoExecutor(pluginFullName: String) = CommandExecutor { sender, _ ->
