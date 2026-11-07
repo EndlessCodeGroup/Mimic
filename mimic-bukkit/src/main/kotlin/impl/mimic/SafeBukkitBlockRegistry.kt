@@ -44,23 +44,13 @@ internal fun BlockRegistryProvider.tryIsBlockExists(blockId: String): Boolean {
     }
 }
 
-internal fun BlockRegistryProvider.tryGetBlockId(block: Block): String? {
-    return try {
-        registry.getBlockId(block)
-    } catch (e: Throwable) {
-        logImplementationError(this, e)
-        null
-    }
-}
+/** Returns failure if the registry failed, so it can be distinguished from a block not belonging to the registry. */
+internal fun BlockRegistryProvider.tryGetBlockId(block: Block): Result<String?> =
+    runCatching { registry.getBlockId(block) }.onFailure { logImplementationError(this, it) }
 
-internal fun BlockRegistryProvider.tryGetBlockIdFromItem(blockItem: ItemStack): String? {
-    return try {
-        registry.getBlockIdFromItem(blockItem)
-    } catch (e: Throwable) {
-        logImplementationError(this, e)
-        null
-    }
-}
+/** Returns failure if the registry failed, so it can be distinguished from an item not belonging to the registry. */
+internal fun BlockRegistryProvider.tryGetBlockIdFromItem(blockItem: ItemStack): Result<String?> =
+    runCatching { registry.getBlockIdFromItem(blockItem) }.onFailure { logImplementationError(this, it) }
 
 internal fun BlockRegistryProvider.trySetBlock(block: Block, blockId: String, payload: Any?): Boolean {
     return try {
