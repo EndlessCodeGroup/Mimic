@@ -26,6 +26,7 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
 import org.bukkit.plugin.java.JavaPlugin
+import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
@@ -35,6 +36,7 @@ import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
+import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
@@ -45,10 +47,12 @@ import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgItemsRegistry
 import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgLevelSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
+import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftPlayerInventory
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.parseKey
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
@@ -88,6 +92,8 @@ public class MimicPlugin : JavaPlugin() {
         hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
         hookItems({ MimicItemsRegistry(servicesManager) }, priority = Highest)
+        hookBlocks(priority = Lowest, ::MinecraftBlockRegistry)
+        hookBlocks(priority = Highest) { MimicBlockRegistry(servicesManager, parseKey = ::parseKey) }
 
         pluginHooks("SkillAPI", "com.sucy.skill.SkillAPI") {
             hookLevels(SkillApiLevelSystem::Provider)
@@ -160,6 +166,14 @@ public class MimicPlugin : JavaPlugin() {
         priority: ServicePriority = Normal,
     ) {
         mimic.registerItemsRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+    }
+
+    @ExperimentalMimicApi
+    private fun hookBlocks(
+        priority: ServicePriority = Normal,
+        constructor: () -> BukkitBlockRegistry,
+    ) {
+        mimic.registerBlockRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
     //</editor-fold>
 

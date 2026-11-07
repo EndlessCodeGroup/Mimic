@@ -6,8 +6,37 @@ Keeping the plugin compatible both with Paper and Spigot consumes a lot of time.
 Now, Mimic is Paper-first as it is the most popular platform.
 This means that compatibility with Spigot is not guaranteed.
 
-To reduce the maintenance burden, support for versions older than 1.20 has been dropped.
-Java 17 is required.
+To reduce the maintenance burden, support for versions older than 1.20.6 has been dropped.
+Java 21 is required.
+
+### BlockRegistry API
+
+This version introduces new *experimental* BlockRegistry API.
+It can be used to get IDs of placed blocks and block items, set blocks, and break blocks passing drops to a custom consumer.
+Block IDs from all registries are available via `Mimic.getBlockRegistry()`, namespaced with the registry ID.
+Block IDs are [resource locations](https://minecraft.wiki/w/Resource_location): `minecraft:stone`, `craftengine:default/palm_log`.
+ID without namespace or with the reserved `mimic` namespace is searched over all registries in order of priority.
+
+```java
+// Register a block registry
+Mimic.getInstance().registerBlockRegistry(new MyBlockRegistry(), MimicApiLevel.CURRENT, plugin, ServicePriority.Normal);
+
+// Set a block
+BukkitBlockRegistry blockRegistry = Mimic.getInstance().getBlockRegistry();
+blockRegistry.setBlock(location.getBlock(), "minecraft:stone_stairs", "[facing=north]");
+
+// Break a block with a pickaxe, collecting drops into a chest inventory
+blockRegistry.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.toArray(new ItemStack[0])).values());
+```
+
+Added commands to debug block registries:
+
+- `/mimic blocks info` - show information about block registries
+- `/mimic blocks set [location] [block] (payload)` - set block at the given location
+- `/mimic blocks break [location]` - break block at the given location with the item in hand
+- `/mimic blocks compare [block]` - compare targeted block with the given block
+- `/mimic blocks id` - print IDs of targeted block and of block placed by item in hand
+- `/mimic blocks find [block]` - check that block with the given ID exists
 
 ### Added command `/mimic config`
 
@@ -40,7 +69,7 @@ Now it is possible to change Mimic config using commands in two ways:
 
 ### Housekeeping
 
-- Update required Java 1.8 → 17
+- Update required Java 1.8 → 21
 - Update Kotlin 1.6.20 → 2.4.21, preserving API and Language level 2.2
 - Replace ACF with CommandAPI
 - Update Gradle 7.4.2 → 9.8.2

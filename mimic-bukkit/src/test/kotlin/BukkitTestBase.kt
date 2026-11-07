@@ -21,6 +21,8 @@ package ru.endlesscode.mimic
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.papermc.paper.ServerBuildInfo
 import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.entity.Player
@@ -47,6 +49,7 @@ open class BukkitTestBase {
     }
 
     private fun mockPlugin(mockServer: Server): Plugin = mockk {
+        every { name } returns "Mimic"
         every { server } returns mockServer
         every { pluginMeta } returns mockk {
             every { authors } returns listOf("Plugin Author")
@@ -73,7 +76,12 @@ open class BukkitTestBase {
 
         fun mockBukkit() {
             @Suppress("SENSELESS_COMPARISON") // The annotation lies about nullability
-            if (Bukkit.getServer() == null) Bukkit.setServer(server)
+            if (Bukkit.getServer() == null) {
+                // Bukkit.setServer logs the server version provided by the server implementation
+                mockkStatic(ServerBuildInfo::class)
+                every { ServerBuildInfo.buildInfo() } returns mockk(relaxed = true)
+                Bukkit.setServer(server)
+            }
         }
     }
 }

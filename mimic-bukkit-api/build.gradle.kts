@@ -14,3 +14,7 @@ dependencies {
     compileOnly(libs.annotations)
     compileOnly(libs.paperApi)
 }
+
+kotlin {
+    jvmToolchain(21)
+}
