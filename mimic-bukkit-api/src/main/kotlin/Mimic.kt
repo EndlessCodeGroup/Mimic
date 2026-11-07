@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import org.jetbrains.annotations.ApiStatus
+import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
@@ -14,14 +15,76 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
 
+    // region Block Registry
+    /**
+     * Registers the given [registry] with normal priority.
+     *
+     * @param registry The [BukkitBlockRegistry] implementation
+     * @param apiLevel Minimal required API level for this block registry implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this block registry.
+     * @return registered registry or `null` if it was not registered.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun registerBlockRegistry(
+        registry: BukkitBlockRegistry,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): BukkitBlockRegistry? = registerBlockRegistry(registry, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [registry].
+     *
+     * @param registry The [BukkitBlockRegistry] implementation
+     * @param apiLevel Minimal required API level for this block registry implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this block registry.
+     * @param priority Default priority. Service with higher priority will be used if user have not configured
+     *                 preferred service in config.
+     * @return registered registry or `null` if it was not registered.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun registerBlockRegistry(
+        registry: BukkitBlockRegistry,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): BukkitBlockRegistry?
+
+    /**
+     * Returns [BukkitBlockRegistry] implementation.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun getBlockRegistry(): BukkitBlockRegistry
+
+    /**
+     * Returns map containing all known [BukkitBlockRegistry], where key is a block registry ID.
+     * @since 0.9.0
+     */
+    @ExperimentalMimicApi
+    @ApiStatus.Experimental
+    public fun getAllBlockRegistries(): Map<String, BukkitBlockRegistry>
+    // endregion
+
+    // region Class System
     /**
      * Registers the given [provider] for [BukkitClassSystem] with normal priority.
      *
      * @param provider The provider used to get class system.
      * @param apiLevel Minimal required API level for this class system implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this class system.
      * @return registered class system or `null` if it was not registered.
      */
@@ -36,9 +99,9 @@ public interface Mimic {
      *
      * @param provider The provider used to get class system.
      * @param apiLevel Minimal required API level for this class system implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this class system.
      * @param priority Default priority. Service with higher priority will be used if user have not configured
      *                 preferred service in config.
@@ -62,15 +125,17 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitClassSystem.Provider]s, where key is a provider ID. */
     public fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider>
+    // endregion
 
+    // region Inventory Provider
     /**
      * Registers the given [provider] for [BukkitPlayerInventory] with normal priority.
      *
      * @param provider The provider used to get player inventory.
      * @param apiLevel Minimal required API level for this level system implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this player inventory.
      * @return registered level system or `null` if it was not registered.
      * @since 0.8.0
@@ -89,9 +154,9 @@ public interface Mimic {
      *
      * @param provider The provider used to get player inventory.
      * @param apiLevel Minimal required API level for this level system implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this player inventory.
      * @param priority Default priority. Service with higher priority will be used if user have not configured
      *                 preferred service in config.
@@ -133,15 +198,17 @@ public interface Mimic {
     @ExperimentalMimicApi
     @ApiStatus.Experimental
     public fun getAllPlayerInventoryProviders(): Map<String, BukkitPlayerInventory.Provider>
+    // endregion
 
+    // region Items Registry
     /**
      * Registers the given [registry] with normal priority.
      *
      * @param registry The [BukkitItemsRegistry] implementation
      * @param apiLevel Minimal required API level for this item registry implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this item registry.
      * @return registered registry or `null` if it was not registered.
      */
@@ -156,9 +223,9 @@ public interface Mimic {
      *
      * @param registry The [BukkitItemsRegistry] implementation
      * @param apiLevel Minimal required API level for this item registry implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this item registry.
      * @param priority Default priority. Service with higher priority will be used if user have not configured
      *                 preferred service in config.
@@ -176,15 +243,17 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitItemsRegistry], where key is an item registry ID. */
     public fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry>
+    // endregion
 
+    // region Level System
     /**
      * Registers the given [provider] for [BukkitLevelSystem] with normal priority.
      *
      * @param provider The provider used to get level system.
      * @param apiLevel Minimal required API level for this level system implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this level system.
      * @return registered level system or `null` if it was not registered.
      */
@@ -199,9 +268,9 @@ public interface Mimic {
      *
      * @param provider The provider used to get level system.
      * @param apiLevel Minimal required API level for this level system implementation:
-     *                 - if required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used on compile time.
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
      * @param plugin The plugin implementing this level system.
      * @param priority Default priority. Service with higher priority will be used if user have not configured
      *                 preferred service in config.
@@ -225,6 +294,7 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitLevelSystem.Provider]s, where key is a provider ID. */
     public fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider>
+    // endregion
 
     public companion object {
         /**
@@ -235,7 +305,7 @@ public interface Mimic {
         public fun getInstance(): Mimic {
             return checkNotNull(Bukkit.getServer().servicesManager.load()) {
                 """
-                Your plugin was loaded earlier than Mimic.
+                Your plugin was loaded before Mimic.
                 Please check you have added Mimic to 'softpend' or 'depend' in the plugin.yml.
                 """.trimIndent()
             }
