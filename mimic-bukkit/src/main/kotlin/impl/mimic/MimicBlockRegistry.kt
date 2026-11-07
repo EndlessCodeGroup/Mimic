@@ -8,6 +8,7 @@ import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.bukkit.getRegistrations
+import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 
 /**
  * Block registry combining all block registries, using their IDs as namespaces.
@@ -34,13 +35,13 @@ public class MimicBlockRegistry internal constructor(
 
     override fun isSameBlock(block: Block, blockId: String): Boolean {
         val key = parseKey(blockId) ?: return false
-        val owner = providers.find { it.tryGetBlockId(block) != null } ?: return false
+        val (owner, _) = identify(block) ?: return false
         return key.matches(owner) && owner.tryIsSameBlock(block, key.key)
     }
 
     override fun isSameBlockItem(blockItem: ItemStack, blockId: String): Boolean {
         val key = parseKey(blockId) ?: return false
-        val owner = providers.find { it.tryGetBlockIdFromItem(blockItem) != null } ?: return false
+        val (owner, _) = identify(blockItem) ?: return false
         return key.matches(owner) && owner.tryIsSameBlockItem(blockItem, key.key)
     }
 
@@ -50,24 +51,44 @@ public class MimicBlockRegistry internal constructor(
     }
 
     override fun getBlockId(block: Block): String? =
-        providers.firstNotNullOfOrNull { provider ->
-            provider.tryGetBlockId(block)?.let { provider.namespaced(it) }
-        }
+        identify(block)?.let { (provider, id) -> provider.namespaced(id) }
 
     override fun getBlockIdFromItem(blockItem: ItemStack): String? =
-        providers.firstNotNullOfOrNull { provider ->
-            provider.tryGetBlockIdFromItem(blockItem)?.let { provider.namespaced(it) }
-        }
+        identify(blockItem)?.let { (provider, id) -> provider.namespaced(id) }
 
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
+        if (!block.isEmpty) return false
         val key = parseKey(blockId) ?: return false
         val provider = getRegistries(key).find { it.tryIsBlockExists(key.key) } ?: return false
         return provider.trySetBlock(block, key.key, payload)
     }
 
     override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>): Boolean {
-        val owner = providers.find { it.tryGetBlockId(block) != null } ?: return false
+        val (owner, _) = identify(block) ?: return false
         return owner.tryBreakBlock(block, tool, dropsConsumer)
+    }
+
+    private fun identify(block: Block) = identify { it.tryGetBlockId(block) }
+
+    private fun identify(blockItem: ItemStack) = identify { it.tryGetBlockIdFromItem(blockItem) }
+
+    /**
+     * Returns the registry with the highest priority recognizing a block paired with the block ID,
+     * or `null` if no registry recognizes it.
+     *
+     * If a registry fails to check the block, the vanilla registry is skipped,
+     * because it recognizes any block, including vanilla blocks backing custom ones.
+     */
+    private inline fun identify(
+        getBlockId: (BlockRegistryProvider) -> Result<String?>,
+    ): Pair<BlockRegistryProvider, String>? {
+        var failed = false
+        for (provider in providers) {
+            if (failed && provider.registry.id == MinecraftBlockRegistry.ID) continue
+            val blockId = getBlockId(provider).getOrElse { failed = true; continue } ?: continue
+            return provider to blockId
+        }
+        return null
     }
 
     /** Returns registries which may contain the block with the given [key]. */

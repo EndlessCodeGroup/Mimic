@@ -40,16 +40,17 @@ public interface BlockRegistry<BlockT : Any, ItemStackT : Any> : MimicService {
     /** Returns ID of the block placed by the given [blockItem], or `null` if it doesn't belong to this registry. */
     public fun getBlockIdFromItem(blockItem: ItemStackT): String?
 
-    /** Replaces the given [block] with the block with the given [blockId]. */
+    /** Sets the block with the given [blockId] in place of the empty [block]. */
     public fun setBlock(block: BlockT, blockId: String): Boolean = setBlock(block, blockId, payload = null)
 
     /**
-     * Replaces the given [block] with the block with the given [blockId] configured with the [payload].
+     * Sets the block with the given [blockId] configured with the [payload] in place of the empty [block].
+     * To replace a block, break it first, so its registry can clean up.
      *
      * Every implementation supports a [String] payload with block state properties, for example `[facing=north]`.
      * Unsupported payload is ignored.
      *
-     * Returns `false` if the ID is unknown or the block can't be set, use [isBlockExists] to tell these apart.
+     * Returns `false` if the [block] is not empty, the ID is unknown, or the block can't be set.
      */
     public fun setBlock(block: BlockT, blockId: String, payload: Any?): Boolean
 

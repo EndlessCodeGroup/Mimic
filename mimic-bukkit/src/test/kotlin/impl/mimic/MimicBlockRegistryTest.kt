@@ -7,6 +7,7 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -72,12 +73,7 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     @ParameterizedTest
     @ValueSource(strings = ["stone", "minecraft:stone", "mimic:stone"])
     fun `when check is same block via wrapper - should return true`(blockId: String) {
-        val pluginManager = mockk<PluginManager> {
-            every { isPluginEnabled(any<String>()) } returns true
-        }
-        val wrappedRegistry = WrappedBlockRegistry(blockRegistry, "Mimic", pluginManager)
-
-        assertSoftly(wrappedRegistry) {
+        assertSoftly(wrap(blockRegistry)) {
             isSameBlock(mockBlock(Material.STONE), blockId).shouldBeTrue()
             isSameBlockItem(ItemStack(Material.STONE), blockId).shouldBeTrue()
         }
@@ -171,6 +167,20 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when set block in place of non-empty block - should return false`() {
+        val block = mockBlock(Material.DIRT)
+
+        blockRegistry.setBlock(block, "stone").shouldBeFalse()
+        verify(exactly = 0) { block.type = any() }
+    }
+
+    @Test
+    fun `when set block with payload via wrapper - should pass payload to the registry`() {
+        wrap(blockRegistry).setBlock(mockBlock(Material.AIR), "stone", "[facing=north]").shouldBeTrue()
+        testRegistry.lastPayload shouldBe "[facing=north]"
+    }
+
+    @Test
     fun `when break block - should drop items on the ground`() {
         val block = mockBlock(Material.STONE)
 
@@ -209,6 +219,34 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when break block with tool via wrapper - should pass tool to the registry`() {
+        val tool = ItemStack(Material.DIAMOND_PICKAXE)
+
+        wrap(blockRegistry).breakBlock(mockBlock(Material.STONE), tool).shouldBeTrue()
+        testRegistry.lastTool shouldBeSameInstanceAs tool
+    }
+
+    @Test
+    fun `when registry fails to identify block - should not fall back to the vanilla registry`() {
+        servicesManager.register(BukkitBlockRegistry::class.java, FailingBlockRegistry(), plugin, High)
+        val block = mockBlock(Material.STONE)
+
+        assertSoftly {
+            blockRegistry.getBlockId(block).shouldBeNull()
+            blockRegistry.isSameBlock(block, "stone").shouldBeFalse()
+            blockRegistry.breakBlock(block).shouldBeFalse()
+            testRegistry.droppedOnGround.shouldBeEmpty()
+        }
+    }
+
+    @Test
+    fun `when registry fails to identify block - should fall back to other custom registries`() {
+        servicesManager.register(BukkitBlockRegistry::class.java, FailingBlockRegistry(), plugin, High)
+
+        blockRegistry.getBlockId(mockBlock(Material.NOTE_BLOCK)) shouldBe "custom:ruby_block"
+    }
+
+    @Test
     fun `when break air - should return false`() {
         val block = mockBlock(Material.AIR)
 
@@ -218,6 +256,14 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
 
     private fun mockBlock(material: Material): Block = mockk(relaxUnitFun = true) {
         every { type } returns material
+        every { isEmpty } returns (material == Material.AIR)
+    }
+
+    private fun wrap(registry: BukkitBlockRegistry): BukkitBlockRegistry {
+        val pluginManager = mockk<PluginManager> {
+            every { isPluginEnabled(any<String>()) } returns true
+        }
+        return WrappedBlockRegistry(registry, "Mimic", pluginManager)
     }
 }
 
@@ -231,6 +277,8 @@ private class TestBlockRegistry : BukkitBlockRegistry {
         .map { it.name.lowercase() }
 
     val droppedOnGround = mutableListOf<ItemStack>()
+    var lastPayload: Any? = null
+    var lastTool: ItemStack? = null
 
     override fun isBlockExists(blockId: String): Boolean = blockId in knownIds
 
@@ -242,12 +290,14 @@ private class TestBlockRegistry : BukkitBlockRegistry {
     }
 
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
+        lastPayload = payload
         if (!isBlockExists(blockId) || blockId == "bedrock") return false
         block.type = Material.valueOf(blockId.uppercase())
         return true
     }
 
     override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>): Boolean {
+        lastTool = tool
         if (block.type == Material.AIR) return false
         droppedOnGround += dropsConsumer.consume(listOf(ItemStack(block.type)))
         block.type = Material.AIR
@@ -282,4 +332,18 @@ private class CustomBlockRegistry : BukkitBlockRegistry {
         block.type = Material.AIR
         return true
     }
+}
+
+/** Registry failing on every call. */
+@OptIn(ExperimentalMimicApi::class)
+private class FailingBlockRegistry : BukkitBlockRegistry {
+    override val id = "failing"
+    override val knownIds: List<String> get() = error("Failure")
+
+    override fun isBlockExists(blockId: String): Boolean = error("Failure")
+    override fun getBlockId(block: Block): String = error("Failure")
+    override fun getBlockIdFromItem(blockItem: ItemStack): String = error("Failure")
+    override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean = error("Failure")
+    override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>): Boolean =
+        error("Failure")
 }

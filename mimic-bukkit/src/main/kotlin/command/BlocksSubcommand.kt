@@ -14,6 +14,8 @@ import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.unwrap
 import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
+import ru.endlesscode.mimic.impl.mimic.registry
+import ru.endlesscode.mimic.impl.mimic.tryGetKnownIds
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
@@ -98,7 +100,7 @@ private fun CommandAPICommand.blockArgument(blockRegistry: BukkitBlockRegistry) 
 }
 
 private fun infoExecutor(blockRegistry: BukkitBlockRegistry) = CommandExecutor { sender, _ ->
-    val providers = (blockRegistry.unwrap() as? MimicBlockRegistry)?.providers.orEmpty().map { it.provider }
+    val providers = (blockRegistry.unwrap() as? MimicBlockRegistry)?.providers.orEmpty()
 
     val message = text {
         appendStats(
@@ -107,8 +109,8 @@ private fun infoExecutor(blockRegistry: BukkitBlockRegistry) = CommandExecutor {
         )
 
         for (provider in providers) {
-            append("  ${provider.id}: ", NamedTextColor.WHITE)
-            appendLine(provider.knownIds.size.toString(), NamedTextColor.GRAY)
+            append("  ${provider.registry.id}: ", NamedTextColor.WHITE)
+            appendLine(provider.tryGetKnownIds().size.toString(), NamedTextColor.GRAY)
         }
     }
     sender.sendMessage(message)

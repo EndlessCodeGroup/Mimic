@@ -44,9 +44,13 @@ public class MinecraftBlockRegistry : BukkitBlockRegistry {
 
     override fun getBlockId(block: Block): String = block.type.name.lowercase()
 
-    override fun getBlockIdFromItem(blockItem: ItemStack): String? = blocksByItem[blockItem.type]?.name?.lowercase()
+    override fun getBlockIdFromItem(blockItem: ItemStack): String? {
+        if (blockItem.isEmpty) return null
+        return blocksByItem[blockItem.type]?.name?.lowercase()
+    }
 
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
+        if (!block.isEmpty) return false
         val material = getMaterial(blockId) ?: return false
 
         val blockData = when (payload) {
@@ -73,7 +77,13 @@ public class MinecraftBlockRegistry : BukkitBlockRegistry {
         val drops = block.getDrops(tool) + takeContents(block)
         block.type = Material.AIR
 
-        for (item in dropsConsumer.consume(drops)) {
+        val remainingDrops = try {
+            dropsConsumer.consume(drops)
+        } catch (e: Throwable) {
+            Log.w(e, "[$TAG] Drops consumer failed, dropping all items on the ground")
+            drops
+        }
+        for (item in remainingDrops) {
             block.world.dropItemNaturally(block.location, item)
         }
         return true
