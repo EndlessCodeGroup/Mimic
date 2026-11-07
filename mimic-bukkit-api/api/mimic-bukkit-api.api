@@ -1,9 +1,11 @@
 public abstract interface class ru/endlesscode/mimic/Mimic {
 	public static final field Companion Lru/endlesscode/mimic/Mimic$Companion;
+	public abstract fun getAllBlockRegistries ()Ljava/util/Map;
 	public abstract fun getAllClassSystemProviders ()Ljava/util/Map;
 	public abstract fun getAllItemsRegistries ()Ljava/util/Map;
 	public abstract fun getAllLevelSystemProviders ()Ljava/util/Map;
 	public abstract fun getAllPlayerInventoryProviders ()Ljava/util/Map;
+	public abstract fun getBlockRegistry ()Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
 	public fun getClassSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/classes/BukkitClassSystem;
 	public abstract fun getClassSystemProvider ()Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;
 	public static fun getInstance ()Lru/endlesscode/mimic/Mimic;
@@ -12,6 +14,8 @@ public abstract interface class ru/endlesscode/mimic/Mimic {
 	public abstract fun getLevelSystemProvider ()Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;
 	public fun getPlayerInventory (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory;
 	public abstract fun getPlayerInventoryProvider ()Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
+	public fun registerBlockRegistry (Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
+	public abstract fun registerBlockRegistry (Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
 	public fun registerClassSystem (Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;
 	public abstract fun registerClassSystem (Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;
 	public fun registerItemsRegistry (Lru/endlesscode/mimic/items/BukkitItemsRegistry;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/items/BukkitItemsRegistry;
@@ -29,6 +33,9 @@ public final class ru/endlesscode/mimic/Mimic$Companion {
 public abstract interface class ru/endlesscode/mimic/PlayerSystemProviderService : ru/endlesscode/mimic/ProviderService {
 	public fun get (Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun getSystem (Lorg/bukkit/entity/Player;)Ljava/lang/Object;
+}
+
+public abstract interface class ru/endlesscode/mimic/blocks/BukkitBlockRegistry : ru/endlesscode/mimic/blocks/BlockRegistry {
 }
 
 public abstract class ru/endlesscode/mimic/classes/BukkitClassSystem : ru/endlesscode/mimic/classes/ClassSystem {
