@@ -1,11 +1,6 @@
 package ru.endlesscode.mimic.command
 
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.arguments.ArgumentSuggestions
-import dev.jorel.commandapi.kotlindsl.anyExecutor
-import dev.jorel.commandapi.kotlindsl.multiLiteralArgument
-import dev.jorel.commandapi.kotlindsl.stringArgument
-import dev.jorel.commandapi.kotlindsl.subcommand
+import com.mojang.brigadier.arguments.StringArgumentType
 import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
@@ -20,75 +15,73 @@ import ru.endlesscode.mimic.config.MimicConfig
  * /mimic config [collection-property] add|remove [value]
  * ```
  */
-internal fun CommandAPICommand.configSubcommand(
+internal fun CommandBuilder.configSubcommand(
     mimic: Mimic,
     config: MimicConfig,
-) = subcommand("config") {
+) = literal("config") {
     val showConfig = { sender: CommandSender ->
         val message = buildConfigMessage(mimic, config)
         sender.sendMessage(message)
     }
 
-    withShortDescription("Show Mimic config")
-    anyExecutor { sender, _ -> showConfig(sender) }
+    // Show Mimic config
+    executesAny { sender, _ -> showConfig(sender) }
 
-    subcommand("level-system") {
-        withShortDescription("Change the preferred level system")
-        stringSetArgument(VALUE) { mimic.getAllLevelSystemProviders().keys }
-        anyExecutor { sender, args ->
-            config.levelSystem = args[VALUE] as String
+    // Change the preferred level system
+    literal("level-system") {
+        stringSetArgument(VALUE, { mimic.getAllLevelSystemProviders().keys }) { sender, value ->
+            config.levelSystem = value
             showConfig(sender)
         }
     }
 
-    subcommand("class-system") {
-        withShortDescription("Change the preferred class system")
-        stringSetArgument(VALUE) { mimic.getAllClassSystemProviders().keys }
-        anyExecutor { sender, args ->
-            config.classSystem = args[VALUE] as String
+    // Change the preferred class system
+    literal("class-system") {
+        stringSetArgument(VALUE, { mimic.getAllClassSystemProviders().keys }) { sender, value ->
+            config.classSystem = value
             showConfig(sender)
         }
     }
 
+    // Change the preferred inventory provider
     @OptIn(ExperimentalMimicApi::class)
-    subcommand("inventory-provider") {
-        withShortDescription("Change the preferred inventory provider")
-        stringSetArgument(VALUE) { mimic.getAllPlayerInventoryProviders().keys }
-        anyExecutor { sender, args ->
-            config.inventoryProvider = args[VALUE] as String
+    literal("inventory-provider") {
+        stringSetArgument(VALUE, { mimic.getAllPlayerInventoryProviders().keys }) { sender, value ->
+            config.inventoryProvider = value
             showConfig(sender)
         }
     }
 
-    subcommand("disabled-items-registries") {
-        withShortDescription("Enable/Disable an item registry in Mimic")
-        multiLiteralArgument(nodeName = ACTION, ACTION_ADD, ACTION_REMOVE)
-        stringSetArgument(ITEMS_REGISTRY) {
-            mimic.getAllItemsRegistries().keys - MimicConfig.DEFAULT_ITEMS_REGISTRIES
-        }
-
-        anyExecutor { sender, args ->
-            val action = args[ACTION] as String
-            val itemsRegistry = args[ITEMS_REGISTRY] as String
-            if (action == ACTION_ADD) {
-                config.disabledItemsRegistries += itemsRegistry
-            } else {
-                config.disabledItemsRegistries -= itemsRegistry
+    // Enable/Disable an item registry in Mimic
+    literal("disabled-items-registries") {
+        for (action in listOf(ACTION_ADD, ACTION_REMOVE)) {
+            literal(action) {
+                stringSetArgument(
+                    ITEMS_REGISTRY,
+                    { mimic.getAllItemsRegistries().keys - MimicConfig.DEFAULT_ITEMS_REGISTRIES },
+                ) { sender, itemsRegistry ->
+                    if (action == ACTION_ADD) {
+                        config.disabledItemsRegistries += itemsRegistry
+                    } else {
+                        config.disabledItemsRegistries -= itemsRegistry
+                    }
+                    showConfig(sender)
+                }
             }
-            showConfig(sender)
         }
     }
 }
 
-private fun CommandAPICommand.stringSetArgument(
-    nodeName: String,
-    provideOptions: () -> Set<String>
-) = stringArgument(nodeName) {
-    replaceSuggestions(ArgumentSuggestions.stringCollection { provideOptions() })
+private fun CommandBuilder.stringSetArgument(
+    name: String,
+    provideOptions: () -> Set<String>,
+    action: (sender: CommandSender, value: String) -> Unit,
+) = argument(name, StringArgumentType.word()) {
+    suggestsStrings(provideOptions)
+    executesAny { sender, context -> action(sender, StringArgumentType.getString(context, name)) }
 }
 
 private const val VALUE = "value"
 private const val ITEMS_REGISTRY = "items-registry"
-private const val ACTION = "action"
 private const val ACTION_ADD = "add"
 private const val ACTION_REMOVE = "remove"

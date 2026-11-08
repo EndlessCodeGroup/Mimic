@@ -20,7 +20,6 @@ bukkit {
         main = "ru.endlesscode.mimic.MimicPlugin"
         authors = listOf("osipxd", "EndlessCodeGroup")
         website = "https://github.com/EndlessCodeGroup/Mimic"
-        softDepend = listOf("CommandAPI")
         loadBefore = listOf(
             "SkillAPI",
             "BattleLevels",
@@ -35,12 +34,6 @@ bukkit {
     server {
         version = "1.21.5"
         eula = true
-    }
-}
-
-tasks.runServer {
-    downloadPlugins {
-        github("CommandAPI", "CommandAPI", "10.1.2", "CommandAPI-10.1.2.jar")
     }
 }
 
@@ -74,8 +67,6 @@ dependencies {
     implementation(libs.bstats)
     implementation(libs.serialization.hocon)
 
-    compileOnly(libs.commandapi)
-    compileOnly(libs.commandapi.kotlin)
     compileOnly(libs.bundles.rpgplugins) { isTransitive = false }
 
     // From libs/ directory

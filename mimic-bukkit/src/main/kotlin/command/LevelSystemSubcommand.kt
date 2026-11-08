@@ -19,13 +19,13 @@
 
 package ru.endlesscode.mimic.command
 
-import dev.jorel.commandapi.CommandAPI
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.arguments.ArgumentSuggestions
-import dev.jorel.commandapi.executors.PlayerCommandExecutor
-import dev.jorel.commandapi.kotlindsl.*
+import com.mojang.brigadier.arguments.DoubleArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
+import com.mojang.brigadier.context.CommandContext
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.text.TextComponent
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.text
@@ -42,61 +42,60 @@ import kotlin.math.roundToInt
  * /mimic xp has [amount] (lvl|points|total) (player)
  * ```
  */
-internal fun CommandAPICommand.levelSystemSubcommand(mimic: Mimic) = subcommand("experience") {
-    withAliases("xp")
+internal fun CommandBuilder.levelSystemSubcommand(mimic: Mimic) {
+    for (name in listOf("experience", "xp")) {
+        literal(name) {
+            // Show information about player's level system
+            literal("info") {
+                executesPlayer(infoCommandExecutor(mimic))
+                argument(TARGET, ArgumentTypes.player()) {
+                    executesPlayer(infoCommandExecutor(mimic))
+                }
+            }
 
-    subcommand("info") {
-        withShortDescription("Show information about player's level system")
-        entitySelectorArgumentOnePlayer(TARGET, optional = true)
-        executesPlayer(infoCommandExecutor(mimic))
-    }
+            // Set player's level or exp
+            literal("set") {
+                amountTypeTargetArguments(allowTotal = true, setCommandExecutor(mimic))
+            }
 
-    subcommand("set") {
-        withShortDescription("Set player's level or exp")
-        amountArgument()
-        valueTypeArgument(allowTotal = true)
-        entitySelectorArgumentOnePlayer(TARGET, optional = true)
-        executesPlayer(setCommandExecutor(mimic))
-    }
+            // Give level or exp to player
+            literal("give") {
+                amountTypeTargetArguments(allowTotal = false, giveCommandExecutor(mimic))
+            }
 
-    subcommand("give") {
-        withShortDescription("Give level or exp to player")
-        amountArgument()
-        valueTypeArgument()
-        entitySelectorArgumentOnePlayer(TARGET, optional = true)
-        executesPlayer(giveCommandExecutor(mimic))
-    }
+            // Take level or exp from player
+            literal("take") {
+                amountTypeTargetArguments(allowTotal = false, takeCommandExecutor(mimic))
+            }
 
-    subcommand("take") {
-        withShortDescription("Take level or exp from player")
-        amountArgument()
-        valueTypeArgument()
-        entitySelectorArgumentOnePlayer(TARGET, optional = true)
-        executesPlayer(takeCommandExecutor(mimic))
-    }
-
-    subcommand("has") {
-        withShortDescription("Check that player did reach level or has exp")
-        amountArgument()
-        valueTypeArgument(allowTotal = true)
-        entitySelectorArgumentOnePlayer(TARGET, optional = true)
-        executesPlayer(hasCommandExecutor(mimic))
+            // Check that player did reach level or has exp
+            literal("has") {
+                amountTypeTargetArguments(allowTotal = true, hasCommandExecutor(mimic))
+            }
+        }
     }
 }
 
-private fun CommandAPICommand.amountArgument() = doubleArgument(AMOUNT, min = 0.0) {
-    replaceSuggestions(ArgumentSuggestions.strings("1", "10", "100"))
+/** Adds arguments `[amount] (type) (target)`, where type and target are optional. */
+private fun CommandBuilder.amountTypeTargetArguments(allowTotal: Boolean, action: CommandAction<Player>) {
+    argument(AMOUNT, DoubleArgumentType.doubleArg(0.0)) {
+        suggestsStrings { listOf("1", "10", "100") }
+        executesPlayer(action)
+
+        argument(TYPE, StringArgumentType.word()) {
+            val values = listOfNotNull(TYPE_LVL, TYPE_POINTS, TYPE_TOTAL.takeIf { allowTotal })
+            suggestsStrings { values }
+            executesPlayer(action)
+
+            argument(TARGET, ArgumentTypes.player()) {
+                executesPlayer(action)
+            }
+        }
+    }
 }
 
-private fun CommandAPICommand.valueTypeArgument(
-    allowTotal: Boolean = false,
-) = stringArgument(TYPE, optional = true) {
-    val values = listOfNotNull(TYPE_LVL, TYPE_POINTS, TYPE_TOTAL.takeIf { allowTotal })
-    replaceSuggestions(ArgumentSuggestions.stringCollection { values })
-}
-
-private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
-    val target = args.getOrDefaultUnchecked(TARGET, sender)
+private fun infoCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+    val target = context.getPlayerOrDefault(TARGET, sender)
     val provider = mimic.getLevelSystemProvider()
     val system = provider.getSystem(target)
 
@@ -112,10 +111,10 @@ private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, 
     target.sendMessage(message)
 }
 
-private fun setCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
-    val amount: Double by args
-    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
-    val target = args.getOrDefaultUnchecked(TARGET, sender)
+private fun setCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+    val amount = DoubleArgumentType.getDouble(context, AMOUNT)
+    val type = context.getTypeOrDefault()
+    val target = context.getPlayerOrDefault(TARGET, sender)
     catchUnsupported {
         val system = mimic.getLevelSystem(target)
         @Suppress("DEPRECATION") // Allow using exp setter
@@ -128,10 +127,10 @@ private fun setCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, a
     }
 }
 
-private fun giveCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
-    val amount: Double by args
-    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
-    val target = args.getOrDefaultUnchecked(TARGET, sender)
+private fun giveCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+    val amount = DoubleArgumentType.getDouble(context, AMOUNT)
+    val type = context.getTypeOrDefault()
+    val target = context.getPlayerOrDefault(TARGET, sender)
     catchUnsupported {
         val system = mimic.getLevelSystem(target)
         when (type) {
@@ -142,10 +141,10 @@ private fun giveCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, 
     }
 }
 
-private fun takeCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
-    val amount: Double by args
-    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
-    val target = args.getOrDefaultUnchecked(TARGET, sender)
+private fun takeCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+    val amount = DoubleArgumentType.getDouble(context, AMOUNT)
+    val type = context.getTypeOrDefault()
+    val target = context.getPlayerOrDefault(TARGET, sender)
     catchUnsupported {
         val system = mimic.getLevelSystem(target)
         when (type) {
@@ -156,12 +155,15 @@ private fun takeCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, 
     }
 }
 
+private fun CommandContext<*>.getTypeOrDefault(): String =
+    if (hasArgument(TYPE)) StringArgumentType.getString(this, TYPE) else TYPE_LVL
+
 private inline fun catchUnsupported(block: () -> Unit) {
     try {
         block()
     } catch (e: UnsupportedOperationException) {
         Log.d(e, quiet = true)
-        throw CommandAPI.failWithString(e.message.toString())
+        throw commandError(e.message.toString())
     }
 }
 
@@ -169,10 +171,10 @@ private fun BukkitLevelSystem.printNewStats(sender: CommandSender) {
     sender.sendMessage(successText("New ${player.name}'s stats: $level LVL, %.1f XP".format(exp)))
 }
 
-private fun hasCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { sender, args ->
-    val amount: Double by args
-    val type = args.getOrDefaultRaw(TYPE, TYPE_LVL)
-    val target = args.getOrDefaultUnchecked(TARGET, sender)
+private fun hasCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+    val amount = DoubleArgumentType.getDouble(context, AMOUNT)
+    val type = context.getTypeOrDefault()
+    val target = context.getPlayerOrDefault(TARGET, sender)
 
     fun buildMessage(has: Boolean, valueType: String): TextComponent {
         val hasOrNot = if (has) "has" else "has not"

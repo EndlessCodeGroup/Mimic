@@ -40,9 +40,6 @@ Added commands to debug block registries:
 
 ### Added command `/mimic config`
 
-> [!NOTE]
-> This feature requires the CommandAPI plugin to be installed.
-
 Now it is possible to change Mimic config using commands in two ways:
 
 1. Using interactive config `/mimic config`.
@@ -71,7 +68,7 @@ Now it is possible to change Mimic config using commands in two ways:
 
 - Update required Java 1.8 → 21
 - Update Kotlin 1.6.20 → 2.4.21, preserving API and Language level 2.2
-- Replace ACF with CommandAPI
+- Replace ACF with Paper's Brigadier command API
 - Update Gradle 7.4.2 → 9.8.2
 - Update dependencies
 - Migrate to version catalogs

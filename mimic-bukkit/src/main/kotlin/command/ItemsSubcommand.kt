@@ -19,12 +19,11 @@
 
 package ru.endlesscode.mimic.command
 
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.arguments.ArgumentSuggestions
-import dev.jorel.commandapi.executors.CommandExecutor
-import dev.jorel.commandapi.kotlindsl.*
+import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
@@ -42,58 +41,66 @@ import ru.endlesscode.mimic.items.unwrap
  * /mimic items find [item]
  * ```
  */
-internal fun CommandAPICommand.itemsSubcommand(itemsRegistry: BukkitItemsRegistry) = subcommand("items") {
-    subcommand("info") {
-        withShortDescription("Show information about items service")
-        executes(infoExecutor(itemsRegistry))
+internal fun CommandBuilder.itemsSubcommand(itemsRegistry: BukkitItemsRegistry) = literal("items") {
+    // Show information about items service
+    literal("info") {
+        executesAny(infoExecutor(itemsRegistry))
     }
 
-    subcommand("give") {
-        withShortDescription("Give item to player")
-        entitySelectorArgumentOnePlayer(TARGET)
-        integerArgument(AMOUNT, min = 1, max = 64) {
-            replaceSuggestions(ArgumentSuggestions.strings("1", "64"))
-        }
-        itemArgument(itemsRegistry)
-        executes(giveExecutor(itemsRegistry))
-    }
-
-    subcommand("compare") {
-        withShortDescription("Compare item in hand corresponds and given item")
-        itemArgument(itemsRegistry)
-        playerExecutor { sender, args ->
-            val item: String by args
-            val isSame = itemsRegistry.isSameItem(sender.inventory.itemInMainHand, item)
-            sender.sendMessage(successText("Item in hand and '$item' %s same.".format(if (isSame) "are" else "aren't")))
+    // Give item to player
+    literal("give") {
+        argument(TARGET, ArgumentTypes.player()) {
+            argument(AMOUNT, IntegerArgumentType.integer(1, 64)) {
+                suggestsStrings { listOf("1", "64") }
+                itemArgument(itemsRegistry) {
+                    executesAny(giveExecutor(itemsRegistry))
+                }
+            }
         }
     }
 
-    subcommand("id") {
-        withShortDescription("Prints ID of item in hand")
-        playerExecutor { sender, _ ->
+    // Compare item in hand corresponds and given item
+    literal("compare") {
+        itemArgument(itemsRegistry) {
+            executesPlayer { sender, context ->
+                val item = StringArgumentType.getString(context, ITEM)
+                val isSame = itemsRegistry.isSameItem(sender.inventory.itemInMainHand, item)
+                sender.sendMessage(successText("Item in hand and '$item' %s same.".format(if (isSame) "are" else "aren't")))
+            }
+        }
+    }
+
+    // Prints ID of item in hand
+    literal("id") {
+        executesPlayer { sender, _ ->
             val id = itemsRegistry.getItemId(sender.inventory.itemInMainHand)
             sender.sendMessage(successText("Id of item in hand is '$id'"))
         }
     }
 
-    subcommand("find") {
-        withShortDescription("Check that item with given ID exists")
-        itemArgument(itemsRegistry)
-        anyExecutor { sender, args ->
-            val item: String by args
-            val itemExists = itemsRegistry.isItemExists(item)
-            sender.sendMessage(successText("Item with id '$item'%s exists".format(if (itemExists) "" else " isn't")))
+    // Check that item with given ID exists
+    literal("find") {
+        itemArgument(itemsRegistry) {
+            executesAny { sender, context ->
+                val item = StringArgumentType.getString(context, ITEM)
+                val itemExists = itemsRegistry.isItemExists(item)
+                sender.sendMessage(successText("Item with id '$item'%s exists".format(if (itemExists) "" else " isn't")))
+            }
         }
     }
 }
 
 // We can use only greedy string if we need to allow colons because it requires quoting in non-greedy strings.
 // https://github.com/Mojang/brigadier/blob/cf754c4ef654160dca946889c11941634c5db3d5/src/main/java/com/mojang/brigadier/StringReader.java#L169
-private fun CommandAPICommand.itemArgument(itemRegistry: BukkitItemsRegistry) = greedyStringArgument(ITEM) {
-    replaceSuggestions(ArgumentSuggestions.stringCollection { itemRegistry.knownIds })
+private fun CommandBuilder.itemArgument(
+    itemRegistry: BukkitItemsRegistry,
+    configure: CommandBuilder.() -> Unit,
+) = argument(ITEM, StringArgumentType.greedyString()) {
+    suggestsStrings { itemRegistry.knownIds }
+    configure()
 }
 
-private fun infoExecutor(itemRegistry: BukkitItemsRegistry) = CommandExecutor { sender, _ ->
+private fun infoExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<CommandSender> = { sender, _ ->
     val providers = (itemRegistry.unwrap() as? MimicItemsRegistry)?.providers.orEmpty().map { it.provider }
 
     val message = text {
@@ -110,11 +117,11 @@ private fun infoExecutor(itemRegistry: BukkitItemsRegistry) = CommandExecutor { 
     sender.sendMessage(message)
 }
 
-private fun giveExecutor(itemRegistry: BukkitItemsRegistry) = CommandExecutor { sender, args ->
-    val target: Player by args
-    val amount = args.getOrDefaultUnchecked(AMOUNT, 1)
+private fun giveExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<CommandSender> = { sender, context ->
+    val target = context.getPlayer(TARGET)
+    val amount = IntegerArgumentType.getInteger(context, AMOUNT)
     // We can use only one greedy string at the end, so we read item and its payload from the same argument
-    val itemParts = args.getRaw(ITEM).orEmpty().split(" ", limit = 2)
+    val itemParts = StringArgumentType.getString(context, ITEM).split(" ", limit = 2)
     val item = itemParts.first()
     val payload = itemParts.getOrNull(1)
 

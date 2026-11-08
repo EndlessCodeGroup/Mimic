@@ -18,13 +18,11 @@
  */
 package ru.endlesscode.mimic.command
 
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.executors.PlayerCommandExecutor
-import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
-import dev.jorel.commandapi.kotlindsl.greedyStringArgument
-import dev.jorel.commandapi.kotlindsl.subcommand
+import com.mojang.brigadier.arguments.StringArgumentType
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.entity.Player
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
@@ -37,23 +35,27 @@ import ru.endlesscode.mimic.internal.text
  * /mimic class check [player] (classes...)
  * ```
  */
-internal fun CommandAPICommand.classSystemSubcommand(mimic: Mimic) = subcommand("class") {
-    subcommand("info") {
-        withShortDescription("Show information about player's class system")
-        entitySelectorArgumentOnePlayer(TARGET, optional = true)
+internal fun CommandBuilder.classSystemSubcommand(mimic: Mimic) = literal("class") {
+    // Show information about player's class system
+    literal("info") {
         executesPlayer(infoCommandExecutor(mimic))
+        argument(TARGET, ArgumentTypes.player()) {
+            executesPlayer(infoCommandExecutor(mimic))
+        }
     }
 
-    subcommand("check") {
-        withShortDescription("Check that player has the given classes")
-        entitySelectorArgumentOnePlayer(TARGET)
-        greedyStringArgument(CLASSES)
-        executesPlayer(checkCommandExecutor(mimic))
+    // Check that player has the given classes
+    literal("check") {
+        argument(TARGET, ArgumentTypes.player()) {
+            argument(CLASSES, StringArgumentType.greedyString()) {
+                executesPlayer(checkCommandExecutor(mimic))
+            }
+        }
     }
 }
 
-private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player, args ->
-    val target = args.getOrDefaultUnchecked(TARGET, player)
+private fun infoCommandExecutor(mimic: Mimic): CommandAction<Player> = { player, context ->
+    val target = context.getPlayerOrDefault(TARGET, player)
     val provider = mimic.getClassSystemProvider()
     val system = provider.getSystem(target)
 
@@ -67,9 +69,9 @@ private fun infoCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player, 
     player.sendMessage(message)
 }
 
-private fun checkCommandExecutor(mimic: Mimic) = PlayerCommandExecutor { player, args ->
-    val target = args.getOrDefaultUnchecked(TARGET, player)
-    val classes = args.getOrDefaultRaw(CLASSES, "").split(" ")
+private fun checkCommandExecutor(mimic: Mimic): CommandAction<Player> = { _, context ->
+    val target = context.getPlayer(TARGET)
+    val classes = StringArgumentType.getString(context, CLASSES).split(" ")
 
     val system = mimic.getClassSystem(target)
     val hasAllClasses = system.hasAllClasses(classes)
