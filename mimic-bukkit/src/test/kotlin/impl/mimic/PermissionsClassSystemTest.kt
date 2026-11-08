@@ -47,6 +47,15 @@ class PermissionsClassSystemTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when class permission is not set explicitly - should not have class`() {
+        // Bukkit grants unregistered permissions to operators by default
+        every { player.isPermissionSet(any<String>()) } returns false
+        every { player.hasPermission(any<String>()) } returns true
+
+        classSystem.hasClass("first") shouldBe false
+    }
+
+    @Test
     fun `when get classes - should return right list of classes`() {
         val perms = listOf(
             createClassPermissionMock("first", value = true),
@@ -60,8 +69,10 @@ class PermissionsClassSystemTest : BukkitTestBase() {
     }
 
     private fun addClasses(vararg classes: String) {
+        every { player.isPermissionSet(any<String>()) } returns false
         every { player.hasPermission(any<String>()) } returns false
         for (theClass in classes) {
+            every { player.isPermissionSet(classPermission(theClass)) } returns true
             every { player.hasPermission(classPermission(theClass)) } returns true
         }
     }

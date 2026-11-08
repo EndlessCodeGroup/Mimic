@@ -63,6 +63,8 @@ Now it is possible to change Mimic config using commands in two ways:
 - Command `/mimic info` replaced with command `/mimic`
 - Command `/mimic class has` replaced with command `/mimic class check` with slightly simpler syntax
 - MMOCore integration requires MMOCore 1.13 or newer
+- Class system `permissions` takes into account only explicitly set `mimic.class.*` permissions.
+  Previously, operators had all classes.
 
 ### Housekeeping
 
