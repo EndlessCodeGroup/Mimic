@@ -30,7 +30,7 @@ import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.command.MimicCommands
+import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
@@ -65,7 +65,6 @@ public class MimicPlugin : JavaPlugin() {
 
     private val config: MimicConfig by lazy { MimicConfig(this) }
     private val mimic: Mimic by lazy { MimicImpl(servicesManager, config) }
-    private val commands: MimicCommands by lazy { MimicCommands() }
 
     private inline val servicesManager get() = server.servicesManager
     private inline val pluginManager get() = server.pluginManager
@@ -79,7 +78,7 @@ public class MimicPlugin : JavaPlugin() {
 
     override fun onEnable() {
         if (isReleased) initMetrics()
-        commands.register(this, mimic, config)
+        registerCommand(this, mimic, config)
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 
@@ -192,9 +191,5 @@ public class MimicPlugin : JavaPlugin() {
                 .filterNot { it == MimicItemsRegistry.ID || it == MinecraftItemsRegistry.ID }
                 .associateWith { 1 }
         })
-    }
-
-    override fun onDisable() {
-        commands.unregister()
     }
 }

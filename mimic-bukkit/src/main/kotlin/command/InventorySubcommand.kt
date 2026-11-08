@@ -1,9 +1,7 @@
 package ru.endlesscode.mimic.command
 
-import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.kotlindsl.entitySelectorArgumentOnePlayer
-import dev.jorel.commandapi.kotlindsl.playerExecutor
-import dev.jorel.commandapi.kotlindsl.subcommand
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes
+import org.bukkit.entity.Player
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.text
@@ -14,29 +12,35 @@ import ru.endlesscode.mimic.internal.text
  * /mimic inventory info (player)
  * ```
  */
-@OptIn(ExperimentalMimicApi::class)
-internal fun CommandAPICommand.inventorySubcommand(mimic: Mimic) = subcommand("inventory") {
-    withAliases("inv")
-
-    subcommand("info") {
-        withShortDescription("Show information about player's inventory provider")
-        entitySelectorArgumentOnePlayer(TARGET, optional = true)
-        playerExecutor { sender, args ->
-            val target = args.getOrDefaultUnchecked(TARGET, sender)
-            val provider = mimic.getPlayerInventoryProvider()
-            val inventory = provider.getSystem(target)
-
-            val message = text {
-                appendStats(
-                    "Inventory provider" to provider.id,
-                    "Count of Equipped" to inventory.equippedItems.size.toString(),
-                    "Count of Stored" to inventory.storedItems.size.toString(),
-                    "Total Count" to inventory.items.size.toString(),
-                )
+internal fun CommandBuilder.inventorySubcommand(mimic: Mimic) {
+    for (name in listOf("inventory", "inv")) {
+        literal(name) {
+            // Show information about player's inventory provider
+            literal("info") {
+                executesPlayer(infoExecutor(mimic))
+                argument(TARGET, ArgumentTypes.player()) {
+                    executesPlayer(infoExecutor(mimic))
+                }
             }
-            sender.sendMessage(message)
         }
     }
+}
+
+@OptIn(ExperimentalMimicApi::class)
+private fun infoExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+    val target = context.getPlayerOrDefault(TARGET, sender)
+    val provider = mimic.getPlayerInventoryProvider()
+    val inventory = provider.getSystem(target)
+
+    val message = text {
+        appendStats(
+            "Inventory provider" to provider.id,
+            "Count of Equipped" to inventory.equippedItems.size.toString(),
+            "Count of Stored" to inventory.storedItems.size.toString(),
+            "Total Count" to inventory.items.size.toString(),
+        )
+    }
+    sender.sendMessage(message)
 }
 
 private const val TARGET = "target"
