@@ -42,7 +42,9 @@ public class PermissionsClassSystem private constructor(player: Player) : Bukkit
         }
 
     override fun hasClass(requiredClass: String): Boolean {
-        return player.hasPermission(PERMISSION_PREFIX + requiredClass.lowercase(Locale.getDefault()))
+        val permission = PERMISSION_PREFIX + requiredClass.lowercase(Locale.getDefault())
+        // Check that permission is set explicitly, otherwise all classes are available to operators
+        return player.isPermissionSet(permission) && player.hasPermission(permission)
     }
 
     internal class Provider : BukkitClassSystem.Provider {
