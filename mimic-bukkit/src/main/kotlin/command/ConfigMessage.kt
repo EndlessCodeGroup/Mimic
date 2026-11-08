@@ -16,7 +16,7 @@ import ru.endlesscode.mimic.internal.text
 
 @OptIn(ExperimentalMimicApi::class)
 internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponent = text {
-    appendLine("----[ Mimic Config ]----")
+    appendHeader("Mimic Config")
     appendSelectablePropertyConfig(
         property = MimicConfig.LEVEL_SYSTEM,
         selectedOption = mimic.getLevelSystemProvider().id,

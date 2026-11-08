@@ -32,13 +32,12 @@ blockRegistry.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.t
 Added commands to debug block registries:
 
 - `/mimic blocks info` - show information about block registries
-- `/mimic blocks set [location] [block] (payload)` - set block at the given location
-- `/mimic blocks break [location]` - break block at the given location with the item in hand
-- `/mimic blocks compare [block]` - compare targeted block with the given block
-- `/mimic blocks id` - print IDs of targeted block and of block placed by item in hand
+- `/mimic blocks set [location] [block] (payload)` - set block at the given location, replacing the existing one
+- `/mimic blocks break (location)` - break block at the given location, or the targeted block, with the item in hand
+- `/mimic blocks compare (block)` - compare targeted block with the given block, or with the block placed by item in hand
 - `/mimic blocks find [block]` - check that block with the given ID exists
 
-### Added command `/mimic config`
+### Improved commands
 
 Now it is possible to change Mimic config using commands in two ways:
 
@@ -51,17 +50,30 @@ Now it is possible to change Mimic config using commands in two ways:
    - `/mimic config disabled-items-registries add [item-registry]` - disable the specified item registry for Mimic
    - `/mimic config disabled-items-registries remove [item-registry]` - enable the specified item registry for Mimic
 
+Commands are now easier to use in general:
+- `/mimic info` replaced with `/mimic`
+- `/mimic class has` replaced with `/mimic class check` with simpler syntax
+- `/mimic xp info [player]` and `/mimic class check [player]` send the result to the command sender instead of the target player.
+- `/mimic items give` has the same arguments order as vanilla `/give`: `/mimic items give [target] [item] (amount) (payload)`.
+- `/mimic xp set|give|take` replaced with a single value: `/mimic xp [value] (player)`
+  Value is `[+|-]<amount>[L|P|T]`: `+` gives, `-` takes, no sign sets; `L` is levels, `P` is points (default), `T` is total exp.
+  For example, `/mimic xp +5L` gives five levels and `/mimic xp 100` sets 100 exp points.
+- `/mimic xp has` removed, use `/mimic xp info` instead
+- `/mimic items id` removed, `/mimic items` shows ID of the item in hand.
+- Aliases `/mimic experience` and `/mimic inv` removed, use `/mimic xp` and `/mimic inventory` instead.
+- Subcommand `info` is optional: `/mimic items`, `/mimic blocks`, `/mimic xp`, `/mimic inventory` and `/mimic class` show info.
+  Info output lists available subcommands, click to use them, hover to see usage.
+- Clearer command output: colored answers, errors for failed actions, click-to-copy IDs.
+
 ### API changes
 
-- Added tag `@since 0.8.0` to all new APIs
+- Added tag `@since 0.8.0` to all APIs added in 0.8.0
 - Make `BukkitPlayerInventory.collectEquippedItems` protected. It was public by an accident.
 - Default implementation of `ClassSystem.hasAnyClass()` changed.
   Now it checks if `getClasses()` returns a non-empty list instead of checking `getPrimaryClass() != null`.
 
 ### Plugin changes
 
-- Command `/mimic info` replaced with command `/mimic`
-- Command `/mimic class has` replaced with command `/mimic class check` with slightly simpler syntax
 - MMOCore integration requires MMOCore 1.13 or newer
 - Class system `permissions` takes into account only explicitly set `mimic.class.*` permissions.
   Previously, operators had all classes.

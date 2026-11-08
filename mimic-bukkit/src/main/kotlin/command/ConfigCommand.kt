@@ -29,7 +29,7 @@ internal fun CommandBuilder.configSubcommand(
 
     // Change the preferred level system
     literal("level-system") {
-        stringSetArgument(VALUE, { mimic.getAllLevelSystemProviders().keys }) { sender, value ->
+        stringSetArgument(VALUE, "level system", { mimic.getAllLevelSystemProviders().keys }) { sender, value ->
             config.levelSystem = value
             showConfig(sender)
         }
@@ -37,7 +37,7 @@ internal fun CommandBuilder.configSubcommand(
 
     // Change the preferred class system
     literal("class-system") {
-        stringSetArgument(VALUE, { mimic.getAllClassSystemProviders().keys }) { sender, value ->
+        stringSetArgument(VALUE, "class system", { mimic.getAllClassSystemProviders().keys }) { sender, value ->
             config.classSystem = value
             showConfig(sender)
         }
@@ -46,7 +46,7 @@ internal fun CommandBuilder.configSubcommand(
     // Change the preferred inventory provider
     @OptIn(ExperimentalMimicApi::class)
     literal("inventory-provider") {
-        stringSetArgument(VALUE, { mimic.getAllPlayerInventoryProviders().keys }) { sender, value ->
+        stringSetArgument(VALUE, "inventory provider", { mimic.getAllPlayerInventoryProviders().keys }) { sender, value ->
             config.inventoryProvider = value
             showConfig(sender)
         }
@@ -54,19 +54,20 @@ internal fun CommandBuilder.configSubcommand(
 
     // Enable/Disable an item registry in Mimic
     literal("disabled-items-registries") {
-        for (action in listOf(ACTION_ADD, ACTION_REMOVE)) {
-            literal(action) {
-                stringSetArgument(
-                    ITEMS_REGISTRY,
-                    { mimic.getAllItemsRegistries().keys - MimicConfig.DEFAULT_ITEMS_REGISTRIES },
-                ) { sender, itemsRegistry ->
-                    if (action == ACTION_ADD) {
-                        config.disabledItemsRegistries += itemsRegistry
-                    } else {
-                        config.disabledItemsRegistries -= itemsRegistry
-                    }
-                    showConfig(sender)
-                }
+        literal(ACTION_ADD) {
+            stringSetArgument(
+                ITEMS_REGISTRY,
+                "items registry",
+                { mimic.getAllItemsRegistries().keys - MimicConfig.DEFAULT_ITEMS_REGISTRIES },
+            ) { sender, itemsRegistry ->
+                config.disabledItemsRegistries += itemsRegistry
+                showConfig(sender)
+            }
+        }
+        literal(ACTION_REMOVE) {
+            stringSetArgument(ITEMS_REGISTRY, "disabled items registry", { config.disabledItemsRegistries }) { sender, itemsRegistry ->
+                config.disabledItemsRegistries -= itemsRegistry
+                showConfig(sender)
             }
         }
     }
@@ -74,11 +75,16 @@ internal fun CommandBuilder.configSubcommand(
 
 private fun CommandBuilder.stringSetArgument(
     name: String,
+    valueDescription: String,
     provideOptions: () -> Set<String>,
     action: (sender: CommandSender, value: String) -> Unit,
 ) = argument(name, StringArgumentType.word()) {
-    suggestsStrings(provideOptions)
-    executesAny { sender, context -> action(sender, StringArgumentType.getString(context, name)) }
+    suggestsStrings(provideOptions = provideOptions)
+    executesAny { sender, context ->
+        val value = context.getArgument<String>(name)
+        if (value !in provideOptions()) throw commandError("Unknown $valueDescription '$value'")
+        action(sender, value)
+    }
 }
 
 private const val VALUE = "value"

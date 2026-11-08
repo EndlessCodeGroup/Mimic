@@ -9,19 +9,17 @@ import ru.endlesscode.mimic.internal.text
 /**
  * Commands to deal with inventory provider.
  * ```
- * /mimic inventory info (player)
+ * /mimic inventory (info) (player)
  * ```
  */
-internal fun CommandBuilder.inventorySubcommand(mimic: Mimic) {
-    for (name in listOf("inventory", "inv")) {
-        literal(name) {
-            // Show information about player's inventory provider
-            literal("info") {
-                executesPlayer(infoExecutor(mimic))
-                argument(TARGET, ArgumentTypes.player()) {
-                    executesPlayer(infoExecutor(mimic))
-                }
-            }
+internal fun CommandBuilder.inventorySubcommand(mimic: Mimic) = literal("inventory") {
+    executesPlayer(infoExecutor(mimic))
+
+    // Show information about player's inventory provider
+    literal("info") {
+        executesPlayer(infoExecutor(mimic))
+        argument(TARGET, ArgumentTypes.player()) {
+            executesPlayer(infoExecutor(mimic))
         }
     }
 }
@@ -33,11 +31,15 @@ private fun infoExecutor(mimic: Mimic): CommandAction<Player> = { sender, contex
     val inventory = provider.getSystem(target)
 
     val message = text {
+        appendHeader("Mimic Inventory")
         appendStats(
             "Inventory provider" to provider.id,
             "Count of Equipped" to inventory.equippedItems.size.toString(),
             "Count of Stored" to inventory.storedItems.size.toString(),
             "Total Count" to inventory.items.size.toString(),
+        )
+        appendCommands(
+            suggestedCommand("info", "/mimic inventory info (player)", "Show information about player's inventory provider"),
         )
     }
     sender.sendMessage(message)
