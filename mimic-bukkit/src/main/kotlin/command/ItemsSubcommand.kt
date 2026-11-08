@@ -22,8 +22,11 @@ package ru.endlesscode.mimic.command
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
@@ -34,14 +37,15 @@ import ru.endlesscode.mimic.items.unwrap
 /**
  * Commands to deal with items registries
  * ```
- * /mimic items info
- * /mimic items give [target] [amount] [item] (payload)
+ * /mimic items (info)
+ * /mimic items give [target] [item] (amount) (payload)
  * /mimic items compare [item]
- * /mimic items id
  * /mimic items find [item]
  * ```
  */
 internal fun CommandBuilder.itemsSubcommand(itemsRegistry: BukkitItemsRegistry) = literal("items") {
+    executesAny(infoExecutor(itemsRegistry))
+
     // Show information about items service
     literal("info") {
         executesAny(infoExecutor(itemsRegistry))
@@ -50,10 +54,14 @@ internal fun CommandBuilder.itemsSubcommand(itemsRegistry: BukkitItemsRegistry) 
     // Give item to player
     literal("give") {
         argument(TARGET, ArgumentTypes.player()) {
-            argument(AMOUNT, IntegerArgumentType.integer(1, 64)) {
-                suggestsStrings { listOf("1", "64") }
-                itemArgument(itemsRegistry) {
+            itemArgument(itemsRegistry) {
+                executesAny(giveExecutor(itemsRegistry))
+                argument(AMOUNT, IntegerArgumentType.integer(1, 64)) {
+                    suggestsStrings { listOf("1", "64") }
                     executesAny(giveExecutor(itemsRegistry))
+                    argument(PAYLOAD, StringArgumentType.greedyString()) {
+                        executesAny(giveExecutor(itemsRegistry))
+                    }
                 }
             }
         }
@@ -63,18 +71,16 @@ internal fun CommandBuilder.itemsSubcommand(itemsRegistry: BukkitItemsRegistry) 
     literal("compare") {
         itemArgument(itemsRegistry) {
             executesPlayer { sender, context ->
-                val item = StringArgumentType.getString(context, ITEM)
-                val isSame = itemsRegistry.isSameItem(sender.inventory.itemInMainHand, item)
-                sender.sendMessage(successText("Item in hand and '$item' %s same.".format(if (isSame) "are" else "aren't")))
+                val item = context.getArgument<String>(ITEM)
+                val isSame = itemsRegistry.isSameItem(sender.requireItemInMainHand(), item)
+                sender.sendMessage(successText {
+                    append("Item in hand ")
+                    appendVerdict(isSame, "matches", "doesn't match")
+                    append(" ")
+                    appendId(item)
+                    append(".")
+                })
             }
-        }
-    }
-
-    // Prints ID of item in hand
-    literal("id") {
-        executesPlayer { sender, _ ->
-            val id = itemsRegistry.getItemId(sender.inventory.itemInMainHand)
-            sender.sendMessage(successText("Id of item in hand is '$id'"))
         }
     }
 
@@ -82,28 +88,54 @@ internal fun CommandBuilder.itemsSubcommand(itemsRegistry: BukkitItemsRegistry) 
     literal("find") {
         itemArgument(itemsRegistry) {
             executesAny { sender, context ->
-                val item = StringArgumentType.getString(context, ITEM)
+                val item = context.getArgument<String>(ITEM)
                 val itemExists = itemsRegistry.isItemExists(item)
-                sender.sendMessage(successText("Item with id '$item'%s exists".format(if (itemExists) "" else " isn't")))
+                sender.sendMessage(successText {
+                    append("Item ")
+                    appendId(item)
+                    append(" ")
+                    appendVerdict(itemExists, "exists", "doesn't exist")
+                    append(".")
+                })
             }
         }
     }
 }
 
-// We can use only greedy string if we need to allow colons because it requires quoting in non-greedy strings.
-// https://github.com/Mojang/brigadier/blob/cf754c4ef654160dca946889c11941634c5db3d5/src/main/java/com/mojang/brigadier/StringReader.java#L169
 private fun CommandBuilder.itemArgument(
     itemRegistry: BukkitItemsRegistry,
     configure: CommandBuilder.() -> Unit,
-) = argument(ITEM, StringArgumentType.greedyString()) {
-    suggestsStrings { itemRegistry.knownIds }
+) = argument(ITEM, ResourceLocationArgumentType) {
+    suggestsIds({ sender -> itemHints(itemRegistry, sender) }) { itemRegistry.knownIds }
     configure()
+}
+
+/** Suggests ID of the item in hand and namespaces of items registries. */
+private fun itemHints(itemRegistry: BukkitItemsRegistry, sender: CommandSender): List<SuggestionHint> {
+    val itemInHandId = itemInHandId(itemRegistry, sender)
+    val namespaces = (itemRegistry.unwrap() as? MimicItemsRegistry)?.providers.orEmpty().map { it.provider.id }
+
+    return listOfNotNull(itemInHandId?.let { SuggestionHint(it, Component.text("Item in hand")) }) +
+        namespaces.map { SuggestionHint("$it:", Component.text("Items from $it")) }
+}
+
+/** Returns ID of the item in [sender]'s hand, or `null` if sender isn't a player or the hand is empty. */
+private fun itemInHandId(itemRegistry: BukkitItemsRegistry, sender: CommandSender): String? =
+    (sender as? Player)?.inventory?.itemInMainHand
+        ?.takeUnless { it.type.isAir }
+        ?.let(itemRegistry::getItemId)
+
+private fun Player.requireItemInMainHand(): ItemStack {
+    val item = inventory.itemInMainHand
+    if (item.type.isAir) throw commandError("You aren't holding an item.")
+    return item
 }
 
 private fun infoExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<CommandSender> = { sender, _ ->
     val providers = (itemRegistry.unwrap() as? MimicItemsRegistry)?.providers.orEmpty().map { it.provider }
 
     val message = text {
+        appendHeader("Mimic Items")
         appendStats(
             "Item Registry" to itemRegistry.id,
             "Known IDs amount" to itemRegistry.knownIds.size.toString(),
@@ -113,27 +145,36 @@ private fun infoExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<Comma
             append("  ${provider.id}: ", NamedTextColor.WHITE)
             appendLine(provider.knownIds.size.toString(), NamedTextColor.GRAY)
         }
+        appendIdStat("Item in hand", itemInHandId(itemRegistry, sender))
+        appendCommands(
+            suggestedCommand("give", "/mimic items give [target] [item] (amount) (payload)", "Give item to player"),
+            suggestedCommand("compare", "/mimic items compare [item]", "Compare item in hand with the given item"),
+            suggestedCommand("find", "/mimic items find [item]", "Check that item with the given ID exists"),
+        )
     }
     sender.sendMessage(message)
 }
 
 private fun giveExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<CommandSender> = { sender, context ->
     val target = context.getPlayer(TARGET)
-    val amount = IntegerArgumentType.getInteger(context, AMOUNT)
-    // We can use only one greedy string at the end, so we read item and its payload from the same argument
-    val itemParts = StringArgumentType.getString(context, ITEM).split(" ", limit = 2)
-    val item = itemParts.first()
-    val payload = itemParts.getOrNull(1)
+    val item = context.getArgument<String>(ITEM)
+    val amount = context.getArgumentOrNull<Int>(AMOUNT) ?: 1
+    val payload = context.getArgumentOrNull<String>(PAYLOAD)
 
-    val itemStack = itemRegistry.getItem(item, payload, amount)
-    if (itemStack != null) {
-        target.inventory.addItem(itemStack)
-        sender.sendMessage(successText("Gave ${itemStack.amount} [$item] to ${target.name}."))
-    } else {
-        sender.sendMessage(errorText("Unknown item '$item'"))
+    val itemStack = itemRegistry.getItem(item, payload, amount) ?: throw commandError("Unknown item '$item'.")
+    val givenAmount = itemStack.amount // addItem may change the amount of the passed stack
+    target.inventory.addItem(itemStack)
+    sender.sendMessage(successText {
+        append("Gave $givenAmount ")
+        appendId(item)
+        append(" to ${target.name}.")
+    })
+    if (givenAmount < amount) {
+        sender.sendMessage(warningText("Requested $amount, but only $givenAmount can be given at once."))
     }
 }
 
 private const val TARGET = "target"
 private const val ITEM = "item"
 private const val AMOUNT = "amount"
+private const val PAYLOAD = "payload"

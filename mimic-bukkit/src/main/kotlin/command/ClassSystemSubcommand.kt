@@ -20,7 +20,6 @@ package ru.endlesscode.mimic.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
-import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.Mimic
@@ -31,11 +30,13 @@ import ru.endlesscode.mimic.internal.text
 /**
  * Commands to deal with class systems.
  * ```
- * /mimic class info [player]
+ * /mimic class (info) [player]
  * /mimic class check [player] (classes...)
  * ```
  */
 internal fun CommandBuilder.classSystemSubcommand(mimic: Mimic) = literal("class") {
+    executesPlayer(infoCommandExecutor(mimic))
+
     // Show information about player's class system
     literal("info") {
         executesPlayer(infoCommandExecutor(mimic))
@@ -60,18 +61,23 @@ private fun infoCommandExecutor(mimic: Mimic): CommandAction<Player> = { player,
     val system = provider.getSystem(target)
 
     val message = text {
+        appendHeader("Mimic Classes")
         appendStats(
             "System" to provider.id,
             "Classes" to system.classes.toString(),
             "Primary" to system.primaryClass.toString(),
         )
+        appendCommands(
+            suggestedCommand("check", "/mimic class check [player] [classes...]", "Check that player has the given classes"),
+            suggestedCommand("info", "/mimic class info (player)", "Show information about player's class system"),
+        )
     }
     player.sendMessage(message)
 }
 
-private fun checkCommandExecutor(mimic: Mimic): CommandAction<Player> = { _, context ->
+private fun checkCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
     val target = context.getPlayer(TARGET)
-    val classes = StringArgumentType.getString(context, CLASSES).split(" ")
+    val classes = context.getArgument<String>(CLASSES).split(" ")
 
     val system = mimic.getClassSystem(target)
     val hasAllClasses = system.hasAllClasses(classes)
@@ -81,20 +87,12 @@ private fun checkCommandExecutor(mimic: Mimic): CommandAction<Player> = { _, con
         color(NamedTextColor.GOLD)
         appendLine("Player '${target.name}':")
         append("- has any of: ")
-        appendStatus(hasAnyOfClasses)
+        appendVerdict(hasAnyOfClasses, "yes", "no")
         appendLine()
         append("- has all: ")
-        appendStatus(hasAllClasses)
+        appendVerdict(hasAllClasses, "yes", "no")
     }
-    target.sendMessage(message)
-}
-
-private fun TextComponent.Builder.appendStatus(status: Boolean) {
-    if (status) {
-        append("yes", NamedTextColor.GREEN)
-    } else {
-        append("no", NamedTextColor.RED)
-    }
+    sender.sendMessage(message)
 }
 
 private const val TARGET = "target"

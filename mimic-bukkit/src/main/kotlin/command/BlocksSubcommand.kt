@@ -4,11 +4,14 @@ package ru.endlesscode.mimic.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
+import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.blocks.unwrap
 import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
 import ru.endlesscode.mimic.impl.mimic.registry
@@ -20,67 +23,56 @@ import ru.endlesscode.mimic.internal.text
 /**
  * Commands to deal with block registries
  * ```
- * /mimic blocks info
+ * /mimic blocks (info)
  * /mimic blocks set [location] [block] (payload)
- * /mimic blocks break [location]
- * /mimic blocks compare [block]
- * /mimic blocks id
+ * /mimic blocks break (location)
+ * /mimic blocks compare (block)
  * /mimic blocks find [block]
  * ```
  */
+@Suppress("UnstableApiUsage")
 internal fun CommandBuilder.blocksSubcommand(blockRegistry: BukkitBlockRegistry) = literal("blocks") {
+    executesAny(infoExecutor(blockRegistry))
+
     // Show information about blocks service
     literal("info") {
         executesAny(infoExecutor(blockRegistry))
     }
 
-    // Set block at the given location
+    // Set block at the given location, replacing the existing one
     literal("set") {
         argument(LOCATION, ArgumentTypes.blockPosition()) {
             blockArgument(blockRegistry) {
                 executesAny(setExecutor(blockRegistry))
-            }
-        }
-    }
-
-    // Break block at the given location with the item in hand
-    literal("break") {
-        argument(LOCATION, ArgumentTypes.blockPosition()) {
-            executesPlayer { sender, context ->
-                val location = context.getBlockLocation(LOCATION)
-                val position = location.toPosition()
-                if (blockRegistry.breakBlock(location.block, sender.inventory.itemInMainHand)) {
-                    sender.sendMessage(successText("Broke block at $position."))
-                } else {
-                    sender.sendMessage(errorText("Can't break block at $position"))
+                argument(PAYLOAD, StringArgumentType.greedyString()) {
+                    executesAny(setExecutor(blockRegistry))
                 }
             }
         }
     }
 
-    // Compare targeted block and given block
+    // Break block at the given location, or the targeted block, with the item in hand
+    literal("break") {
+        executesPlayer { sender, _ ->
+            val targetBlock = sender.getTargetBlockExact(TARGET_DISTANCE) ?: throw commandError("You aren't looking at a block.")
+            breakBlock(blockRegistry, sender, targetBlock.location)
+        }
+        argument(LOCATION, ArgumentTypes.blockPosition()) {
+            executesPlayer { sender, context -> breakBlock(blockRegistry, sender, context.getBlockLocation(LOCATION)) }
+        }
+    }
+
+    // Compare targeted block with the given block, or with the block placed by item in hand
     literal("compare") {
+        executesPlayer { sender, _ ->
+            val block = blockRegistry.getBlockIdFromItem(sender.inventory.itemInMainHand)
+                ?: throw commandError("Item in hand doesn't place a block.")
+            compareTargetedBlock(blockRegistry, sender, block, suffix = " (item in hand)")
+        }
         blockArgument(blockRegistry) {
             executesPlayer { sender, context ->
-                val block = StringArgumentType.getString(context, BLOCK)
-                val targetBlock = sender.getTargetBlockExact(TARGET_DISTANCE)
-                if (targetBlock == null) {
-                    sender.sendMessage(errorText("You should look at a block"))
-                } else {
-                    val isSame = blockRegistry.isSameBlock(targetBlock, block)
-                    sender.sendMessage(successText("Targeted block and '$block' %s same.".format(if (isSame) "are" else "aren't")))
-                }
+                compareTargetedBlock(blockRegistry, sender, context.getArgument<String>(BLOCK))
             }
-        }
-    }
-
-    // Prints ID of targeted block and ID of block placed by item in hand
-    literal("id") {
-        executesPlayer { sender, _ ->
-            val blockId = sender.getTargetBlockExact(TARGET_DISTANCE)?.let(blockRegistry::getBlockId)
-            val itemBlockId = blockRegistry.getBlockIdFromItem(sender.inventory.itemInMainHand)
-            sender.sendMessage(successText("Id of targeted block is '$blockId'"))
-            sender.sendMessage(successText("Id of block placed by item in hand is '$itemBlockId'"))
         }
     }
 
@@ -88,27 +80,51 @@ internal fun CommandBuilder.blocksSubcommand(blockRegistry: BukkitBlockRegistry)
     literal("find") {
         blockArgument(blockRegistry) {
             executesAny { sender, context ->
-                val block = StringArgumentType.getString(context, BLOCK)
+                val block = context.getArgument<String>(BLOCK)
                 val blockExists = blockRegistry.isBlockExists(block)
-                sender.sendMessage(successText("Block with id '$block'%s exists".format(if (blockExists) "" else " isn't")))
+                sender.sendMessage(successText {
+                    append("Block ")
+                    appendId(block)
+                    append(" ")
+                    appendVerdict(blockExists, "exists", "doesn't exist")
+                    append(".")
+                })
             }
         }
     }
 }
 
-// See itemArgument in ItemsSubcommand for the reason to use greedy string
 private fun CommandBuilder.blockArgument(
     blockRegistry: BukkitBlockRegistry,
     configure: CommandBuilder.() -> Unit,
-) = argument(BLOCK, StringArgumentType.greedyString()) {
-    suggestsStrings { blockRegistry.knownIds }
+) = argument(BLOCK, ResourceLocationArgumentType) {
+    suggestsIds({ sender -> blockHints(blockRegistry, sender) }) { blockRegistry.knownIds }
     configure()
 }
+
+/** Suggests IDs of the block placed by item in hand, of the targeted block, and namespaces of block registries. */
+private fun blockHints(blockRegistry: BukkitBlockRegistry, sender: CommandSender): List<SuggestionHint> {
+    val namespaces = (blockRegistry.unwrap() as? MimicBlockRegistry)?.providers.orEmpty().map { it.registry.id }
+
+    return listOfNotNull(
+        itemInHandBlockId(blockRegistry, sender)?.let { SuggestionHint(it, Component.text("Block placed by item in hand")) },
+        targetedBlockId(blockRegistry, sender)?.let { SuggestionHint(it, Component.text("Targeted block")) },
+    ) + namespaces.map { SuggestionHint("$it:", Component.text("Blocks from $it")) }
+}
+
+/** Returns ID of the block placed by item in [sender]'s hand, or `null` if there is no such block. */
+private fun itemInHandBlockId(blockRegistry: BukkitBlockRegistry, sender: CommandSender): String? =
+    (sender as? Player)?.inventory?.itemInMainHand?.let(blockRegistry::getBlockIdFromItem)
+
+/** Returns ID of the block [sender] is looking at, or `null` if there is no such block. */
+private fun targetedBlockId(blockRegistry: BukkitBlockRegistry, sender: CommandSender): String? =
+    (sender as? Player)?.getTargetBlockExact(TARGET_DISTANCE)?.let(blockRegistry::getBlockId)
 
 private fun infoExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<CommandSender> = { sender, _ ->
     val providers = (blockRegistry.unwrap() as? MimicBlockRegistry)?.providers.orEmpty()
 
     val message = text {
+        appendHeader("Mimic Blocks")
         appendStats(
             "Block Registry" to blockRegistry.id,
             "Known IDs amount" to blockRegistry.knownIds.size.toString(),
@@ -118,29 +134,77 @@ private fun infoExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<Comm
             append("  ${provider.registry.id}: ", NamedTextColor.WHITE)
             appendLine(provider.tryGetKnownIds().size.toString(), NamedTextColor.GRAY)
         }
+        appendIdStat("Targeted block", targetedBlockId(blockRegistry, sender))
+        appendIdStat("Item in hand places", itemInHandBlockId(blockRegistry, sender))
+        appendCommands(
+            suggestedCommand("set", "/mimic blocks set [location] [block] (payload)", "Set block at the given location, replacing the existing one"),
+            suggestedCommand("break", "/mimic blocks break (location)", "Break block at the given location, or the targeted block, with the item in hand"),
+            suggestedCommand("compare", "/mimic blocks compare (block)", "Compare targeted block with the given block, or with the block placed by item in hand"),
+            suggestedCommand("find", "/mimic blocks find [block]", "Check that block with the given ID exists"),
+        )
     }
     sender.sendMessage(message)
 }
 
 private fun setExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<CommandSender> = { sender, context ->
     val location = context.getBlockLocation(LOCATION)
-    // We can use only one greedy string at the end, so we read block and its payload from the same argument
-    val blockParts = StringArgumentType.getString(context, BLOCK).split(" ", limit = 2)
-    val block = blockParts.first()
-    val payload = blockParts.getOrNull(1)
+    val block = context.getArgument<String>(BLOCK)
+    val payload = context.getArgumentOrNull<String>(PAYLOAD)
 
+    if (!blockRegistry.isBlockExists(block)) throw commandError("Unknown block '$block'.")
+
+    val target = location.block
     val position = location.toPosition()
-    if (blockRegistry.setBlock(location.block, block, payload)) {
-        sender.sendMessage(successText("Set [$block] at $position."))
-    } else if (!blockRegistry.isBlockExists(block)) {
-        sender.sendMessage(errorText("Unknown block '$block'"))
-    } else {
-        sender.sendMessage(errorText("Failed to set [$block] at $position"))
+    if (!blockRegistry.setBlock(target, block, payload)) {
+        // Replace existing block like vanilla /setblock does: break it without drops and set the new one
+        if (target.isEmpty || !blockRegistry.breakBlock(target, tool = null, DropsConsumer.disappear())) {
+            throw commandError("Failed to set '$block' at $position.")
+        }
+        if (!blockRegistry.setBlock(target, block, payload)) {
+            throw commandError("Removed the block at $position, but failed to set '$block'.")
+        }
     }
+
+    sender.sendMessage(successText {
+        append("Set ")
+        appendId(block)
+        append(" at $position.")
+    })
+}
+
+private fun compareTargetedBlock(blockRegistry: BukkitBlockRegistry, sender: Player, block: String, suffix: String = "") {
+    val targetBlock = sender.getTargetBlockExact(TARGET_DISTANCE) ?: throw commandError("You aren't looking at a block.")
+    val isSame = blockRegistry.isSameBlock(targetBlock, block)
+    sender.sendMessage(successText {
+        append("Targeted block ")
+        appendVerdict(isSame, "matches", "doesn't match")
+        append(" ")
+        appendId(block)
+        append("$suffix.")
+    })
+}
+
+private fun breakBlock(blockRegistry: BukkitBlockRegistry, sender: Player, location: Location) {
+    val position = location.toPosition()
+    // Get ID before breaking as the block is gone after it
+    val blockId = blockRegistry.getBlockId(location.block)
+    if (!blockRegistry.breakBlock(location.block, sender.inventory.itemInMainHand)) {
+        throw commandError("Can't break block at $position.")
+    }
+    sender.sendMessage(successText {
+        append("Broke ")
+        if (blockId != null) {
+            appendId(blockId)
+        } else {
+            append("block")
+        }
+        append(" at $position.")
+    })
 }
 
 private fun Location.toPosition() = "$blockX $blockY $blockZ"
 
 private const val LOCATION = "location"
 private const val BLOCK = "block"
+private const val PAYLOAD = "payload"
 private const val TARGET_DISTANCE = 8

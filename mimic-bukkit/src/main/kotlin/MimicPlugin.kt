@@ -78,7 +78,7 @@ public class MimicPlugin : JavaPlugin() {
 
     override fun onEnable() {
         if (isReleased) initMetrics()
-        registerCommand(this, mimic, config)
+        registerCommand(mimic, config)
         pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
     }
 
