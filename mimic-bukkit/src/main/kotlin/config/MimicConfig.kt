@@ -20,6 +20,7 @@ internal class MimicConfig(
     var classSystem: String by configuration.property(CLASS_SYSTEM)
     var inventoryProvider: String by configuration.property(INVENTORY_PROVIDER)
     var disabledItemsRegistries: Set<String> by configuration.property(DISABLED_ITEMS_REGISTRIES)
+    var disabledBlockRegistries: Set<String> by configuration.property(DISABLED_BLOCK_REGISTRIES)
 
     constructor(plugin: Plugin) : this(plugin.toString(), File(plugin.dataFolder, "config.yml"))
 
@@ -29,7 +30,7 @@ internal class MimicConfig(
                 pluginName,
                 "",
                 "Here you can configure Mimic APIs.",
-                "Use command '/mimic info' to list available implementations.",
+                "Use command '/mimic' to list available implementations.",
             )
             properties.forEach(::addDefault)
         }
@@ -58,6 +59,20 @@ internal class MimicConfig(
         if (notDisabledRegistries.isNotEmpty()) {
             Log.w("Config: Items registries $notDisabledRegistries can not be disabled. It will be removed from config.")
         }
+
+        val configuredDisabledBlockRegistries = disabledBlockRegistries
+        disabledBlockRegistries = configuredDisabledBlockRegistries - DEFAULT_BLOCK_REGISTRIES
+
+        val notDisabledBlockRegistries = configuredDisabledBlockRegistries - disabledBlockRegistries
+        if (notDisabledBlockRegistries.isNotEmpty()) {
+            Log.w("Config: Block registries $notDisabledBlockRegistries can not be disabled. It will be removed from config.")
+        }
+    }
+
+    /** Resets the given [property] to its default value. */
+    fun reset(property: ConfigProperty<*>) {
+        configuration.set(property.path, property.defaultValue)
+        save()
     }
 
     fun save() {
@@ -87,6 +102,7 @@ internal class MimicConfig(
             "If the value is empty, will be used implementation with the highest priority."
 
         val DEFAULT_ITEMS_REGISTRIES = setOf("mimic", "minecraft")
+        val DEFAULT_BLOCK_REGISTRIES = DEFAULT_ITEMS_REGISTRIES
 
         val LEVEL_SYSTEM = StringConfigProperty(
             path = "level-system",
@@ -122,11 +138,22 @@ internal class MimicConfig(
             ),
         )
 
-        private val properties = listOf(
+        val DISABLED_BLOCK_REGISTRIES = StringSetConfigProperty(
+            path = "disabled-block-registries",
+            title = "BlockRegistry API",
+            comments = arrayOf(
+                "List here disabled block registry implementations.",
+                "You can't disable 'mimic' and 'minecraft' block registries.",
+                "By default, all implementations are enabled.",
+            ),
+        )
+
+        val properties = listOf(
             LEVEL_SYSTEM,
             CLASS_SYSTEM,
             INVENTORY_PROVIDER,
             DISABLED_ITEMS_REGISTRIES,
+            DISABLED_BLOCK_REGISTRIES,
         )
     }
 }

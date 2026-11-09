@@ -49,6 +49,9 @@ Now it is possible to change Mimic config using commands in two ways:
    - `/mimic config inventory-provider [value]` - set the specified inventory provider as preferred for Mimic
    - `/mimic config disabled-items-registries add [item-registry]` - disable the specified item registry for Mimic
    - `/mimic config disabled-items-registries remove [item-registry]` - enable the specified item registry for Mimic
+   - `/mimic config disabled-block-registries add [block-registry]` - disable the specified block registry for Mimic
+   - `/mimic config disabled-block-registries remove [block-registry]` - enable the specified block registry for Mimic
+   - `/mimic config reset [option]` - reset the specified option to its default value
 
 Commands are now easier to use in general:
 - `/mimic info` replaced with `/mimic`
