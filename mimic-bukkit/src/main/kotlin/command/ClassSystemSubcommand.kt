@@ -21,7 +21,7 @@ package ru.endlesscode.mimic.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
@@ -41,7 +41,7 @@ internal fun CommandBuilder.classSystemSubcommand(mimic: Mimic) = literal("class
     literal("info") {
         executesPlayer(infoCommandExecutor(mimic))
         argument(TARGET, ArgumentTypes.player()) {
-            executesPlayer(infoCommandExecutor(mimic))
+            executesAny(infoCommandExecutor(mimic))
         }
     }
 
@@ -49,14 +49,14 @@ internal fun CommandBuilder.classSystemSubcommand(mimic: Mimic) = literal("class
     literal("check") {
         argument(TARGET, ArgumentTypes.player()) {
             argument(CLASSES, StringArgumentType.greedyString()) {
-                executesPlayer(checkCommandExecutor(mimic))
+                executesAny(checkCommandExecutor(mimic))
             }
         }
     }
 }
 
-private fun infoCommandExecutor(mimic: Mimic): CommandAction<Player> = { player, context ->
-    val target = context.getPlayerOrDefault(TARGET, player)
+private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
+    val target = context.getPlayerOrSender(TARGET, sender)
     val provider = mimic.getClassSystemProvider()
     val system = provider.getSystem(target)
 
@@ -72,10 +72,10 @@ private fun infoCommandExecutor(mimic: Mimic): CommandAction<Player> = { player,
             suggestedCommand("info", "/mimic class info (player)", "Show information about player's class system"),
         )
     }
-    player.sendMessage(message)
+    sender.sendMessage(message)
 }
 
-private fun checkCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+private fun checkCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
     val target = context.getPlayer(TARGET)
     val classes = context.getArgument<String>(CLASSES).split(" ")
 

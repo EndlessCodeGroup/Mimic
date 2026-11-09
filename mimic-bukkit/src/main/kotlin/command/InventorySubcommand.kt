@@ -1,7 +1,7 @@
 package ru.endlesscode.mimic.command
 
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.text
@@ -19,14 +19,14 @@ internal fun CommandBuilder.inventorySubcommand(mimic: Mimic) = literal("invento
     literal("info") {
         executesPlayer(infoExecutor(mimic))
         argument(TARGET, ArgumentTypes.player()) {
-            executesPlayer(infoExecutor(mimic))
+            executesAny(infoExecutor(mimic))
         }
     }
 }
 
 @OptIn(ExperimentalMimicApi::class)
-private fun infoExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
-    val target = context.getPlayerOrDefault(TARGET, sender)
+private fun infoExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
+    val target = context.getPlayerOrSender(TARGET, sender)
     val provider = mimic.getPlayerInventoryProvider()
     val inventory = provider.getSystem(target)
 
