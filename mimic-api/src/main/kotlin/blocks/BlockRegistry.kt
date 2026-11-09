@@ -71,5 +71,5 @@ public interface BlockRegistry<BlockT : Any, ItemStackT : Any> : MimicService {
      *
      * Returns `false` if the block can't be broken or doesn't belong to this registry.
      */
-    public fun breakBlock(block: BlockT, tool: ItemStackT?, dropsConsumer: DropsConsumer<ItemStackT>): Boolean
+    public fun breakBlock(block: BlockT, tool: ItemStackT? = null, dropsConsumer: DropsConsumer<ItemStackT>): Boolean
 }
