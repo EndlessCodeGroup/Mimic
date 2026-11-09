@@ -72,6 +72,7 @@ Commands are now easier to use in general:
 
 - Added tag `@since 0.8.0` to all APIs added in 0.8.0
 - Make `BukkitPlayerInventory.collectEquippedItems` protected. It was public by an accident.
+- Fixed `BukkitPlayerInventory.collectStoredItems` excluding the first stack equal to the item in the main hand instead of the held slot itself.
 - Default implementation of `ClassSystem.hasAnyClass()` changed.
   Now it checks if `getClasses()` returns a non-empty list instead of checking `getPrimaryClass() != null`.
 

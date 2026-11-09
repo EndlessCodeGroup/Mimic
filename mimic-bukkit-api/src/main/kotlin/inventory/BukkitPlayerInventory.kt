@@ -32,8 +32,8 @@ public abstract class BukkitPlayerInventory(player: Player) : PlayerInventory<It
         val playerInventory = player.inventory
         return playerInventory.storageContents
             .asSequence()
+            .filterIndexed { slot, _ -> slot != playerInventory.heldItemSlot }
             .plus(additionalItems)
-            .minus(playerInventory.itemInMainHand)
             .filterNotNullOrEmpty()
             .toList()
     }
