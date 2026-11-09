@@ -33,7 +33,7 @@ internal class MimicImpl(
         plugin: Plugin,
         priority: ServicePriority
     ): BukkitBlockRegistry? = tryRegisterService<BukkitBlockRegistry>(apiLevel, plugin, priority) {
-        WrappedBlockRegistry(registry, plugin)
+        WrappedBlockRegistry(registry, config, plugin)
     }
 
     @ExperimentalMimicApi

@@ -13,6 +13,7 @@ import ru.endlesscode.mimic.config.MimicConfig
  * /mimic config
  * /mimic config [single-property] [value]
  * /mimic config [collection-property] add|remove [value]
+ * /mimic config reset [property]
  * ```
  */
 internal fun CommandBuilder.configSubcommand(
@@ -71,6 +72,39 @@ internal fun CommandBuilder.configSubcommand(
             }
         }
     }
+
+    // Enable/Disable a block registry in Mimic
+    @OptIn(ExperimentalMimicApi::class)
+    literal("disabled-block-registries") {
+        literal(ACTION_ADD) {
+            stringSetArgument(
+                BLOCK_REGISTRY,
+                "block registry",
+                { mimic.getAllBlockRegistries().keys - MimicConfig.DEFAULT_BLOCK_REGISTRIES },
+            ) { sender, blockRegistry ->
+                config.disabledBlockRegistries += blockRegistry
+                showConfig(sender)
+            }
+        }
+        literal(ACTION_REMOVE) {
+            stringSetArgument(BLOCK_REGISTRY, "disabled block registry", { config.disabledBlockRegistries }) { sender, blockRegistry ->
+                config.disabledBlockRegistries -= blockRegistry
+                showConfig(sender)
+            }
+        }
+    }
+
+    // Reset a property to its default value
+    literal(ACTION_RESET) {
+        for (property in MimicConfig.properties) {
+            literal(property.path) {
+                executesAny { sender, _ ->
+                    config.reset(property)
+                    showConfig(sender)
+                }
+            }
+        }
+    }
 }
 
 private fun CommandBuilder.stringSetArgument(
@@ -89,5 +123,7 @@ private fun CommandBuilder.stringSetArgument(
 
 private const val VALUE = "value"
 private const val ITEMS_REGISTRY = "items-registry"
+private const val BLOCK_REGISTRY = "block-registry"
 private const val ACTION_ADD = "add"
 private const val ACTION_REMOVE = "remove"
+internal const val ACTION_RESET = "reset"

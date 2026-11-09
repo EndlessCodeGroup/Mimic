@@ -25,6 +25,7 @@ import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.blocks.WrappedBlockRegistry
+import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.parseKey
 import kotlin.test.Test
 
@@ -204,6 +205,22 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when registry is disabled in config - should ignore it`() {
+        servicesManager.unregister(customRegistry)
+        servicesManager.register(
+            BukkitBlockRegistry::class.java,
+            wrap(customRegistry, disabledRegistries = setOf(customRegistry.id)),
+            plugin,
+            Normal,
+        )
+
+        assertSoftly {
+            blockRegistry.isBlockExists("custom:ruby_block").shouldBeFalse()
+            blockRegistry.getBlockId(mockBlock(Material.NOTE_BLOCK)) shouldBe "minecraft:note_block"
+        }
+    }
+
+    @Test
     fun `when break block with disappearing drops - should not drop items`() {
         blockRegistry.breakBlock(mockBlock(Material.STONE), tool = null, DropsConsumer.disappear()).shouldBeTrue()
         testRegistry.droppedOnGround.shouldBeEmpty()
@@ -259,11 +276,17 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
         every { isEmpty } returns (material == Material.AIR)
     }
 
-    private fun wrap(registry: BukkitBlockRegistry): BukkitBlockRegistry {
+    private fun wrap(
+        registry: BukkitBlockRegistry,
+        disabledRegistries: Set<String> = emptySet(),
+    ): BukkitBlockRegistry {
         val pluginManager = mockk<PluginManager> {
             every { isPluginEnabled(any<String>()) } returns true
         }
-        return WrappedBlockRegistry(registry, "Mimic", pluginManager)
+        val config = mockk<MimicConfig> {
+            every { disabledBlockRegistries } returns disabledRegistries
+        }
+        return WrappedBlockRegistry(registry, config, "Mimic", pluginManager)
     }
 }
 

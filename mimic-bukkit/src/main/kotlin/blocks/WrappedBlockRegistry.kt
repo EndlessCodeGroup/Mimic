@@ -6,16 +6,21 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.PluginManager
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.WrappedMimicService
+import ru.endlesscode.mimic.config.MimicConfig
 
 @ExperimentalMimicApi
 internal class WrappedBlockRegistry(
     internal val delegate: BukkitBlockRegistry,
+    private val config: MimicConfig,
     pluginName: String,
     pluginManager: PluginManager,
 ) : WrappedMimicService(delegate, pluginName, pluginManager), BukkitBlockRegistry {
 
-    constructor(delegate: BukkitBlockRegistry, plugin: Plugin)
-            : this(delegate, plugin.name, plugin.server.pluginManager)
+    constructor(delegate: BukkitBlockRegistry, config: MimicConfig, plugin: Plugin)
+            : this(delegate, config, plugin.name, plugin.server.pluginManager)
+
+    override val isEnabled: Boolean
+        get() = super<WrappedMimicService>.isEnabled && id !in config.disabledBlockRegistries
 
     override val knownIds: Collection<String> by delegate::knownIds
 

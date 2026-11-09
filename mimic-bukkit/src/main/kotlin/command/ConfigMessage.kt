@@ -19,16 +19,19 @@ internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponen
     appendHeader("Mimic Config")
     appendSelectablePropertyConfig(
         property = MimicConfig.LEVEL_SYSTEM,
+        configuredValue = config.levelSystem,
         selectedOption = mimic.getLevelSystemProvider().id,
         options = mimic.getAllLevelSystemProviders().keys,
     )
     appendSelectablePropertyConfig(
         property = MimicConfig.CLASS_SYSTEM,
+        configuredValue = config.classSystem,
         selectedOption = mimic.getClassSystemProvider().id,
         options = mimic.getAllClassSystemProviders().keys,
     )
     appendSelectablePropertyConfig(
         property = MimicConfig.INVENTORY_PROVIDER,
+        configuredValue = config.inventoryProvider,
         selectedOption = mimic.getPlayerInventoryProvider().id,
         options = mimic.getAllPlayerInventoryProviders().keys,
     )
@@ -38,14 +41,22 @@ internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponen
         options = mimic.getAllItemsRegistries().keys,
         permanentOptions = MimicConfig.DEFAULT_ITEMS_REGISTRIES,
     )
+    appendSetPropertyConfig(
+        property = MimicConfig.DISABLED_BLOCK_REGISTRIES,
+        values = config.disabledBlockRegistries,
+        options = mimic.getAllBlockRegistries().keys,
+        permanentOptions = MimicConfig.DEFAULT_BLOCK_REGISTRIES,
+    )
 }
 
 private fun TextComponent.Builder.appendSelectablePropertyConfig(
     property: StringConfigProperty,
+    configuredValue: String,
     selectedOption: String,
     options: Set<String>,
 ) = appendProperty(property) {
-    val availableOptions = options - selectedOption
+    val isAutomatic = configuredValue.isEmpty()
+    val availableOptions = if (isAutomatic) options else options - selectedOption
     if (availableOptions.isNotEmpty()) {
         appendLine()
         appendComment("Options: ")
@@ -60,6 +71,19 @@ private fun TextComponent.Builder.appendSelectablePropertyConfig(
     appendLine()
     appendPropertyPath(property)
     append(selectedOption)
+    if (isAutomatic) {
+        append(" (auto)", NamedTextColor.GRAY)
+    } else {
+        append(" ")
+        append(text {
+            color(NamedTextColor.GRAY)
+            appendClickable(
+                ACTION_RESET,
+                hint = "Click to use the implementation with the highest priority",
+                command = "/$COMMAND_NAME config $ACTION_RESET ${property.path}",
+            )
+        })
+    }
 }
 
 private fun TextComponent.Builder.appendSetPropertyConfig(
