@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
-import ru.endlesscode.mimic.blocks.DropsConsumer
+import ru.endlesscode.mimic.blocks.DropsConsumer.Companion.disappear
 import ru.endlesscode.mimic.blocks.unwrap
 import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
 import ru.endlesscode.mimic.impl.mimic.registry
@@ -157,7 +157,7 @@ private fun setExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<Comma
     val position = location.toPosition()
     if (!blockRegistry.setBlock(target, block, payload)) {
         // Replace existing block like vanilla /setblock does: break it without drops and set the new one
-        if (target.isEmpty || !blockRegistry.breakBlock(target, tool = null, DropsConsumer.disappear())) {
+        if (target.isEmpty || !blockRegistry.breakBlock(target, dropsConsumer = disappear())) {
             throw commandError("Failed to set '$block' at $position.")
         }
         if (!blockRegistry.setBlock(target, block, payload)) {
