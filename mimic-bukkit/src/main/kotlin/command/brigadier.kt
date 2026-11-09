@@ -153,8 +153,9 @@ internal fun CommandContext<CommandSourceStack>.getPlayer(name: String): Player 
     getArgument<PlayerSelectorArgumentResolver>(name).resolve(source).firstOrNull()
         ?: throw commandError("No player was found")
 
-internal fun CommandContext<CommandSourceStack>.getPlayerOrDefault(name: String, default: Player): Player =
-    if (hasArgument(name)) getPlayer(name) else default
+/** Returns the player from the argument [name]. If it is not specified, [sender] must be a player. */
+internal fun CommandContext<CommandSourceStack>.getPlayerOrSender(name: String, sender: CommandSender): Player =
+    if (hasArgument(name)) getPlayer(name) else sender as Player
 
 internal fun CommandContext<CommandSourceStack>.getBlockLocation(name: String): Location =
     getArgument<BlockPositionResolver>(name).resolve(source).toLocation(source.location.world)

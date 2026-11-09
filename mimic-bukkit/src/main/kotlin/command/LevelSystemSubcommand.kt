@@ -30,7 +30,6 @@ import io.papermc.paper.command.brigadier.argument.CustomArgumentType
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.append
@@ -55,7 +54,7 @@ internal fun CommandBuilder.levelSystemSubcommand(mimic: Mimic) = literal("xp") 
     literal("info") {
         executesPlayer(infoCommandExecutor(mimic))
         argument(TARGET, ArgumentTypes.player()) {
-            executesPlayer(infoCommandExecutor(mimic))
+            executesAny(infoCommandExecutor(mimic))
         }
     }
 
@@ -64,7 +63,7 @@ internal fun CommandBuilder.levelSystemSubcommand(mimic: Mimic) = literal("xp") 
         suggests { _, builder -> suggestValues(builder) }
         executesPlayer(changeCommandExecutor(mimic))
         argument(TARGET, ArgumentTypes.player()) {
-            executesPlayer(changeCommandExecutor(mimic))
+            executesAny(changeCommandExecutor(mimic))
         }
     }
 }
@@ -105,8 +104,8 @@ private fun ExpValue.describe(): Component {
     }
 }
 
-private fun infoCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
-    val target = context.getPlayerOrDefault(TARGET, sender)
+private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
+    val target = context.getPlayerOrSender(TARGET, sender)
     val provider = mimic.getLevelSystemProvider()
     val system = provider.getSystem(target)
 
@@ -127,9 +126,9 @@ private fun infoCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender,
     sender.sendMessage(message)
 }
 
-private fun changeCommandExecutor(mimic: Mimic): CommandAction<Player> = { sender, context ->
+private fun changeCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
     val value = context.getArgument<ExpValue>(VALUE)
-    val target = context.getPlayerOrDefault(TARGET, sender)
+    val target = context.getPlayerOrSender(TARGET, sender)
     catchUnsupported {
         val system = mimic.getLevelSystem(target)
         @Suppress("DEPRECATION") // Allow using exp setter
