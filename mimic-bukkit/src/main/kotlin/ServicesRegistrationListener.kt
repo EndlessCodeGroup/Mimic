@@ -19,10 +19,21 @@ internal class ServicesRegistrationListener(
 
     @EventHandler
     fun onServiceRegistered(event: ServiceRegisterEvent) {
-        val service = event.provider.provider
+        forwardService(event.provider)
+    }
+
+    /** Forwards services registered in [ServicesManager] before this listener was registered. */
+    fun forwardRegisteredServices() {
+        servicesManager.knownServices
+            .flatMap { servicesManager.getRegistrations(it) }
+            .forEach(::forwardService)
+    }
+
+    private fun forwardService(registration: RegisteredServiceProvider<*>) {
+        val service = registration.provider
         if (service is MimicService && service !is WrappedMimicService) {
-            val serviceClass = event.provider.service
-            val plugin = event.provider.plugin
+            val serviceClass = registration.service
+            val plugin = registration.plugin
             Log.w(
                 """
                 Service ${serviceClass.name} with id '${service.id}' registered in deprecated way.
@@ -32,7 +43,7 @@ internal class ServicesRegistrationListener(
                 """.trimIndent()
             )
             @Suppress("UNCHECKED_CAST") // We have checked before that service is instance of MimicService
-            registerService(event.provider as RegisteredServiceProvider<MimicService>)
+            registerService(registration as RegisteredServiceProvider<MimicService>)
         }
     }
 

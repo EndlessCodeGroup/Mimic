@@ -81,7 +81,11 @@ public class MimicPlugin : JavaPlugin() {
     override fun onEnable() {
         if (isReleased) initMetrics()
         registerCommand(mimic, config)
-        pluginManager.registerEvents(ServicesRegistrationListener(servicesManager, mimic), this)
+        pluginManager.registerEvents(mimic, this)
+
+        val servicesRegistrationListener = ServicesRegistrationListener(servicesManager, mimic)
+        pluginManager.registerEvents(servicesRegistrationListener, this)
+        servicesRegistrationListener.forwardRegisteredServices()
     }
 
     @OptIn(ExperimentalMimicApi::class)
