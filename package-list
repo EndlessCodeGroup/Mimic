@@ -12,6 +12,7 @@ ru.endlesscode.mimic.util
 module:mimic-bukkit
 ru.endlesscode.mimic
 ru.endlesscode.mimic.impl.battlelevels
+ru.endlesscode.mimic.impl.craftengine
 ru.endlesscode.mimic.impl.customitems
 ru.endlesscode.mimic.impl.heroes
 ru.endlesscode.mimic.impl.mimic
