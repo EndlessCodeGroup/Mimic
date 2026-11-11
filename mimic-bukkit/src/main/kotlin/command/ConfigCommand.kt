@@ -62,6 +62,7 @@ internal fun CommandBuilder.configSubcommand(
                 ITEMS_REGISTRY,
                 "items registry",
                 { mimic.getAllItemsRegistries().keys - MinecraftItemsRegistry.ID },
+                permanentOptions = setOf(MinecraftItemsRegistry.ID),
             ) { sender, itemsRegistry ->
                 config.disabledItemsRegistries += itemsRegistry
                 showConfig(sender)
@@ -83,6 +84,7 @@ internal fun CommandBuilder.configSubcommand(
                 BLOCK_REGISTRY,
                 "block registry",
                 { mimic.getAllBlockRegistries().keys - MinecraftBlockRegistry.ID },
+                permanentOptions = setOf(MinecraftBlockRegistry.ID),
             ) { sender, blockRegistry ->
                 config.disabledBlockRegistries += blockRegistry
                 showConfig(sender)
@@ -113,11 +115,13 @@ private fun CommandBuilder.stringSetArgument(
     name: String,
     valueDescription: String,
     provideOptions: () -> Set<String>,
+    permanentOptions: Set<String> = emptySet(),
     action: (sender: CommandSender, value: String) -> Unit,
 ) = argument(name, StringArgumentType.word()) {
     suggestsStrings(provideOptions = provideOptions)
     executesAny { sender, context ->
         val value = context.getArgument<String>(name)
+        if (value in permanentOptions) throw commandError("Built-in $valueDescription '$value' can't be disabled")
         if (value !in provideOptions()) throw commandError("Unknown $valueDescription '$value'")
         action(sender, value)
     }

@@ -135,7 +135,12 @@ private fun changeCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = 
         when (value.operation) {
             ExpOperation.SET -> when (value.unit) {
                 ExpUnit.LEVELS -> system.level = value.levels
-                ExpUnit.POINTS -> system.exp = value.amount
+                ExpUnit.POINTS -> {
+                    // Exp points should be within the current level, the full bar is the next level
+                    val maxExp = system.totalExpToNextLevel
+                    if (maxExp >= 0 && value.amount >= maxExp) throw pointsAboveLevelError(maxExp)
+                    system.exp = value.amount
+                }
                 ExpUnit.TOTAL -> system.totalExp = value.amount
             }
             ExpOperation.GIVE -> when (value.unit) {
@@ -223,6 +228,8 @@ private fun String.toExpValueOrNull(): ExpValue? {
 private val AMOUNT_PATTERN = Regex("[+-]?\\d+(\\.\\d+)?")
 private val VALUE_PATTERN = Regex("([+-]?)(\\d+(?:\\.\\d+)?)([lptLPT]?)")
 private fun totalChangeError() = commandError("Total exp can only be set or checked, use L or P to give or take exp.")
+private fun pointsAboveLevelError(maxExp: Double) =
+    commandError("Exp points should be less than %.1f on the current level, use T to set total exp or + to give exp.".format(maxExp))
 
 private val VALUE_DESCRIPTION = text {
     color(NamedTextColor.GRAY)

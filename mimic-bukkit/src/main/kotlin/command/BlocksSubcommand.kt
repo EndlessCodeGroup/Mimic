@@ -10,6 +10,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer.Companion.disappear
@@ -69,10 +70,14 @@ internal fun CommandBuilder.blocksSubcommand(blockRegistry: BukkitBlockRegistry)
     literal("break") {
         executesPlayer { sender, _ ->
             val targetBlock = sender.getTargetBlockExact(TARGET_DISTANCE) ?: throw commandError("You aren't looking at a block.")
-            breakBlock(blockRegistry, sender, targetBlock.location)
+            breakBlock(blockRegistry, sender, targetBlock.location, sender.inventory.itemInMainHand)
         }
         argument(LOCATION, ArgumentTypes.blockPosition()) {
-            executesPlayer { sender, context -> breakBlock(blockRegistry, sender, context.getBlockLocation(LOCATION)) }
+            executesAny { sender, context ->
+                // Non-player senders break the block without a tool
+                val tool = (sender as? Player)?.inventory?.itemInMainHand
+                breakBlock(blockRegistry, sender, context.getBlockLocation(LOCATION), tool)
+            }
         }
     }
 
@@ -219,11 +224,11 @@ private fun compareTargetedBlock(blockRegistry: BukkitBlockRegistry, sender: Pla
     })
 }
 
-private fun breakBlock(blockRegistry: BukkitBlockRegistry, sender: Player, location: Location) {
+private fun breakBlock(blockRegistry: BukkitBlockRegistry, sender: CommandSender, location: Location, tool: ItemStack?) {
     val position = location.toPosition()
     // Get ID before breaking as the block is gone after it
     val blockId = blockRegistry.getBlockId(location.block)
-    if (!blockRegistry.breakBlock(location.block, sender.inventory.itemInMainHand)) {
+    if (!blockRegistry.breakBlock(location.block, tool)) {
         throw commandError("Can't break block at $position.")
     }
     sender.sendMessage(successText {
