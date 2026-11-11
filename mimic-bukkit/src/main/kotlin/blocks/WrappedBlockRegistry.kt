@@ -35,6 +35,8 @@ internal class WrappedBlockRegistry(
 
     override fun getBlockIdFromItem(blockItem: ItemStack) = delegate.getBlockIdFromItem(blockItem)
 
+    override fun getBlockItem(blockId: String, amount: Int) = delegate.getBlockItem(blockId, amount)
+
     override fun setBlock(block: Block, blockId: String, payload: Any?) = delegate.setBlock(block, blockId, payload)
 
     override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>) =

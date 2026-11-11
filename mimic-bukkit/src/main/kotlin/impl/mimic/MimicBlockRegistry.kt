@@ -56,6 +56,12 @@ public class MimicBlockRegistry internal constructor(
     override fun getBlockIdFromItem(blockItem: ItemStack): String? =
         identify(blockItem)?.let { (provider, id) -> provider.namespaced(id) }
 
+    override fun getBlockItem(blockId: String, amount: Int): ItemStack? {
+        val key = parseKey(blockId) ?: return null
+        val provider = getRegistries(key).find { it.tryIsBlockExists(key.key) } ?: return null
+        return provider.tryGetBlockItem(key.key, amount)
+    }
+
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
         if (!block.isEmpty) return false
         val key = parseKey(blockId) ?: return false

@@ -49,6 +49,12 @@ public class MinecraftBlockRegistry : BukkitBlockRegistry {
         return blocksByItem[blockItem.type]?.name?.lowercase()
     }
 
+    override fun getBlockItem(blockId: String, amount: Int): ItemStack? {
+        val item = getMaterial(blockId)?.createBlockData()?.placementMaterial ?: return null
+        if (!item.isItem || item.isAir) return null
+        return ItemStack(item, amount.coerceIn(1, item.maxStackSize))
+    }
+
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
         if (!block.isEmpty) return false
         val material = getMaterial(blockId) ?: return false

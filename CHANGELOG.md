@@ -12,7 +12,7 @@ Java 21 is required.
 ### BlockRegistry API
 
 This version introduces new *experimental* BlockRegistry API.
-It can be used to get IDs of placed blocks and block items, set blocks, and break blocks passing drops to a custom consumer.
+It can be used to get IDs of placed blocks and block items, get items placing blocks, set blocks, and break blocks passing drops to a custom consumer.
 Block IDs from all registries are available via `Mimic.getBlockRegistry()`, namespaced with the registry ID.
 Block IDs are [resource locations](https://minecraft.wiki/w/Resource_location): `minecraft:stone`, `craftengine:default/palm_log`.
 ID without namespace or with the reserved `mimic` namespace is searched over all registries in order of priority.

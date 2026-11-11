@@ -102,6 +102,8 @@ public final class ru/endlesscode/mimic/impl/mimic/MimicBlockRegistry : ru/endle
 	public fun getBlockId (Lorg/bukkit/block/Block;)Ljava/lang/String;
 	public synthetic fun getBlockIdFromItem (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getBlockIdFromItem (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public synthetic fun getBlockItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getBlockItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
 	public fun getId ()Ljava/lang/String;
 	public fun getKnownIds ()Ljava/util/Collection;
 	public fun isBlockExists (Ljava/lang/String;)Z
@@ -344,6 +346,8 @@ public final class ru/endlesscode/mimic/impl/vanilla/MinecraftBlockRegistry : ru
 	public fun getBlockId (Lorg/bukkit/block/Block;)Ljava/lang/String;
 	public synthetic fun getBlockIdFromItem (Ljava/lang/Object;)Ljava/lang/String;
 	public fun getBlockIdFromItem (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public synthetic fun getBlockItem (Ljava/lang/String;I)Ljava/lang/Object;
+	public fun getBlockItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
 	public fun getId ()Ljava/lang/String;
 	public synthetic fun getKnownIds ()Ljava/util/Collection;
 	public fun getKnownIds ()Ljava/util/List;

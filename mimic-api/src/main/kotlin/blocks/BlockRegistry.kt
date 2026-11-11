@@ -40,6 +40,21 @@ public interface BlockRegistry<BlockT : Any, ItemStackT : Any> : MimicService {
     /** Returns ID of the block placed by the given [blockItem], or `null` if it doesn't belong to this registry. */
     public fun getBlockIdFromItem(blockItem: ItemStackT): String?
 
+    /**
+     * Returns item placing the block with the given [blockId], or `null` if the block has no item or the ID is unknown.
+     */
+    public fun getBlockItem(blockId: String): ItemStackT? = getBlockItem(blockId, amount = 1)
+
+    /**
+     * Returns item stack with the given [amount] placing the block with the given [blockId],
+     * or `null` if the block has no item or the ID is unknown.
+     * Some blocks, like fire, can't be placed by an item.
+     *
+     * If given [amount] is greater than maximum possible, will use maximum possible amount.
+     * Amount shouldn't be less than `1`.
+     */
+    public fun getBlockItem(blockId: String, amount: Int): ItemStackT?
+
     /** Sets the block with the given [blockId] in place of the empty [block]. */
     public fun setBlock(block: BlockT, blockId: String): Boolean = setBlock(block, blockId, payload = null)
 

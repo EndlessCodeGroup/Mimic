@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.ServicePriority.*
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
@@ -138,6 +139,31 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     )
     fun `when check is block exists`(blockId: String, shouldExist: Boolean) {
         blockRegistry.isBlockExists(blockId) shouldBe shouldExist
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "stone,             STONE",
+        "minecraft:wheat,   WHEAT_SEEDS",
+        "custom:ruby_block, EMERALD",
+        "mimic:ruby_block,  EMERALD",
+    )
+    fun `when get block item - should return item from the block registry`(blockId: String, expected: Material) {
+        servicesManager.register(BukkitBlockRegistry::class.java, FailingBlockRegistry(), plugin, High)
+
+        val item = blockRegistry.getBlockItem(blockId, amount = 5)
+        assertNotNull(item, "Item should not be null")
+        // Not assertSoftly(item), it prints ItemStack requiring ItemFactory which isn't mocked
+        assertSoftly {
+            item.type shouldBe expected
+            item.amount shouldBe 5
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["unknown", "custom:stone", "bedrock"])
+    fun `when get item of unknown block or block without item - should return null`(blockId: String) {
+        blockRegistry.getBlockItem(blockId).shouldBeNull()
     }
 
     @ParameterizedTest
@@ -318,6 +344,12 @@ private class TestBlockRegistry : BukkitBlockRegistry {
         else -> blockItem.type.name.lowercase().takeIf(::isBlockExists)
     }
 
+    override fun getBlockItem(blockId: String, amount: Int): ItemStack? = when (blockId) {
+        "wheat" -> ItemStack(Material.WHEAT_SEEDS, amount)
+        "bedrock" -> null
+        else -> if (isBlockExists(blockId)) ItemStack(Material.valueOf(blockId.uppercase()), amount) else null
+    }
+
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
         lastPayload = payload
         if (!isBlockExists(blockId) || blockId == "bedrock") return false
@@ -349,6 +381,9 @@ private class CustomBlockRegistry : BukkitBlockRegistry {
     override fun getBlockIdFromItem(blockItem: ItemStack): String? =
         "ruby_block".takeIf { blockItem.type == Material.EMERALD }
 
+    override fun getBlockItem(blockId: String, amount: Int): ItemStack? =
+        if (blockId == "ruby_block") ItemStack(Material.EMERALD, amount) else null
+
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
         if (!isBlockExists(blockId)) return false
         block.type = Material.NOTE_BLOCK
@@ -372,6 +407,7 @@ private class FailingBlockRegistry : BukkitBlockRegistry {
     override fun isBlockExists(blockId: String): Boolean = error("Failure")
     override fun getBlockId(block: Block): String = error("Failure")
     override fun getBlockIdFromItem(blockItem: ItemStack): String = error("Failure")
+    override fun getBlockItem(blockId: String, amount: Int): ItemStack = error("Failure")
     override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean = error("Failure")
     override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>): Boolean =
         error("Failure")

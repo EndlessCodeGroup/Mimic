@@ -52,6 +52,15 @@ internal fun BlockRegistryProvider.tryGetBlockId(block: Block): Result<String?> 
 internal fun BlockRegistryProvider.tryGetBlockIdFromItem(blockItem: ItemStack): Result<String?> =
     runCatching { registry.getBlockIdFromItem(blockItem) }.onFailure { logImplementationError(this, it) }
 
+internal fun BlockRegistryProvider.tryGetBlockItem(blockId: String, amount: Int): ItemStack? {
+    return try {
+        registry.getBlockItem(blockId, amount)
+    } catch (e: Throwable) {
+        logImplementationError(this, e)
+        null
+    }
+}
+
 internal fun BlockRegistryProvider.trySetBlock(block: Block, blockId: String, payload: Any?): Boolean {
     return try {
         registry.setBlock(block, blockId, payload)
