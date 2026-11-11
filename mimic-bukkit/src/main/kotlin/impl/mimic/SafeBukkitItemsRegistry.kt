@@ -21,6 +21,7 @@ package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.authorsMention
 
 internal fun ItemsRegistryProvider.tryGetKnownIds(): Collection<String> {
     return try {
@@ -71,5 +72,5 @@ private fun logImplementationError(provider: ItemsRegistryProvider, throwable: T
     Log.w(throwable,
         "Error in ItemsRegistry '${provider.registry.id}' " +
                 "implemented via ${provider.plugin}. " +
-                "Please, report it to ${provider.plugin.pluginMeta.authors.joinToString()}.")
+                "Please, report it to ${provider.plugin.authorsMention}.")
 }

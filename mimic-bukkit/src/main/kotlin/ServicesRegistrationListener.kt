@@ -9,6 +9,7 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicesManager
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 
@@ -37,7 +38,7 @@ internal class ServicesRegistrationListener(
             Log.w(
                 """
                 Service ${serviceClass.name} with id '${service.id}' registered in deprecated way.
-                Please ask the ${plugin.name} authors (${plugin.pluginMeta.authors.joinToString()}) to migrate
+                Please ask ${plugin.authorsMention} to migrate
                 to the new service registration API introduced in Mimic v0.7:
                    https://github.com/EndlessCodeGroup/Mimic/releases/tag/v0.7
                 """.trimIndent()

@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.authorsMention
 
 internal fun BlockRegistryProvider.tryGetKnownIds(): Collection<String> {
     return try {
@@ -84,10 +85,9 @@ internal fun BlockRegistryProvider.tryBreakBlock(
 }
 
 
-@Suppress("UnstableApiUsage")
 private fun logImplementationError(provider: BlockRegistryProvider, throwable: Throwable) {
     Log.w(throwable,
         "Error in BlockRegistry '${provider.registry.id}' " +
                 "implemented via ${provider.plugin}. " +
-                "Please, report it to ${provider.plugin.pluginMeta.authors.joinToString()}.")
+                "Please, report it to ${provider.plugin.authorsMention}.")
 }
