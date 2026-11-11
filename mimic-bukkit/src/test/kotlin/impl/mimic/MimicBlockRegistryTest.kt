@@ -205,6 +205,12 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when drops consumer fails via wrapper - should drop all items on the ground`() {
+        wrap(testRegistry).breakBlock(mockBlock(Material.STONE), tool = null) { error("Failure") }.shouldBeTrue()
+        testRegistry.droppedOnGround.map { it.type } shouldContainExactly listOf(Material.STONE)
+    }
+
+    @Test
     fun `when registry is disabled in config - should ignore it`() {
         servicesManager.unregister(customRegistry)
         servicesManager.register(

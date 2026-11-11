@@ -77,13 +77,7 @@ public class MinecraftBlockRegistry : BukkitBlockRegistry {
         val drops = block.getDrops(tool) + takeContents(block)
         block.type = Material.AIR
 
-        val remainingDrops = try {
-            dropsConsumer.consume(drops)
-        } catch (e: Throwable) {
-            Log.w(e, "[$TAG] Drops consumer failed, dropping all items on the ground")
-            drops
-        }
-        for (item in remainingDrops) {
+        for (item in dropsConsumer.consume(drops)) {
             block.world.dropItemNaturally(block.location, item)
         }
         return true

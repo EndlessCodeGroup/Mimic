@@ -7,6 +7,7 @@ import org.bukkit.plugin.PluginManager
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.WrappedMimicService
 import ru.endlesscode.mimic.config.MimicConfig
+import ru.endlesscode.mimic.internal.Log
 
 @ExperimentalMimicApi
 internal class WrappedBlockRegistry(
@@ -37,7 +38,18 @@ internal class WrappedBlockRegistry(
     override fun setBlock(block: Block, blockId: String, payload: Any?) = delegate.setBlock(block, blockId, payload)
 
     override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>) =
-        delegate.breakBlock(block, tool, dropsConsumer)
+        delegate.breakBlock(block, tool, dropsConsumer.dropAllOnFailure())
+}
+
+/** Drops all items on the ground if the consumer fails, so they don't disappear when the block is already removed. */
+@ExperimentalMimicApi
+private fun DropsConsumer<ItemStack>.dropAllOnFailure() = DropsConsumer { drops ->
+    try {
+        consume(drops)
+    } catch (e: Throwable) {
+        Log.w(e, "Drops consumer failed, dropping all items on the ground")
+        drops
+    }
 }
 
 @ExperimentalMimicApi

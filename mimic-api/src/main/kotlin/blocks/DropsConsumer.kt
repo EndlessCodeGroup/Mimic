@@ -9,7 +9,10 @@ import ru.endlesscode.mimic.ExperimentalMimicApi
 @ExperimentalMimicApi
 public fun interface DropsConsumer<ItemStackT : Any> {
 
-    /** Consumes the [drops] and returns the items to drop on the ground near the broken block. */
+    /**
+     * Consumes the [drops] and returns the items to drop on the ground near the broken block.
+     * It should not throw exceptions, because the block may already be removed when it is called.
+     */
     public fun consume(drops: Collection<ItemStackT>): Collection<ItemStackT>
 
     public companion object {
