@@ -3,25 +3,17 @@ package ru.endlesscode.mimic.blocks
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
-import org.bukkit.plugin.PluginManager
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.WrappedMimicService
-import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.Log
 
 @ExperimentalMimicApi
 internal class WrappedBlockRegistry(
     private val delegate: BukkitBlockRegistry,
-    private val config: MimicConfig,
     pluginName: String,
-    pluginManager: PluginManager,
-) : WrappedMimicService(delegate, pluginName, pluginManager), BukkitBlockRegistry {
+) : WrappedMimicService(delegate, pluginName), BukkitBlockRegistry {
 
-    constructor(delegate: BukkitBlockRegistry, config: MimicConfig, plugin: Plugin)
-            : this(delegate, config, plugin.name, plugin.server.pluginManager)
-
-    override val isEnabled: Boolean
-        get() = super<WrappedMimicService>.isEnabled && id !in config.disabledBlockRegistries
+    constructor(delegate: BukkitBlockRegistry, plugin: Plugin) : this(delegate, plugin.name)
 
     override val knownIds: Collection<String> by delegate::knownIds
 

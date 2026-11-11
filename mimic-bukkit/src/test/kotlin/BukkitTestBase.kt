@@ -48,6 +48,7 @@ open class BukkitTestBase {
 
     private fun mockPlugin(mockServer: Server): Plugin = mockk {
         every { name } returns "Mimic"
+        every { isEnabled } returns true
         every { server } returns mockServer
         every { pluginMeta } returns mockk {
             every { authors } returns listOf("Plugin Author")

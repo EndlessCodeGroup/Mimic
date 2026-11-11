@@ -42,7 +42,7 @@ public class MimicItemsRegistry internal constructor(
         }
 
     internal val providers: List<ItemsRegistryProvider>
-        get() = registries.entries.filter { it.registry.isEnabled }
+        get() = registries.enabledEntries
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
         val (namespace, id) = itemId.splitBySeparator()

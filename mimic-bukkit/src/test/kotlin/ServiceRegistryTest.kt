@@ -20,7 +20,10 @@ internal class ServiceRegistryTest : BukkitTestBase() {
     private val anotherThirdParty = mockPlugin("AnotherThirdParty")
 
     // SUT
-    private val registry = ServiceRegistry<TestService>("TestApi", plugin, reservedIds = setOf("default"))
+    private var disabledIds = emptySet<String>()
+    private val registry = ServiceRegistry<TestService>(
+        "TestApi", plugin, defaultId = "default",
+    ) { disabledIds }
 
     @Test
     fun `when register services - should sort them by priority keeping registration order`() {
@@ -92,6 +95,12 @@ internal class ServiceRegistryTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when third party registers mimic ID - should not register it`() {
+        registry.register(TestService("mimic"), thirdParty, Highest).shouldBeFalse()
+        registry.registeredIds() shouldContainExactly emptyList()
+    }
+
+    @Test
     fun `when built-in registers reserved ID - should register it`() {
         registry.register(TestService("default"), plugin, Lowest).shouldBeTrue()
         registry.registeredIds() shouldContainExactly listOf("default")
@@ -116,12 +125,24 @@ internal class ServiceRegistryTest : BukkitTestBase() {
         registry.registeredIds() shouldContainExactly listOf("built-in", "another-third-party")
     }
 
+    @Test
+    fun `when get enabled services - should skip disabled plugins, services and IDs`() {
+        registry.register(TestService("enabled"), thirdParty, Normal)
+        registry.register(TestService("disabled-plugin"), mockPlugin("DisabledPlugin", isEnabled = false), Normal)
+        registry.register(TestService("disabled-service", isEnabled = false), thirdParty, Normal)
+        registry.register(TestService("disabled-id"), thirdParty, Normal)
+        disabledIds = setOf("disabled-id")
+
+        registry.enabledEntries.map { it.service.id } shouldContainExactly listOf("enabled")
+    }
+
     private fun ServiceRegistry<TestService>.registeredIds() = entries.map { it.service.id }
     private fun ServiceRegistry<TestService>.registeredPlugins() = entries.map { it.plugin }
 
-    private fun mockPlugin(name: String): Plugin = mockk {
+    private fun mockPlugin(name: String, isEnabled: Boolean = true): Plugin = mockk {
         every { this@mockk.name } returns name
+        every { this@mockk.isEnabled } returns isEnabled
     }
 
-    private class TestService(override val id: String) : MimicService
+    private class TestService(override val id: String, override val isEnabled: Boolean = true) : MimicService
 }

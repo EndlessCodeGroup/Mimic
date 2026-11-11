@@ -7,8 +7,11 @@ import ru.endlesscode.mimic.internal.Log
 /**
  * Registry of implementations of a single API, keyed by service ID.
  *
- * [reservedIds] are IDs of Mimic default implementations.
- * They can be registered only by Mimic itself and are always placed after other services, regardless of priority.
+ * A service is enabled if its plugin is enabled, the service itself is enabled, and its ID is not in [disabledIds].
+ *
+ * [defaultId] is the ID of Mimic default implementation.
+ * It can be registered only by Mimic itself and is always placed after other services, regardless of priority.
+ * ID `mimic` is reserved for Mimic too.
  *
  * Registration rules for a service with an already registered ID:
  * - A service registered again by the same plugin replaces the previous one.
@@ -19,7 +22,8 @@ import ru.endlesscode.mimic.internal.Log
 internal class ServiceRegistry<T : MimicService>(
     val apiName: String,
     private val mimicPlugin: Plugin,
-    private val reservedIds: Set<String> = emptySet(),
+    private val defaultId: String,
+    private val disabledIds: () -> Set<String> = { emptySet() },
 ) {
 
     /** Registered services sorted by priority from the highest to the lowest, default implementations last. */
@@ -27,12 +31,21 @@ internal class ServiceRegistry<T : MimicService>(
     var entries: List<ServiceEntry<T>> = emptyList()
         private set
 
+    /** Enabled services in the same order as [entries]. */
+    val enabledEntries: List<ServiceEntry<T>>
+        get() {
+            val disabledIds = disabledIds()
+            return entries.filter { (service, plugin) ->
+                plugin.isEnabled && service.isEnabled && service.id !in disabledIds
+            }
+        }
+
     /** Registers the given [service], returns `true` if it was registered. */
     @Synchronized
     fun register(service: T, plugin: Plugin, priority: ServicePriority): Boolean {
         val id = service.id
         val isBuiltIn = plugin == mimicPlugin
-        if (id in reservedIds && !isBuiltIn) {
+        if (!isBuiltIn && (id == defaultId || id == MIMIC_ID)) {
             Log.w("$apiName '$id' by $plugin is not registered, because the ID is reserved by Mimic.")
             return false
         }
@@ -69,7 +82,7 @@ internal class ServiceRegistry<T : MimicService>(
         val entry = ServiceEntry(service, plugin, priority)
         val newEntries = if (existing == null) entries + entry else entries.map { if (it === existing) entry else it }
         entries = newEntries.sortedWith(
-            compareBy<ServiceEntry<T>> { it.service.id in reservedIds }.thenByDescending { it.priority }
+            compareBy<ServiceEntry<T>> { it.service.id == defaultId }.thenByDescending { it.priority }
         )
         return true
     }
@@ -79,9 +92,14 @@ internal class ServiceRegistry<T : MimicService>(
     fun unregisterAll(plugin: Plugin) {
         entries = entries.filter { it.plugin != plugin }
     }
+
+    private companion object {
+        /** Namespace of Mimic's combining registries. */
+        const val MIMIC_ID = "mimic"
+    }
 }
 
-internal class ServiceEntry<T : MimicService>(
+internal data class ServiceEntry<T : MimicService>(
     val service: T,
     val plugin: Plugin,
     val priority: ServicePriority,

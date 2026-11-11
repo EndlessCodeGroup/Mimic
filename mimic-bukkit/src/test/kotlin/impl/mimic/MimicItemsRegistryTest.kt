@@ -38,7 +38,7 @@ import kotlin.test.Test
 internal class MimicItemsRegistryTest : BukkitTestBase() {
 
     // SUT
-    private val registries = ServiceRegistry<BukkitItemsRegistry>("ItemsRegistry", plugin)
+    private val registries = ServiceRegistry<BukkitItemsRegistry>("ItemsRegistry", plugin, defaultId = "minecraft")
     private val itemsService: BukkitItemsRegistry = MimicItemsRegistry(registries)
 
     init {

@@ -1,17 +1,14 @@
 package ru.endlesscode.mimic
 
-import org.bukkit.plugin.PluginManager
-
 internal abstract class WrappedMimicService(
     private val delegate: MimicService,
-    private val pluginName: String,
-    private val pluginManager: PluginManager,
+    pluginName: String,
 ) : MimicService {
 
     final override val id: String = serviceId(delegate.id, pluginName)
 
     override val isEnabled: Boolean
-        get() = pluginManager.isPluginEnabled(pluginName) && delegate.isEnabled
+        get() = delegate.isEnabled
 
     private companion object {
         /**

@@ -14,7 +14,6 @@ import io.mockk.verify
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.ServicePriority.*
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
@@ -26,7 +25,6 @@ import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.blocks.WrappedBlockRegistry
-import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.parseKey
 import kotlin.test.Test
 
@@ -37,7 +35,10 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     private val customRegistry = CustomBlockRegistry()
 
     // SUT
-    private val registries = ServiceRegistry<BukkitBlockRegistry>("BlockRegistry", plugin)
+    private var disabledRegistries = emptySet<String>()
+    private val registries = ServiceRegistry<BukkitBlockRegistry>(
+        "BlockRegistry", plugin, defaultId = "minecraft",
+    ) { disabledRegistries }
     private val blockRegistry: BukkitBlockRegistry = MimicBlockRegistry(registries, parseKey = plugin::parseKey)
 
     init {
@@ -232,8 +233,7 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
 
     @Test
     fun `when registry is disabled in config - should ignore it`() {
-        // Replaces the registry with the same ID registered with lower priority
-        registries.register(wrap(customRegistry, disabledRegistries = setOf(customRegistry.id)), plugin, High)
+        disabledRegistries = setOf(customRegistry.id)
 
         assertSoftly {
             blockRegistry.isBlockExists("custom:ruby_block").shouldBeFalse()
@@ -297,18 +297,7 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
         every { isEmpty } returns (material == Material.AIR)
     }
 
-    private fun wrap(
-        registry: BukkitBlockRegistry,
-        disabledRegistries: Set<String> = emptySet(),
-    ): BukkitBlockRegistry {
-        val pluginManager = mockk<PluginManager> {
-            every { isPluginEnabled(any<String>()) } returns true
-        }
-        val config = mockk<MimicConfig> {
-            every { disabledBlockRegistries } returns disabledRegistries
-        }
-        return WrappedBlockRegistry(registry, config, "Mimic", pluginManager)
-    }
+    private fun wrap(registry: BukkitBlockRegistry): BukkitBlockRegistry = WrappedBlockRegistry(registry, "Mimic")
 }
 
 /** Registry imitating vanilla blocks. */

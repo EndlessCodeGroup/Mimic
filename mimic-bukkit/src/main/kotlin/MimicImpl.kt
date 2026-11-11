@@ -33,28 +33,42 @@ import ru.endlesscode.mimic.inventory.BukkitPlayerInventory.Provider as PlayerIn
  */
 @OptIn(ExperimentalMimicApi::class)
 internal class MimicImpl(
-    mimicPlugin: Plugin,
+    private val mimicPlugin: Plugin,
     private val config: MimicConfig,
 ) : Mimic, Listener {
 
-    private val blockRegistries = ServiceRegistry<BukkitBlockRegistry>(
-        "BlockRegistry", mimicPlugin, reservedIds = setOf(MinecraftBlockRegistry.ID, MimicBlockRegistry.ID),
+    private val blockRegistries = registry<BukkitBlockRegistry>(
+        "BlockRegistry",
+        defaultId = MinecraftBlockRegistry.ID,
+        disabledIds = { config.disabledBlockRegistries },
     )
-    private val classSystems = ServiceRegistry<BukkitClassSystem.Provider>(
-        "ClassSystem", mimicPlugin, reservedIds = setOf(PermissionsClassSystem.ID),
+    private val classSystems = registry<BukkitClassSystem.Provider>(
+        "ClassSystem",
+        defaultId = PermissionsClassSystem.ID,
     )
-    private val playerInventories = ServiceRegistry<PlayerInventoryProvider>(
-        "PlayerInventory", mimicPlugin, reservedIds = setOf(MinecraftPlayerInventory.ID),
+    private val playerInventories = registry<PlayerInventoryProvider>(
+        "PlayerInventory",
+        defaultId = MinecraftPlayerInventory.ID,
     )
-    private val itemsRegistries = ServiceRegistry<BukkitItemsRegistry>(
-        "ItemsRegistry", mimicPlugin, reservedIds = setOf(MinecraftItemsRegistry.ID, MimicItemsRegistry.ID),
+    private val itemsRegistries = registry<BukkitItemsRegistry>(
+        "ItemsRegistry",
+        defaultId = MinecraftItemsRegistry.ID,
+        disabledIds = { config.disabledItemsRegistries },
     )
-    private val levelSystems = ServiceRegistry<BukkitLevelSystem.Provider>(
-        "LevelSystem", mimicPlugin, reservedIds = setOf(MinecraftLevelSystem.ID),
+    private val levelSystems = registry<BukkitLevelSystem.Provider>(
+        "LevelSystem",
+        defaultId = MinecraftLevelSystem.ID,
     )
 
     private val blockRegistry = MimicBlockRegistry(blockRegistries, parseKey = mimicPlugin::parseKey)
     private val itemsRegistry = MimicItemsRegistry(itemsRegistries)
+    private val registries = listOf(blockRegistries, classSystems, playerInventories, itemsRegistries, levelSystems)
+
+    private fun <T : MimicService> registry(
+        apiName: String,
+        defaultId: String,
+        disabledIds: () -> Set<String> = { emptySet() },
+    ): ServiceRegistry<T> = ServiceRegistry<T>(apiName, mimicPlugin, defaultId, disabledIds)
 
     // region Block Registry
     @ExperimentalMimicApi
@@ -64,7 +78,7 @@ internal class MimicImpl(
         plugin: Plugin,
         priority: ServicePriority
     ): BukkitBlockRegistry? = blockRegistries.tryRegister(apiLevel, plugin, priority) {
-        WrappedBlockRegistry(registry, config, plugin)
+        WrappedBlockRegistry(registry, plugin)
     }
 
     @ExperimentalMimicApi
@@ -100,7 +114,8 @@ internal class MimicImpl(
     }
 
     @ExperimentalMimicApi
-    override fun getPlayerInventoryProvider(): PlayerInventoryProvider = playerInventories.load(config.inventoryProvider)
+    override fun getPlayerInventoryProvider(): PlayerInventoryProvider =
+        playerInventories.load(config.inventoryProvider)
 
     @ExperimentalMimicApi
     override fun getAllPlayerInventoryProviders(): Map<String, PlayerInventoryProvider> = playerInventories.loadAll()
@@ -113,7 +128,7 @@ internal class MimicImpl(
         plugin: Plugin,
         priority: ServicePriority,
     ): BukkitItemsRegistry? = itemsRegistries.tryRegister(apiLevel, plugin, priority) {
-        WrappedItemsRegistry(registry, config, plugin)
+        WrappedItemsRegistry(registry, plugin)
     }
 
     override fun getItemsRegistry(): BukkitItemsRegistry = itemsRegistry
@@ -136,11 +151,7 @@ internal class MimicImpl(
 
     @EventHandler
     fun onPluginDisable(event: PluginDisableEvent) {
-        blockRegistries.unregisterAll(event.plugin)
-        classSystems.unregisterAll(event.plugin)
-        playerInventories.unregisterAll(event.plugin)
-        itemsRegistries.unregisterAll(event.plugin)
-        levelSystems.unregisterAll(event.plugin)
+        registries.forEach { it.unregisterAll(event.plugin) }
     }
 
     private inline fun <Service : MimicService> ServiceRegistry<Service>.tryRegister(
@@ -175,7 +186,7 @@ internal class MimicImpl(
     }
 
     private fun <T : MimicService> ServiceRegistry<T>.load(preferred: String): T {
-        val services = entries.mapNotNull { it.service.takeIf(MimicService::isEnabled) }
+        val services = enabledEntries.map { it.service }
         val defaultService = services.firstOrNull()
         checkNotNull(defaultService) {
             """

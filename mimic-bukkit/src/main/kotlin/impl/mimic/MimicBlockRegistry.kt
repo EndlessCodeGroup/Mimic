@@ -29,7 +29,7 @@ public class MimicBlockRegistry internal constructor(
         }
 
     internal val providers: List<BlockRegistryProvider>
-        get() = registries.entries.filter { it.registry.isEnabled }
+        get() = registries.enabledEntries
 
     override fun isSameBlock(block: Block, blockId: String): Boolean {
         val key = parseKey(blockId) ?: return false

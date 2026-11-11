@@ -7,7 +7,6 @@ import io.mockk.mockk
 import org.bukkit.entity.Player
 import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.plugin.Plugin
-import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.ServicePriority.Lowest
 import org.bukkit.plugin.ServicePriority.Normal
 import ru.endlesscode.mimic.config.MimicConfig
@@ -17,9 +16,6 @@ import kotlin.test.Test
 internal class MimicImplTest : BukkitTestBase() {
 
     private val enabledPlugins = mutableSetOf("Mimic", "ThirdParty")
-    private val pluginManager: PluginManager = mockk {
-        every { isPluginEnabled(any<String>()) } answers { firstArg<String>() in enabledPlugins }
-    }
     private val mimicPlugin = mockPlugin("Mimic")
     private val thirdParty = mockPlugin("ThirdParty")
 
@@ -71,9 +67,7 @@ internal class MimicImplTest : BukkitTestBase() {
 
     private fun mockPlugin(name: String): Plugin = mockk {
         every { this@mockk.name } returns name
-        every { server } returns mockk {
-            every { pluginManager } returns this@MimicImplTest.pluginManager
-        }
+        every { isEnabled } answers { name in enabledPlugins }
     }
 
     private class TestLevelSystemProvider(override val id: String) : BukkitLevelSystem.Provider {
