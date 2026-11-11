@@ -21,14 +21,17 @@ package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.ServiceRegistry
+import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.MimicId
+import ru.endlesscode.mimic.internal.authorsMention
+import ru.endlesscode.mimic.internal.parseMimicId
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import java.util.concurrent.ConcurrentHashMap
 
 /**
- * Items registry combining all items registries.
- *
- * It uses service ID as namespace for items IDs.
- * For example: `acacia_boat` -> `minecraft:acacia_boat`.
- * If you use item ID without namespace it will search over all registries.
+ * Items registry combining all items registries, using their IDs as namespaces: `acacia_boat` -> `minecraft:acacia_boat`.
+ * ID without namespace or with the `mimic` namespace is searched over all registries.
+ * Deprecated IDs with uppercase letters or more than one `:` are accepted with a warning.
  */
 public class MimicItemsRegistry internal constructor(
     private val registries: ServiceRegistry<BukkitItemsRegistry>,
@@ -38,56 +41,83 @@ public class MimicItemsRegistry internal constructor(
 
     override val knownIds: Collection<String>
         get() = providers.flatMap { provider ->
-            provider.tryGetKnownIds().map { provider.namespaced(it) }
+            provider.tryGetKnownIds().mapNotNull { provider.namespaced(it) }
         }
 
     internal val providers: List<ItemsRegistryProvider>
         get() = registries.enabledEntries
 
+    /** Keys of the warnings already logged, to log each warning once. */
+    private val loggedWarnings = ConcurrentHashMap.newKeySet<String>()
+
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
-        val (namespace, id) = itemId.splitBySeparator()
-        return getRegistries(namespace)
-            .any { provider -> provider.tryIsSameItem(item, id) }
+        val id = parse(itemId) ?: return false
+        return getRegistries(id)
+            .any { provider -> provider.tryIsSameItem(item, id.path) }
     }
 
     override fun isItemExists(itemId: String): Boolean {
-        val (namespace, id) = itemId.splitBySeparator()
-        return getRegistries(namespace)
-            .any { provider -> provider.tryIsItemExists(id) }
+        val id = parse(itemId) ?: return false
+        return getRegistries(id)
+            .any { provider -> provider.tryIsItemExists(id.path) }
     }
 
     override fun getItemId(item: ItemStack): String? {
-        return providers.asSequence()
-            .mapNotNull { provider -> provider.tryGetItemId(item)?.let { provider.namespaced(it) } }
-            .firstOrNull()
+        val (provider, itemId) = providers.firstNotNullOfOrNull { provider ->
+            provider.tryGetItemId(item)?.let { provider to it }
+        } ?: return null
+        return provider.namespaced(itemId)
     }
 
     override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
-        val (namespace, id) = itemId.splitBySeparator()
-        return getRegistries(namespace)
-            .mapNotNull { service -> service.tryGetItem(id, payload, amount) }
+        val id = parse(itemId) ?: return null
+        return getRegistries(id)
+            .mapNotNull { service -> service.tryGetItem(id.path, payload, amount) }
             .firstOrNull()
     }
 
-    private fun getRegistries(namespace: String): Sequence<ItemsRegistryProvider> {
-        return if (namespace.isEmpty()) {
-            providers.asSequence()
-        } else {
-            providers.asSequence()
-                .filter { it.registry.id.equals(namespace, ignoreCase = true) }
-        }
+    private fun getRegistries(id: MimicId): Sequence<ItemsRegistryProvider> {
+        return providers.asSequence()
+            .filter { id.matches(it.registry.id) }
     }
 
-    private fun String.splitBySeparator(): Pair<String, String> {
-        return if (':' in this) {
-            val parts = split(":", limit = 2)
-            return parts[0] to parts[1];
-        } else {
-            "" to this
+    /** Parses the given [itemId], or returns `null` if it is invalid. */
+    private fun parse(itemId: String): MimicId? {
+        val lowercaseId = itemId.lowercase()
+        val id = parseMimicId(lowercaseId, allowLegacy = true) ?: return null
+
+        if (lowercaseId != itemId) {
+            warnOnce("uppercase:$itemId") { "Item ID '$itemId' is deprecated, use '$lowercaseId' instead." }
         }
+        if (id.isLegacy) {
+            warnOnce("legacy") { "Item ID '$itemId' contains more than one ':', this is deprecated." }
+        }
+        return id
     }
 
-    private fun ItemsRegistryProvider.namespaced(itemId: String) = "${registry.id}:$itemId"
+    /** Returns the given [itemId] prefixed with the registry ID, or `null` if the result is invalid. */
+    private fun ItemsRegistryProvider.namespaced(itemId: String): String? {
+        val namespacedId = "${registry.id}:$itemId"
+        val id = parseMimicId(namespacedId, allowLegacy = true)
+        when {
+            id == null -> warnOnce("invalid:${registry.id}") {
+                "Items registry '${registry.id}' returned invalid ID '$itemId', such items are ignored. " +
+                    "IDs may contain only a-z, 0-9, '.', '_', '-' and '/'. " +
+                    "Please, report it to ${plugin.authorsMention}."
+            }
+
+            id.isLegacy -> warnOnce("legacy:${registry.id}") {
+                "Items registry '${registry.id}' returned ID '$itemId' containing ':', this is deprecated. " +
+                    "Use '/' instead: '${itemId.replace(':', '/')}'. " +
+                    "Please, report it to ${plugin.authorsMention}."
+            }
+        }
+        return namespacedId.takeIf { id != null }
+    }
+
+    private inline fun warnOnce(key: String, message: () -> String) {
+        if (loggedWarnings.add(key)) Log.w(message())
+    }
 
     public companion object {
         public const val ID: String = "mimic"

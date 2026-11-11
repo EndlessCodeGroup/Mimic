@@ -21,7 +21,20 @@ package ru.endlesscode.mimic.items
 
 import ru.endlesscode.mimic.MimicService
 
-/** Service for getting items by theirs ID. Also, can be used to match ID with item. */
+/**
+ * Service for getting items by their ID. Also, can be used to match ID with item.
+ *
+ * Mimic uses [resource locations](https://minecraft.wiki/w/Resource_location) to identify items,
+ * where the namespace is the ID of an items registry: `[namespace]:[itemId]`, e.g. `minecraft:acacia_boat`.
+ * IDs without namespace or with the `mimic:` namespace are searched over all registries.
+ *
+ * ### Implementation Notes
+ *
+ * Implementations receive and return IDs without the registry namespace:
+ * lowercase paths of `a-z`, `0-9`, `.`, `_`, `-` and `/`.
+ * Mapping them to the plugin's own IDs is up to the implementation: `itemsadder:ruby_sword` -> `itemsadder/ruby_sword`.
+ * Invalid IDs are ignored.
+ */
 public interface ItemsRegistry<ItemStackT : Any> : MimicService {
 
     /** Returns all known item IDs. */

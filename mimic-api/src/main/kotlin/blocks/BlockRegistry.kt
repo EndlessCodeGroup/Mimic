@@ -6,16 +6,21 @@ import ru.endlesscode.mimic.MimicService
 /**
  * Registry to get, set and break blocks.
  *
- * Block IDs are [resource locations](https://minecraft.wiki/w/Resource_location),
- * where the namespace is the ID of a block registry, for example `craftengine:default/palm_log`.
- * IDs without namespace or with the `mimic` namespace are searched over all registries.
- *
- * Implementations work with IDs without the registry namespace.
- * A plugin's own namespace becomes the first path segment: `default:palm_log` -> `default/palm_log`.
+ * Mimic uses [resource locations](https://minecraft.wiki/w/Resource_location) to identify blocks,
+ * where the namespace is the ID of a block registry: `[namespace]:[blockId]`, e.g. `craftengine:default/palm_log`.
+ * IDs without namespace or with the `mimic:` namespace are searched over all registries.
  *
  * Methods changing blocks should be called from the server thread.
  * They fire no place or break events and make no protection checks, the caller is responsible for both.
  * Block physics is applied as usual, so neighboring blocks are updated.
+ *
+ * ### Implementation Notes
+ *
+ * Implementations receive and return IDs without the registry namespace:
+ * lowercase paths of `a-z`, `0-9`, `.`, `_`, `-` and `/`.
+ * Mapping them to the plugin's own IDs is up to the implementation: `default:palm_log` -> `default/palm_log`.
+ * Invalid IDs are ignored.
+ *
  * @since 0.9.0
  */
 @ExperimentalMimicApi

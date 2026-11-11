@@ -4,7 +4,9 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -25,7 +27,6 @@ import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.blocks.WrappedBlockRegistry
-import ru.endlesscode.mimic.internal.parseKey
 import kotlin.test.Test
 
 @OptIn(ExperimentalMimicApi::class)
@@ -39,7 +40,7 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     private val registries = ServiceRegistry<BukkitBlockRegistry>(
         "BlockRegistry", plugin, defaultId = "minecraft",
     ) { disabledRegistries }
-    private val blockRegistry: BukkitBlockRegistry = MimicBlockRegistry(registries, parseKey = plugin::parseKey)
+    private val blockRegistry: BukkitBlockRegistry = MimicBlockRegistry(registries)
 
     init {
         registries.register(testRegistry, plugin, Lowest)
@@ -131,6 +132,9 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
         "mimic:default/palm_log,        true",
         "minecraft:default/palm_log,    false",
         "custom:default:palm_log,       false",
+        ":stone,                        false",
+        "minecraft:,                    false",
+        "minecraft:stone!,              false",
     )
     fun `when check is block exists`(blockId: String, shouldExist: Boolean) {
         blockRegistry.isBlockExists(blockId) shouldBe shouldExist
@@ -284,6 +288,40 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
         blockRegistry.getBlockId(mockBlock(Material.NOTE_BLOCK)) shouldBe "custom:ruby_block"
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = ["Stone", "custom:default:palm_log", "minecraft:", "mine craft:stone"])
+    fun `when use invalid id - should not query registries`(blockId: String) {
+        val registry = mockk<BukkitBlockRegistry>(relaxed = true) {
+            every { id } returns "mock"
+            every { isEnabled } returns true
+        }
+        registries.register(registry, plugin, High)
+
+        assertSoftly(blockRegistry) {
+            isBlockExists(blockId).shouldBeFalse()
+            getBlockItem(blockId).shouldBeNull()
+            setBlock(mockBlock(Material.AIR), blockId).shouldBeFalse()
+        }
+        verify(exactly = 0) {
+            registry.isBlockExists(any())
+            registry.getBlockItem(any(), any())
+            registry.setBlock(any(), any(), any())
+        }
+    }
+
+    @Test
+    fun `when registry returns invalid id - should ignore it`() {
+        registries.register(InvalidIdBlockRegistry(), plugin, High)
+
+        assertSoftly(blockRegistry) {
+            knownIds shouldNotContain "invalid:Ruby Block"
+            knownIds shouldContain "invalid:emerald_block"
+            // Should not fall back to the vanilla registry
+            getBlockId(mockBlock(Material.STONE)).shouldBeNull()
+            getBlockId(mockBlock(Material.NOTE_BLOCK)) shouldBe "custom:ruby_block"
+        }
+    }
+
     @Test
     fun `when break air - should return false`() {
         val block = mockBlock(Material.AIR)
@@ -374,6 +412,20 @@ private class CustomBlockRegistry : BukkitBlockRegistry {
         block.type = Material.AIR
         return true
     }
+}
+
+/** Registry returning invalid IDs. */
+@OptIn(ExperimentalMimicApi::class)
+private class InvalidIdBlockRegistry : BukkitBlockRegistry {
+    override val id = "invalid"
+    override val knownIds = listOf("Ruby Block", "emerald_block")
+
+    override fun isBlockExists(blockId: String): Boolean = blockId in knownIds
+    override fun getBlockId(block: Block): String = knownIds.first()
+    override fun getBlockIdFromItem(blockItem: ItemStack): String = knownIds.first()
+    override fun getBlockItem(blockId: String, amount: Int): ItemStack? = null
+    override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean = false
+    override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>): Boolean = false
 }
 
 /** Registry failing on every call. */

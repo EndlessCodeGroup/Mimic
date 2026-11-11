@@ -18,7 +18,6 @@ import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftPlayerInventory
 import ru.endlesscode.mimic.internal.Log
-import ru.endlesscode.mimic.internal.parseKey
 import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
@@ -60,7 +59,7 @@ internal class MimicImpl(
         defaultId = MinecraftLevelSystem.ID,
     )
 
-    private val blockRegistry = MimicBlockRegistry(blockRegistries, parseKey = mimicPlugin::parseKey)
+    private val blockRegistry = MimicBlockRegistry(blockRegistries)
     private val itemsRegistry = MimicItemsRegistry(itemsRegistries)
     private val registries = listOf(blockRegistries, classSystems, playerInventories, itemsRegistries, levelSystems)
 

@@ -70,6 +70,18 @@ Commands are now easier to use in general:
 - Clearer command output: colored answers, errors for failed actions, click-to-copy IDs.
 - Item and block IDs are completed step by step: namespace first (`craftengine:`), then folder (`craftengine:default/`), then ID.
 
+### Item and block IDs format
+
+Item and block IDs now share one format (#66): a [resource location](https://minecraft.wiki/w/Resource_location) with the registry ID as namespace,
+like `minecraft:acacia_boat` or `craftengine:default/palm_log`.
+
+- Invalid IDs are rejected without querying registries.
+  Invalid IDs returned by registries are ignored with a warning, for example IDs with uppercase letters, including the registry ID.
+- Items: the `mimic` namespace searches over all registries, like IDs without namespace.
+- Registries map plugin IDs to Mimic IDs themselves: `itemsadder:ruby_sword` → `itemsadder/ruby_sword`.
+- **Deprecated:** item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`) are lowercased,
+  and IDs with more than one `:` (`ia:itemsadder:ruby_sword`) are passed as is. Both log a warning.
+
 ### API changes
 
 - Added tag `@since 0.8.0` to all APIs added in 0.8.0
