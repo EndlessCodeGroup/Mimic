@@ -105,11 +105,12 @@ private fun CommandBuilder.blockArgument(
 /** Suggests IDs of the block placed by item in hand, of the targeted block, and namespaces of block registries. */
 private fun blockHints(blockRegistry: BukkitBlockRegistry, sender: CommandSender): List<SuggestionHint> {
     val namespaces = (blockRegistry.unwrap() as? MimicBlockRegistry)?.providers.orEmpty().map { it.registry.id }
+    val knownIds = blockRegistry.knownIds
 
     return listOfNotNull(
         itemInHandBlockId(blockRegistry, sender)?.let { SuggestionHint(it, Component.text("Block placed by item in hand")) },
         targetedBlockId(blockRegistry, sender)?.let { SuggestionHint(it, Component.text("Targeted block")) },
-    ) + namespaces.map { SuggestionHint("$it:", Component.text("Blocks from $it")) }
+    ) + namespaces.map { SuggestionHint(collapseFolders("$it:", knownIds), Component.text("Blocks from $it")) }
 }
 
 /** Returns ID of the block placed by item in [sender]'s hand, or `null` if there is no such block. */

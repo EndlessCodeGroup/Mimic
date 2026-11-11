@@ -67,6 +67,7 @@ Commands are now easier to use in general:
 - Subcommand `info` is optional: `/mimic items`, `/mimic blocks`, `/mimic xp`, `/mimic inventory` and `/mimic class` show info.
   Info output lists available subcommands, click to use them, hover to see usage.
 - Clearer command output: colored answers, errors for failed actions, click-to-copy IDs.
+- Item and block IDs are completed step by step: namespace first (`craftengine:`), then folder (`craftengine:default/`), then ID.
 
 ### API changes
 

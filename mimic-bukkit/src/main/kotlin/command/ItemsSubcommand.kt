@@ -114,9 +114,10 @@ private fun CommandBuilder.itemArgument(
 private fun itemHints(itemRegistry: BukkitItemsRegistry, sender: CommandSender): List<SuggestionHint> {
     val itemInHandId = itemInHandId(itemRegistry, sender)
     val namespaces = (itemRegistry.unwrap() as? MimicItemsRegistry)?.providers.orEmpty().map { it.provider.id }
+    val knownIds = itemRegistry.knownIds
 
     return listOfNotNull(itemInHandId?.let { SuggestionHint(it, Component.text("Item in hand")) }) +
-        namespaces.map { SuggestionHint("$it:", Component.text("Items from $it")) }
+        namespaces.map { SuggestionHint(collapseFolders("$it:", knownIds), Component.text("Items from $it")) }
 }
 
 /** Returns ID of the item in [sender]'s hand, or `null` if sender isn't a player or the hand is empty. */

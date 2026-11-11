@@ -84,11 +84,11 @@ internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsStrings(prov
 }
 
 /**
- * Suggests namespaced IDs like `minecraft:stone`, matching the typed input against the part after namespace.
+ * Suggests namespaced IDs like `minecraft:stone`, matching the typed input against the path after namespace.
  * - Empty input: hints from [provideEmptyInputHints].
- * - `namespace:name`: IDs from the namespace containing `name`, or similar namespaces if the namespace is unknown.
+ * - `namespace:path`: [path hints][pathHints] from the namespace, or similar namespaces if the namespace is unknown.
  *   Namespace `mimic` searches over all namespaces.
- * - `name` without namespace: IDs from all namespaces containing `name` and namespaces starting with `name`.
+ * - `path` without namespace: [path hints][pathHints] from all namespaces and namespaces starting with `path`.
  */
 internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsIds(
     provideEmptyInputHints: (CommandSender) -> List<SuggestionHint>,
@@ -106,35 +106,79 @@ internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsIds(
     }
 }
 
-private fun idHints(input: String, ids: Collection<String>): List<SuggestionHint> {
+internal fun idHints(input: String, ids: Collection<String>): List<SuggestionHint> {
     val parsedIds = ids.map { id -> ParsedId(id) }
     val namespaces = parsedIds.map { it.namespace }.toSet()
 
-    fun idsContaining(name: String, namespace: String? = null) = parsedIds
-        .filter { (namespace == null || it.namespace == namespace) && name in it.name }
-        .map { SuggestionHint(it.id) }
-
     if (':' !in input) {
-        return idsContaining(input) + namespaces
+        return pathHints(input, parsedIds) + namespaces
             .filter { it.startsWith(input) }
-            .map { SuggestionHint("$it:", Component.text("Namespace")) }
+            .map { namespace ->
+                val hint = collapseFolders("$namespace:", parsedIds)
+                SuggestionHint(hint, Component.text(if (hint.endsWith(':')) "Namespace" else "Folder"))
+            }
     }
 
     val namespace = input.substringBefore(':')
-    val name = input.substringAfter(':')
+    val path = input.substringAfter(':')
     return when (namespace) {
-        SEARCH_ALL_NAMESPACE -> idsContaining(name)
-        in namespaces -> idsContaining(name, namespace)
+        SEARCH_ALL_NAMESPACE -> pathHints(path, parsedIds)
+        in namespaces -> pathHints(path, parsedIds.filter { it.namespace == namespace })
         else -> namespaces
             .filter { namespace in it }
-            .map { SuggestionHint("$it:$name", Component.text("Did you mean $it?")) }
+            .map { SuggestionHint("$it:$path", Component.text("Did you mean $it?")) }
     }
 }
 
-/** ID split to the lowercase namespace and name. */
+/**
+ * Suggests IDs and folders, the path segments ending with `/`, like `default/` in `craftengine:default/palm_log`.
+ * - Empty `path` or ending with `/`: IDs and folders directly inside the typed folder.
+ * - Otherwise: IDs containing `path` and folders starting with `path`.
+ */
+private fun pathHints(path: String, ids: List<ParsedId>): List<SuggestionHint> {
+    val isFolder = path.isEmpty() || path.endsWith('/')
+    val matchingIds = ids
+        .filter { if (isFolder) it.isDirectlyInside(path) else path in it.path }
+        .map { SuggestionHint(it.id) }
+    // Group IDs by folder first, so each folder is collapsed over its own IDs only
+    val folders = ids
+        .mapNotNull { id -> id.folderStartingWith(path)?.let { folder -> folder to id } }
+        .groupBy(keySelector = { it.first }, valueTransform = { it.second })
+        .map { (folder, folderIds) -> SuggestionHint(collapseFolders(folder, folderIds), Component.text("Folder")) }
+    return matchingIds + folders
+}
+
+/** Extends [prefix] with the folders shared by all [ids] starting with it, see [collapseFolders]. */
+internal fun collapseFolders(prefix: String, ids: Collection<String>): String =
+    collapseFolders(prefix, ids.map(::ParsedId))
+
+/**
+ * Extends [prefix] with the folders shared by all IDs starting with it,
+ * so `craftengine:` becomes `craftengine:default/` if all IDs are inside `default/`.
+ */
+private fun collapseFolders(prefix: String, ids: List<ParsedId>): String {
+    val commonPath = ids
+        .filter { it.id.startsWith(prefix, ignoreCase = true) }
+        .map { it.id.substring(prefix.length) }
+        .reduceOrNull { common, path -> common.commonPrefixWith(path, ignoreCase = true) }
+        .orEmpty()
+    return prefix + commonPath.take(commonPath.lastIndexOf('/') + 1)
+}
+
+/** ID split to the lowercase namespace and path. */
 private class ParsedId(val id: String) {
     val namespace: String = id.substringBefore(':', missingDelimiterValue = "").lowercase()
-    val name: String = id.substringAfter(':').lowercase()
+    val path: String = id.substringAfter(':').lowercase()
+
+    fun isDirectlyInside(folder: String): Boolean = path.startsWith(folder) && '/' !in path.substring(folder.length)
+
+    /** Returns the folder of this ID next to the typed [prefix] if it starts with [prefix], keeping the namespace. */
+    fun folderStartingWith(prefix: String): String? {
+        val folderEnd = path.indexOf('/', startIndex = prefix.lastIndexOf('/') + 1)
+        if (folderEnd == -1) return null
+        val folder = path.take(folderEnd + 1)
+        return if (folder.startsWith(prefix)) id.dropLast(path.length) + folder else null
+    }
 }
 
 /** Namespace used by Mimic registries to search IDs over all registries. */
