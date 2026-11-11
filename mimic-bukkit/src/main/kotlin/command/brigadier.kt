@@ -25,6 +25,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 
 internal typealias CommandBuilder = ArgumentBuilder<CommandSourceStack, *>
 internal typealias CommandAction<S> = (sender: S, context: CommandContext<CommandSourceStack>) -> Unit
@@ -200,6 +201,13 @@ internal fun CommandContext<CommandSourceStack>.getPlayer(name: String): Player 
 /** Returns the player from the argument [name]. If it is not specified, [sender] must be a player. */
 internal fun CommandContext<CommandSourceStack>.getPlayerOrSender(name: String, sender: CommandSender): Player =
     if (hasArgument(name)) getPlayer(name) else sender as Player
+
+/** Adds the [item] to the inventory, dropping what doesn't fit at the player's location like vanilla `/give`. */
+internal fun Player.giveItem(item: ItemStack) {
+    for (leftover in inventory.addItem(item).values) {
+        world.dropItem(location, leftover)
+    }
+}
 
 internal fun CommandContext<CommandSourceStack>.getBlockLocation(name: String): Location =
     getArgument<BlockPositionResolver>(name).resolve(source).toLocation(source.location.world)

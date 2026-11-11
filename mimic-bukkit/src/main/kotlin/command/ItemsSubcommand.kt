@@ -164,7 +164,7 @@ private fun giveExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<Comma
 
     val itemStack = itemRegistry.getItem(item, payload, amount) ?: throw commandError("Unknown item '$item'.")
     val givenAmount = itemStack.amount // addItem may change the amount of the passed stack
-    target.inventory.addItem(itemStack)
+    target.giveItem(itemStack)
     sender.sendMessage(successText {
         append("Gave $givenAmount ")
         appendId(item)

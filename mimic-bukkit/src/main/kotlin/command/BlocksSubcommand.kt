@@ -2,6 +2,7 @@
 
 package ru.endlesscode.mimic.command
 
+import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.text.Component
@@ -24,6 +25,7 @@ import ru.endlesscode.mimic.internal.text
  * Commands to deal with block registries
  * ```
  * /mimic blocks (info)
+ * /mimic blocks give [target] [block] (amount)
  * /mimic blocks set [location] [block] (payload)
  * /mimic blocks break (location)
  * /mimic blocks compare (block)
@@ -37,6 +39,19 @@ internal fun CommandBuilder.blocksSubcommand(blockRegistry: BukkitBlockRegistry)
     // Show information about blocks service
     literal("info") {
         executesAny(infoExecutor(blockRegistry))
+    }
+
+    // Give item placing the block to player
+    literal("give") {
+        argument(TARGET, ArgumentTypes.player()) {
+            blockArgument(blockRegistry) {
+                executesAny(giveExecutor(blockRegistry))
+                argument(AMOUNT, IntegerArgumentType.integer(1, 64)) {
+                    suggestsStrings { listOf("1", "64") }
+                    executesAny(giveExecutor(blockRegistry))
+                }
+            }
+        }
     }
 
     // Set block at the given location, replacing the existing one
@@ -138,6 +153,7 @@ private fun infoExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<Comm
         appendIdStat("Targeted block", targetedBlockId(blockRegistry, sender))
         appendIdStat("Item in hand places", itemInHandBlockId(blockRegistry, sender))
         appendCommands(
+            suggestedCommand("give", "/mimic blocks give [target] [block] (amount)", "Give item placing the given block to the player"),
             suggestedCommand("set", "/mimic blocks set [location] [block] (payload)", "Set block at the given location, replacing the existing one"),
             suggestedCommand("break", "/mimic blocks break (location)", "Break block at the given location, or the targeted block, with the item in hand"),
             suggestedCommand("compare", "/mimic blocks compare (block)", "Compare targeted block with the given block, or with the block placed by item in hand"),
@@ -145,6 +161,25 @@ private fun infoExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<Comm
         )
     }
     sender.sendMessage(message)
+}
+
+private fun giveExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<CommandSender> = { sender, context ->
+    val target = context.getPlayer(TARGET)
+    val block = context.getArgument<String>(BLOCK)
+    val amount = context.getArgumentOrNull<Int>(AMOUNT) ?: 1
+
+    if (!blockRegistry.isBlockExists(block)) throw commandError("Unknown block '$block'.")
+    val itemStack = blockRegistry.getBlockItem(block, amount) ?: throw commandError("Block '$block' has no item.")
+    val givenAmount = itemStack.amount // addItem may change the amount of the passed stack
+    target.giveItem(itemStack)
+    sender.sendMessage(successText {
+        append("Gave $givenAmount of item placing ")
+        appendId(block)
+        append(" to ${target.name}.")
+    })
+    if (givenAmount < amount) {
+        sender.sendMessage(warningText("Requested $amount, but only $givenAmount can be given at once."))
+    }
 }
 
 private fun setExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<CommandSender> = { sender, context ->
@@ -205,6 +240,8 @@ private fun breakBlock(blockRegistry: BukkitBlockRegistry, sender: Player, locat
 
 private fun Location.toPosition() = "$blockX $blockY $blockZ"
 
+private const val TARGET = "target"
+private const val AMOUNT = "amount"
 private const val LOCATION = "location"
 private const val BLOCK = "block"
 private const val PAYLOAD = "payload"

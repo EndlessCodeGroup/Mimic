@@ -32,6 +32,7 @@ blockRegistry.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.t
 Added commands to debug block registries:
 
 - `/mimic blocks info` - show information about block registries
+- `/mimic blocks give [target] [block] (amount)` - give the item placing the given block
 - `/mimic blocks set [location] [block] (payload)` - set block at the given location, replacing the existing one
 - `/mimic blocks break (location)` - break block at the given location, or the targeted block, with the item in hand
 - `/mimic blocks compare (block)` - compare targeted block with the given block, or with the block placed by item in hand
