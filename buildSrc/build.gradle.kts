@@ -15,6 +15,8 @@ dependencies {
     implementation(kotlin("serialization", version = kotlinVersion))
     implementation(libs.dokka)
     implementation(libs.mavenPublish)
+    // Dokka brings an old kotlinx-serialization, but BukkitGradle's runServer requires a newer one
+    implementation(platform(libs.serialization.bom))
 }
 
 repositories {

@@ -14,12 +14,13 @@ mmocore = "1.13.1-SNAPSHOT"
 mmoitems = "6.10.1-SNAPSHOT"
 mythiclib = "1.7.1-SNAPSHOT"
 heroes = "1.9.30-RELEASE"
+craftengine = "26.9.1"
 
 junit = "6.1.3"
 kotest = "6.2.6"
 mockk = "1.14.11"
 
-gradlePlugin-bukkitgradle = "1.0.0"
+gradlePlugin-bukkitgradle = "1.1.0"
 gradlePlugin-shadow = "9.6.1"
 gradlePlugin-versions = "0.67.0"
 gradlePlugin-mavenPublish = "0.37.0"
@@ -28,6 +29,7 @@ gradlePlugin-mavenPublish = "0.37.0"
 
 paperApi = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-serialization" }
+serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinx-serialization" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
@@ -38,6 +40,8 @@ rpgplugins-mmocore = { module = "net.Indyuce:MMOCore-API", version.ref = "mmocor
 rpgplugins-mmoitems = { module = "net.Indyuce:MMOItems-API", version.ref = "mmoitems" }
 rpgplugins-mythiclib = { module = "io.lumine:MythicLib-dist", version.ref = "mythiclib" }
 rpgplugins-heroes = { module = "com.herocraftonline.heroes:Heroes", version.ref = "heroes" }
+rpgplugins-craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
+rpgplugins-craftengine-bukkit = { module = "net.momirealms:craft-engine-bukkit", version.ref = "craftengine" }
 
 # Test dependencies
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -65,4 +69,6 @@ rpgplugins = [
     "rpgplugins-mmoitems",
     "rpgplugins-mythiclib",
     "rpgplugins-heroes",
+    "rpgplugins-craftengine-core",
+    "rpgplugins-craftengine-bukkit",
 ]

@@ -33,6 +33,8 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
+import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockRegistry
+import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
@@ -125,6 +127,11 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("MMOItems", "net.Indyuce.mmoitems.MMOItems") {
             hookItems(::MmoItemsRegistry)
+        }
+
+        pluginHooks("CraftEngine", "net.momirealms.craftengine.bukkit.api.CraftEngineBlocks") {
+            hookItems(::CraftEngineItemsRegistry)
+            hookBlocks(constructor = ::CraftEngineBlockRegistry)
         }
     }
 

@@ -80,6 +80,8 @@ Commands are now easier to use in general:
 
 ### Plugin changes
 
+- Added CraftEngine integration: items registry and block registry (#52).
+  CraftEngine IDs `namespace:path` become `craftengine:namespace/path`, for example `craftengine:default/palm_log`.
 - MMOCore integration requires MMOCore 1.13 or newer
 - Class system `permissions` takes into account only explicitly set `mimic.class.*` permissions.
   Previously, operators had all classes.

@@ -28,6 +28,7 @@ bukkit {
             "MMOItems",
             "Heroes",
             "QuantumRPG",
+            "CraftEngine",
         )
     }
 
@@ -49,6 +50,11 @@ repositories {
         content {
             includeGroup("net.Indyuce")
             includeModule("io.lumine", "MythicLib-dist")
+        }
+    }
+    maven(url = "https://repo.momirealms.net/releases/") {
+        content {
+            includeGroup("net.momirealms")
         }
     }
     aikar()
