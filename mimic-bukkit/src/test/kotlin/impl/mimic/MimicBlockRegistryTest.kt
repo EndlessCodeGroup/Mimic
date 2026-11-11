@@ -16,13 +16,13 @@ import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.ServicePriority.*
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
 import ru.endlesscode.mimic.ExperimentalMimicApi
+import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.blocks.WrappedBlockRegistry
@@ -37,18 +37,12 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
     private val customRegistry = CustomBlockRegistry()
 
     // SUT
-    private val blockRegistry: BukkitBlockRegistry = MimicBlockRegistry(servicesManager, parseKey = plugin::parseKey)
+    private val registries = ServiceRegistry<BukkitBlockRegistry>("BlockRegistry", plugin)
+    private val blockRegistry: BukkitBlockRegistry = MimicBlockRegistry(registries, parseKey = plugin::parseKey)
 
     init {
-        servicesManager.register(BukkitBlockRegistry::class.java, testRegistry, plugin, Lowest)
-        servicesManager.register(BukkitBlockRegistry::class.java, customRegistry, plugin, Normal)
-        servicesManager.register(BukkitBlockRegistry::class.java, blockRegistry, plugin, Highest)
-    }
-
-    // Services manager is shared between tests
-    @AfterEach
-    fun tearDown() {
-        servicesManager.unregisterAll(plugin)
+        registries.register(testRegistry, plugin, Lowest)
+        registries.register(customRegistry, plugin, Normal)
     }
 
     @ParameterizedTest
@@ -149,7 +143,7 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
         "mimic:ruby_block,  EMERALD",
     )
     fun `when get block item - should return item from the block registry`(blockId: String, expected: Material) {
-        servicesManager.register(BukkitBlockRegistry::class.java, FailingBlockRegistry(), plugin, High)
+        registries.register(FailingBlockRegistry(), plugin, High)
 
         val item = blockRegistry.getBlockItem(blockId, amount = 5)
         assertNotNull(item, "Item should not be null")
@@ -238,13 +232,8 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
 
     @Test
     fun `when registry is disabled in config - should ignore it`() {
-        servicesManager.unregister(customRegistry)
-        servicesManager.register(
-            BukkitBlockRegistry::class.java,
-            wrap(customRegistry, disabledRegistries = setOf(customRegistry.id)),
-            plugin,
-            Normal,
-        )
+        // Replaces the registry with the same ID registered with lower priority
+        registries.register(wrap(customRegistry, disabledRegistries = setOf(customRegistry.id)), plugin, High)
 
         assertSoftly {
             blockRegistry.isBlockExists("custom:ruby_block").shouldBeFalse()
@@ -277,7 +266,7 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
 
     @Test
     fun `when registry fails to identify block - should not fall back to the vanilla registry`() {
-        servicesManager.register(BukkitBlockRegistry::class.java, FailingBlockRegistry(), plugin, High)
+        registries.register(FailingBlockRegistry(), plugin, High)
         val block = mockBlock(Material.STONE)
 
         assertSoftly {
@@ -290,7 +279,7 @@ internal class MimicBlockRegistryTest : BukkitTestBase() {
 
     @Test
     fun `when registry fails to identify block - should fall back to other custom registries`() {
-        servicesManager.register(BukkitBlockRegistry::class.java, FailingBlockRegistry(), plugin, High)
+        registries.register(FailingBlockRegistry(), plugin, High)
 
         blockRegistry.getBlockId(mockBlock(Material.NOTE_BLOCK)) shouldBe "custom:ruby_block"
     }

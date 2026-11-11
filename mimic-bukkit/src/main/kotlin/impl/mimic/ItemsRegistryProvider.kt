@@ -19,10 +19,10 @@
 
 package ru.endlesscode.mimic.impl.mimic
 
-import org.bukkit.plugin.RegisteredServiceProvider
+import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
-internal typealias ItemsRegistryProvider = RegisteredServiceProvider<BukkitItemsRegistry>
+internal typealias ItemsRegistryProvider = ServiceEntry<BukkitItemsRegistry>
 
 internal inline val ItemsRegistryProvider.registry: BukkitItemsRegistry
-    get() = provider
+    get() = service

@@ -13,7 +13,6 @@ import org.bukkit.entity.Player
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer.Companion.disappear
-import ru.endlesscode.mimic.blocks.unwrap
 import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
 import ru.endlesscode.mimic.impl.mimic.registry
 import ru.endlesscode.mimic.impl.mimic.tryGetKnownIds
@@ -119,7 +118,7 @@ private fun CommandBuilder.blockArgument(
 
 /** Suggests IDs of the block placed by item in hand, of the targeted block, and namespaces of block registries. */
 private fun blockHints(blockRegistry: BukkitBlockRegistry, sender: CommandSender): List<SuggestionHint> {
-    val namespaces = (blockRegistry.unwrap() as? MimicBlockRegistry)?.providers.orEmpty().map { it.registry.id }
+    val namespaces = (blockRegistry as? MimicBlockRegistry)?.providers.orEmpty().map { it.registry.id }
     val knownIds = blockRegistry.knownIds
 
     return listOfNotNull(
@@ -137,7 +136,7 @@ private fun targetedBlockId(blockRegistry: BukkitBlockRegistry, sender: CommandS
     (sender as? Player)?.getTargetBlockExact(TARGET_DISTANCE)?.let(blockRegistry::getBlockId)
 
 private fun infoExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<CommandSender> = { sender, _ ->
-    val providers = (blockRegistry.unwrap() as? MimicBlockRegistry)?.providers.orEmpty()
+    val providers = (blockRegistry as? MimicBlockRegistry)?.providers.orEmpty()
 
     val message = text {
         appendHeader("Mimic Blocks")

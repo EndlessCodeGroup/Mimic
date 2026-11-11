@@ -3,11 +3,10 @@ package ru.endlesscode.mimic.impl.mimic
 import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.ServicesManager
 import ru.endlesscode.mimic.ExperimentalMimicApi
+import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer
-import ru.endlesscode.mimic.bukkit.getRegistrations
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 
 /**
@@ -18,7 +17,7 @@ import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
  */
 @ExperimentalMimicApi
 public class MimicBlockRegistry internal constructor(
-    private val servicesManager: ServicesManager,
+    private val registries: ServiceRegistry<BukkitBlockRegistry>,
     private val parseKey: (String) -> NamespacedKey?,
 ) : BukkitBlockRegistry {
 
@@ -30,8 +29,7 @@ public class MimicBlockRegistry internal constructor(
         }
 
     internal val providers: List<BlockRegistryProvider>
-        get() = servicesManager.getRegistrations<BukkitBlockRegistry>()
-            .filter { it.registry.id != id && it.registry.isEnabled }
+        get() = registries.entries.filter { it.registry.isEnabled }
 
     override fun isSameBlock(block: Block, blockId: String): Boolean {
         val key = parseKey(blockId) ?: return false

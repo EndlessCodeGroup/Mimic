@@ -85,6 +85,23 @@ Commands are now easier to use in general:
 - MMOCore integration requires MMOCore 1.13 or newer
 - Class system `permissions` takes into account only explicitly set `mimic.class.*` permissions.
   Previously, operators had all classes.
+- Implementations are stored in Mimic instead of Bukkit's `ServicesManager` (#70).
+  Each ID now belongs to a single implementation:
+  - An implementation registered by another plugin replaces the Mimic built-in integration with the same ID.
+  - If two plugins register the same ID, the one with higher priority is used.
+    On equal priorities, the first registered is used.
+  - If a plugin registers the same ID again, the new implementation replaces the previous one.
+  - IDs of default implementations (`mimic`, `minecraft`, `permissions`) are reserved.
+  - Default implementations are always used last, regardless of priority.
+    So a custom block registry registered with `Lowest` priority still recognizes its blocks before the vanilla registry.
+
+  Implementations with different IDs and equal priority are ordered by registration: the first registered is used by default.
+  Previously, the implementation with the lowest priority was selected by ID, and the order of equal priorities was undefined.
+- `mimic` is not listed in `Mimic.getAllItemsRegistries()` and `Mimic.getAllBlockRegistries()` anymore,
+  and is not an option of `disabled-items-registries` and `disabled-block-registries` in config.
+- **Breaking change!** Implementations can't be loaded from `ServicesManager` anymore, use `Mimic.getInstance()` instead.
+  Implementations registered directly in `ServicesManager` are still moved to Mimic.
+- **Breaking change!** `MimicItemsRegistry` constructor is internal now, use `Mimic.getItemsRegistry()` instead.
 
 ### Housekeeping
 

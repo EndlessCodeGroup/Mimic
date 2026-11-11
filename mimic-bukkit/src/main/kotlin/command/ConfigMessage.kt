@@ -9,6 +9,8 @@ import ru.endlesscode.mimic.config.ConfigProperty
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.config.StringConfigProperty
 import ru.endlesscode.mimic.config.StringSetConfigProperty
+import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
@@ -39,13 +41,13 @@ internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponen
         property = MimicConfig.DISABLED_ITEMS_REGISTRIES,
         values = config.disabledItemsRegistries,
         options = mimic.getAllItemsRegistries().keys,
-        permanentOptions = MimicConfig.DEFAULT_ITEMS_REGISTRIES,
+        permanentOptions = setOf(MinecraftItemsRegistry.ID),
     )
     appendSetPropertyConfig(
         property = MimicConfig.DISABLED_BLOCK_REGISTRIES,
         values = config.disabledBlockRegistries,
         options = mimic.getAllBlockRegistries().keys,
-        permanentOptions = MimicConfig.DEFAULT_BLOCK_REGISTRIES,
+        permanentOptions = setOf(MinecraftBlockRegistry.ID),
     )
 }
 

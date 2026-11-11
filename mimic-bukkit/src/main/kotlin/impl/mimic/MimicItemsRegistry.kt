@@ -20,8 +20,7 @@
 package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.ServicesManager
-import ru.endlesscode.mimic.bukkit.getRegistrations
+import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 /**
@@ -31,7 +30,9 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
  * For example: `acacia_boat` -> `minecraft:acacia_boat`.
  * If you use item ID without namespace it will search over all registries.
  */
-public class MimicItemsRegistry(private val servicesManager: ServicesManager) : BukkitItemsRegistry {
+public class MimicItemsRegistry internal constructor(
+    private val registries: ServiceRegistry<BukkitItemsRegistry>,
+) : BukkitItemsRegistry {
 
     override val id: String = ID
 
@@ -41,8 +42,7 @@ public class MimicItemsRegistry(private val servicesManager: ServicesManager) : 
         }
 
     internal val providers: List<ItemsRegistryProvider>
-        get() = servicesManager.getRegistrations<BukkitItemsRegistry>()
-            .filter { it.registry.id != id && it.registry.isEnabled }
+        get() = registries.entries.filter { it.registry.isEnabled }
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
         val (namespace, id) = itemId.splitBySeparator()

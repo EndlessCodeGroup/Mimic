@@ -5,6 +5,8 @@ import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
+import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 
 /**
  * Commands to see and change Mimic config.
@@ -59,7 +61,7 @@ internal fun CommandBuilder.configSubcommand(
             stringSetArgument(
                 ITEMS_REGISTRY,
                 "items registry",
-                { mimic.getAllItemsRegistries().keys - MimicConfig.DEFAULT_ITEMS_REGISTRIES },
+                { mimic.getAllItemsRegistries().keys - MinecraftItemsRegistry.ID },
             ) { sender, itemsRegistry ->
                 config.disabledItemsRegistries += itemsRegistry
                 showConfig(sender)
@@ -80,7 +82,7 @@ internal fun CommandBuilder.configSubcommand(
             stringSetArgument(
                 BLOCK_REGISTRY,
                 "block registry",
-                { mimic.getAllBlockRegistries().keys - MimicConfig.DEFAULT_BLOCK_REGISTRIES },
+                { mimic.getAllBlockRegistries().keys - MinecraftBlockRegistry.ID },
             ) { sender, blockRegistry ->
                 config.disabledBlockRegistries += blockRegistry
                 showConfig(sender)

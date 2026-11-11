@@ -26,23 +26,23 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.ServicePriority.Highest
 import org.bukkit.plugin.ServicePriority.Lowest
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import kotlin.test.Test
 
 internal class MimicItemsRegistryTest : BukkitTestBase() {
 
     // SUT
-    private val itemsService: BukkitItemsRegistry = MimicItemsRegistry(servicesManager)
+    private val registries = ServiceRegistry<BukkitItemsRegistry>("ItemsRegistry", plugin)
+    private val itemsService: BukkitItemsRegistry = MimicItemsRegistry(registries)
 
     init {
-        servicesManager.register(BukkitItemsRegistry::class.java, TestItemRegistry(), plugin, Lowest)
-        servicesManager.register(BukkitItemsRegistry::class.java, itemsService, plugin, Highest)
+        registries.register(TestItemRegistry(), plugin, Lowest)
     }
 
     @ParameterizedTest

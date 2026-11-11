@@ -11,7 +11,7 @@ import ru.endlesscode.mimic.internal.Log
 
 @ExperimentalMimicApi
 internal class WrappedBlockRegistry(
-    internal val delegate: BukkitBlockRegistry,
+    private val delegate: BukkitBlockRegistry,
     private val config: MimicConfig,
     pluginName: String,
     pluginManager: PluginManager,
@@ -53,6 +53,3 @@ private fun DropsConsumer<ItemStack>.dropAllOnFailure() = DropsConsumer { drops 
         drops
     }
 }
-
-@ExperimentalMimicApi
-internal fun BukkitBlockRegistry.unwrap() = if (this is WrappedBlockRegistry) delegate else this

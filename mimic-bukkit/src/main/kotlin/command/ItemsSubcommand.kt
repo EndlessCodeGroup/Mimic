@@ -28,11 +28,11 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
+import ru.endlesscode.mimic.impl.mimic.registry
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
-import ru.endlesscode.mimic.items.unwrap
 
 /**
  * Commands to deal with items registries
@@ -113,7 +113,7 @@ private fun CommandBuilder.itemArgument(
 /** Suggests ID of the item in hand and namespaces of items registries. */
 private fun itemHints(itemRegistry: BukkitItemsRegistry, sender: CommandSender): List<SuggestionHint> {
     val itemInHandId = itemInHandId(itemRegistry, sender)
-    val namespaces = (itemRegistry.unwrap() as? MimicItemsRegistry)?.providers.orEmpty().map { it.provider.id }
+    val namespaces = (itemRegistry as? MimicItemsRegistry)?.providers.orEmpty().map { it.registry.id }
     val knownIds = itemRegistry.knownIds
 
     return listOfNotNull(itemInHandId?.let { SuggestionHint(it, Component.text("Item in hand")) }) +
@@ -133,7 +133,7 @@ private fun Player.requireItemInMainHand(): ItemStack {
 }
 
 private fun infoExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<CommandSender> = { sender, _ ->
-    val providers = (itemRegistry.unwrap() as? MimicItemsRegistry)?.providers.orEmpty().map { it.provider }
+    val providers = (itemRegistry as? MimicItemsRegistry)?.providers.orEmpty().map { it.registry }
 
     val message = text {
         appendHeader("Mimic Items")

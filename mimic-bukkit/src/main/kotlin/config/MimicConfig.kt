@@ -4,6 +4,9 @@ import org.bukkit.configuration.Configuration
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
+import ru.endlesscode.mimic.ExperimentalMimicApi
+import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.applyDefaults
 import ru.endlesscode.mimic.internal.setComments
@@ -53,7 +56,7 @@ internal class MimicConfig(
 
     private fun validateConfigValues() {
         val configuredDisabledItemsRegistries = disabledItemsRegistries
-        disabledItemsRegistries = configuredDisabledItemsRegistries - DEFAULT_ITEMS_REGISTRIES
+        disabledItemsRegistries = configuredDisabledItemsRegistries - MinecraftItemsRegistry.ID
 
         val notDisabledRegistries = configuredDisabledItemsRegistries - disabledItemsRegistries
         if (notDisabledRegistries.isNotEmpty()) {
@@ -61,8 +64,8 @@ internal class MimicConfig(
         }
 
         val configuredDisabledBlockRegistries = disabledBlockRegistries
-        disabledBlockRegistries = configuredDisabledBlockRegistries - DEFAULT_BLOCK_REGISTRIES
-
+        @OptIn(ExperimentalMimicApi::class)
+        disabledBlockRegistries = configuredDisabledBlockRegistries - MinecraftBlockRegistry.ID
         val notDisabledBlockRegistries = configuredDisabledBlockRegistries - disabledBlockRegistries
         if (notDisabledBlockRegistries.isNotEmpty()) {
             Log.w("Config: Block registries $notDisabledBlockRegistries can not be disabled. It will be removed from config.")
@@ -101,9 +104,6 @@ internal class MimicConfig(
         private const val EMPTY_VALUE_MESSAGE =
             "If the value is empty, will be used implementation with the highest priority."
 
-        val DEFAULT_ITEMS_REGISTRIES = setOf("mimic", "minecraft")
-        val DEFAULT_BLOCK_REGISTRIES = DEFAULT_ITEMS_REGISTRIES
-
         val LEVEL_SYSTEM = StringConfigProperty(
             path = "level-system",
             title = "LevelSystem API",
@@ -133,7 +133,7 @@ internal class MimicConfig(
             title = "ItemsRegistry API",
             comments = arrayOf(
                 "List here disabled items registry implementations.",
-                "You can't disable 'mimic' and 'minecraft' items registries.",
+                "You can't disable 'minecraft' items registry.",
                 "By default, all implementations are enabled.",
             ),
         )
@@ -143,7 +143,7 @@ internal class MimicConfig(
             title = "BlockRegistry API",
             comments = arrayOf(
                 "List here disabled block registry implementations.",
-                "You can't disable 'mimic' and 'minecraft' block registries.",
+                "You can't disable 'minecraft' block registry.",
                 "By default, all implementations are enabled.",
             ),
         )

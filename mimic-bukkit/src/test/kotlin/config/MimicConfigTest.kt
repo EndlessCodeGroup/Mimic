@@ -19,7 +19,7 @@ internal class MimicConfigTest : BukkitTestBase() {
 
     @Test
     fun `when load disabled block registries - should remove default registries`() {
-        file.writeText("disabled-block-registries: [custom, minecraft, mimic]\n")
+        file.writeText("disabled-block-registries: [custom, minecraft]\n")
 
         loadConfig().disabledBlockRegistries shouldBe setOf("custom")
     }

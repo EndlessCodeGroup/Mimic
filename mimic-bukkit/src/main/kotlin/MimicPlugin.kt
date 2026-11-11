@@ -24,10 +24,10 @@ import org.bstats.charts.AdvancedPie
 import org.bstats.charts.SimplePie
 import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
-import org.bukkit.plugin.ServicePriority.*
+import org.bukkit.plugin.ServicePriority.Lowest
+import org.bukkit.plugin.ServicePriority.Normal
 import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
-import ru.endlesscode.mimic.bukkit.loadAll
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.command.registerCommand
@@ -38,8 +38,6 @@ import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
-import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
-import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
@@ -54,7 +52,6 @@ import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.MinecraftPlayerInventory
 import ru.endlesscode.mimic.internal.Log
-import ru.endlesscode.mimic.internal.parseKey
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
@@ -66,7 +63,7 @@ public class MimicPlugin : JavaPlugin() {
     private val isReleased = !pluginMeta.version.endsWith("-SNAPSHOT")
 
     private val config: MimicConfig by lazy { MimicConfig(this) }
-    private val mimic: Mimic by lazy { MimicImpl(servicesManager, config) }
+    private val mimic: MimicImpl by lazy { MimicImpl(this, config) }
 
     private inline val servicesManager get() = server.servicesManager
     private inline val pluginManager get() = server.pluginManager
@@ -74,7 +71,7 @@ public class MimicPlugin : JavaPlugin() {
     override fun onLoad() {
         Log.init(logger, debug = !isReleased)
 
-        servicesManager.register(mimic, this)
+        servicesManager.register<Mimic>(mimic, this)
         hookDefaultServices()
     }
 
@@ -96,9 +93,7 @@ public class MimicPlugin : JavaPlugin() {
         hookClasses(PermissionsClassSystem::Provider, priority = Lowest)
         hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
-        hookItems({ MimicItemsRegistry(servicesManager) }, priority = Highest)
-        hookBlocks(priority = Lowest, ::MinecraftBlockRegistry)
-        hookBlocks(priority = Highest) { MimicBlockRegistry(servicesManager, parseKey = ::parseKey) }
+        hookBlocks(::MinecraftBlockRegistry, priority = Lowest)
 
         pluginHooks("SkillAPI", "com.sucy.skill.SkillAPI") {
             hookLevels(SkillApiLevelSystem::Provider)
@@ -135,7 +130,7 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("CraftEngine", "net.momirealms.craftengine.bukkit.api.CraftEngineBlocks") {
             hookItems(::CraftEngineItemsRegistry)
-            hookBlocks(constructor = ::CraftEngineBlockRegistry)
+            hookBlocks(::CraftEngineBlockRegistry)
         }
     }
 
@@ -180,8 +175,8 @@ public class MimicPlugin : JavaPlugin() {
 
     @ExperimentalMimicApi
     private fun hookBlocks(
-        priority: ServicePriority = Normal,
         constructor: () -> BukkitBlockRegistry,
+        priority: ServicePriority = Normal,
     ) {
         mimic.registerBlockRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
@@ -197,9 +192,8 @@ public class MimicPlugin : JavaPlugin() {
             mimic.getClassSystemProvider().id
         })
         metrics.addCustomChart(AdvancedPie("items_registry_custom") {
-            servicesManager.loadAll<BukkitItemsRegistry>()
-                .map { it.id }
-                .filterNot { it == MimicItemsRegistry.ID || it == MinecraftItemsRegistry.ID }
+            mimic.getAllItemsRegistries().keys
+                .filterNot { it == MinecraftItemsRegistry.ID }
                 .associateWith { 1 }
         })
     }

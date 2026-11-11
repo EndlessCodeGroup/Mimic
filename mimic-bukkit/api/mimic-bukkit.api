@@ -159,7 +159,6 @@ public final class ru/endlesscode/mimic/impl/mimic/MimicBlockRegistry$Companion 
 public final class ru/endlesscode/mimic/impl/mimic/MimicItemsRegistry : ru/endlesscode/mimic/items/BukkitItemsRegistry {
 	public static final field Companion Lru/endlesscode/mimic/impl/mimic/MimicItemsRegistry$Companion;
 	public static final field ID Ljava/lang/String;
-	public fun <init> (Lorg/bukkit/plugin/ServicesManager;)V
 	public fun getId ()Ljava/lang/String;
 	public synthetic fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Ljava/lang/Object;
 	public fun getItem (Ljava/lang/String;Ljava/lang/Object;I)Lorg/bukkit/inventory/ItemStack;

@@ -27,7 +27,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Server
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
-import org.bukkit.plugin.ServicesManager
 import org.bukkit.plugin.SimpleServicesManager
 import ru.endlesscode.mimic.internal.Log
 import java.util.*
@@ -37,7 +36,6 @@ import java.util.*
 open class BukkitTestBase {
     protected val plugin: Plugin = mockPlugin(server)
     protected val player: Player = mockPlayer()
-    protected val servicesManager: ServicesManager = server.servicesManager
 
     init {
         Log.init({ level, message, throwable ->
