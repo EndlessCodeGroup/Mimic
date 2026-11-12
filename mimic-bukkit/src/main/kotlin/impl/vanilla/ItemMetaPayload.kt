@@ -80,7 +80,7 @@ public data class ItemMetaPayload(
          * Unknown fields are ignored.
          * ```
          * {
-         *   name = "&6Item Name"
+         *   name = "<gold>Item Name"
          *   lore = [Line1, Line2]
          *   unbreakable = true
          *   damage = 42

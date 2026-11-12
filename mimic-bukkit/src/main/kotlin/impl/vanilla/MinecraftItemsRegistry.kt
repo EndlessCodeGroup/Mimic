@@ -19,6 +19,7 @@
 
 package ru.endlesscode.mimic.impl.vanilla
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
@@ -28,7 +29,15 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
 /**
  * Items service implementation using material name as itemId.
- * Supports [ItemMetaPayload] as a payload in [getItem].
+ *
+ * Supported payloads in [getItem]:
+ * - [String] with [item components](https://minecraft.wiki/w/Data_component_format) in the format of the `/give` command,
+ *   for example `[damage=10,unbreakable={}]`.
+ *   Components syntax depends on the server version.
+ *   Invalid components are ignored.
+ * - [String] with [ItemMetaPayload] in HOCON format, see [ItemMetaPayload.parse].
+ *   Name and lore support MiniMessage formatting.
+ * - [ItemMetaPayload] instance.
  */
 public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
@@ -48,6 +57,16 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
     override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
         val material = getMaterial(itemId) ?: return null
         val realAmount = amount.coerceIn(1, material.maxStackSize)
+
+        if (payload is String && payload.startsWith("[")) {
+            return try {
+                Bukkit.getItemFactory().createItemStack("${material.key.asString()}$payload")
+                    .apply { this.amount = realAmount }
+            } catch (e: IllegalArgumentException) {
+                Log.w(e, "[${javaClass.simpleName}] Ignoring invalid payload for item $itemId:\n$payload")
+                ItemStack(material, realAmount)
+            }
+        }
 
         val minecraftPayload = ItemMetaPayload.of(payload)
         if (payload != null && minecraftPayload == null)  {

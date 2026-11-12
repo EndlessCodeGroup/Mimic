@@ -94,6 +94,9 @@ like `minecraft:acacia_boat` or `craftengine:default/palm_log`.
 
 - Added CraftEngine integration: items registry and block registry (#52).
   CraftEngine IDs `namespace:path` become `craftengine:namespace/path`, for example `craftengine:default/palm_log`.
+- `minecraft` items registry accepts [item components](https://minecraft.wiki/w/Data_component_format) as a payload in the format of the `/give` command:
+  `/mimic items give Steve minecraft:diamond_sword 1 [damage=10,unbreakable={}]`.
+  The HOCON payload (`ItemMetaPayload`) is still supported as an alternative, with MiniMessage formatting for name and lore.
 - MMOCore integration requires MMOCore 1.13 or newer
 - Class system `permissions` takes into account only explicitly set `mimic.class.*` permissions.
   Previously, operators had all classes.

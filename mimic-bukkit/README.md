@@ -72,7 +72,8 @@ For example: `acacia_boat -> minecraft:acacia_boat`.
 #### [Minecraft][MinecraftItemsRegistry]
 
 **ID Format:** `minecraft:[id]`\
-**Payload:** [ItemMetaPayload]
+**Payload:** [Item components][item-components] in the format of `/give` command, for example `[damage=10,unbreakable={}]`.\
+Alternatively, [ItemMetaPayload] in HOCON format with MiniMessage support for name and lore, for example `{name: "<gold>Sword", unbreakable: true}`.
 
 #### [CustomItems]
 
@@ -106,6 +107,7 @@ For example: `acacia_boat -> minecraft:acacia_boat`.
 
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
+[item-components]: https://minecraft.wiki/w/Data_component_format
 [skillapi]: https://www.spigotmc.org/resources/4824/
 [proskillapi]: https://www.spigotmc.org/resources/91913/
 [battlelevels]: https://www.spigotmc.org/resources/2218/
