@@ -12,6 +12,7 @@ public abstract interface class ru/endlesscode/mimic/Mimic {
 	public abstract fun getItemsRegistry ()Lru/endlesscode/mimic/items/BukkitItemsRegistry;
 	public fun getLevelSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/BukkitLevelSystem;
 	public abstract fun getLevelSystemProvider ()Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;
+	public abstract fun getLevels ()Lru/endlesscode/mimic/level/Levels;
 	public fun getPlayerInventory (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory;
 	public abstract fun getPlayerInventoryProvider ()Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
 	public fun registerBlockRegistry (Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
@@ -20,6 +21,8 @@ public abstract interface class ru/endlesscode/mimic/Mimic {
 	public abstract fun registerClassSystem (Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;
 	public fun registerItemsRegistry (Lru/endlesscode/mimic/items/BukkitItemsRegistry;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/items/BukkitItemsRegistry;
 	public abstract fun registerItemsRegistry (Lru/endlesscode/mimic/items/BukkitItemsRegistry;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/items/BukkitItemsRegistry;
+	public fun registerLevelProvider (Lru/endlesscode/mimic/level/LevelProvider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/level/LevelProvider;
+	public abstract fun registerLevelProvider (Lru/endlesscode/mimic/level/LevelProvider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/level/LevelProvider;
 	public fun registerLevelSystem (Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;
 	public abstract fun registerLevelSystem (Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;
 	public fun registerPlayerInventoryProvider (Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
@@ -69,5 +72,62 @@ public abstract class ru/endlesscode/mimic/level/BukkitLevelSystem : ru/endlessc
 }
 
 public abstract interface class ru/endlesscode/mimic/level/BukkitLevelSystem$Provider : ru/endlesscode/mimic/PlayerSystemProviderService {
+}
+
+public abstract interface class ru/endlesscode/mimic/level/LevelProgress {
+	public static final field Companion Lru/endlesscode/mimic/level/LevelProgress$Companion;
+	public abstract fun getExp ()D
+	public abstract fun getExpToNextLevel ()D
+	public abstract fun getLevel ()I
+	public abstract fun getMaxLevel ()I
+	public abstract fun getMinLevel ()I
+	public abstract fun hasExp ()Z
+	public fun hasExpToNextLevel ()Z
+	public fun hasMaxLevel ()Z
+	public static fun level (I)Lru/endlesscode/mimic/level/LevelProgress$Builder;
+}
+
+public final class ru/endlesscode/mimic/level/LevelProgress$Builder {
+	public final fun build ()Lru/endlesscode/mimic/level/LevelProgress;
+	public final fun exp (D)Lru/endlesscode/mimic/level/LevelProgress$Builder;
+	public final fun expToNextLevel (D)Lru/endlesscode/mimic/level/LevelProgress$Builder;
+	public final fun maxLevel (I)Lru/endlesscode/mimic/level/LevelProgress$Builder;
+	public final fun minLevel (I)Lru/endlesscode/mimic/level/LevelProgress$Builder;
+}
+
+public final class ru/endlesscode/mimic/level/LevelProgress$Companion {
+	public final fun level (I)Lru/endlesscode/mimic/level/LevelProgress$Builder;
+}
+
+public abstract interface class ru/endlesscode/mimic/level/LevelProvider : ru/endlesscode/mimic/MimicService {
+	public abstract fun getAllTracks ()Ljava/util/Collection;
+	public abstract fun getPrimaryTrack (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/LevelProvider$Track;
+	public abstract fun getProgress (Lorg/bukkit/entity/Player;Ljava/lang/String;)Lru/endlesscode/mimic/level/LevelProgress;
+	public abstract fun getTracks (Lorg/bukkit/entity/Player;)Ljava/util/Collection;
+	public fun giveExp (Lorg/bukkit/entity/Player;Ljava/lang/String;D)Z
+	public fun setLevel (Lorg/bukkit/entity/Player;Ljava/lang/String;I)Z
+	public fun takeExp (Lorg/bukkit/entity/Player;Ljava/lang/String;D)Z
+}
+
+public final class ru/endlesscode/mimic/level/LevelProvider$Track {
+	public fun <init> (Ljava/lang/String;Lnet/kyori/adventure/text/Component;)V
+	public final fun getId ()Ljava/lang/String;
+	public final fun getName ()Lnet/kyori/adventure/text/Component;
+}
+
+public abstract interface class ru/endlesscode/mimic/level/LevelTrack : net/kyori/adventure/key/Keyed {
+	public abstract fun key ()Lnet/kyori/adventure/key/Key;
+	public abstract fun name ()Lnet/kyori/adventure/text/Component;
+}
+
+public abstract interface class ru/endlesscode/mimic/level/Levels {
+	public abstract fun getAllTracks ()Ljava/util/List;
+	public abstract fun getPrimaryTrack (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/level/LevelTrack;
+	public abstract fun getProgress (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;)Lru/endlesscode/mimic/level/LevelProgress;
+	public abstract fun getTracks (Lorg/bukkit/entity/Player;)Ljava/util/List;
+	public abstract fun giveExp (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
+	public abstract fun hasLevel (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;I)Z
+	public abstract fun setLevel (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;I)Z
+	public abstract fun takeExp (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
 }
 

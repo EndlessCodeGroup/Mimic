@@ -14,6 +14,8 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.LevelProvider
+import ru.endlesscode.mimic.level.Levels
 
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
@@ -297,6 +299,55 @@ public interface Mimic {
 
     /** Returns map containing all known [BukkitLevelSystem.Provider]s, where key is a provider ID. */
     public fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider>
+    // endregion
+
+    // region Levels
+    /**
+     * Registers the given [provider] of level tracks with normal priority.
+     *
+     * @param provider The [LevelProvider] implementation.
+     * @param apiLevel Minimal required API level for this level provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this level provider.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.10.0
+     */
+    public fun registerLevelProvider(
+        provider: LevelProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): LevelProvider? = registerLevelProvider(provider, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [provider] of level tracks.
+     *
+     * @param provider The [LevelProvider] implementation.
+     * @param apiLevel Minimal required API level for this level provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this level provider.
+     * @param priority Default priority. If user have not configured `level-provider` option in config,
+     *                 the primary track is taken from the first provider in order of priority that has one.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.10.0
+     */
+    public fun registerLevelProvider(
+        provider: LevelProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): LevelProvider?
+
+    /**
+     * Levels of players from all RPG plugins: read them, check level requirements, give or take experience.
+     * See [Levels] for details and examples.
+     * To make your plugin's levels available here, use [registerLevelProvider].
+     * @since 0.10.0
+     */
+    public fun getLevels(): Levels
     // endregion
 
     public companion object {
