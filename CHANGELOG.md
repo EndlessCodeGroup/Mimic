@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+### Plugin changes
+
+- Consistent colors in command output
+- `/mimic config` hints say "Click to disable" and "Click to enable" for disabled registries instead of "Click to add" and "Click to remove".
+
 ### Housekeeping
 
 - License changed to MIT.

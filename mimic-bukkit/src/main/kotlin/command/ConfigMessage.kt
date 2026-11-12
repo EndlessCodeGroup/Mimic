@@ -4,8 +4,6 @@
 package ru.endlesscode.mimic.command
 
 import net.kyori.adventure.text.TextComponent
-import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.ConfigProperty
@@ -15,7 +13,6 @@ import ru.endlesscode.mimic.config.StringSetConfigProperty
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.internal.append
-import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
 
@@ -68,7 +65,6 @@ private fun TextComponent.Builder.appendSelectablePropertyConfig(
         appendSelectableOptions(
             availableOptions,
             hint = "Click to select",
-            color = NamedTextColor.GRAY,
             resolveCommand = { "/$COMMAND_NAME config ${property.path} $it" },
         )
     }
@@ -77,17 +73,14 @@ private fun TextComponent.Builder.appendSelectablePropertyConfig(
     appendPropertyPath(property)
     append(selectedOption)
     if (isAutomatic) {
-        append(" (auto)", NamedTextColor.GRAY)
+        append(" (auto)", SECONDARY_COLOR)
     } else {
         append(" ")
-        append(text {
-            color(NamedTextColor.GRAY)
-            appendClickable(
-                ACTION_RESET,
-                hint = "Click to use the implementation with the highest priority",
-                command = "/$COMMAND_NAME config $ACTION_RESET ${property.path}",
-            )
-        })
+        appendAction(
+            ACTION_RESET,
+            hint = "Click to use the implementation with the highest priority",
+            command = "/$COMMAND_NAME config $ACTION_RESET ${property.path}",
+        )
     }
 }
 
@@ -102,8 +95,7 @@ private fun TextComponent.Builder.appendSetPropertyConfig(
     appendComment("Options: ")
     appendSelectableOptions(
         selectableIds,
-        hint = "Click to add",
-        color = NamedTextColor.GRAY,
+        hint = "Click to disable",
         nonClickableOptions = permanentOptions,
         resolveCommand = { "/$COMMAND_NAME config ${property.path} add $it" },
     )
@@ -111,7 +103,7 @@ private fun TextComponent.Builder.appendSetPropertyConfig(
     appendLine()
     appendPropertyPath(property)
     append("[")
-    appendSelectableOptions(values, hint = "Click to remove") {
+    appendSelectableOptions(values, hint = "Click to enable") {
         "/$COMMAND_NAME config ${property.path} remove $it"
     }
     append("]")
@@ -127,24 +119,18 @@ private fun TextComponent.Builder.appendProperty(property: ConfigProperty<*>, bo
 private fun TextComponent.Builder.appendSelectableOptions(
     options: Collection<String>,
     hint: String,
-    color: TextColor? = null,
     nonClickableOptions: Collection<String> = emptySet(),
     resolveCommand: (String) -> String,
-) = append(
-    options.mapIndexed { index, option ->
-        text {
-            color(color)
-            if (index != 0) append(", ")
-            if (option !in nonClickableOptions) {
-                appendClickable(option, hint, resolveCommand(option))
-            } else {
-                append(option)
-            }
-        }
+) = options.forEachIndexed { index, option ->
+    if (index != 0) append(", ", SECONDARY_COLOR)
+    if (option !in nonClickableOptions) {
+        appendAction(option, hint, resolveCommand(option))
+    } else {
+        append(option, SECONDARY_COLOR)
     }
-)
+}
 
 private fun TextComponent.Builder.appendPropertyPath(property: ConfigProperty<*>) =
-    append("${property.path}: ", NamedTextColor.GREEN)
+    appendKey("${property.path}: ")
 
-private fun TextComponent.Builder.appendComment(comment: String) = append("# $comment", NamedTextColor.GRAY)
+private fun TextComponent.Builder.appendComment(comment: String) = append("# $comment", SECONDARY_COLOR)

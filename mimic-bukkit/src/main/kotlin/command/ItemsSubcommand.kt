@@ -7,7 +7,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -127,8 +126,9 @@ private fun infoExecutor(itemRegistry: BukkitItemsRegistry): CommandAction<Comma
         )
 
         for (provider in providers) {
-            append("  ${provider.id}: ", NamedTextColor.WHITE)
-            appendLine(provider.knownIds.size.toString(), NamedTextColor.GRAY)
+            appendKey("  ${provider.id}: ")
+            appendValue(provider.knownIds.size.toString())
+            appendLine()
         }
         appendIdStat("Item in hand", itemInHandId(itemRegistry, sender))
         appendCommands(

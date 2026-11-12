@@ -5,7 +5,6 @@ package ru.endlesscode.mimic.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
-import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.append
@@ -68,8 +67,7 @@ private fun checkCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = {
     val hasAllClasses = system.hasAllClasses(classes)
     val hasAnyOfClasses = system.hasAnyOfClasses(classes)
 
-    val message = text {
-        color(NamedTextColor.GOLD)
+    val message = successText {
         appendLine("Player '${target.name}':")
         append("- has any of: ")
         appendVerdict(hasAnyOfClasses, "yes", "no")

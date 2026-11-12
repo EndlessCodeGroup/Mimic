@@ -12,7 +12,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.internal.Log
@@ -76,13 +75,13 @@ private fun SuggestionsBuilder.suggestValue(text: String) {
 private fun ExpValue.describe(): Component {
     val amountText = if (amount % 1 == 0.0) amount.toInt().toString() else amount.toString()
     return text {
-        color(NamedTextColor.GRAY)
+        color(SECONDARY_COLOR)
         if (operation == ExpOperation.SET) {
             append("Set ${unit.title} to ")
-            append(amountText, NamedTextColor.YELLOW)
+            appendValue(amountText)
         } else {
             append(if (operation == ExpOperation.GIVE) "Give " else "Take ")
-            append(amountText, NamedTextColor.YELLOW)
+            appendValue(amountText)
             append(if (unit == ExpUnit.LEVELS && amount != 1.0) " levels" else " ${unit.title}")
         }
     }
@@ -216,25 +215,25 @@ private fun pointsAboveLevelError(maxExp: Double) =
     commandError("Exp points should be less than %.1f on the current level, use T to set total exp or + to give exp.".format(maxExp))
 
 private val VALUE_DESCRIPTION = text {
-    color(NamedTextColor.GRAY)
+    color(SECONDARY_COLOR)
     append("Sign: ")
-    append("+", NamedTextColor.YELLOW)
+    appendValue("+")
     append(" gives, ")
-    append("-", NamedTextColor.YELLOW)
+    appendValue("-")
     appendLine(" takes, no sign sets")
     append("Unit: ")
-    append("L", NamedTextColor.YELLOW)
+    appendValue("L")
     append(" levels, ")
-    append("P", NamedTextColor.YELLOW)
+    appendValue("P")
     append(" points (default), ")
-    append("T", NamedTextColor.YELLOW)
+    appendValue("T")
     appendLine(" total exp")
     append("For example: ")
-    append("+5L", NamedTextColor.YELLOW)
+    appendValue("+5L")
     append(", ")
-    append("-100", NamedTextColor.YELLOW)
+    appendValue("-100")
     append(", ")
-    append("30T", NamedTextColor.YELLOW)
+    appendValue("30T")
 }
 
 private val VALUE_EXAMPLES =listOf("+1L", "-1L", "10L", "+100", "-100", "100T")
