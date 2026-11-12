@@ -9,16 +9,40 @@ import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.NamedTextColor
 import ru.endlesscode.mimic.internal.append
+import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
 
-internal fun successText(text: String) = Component.text(text, NamedTextColor.GOLD)
-internal fun warningText(text: String) = Component.text(text, NamedTextColor.YELLOW)
+// Colors used in command messages. Each color has a single meaning.
+private val HEADER_COLOR = NamedTextColor.GOLD
+private val KEY_COLOR = NamedTextColor.AQUA
+private val VALUE_COLOR = NamedTextColor.WHITE
+private val ID_COLOR = NamedTextColor.GREEN
+private val ACTION_COLOR = NamedTextColor.YELLOW
+internal val SECONDARY_COLOR = NamedTextColor.GRAY
+private val WARNING_COLOR = NamedTextColor.GOLD
+
+internal fun successText(text: String) = Component.text(text, VALUE_COLOR)
+internal fun warningText(text: String) = Component.text(text, WARNING_COLOR)
 
 /** Builds a message with the default success color. */
 internal fun successText(builder: TextComponent.Builder.() -> Unit): TextComponent = text {
-    color(NamedTextColor.GOLD)
+    color(VALUE_COLOR)
     builder()
+}
+
+/** Appends a key of key-value pair. */
+internal fun TextComponent.Builder.appendKey(key: String) = append(key, KEY_COLOR)
+
+/** Appends a value highlighted inside of secondary text. */
+internal fun TextComponent.Builder.appendValue(value: String) = append(value, VALUE_COLOR)
+
+/** Appends underlined [label] running the [command] on click. */
+internal fun TextComponent.Builder.appendAction(label: String, hint: String, command: String) {
+    append(text {
+        color(ACTION_COLOR)
+        appendClickable(label, hint, command)
+    })
 }
 
 /** Appends [positive] text in green if [isPositive], otherwise appends [negative] text in red. */
@@ -33,7 +57,7 @@ internal fun TextComponent.Builder.appendVerdict(isPositive: Boolean, positive: 
 /** Appends quoted [id] which is copied to clipboard on click. */
 internal fun TextComponent.Builder.appendId(id: String) {
     append(
-        Component.text("'$id'")
+        Component.text("'$id'", ID_COLOR)
             .hoverEvent(HoverEvent.showText(Component.text("Click to copy")))
             .clickEvent(ClickEvent.copyToClipboard(id))
     )
@@ -41,13 +65,13 @@ internal fun TextComponent.Builder.appendId(id: String) {
 
 /** Appends the header separating this message from the previous ones. */
 internal fun TextComponent.Builder.appendHeader(title: String) {
-    appendLine("----[ $title ]----")
+    appendLine("----[ $title ]----", HEADER_COLOR)
 }
 
 internal fun TextComponent.Builder.appendStats(vararg stats: Pair<String, String>) {
     for ((key, value) in stats) {
-        append("$key: ", NamedTextColor.DARK_AQUA)
-        append(value, NamedTextColor.GRAY)
+        appendKey("$key: ")
+        appendValue(value)
         appendLine()
     }
 }
@@ -55,11 +79,8 @@ internal fun TextComponent.Builder.appendStats(vararg stats: Pair<String, String
 /** Appends stat with the copyable [id] value. Does nothing if [id] is `null`. */
 internal fun TextComponent.Builder.appendIdStat(key: String, id: String?) {
     if (id == null) return
-    append("$key: ", NamedTextColor.DARK_AQUA)
-    append(text {
-        color(NamedTextColor.GRAY)
-        appendId(id)
-    })
+    appendKey("$key: ")
+    appendId(id)
     appendLine()
 }
 
@@ -82,19 +103,19 @@ internal fun suggestedCommand(label: String, usage: String, description: Compone
 internal fun executedCommand(label: String, command: String, description: String): CommandHint =
     CommandHint(label, command, descriptionText(description), ClickEvent.runCommand(command))
 
-private fun descriptionText(description: String) = Component.text(description, NamedTextColor.GRAY)
+private fun descriptionText(description: String) = Component.text(description, SECONDARY_COLOR)
 
 /** Appends the line with clickable [commands]. */
 internal fun TextComponent.Builder.appendCommands(vararg commands: CommandHint) {
-    append("Commands:", NamedTextColor.DARK_AQUA)
+    appendKey("Commands:")
     for (command in commands) {
         val hover = text {
-            appendLine(command.usage, NamedTextColor.YELLOW)
+            appendLine(command.usage, ACTION_COLOR)
             append(command.description)
         }
         append(" ")
         append(
-            Component.text("[${command.label}]", NamedTextColor.YELLOW)
+            Component.text("[${command.label}]", ACTION_COLOR)
                 .hoverEvent(HoverEvent.showText(hover))
                 .clickEvent(command.clickEvent)
         )

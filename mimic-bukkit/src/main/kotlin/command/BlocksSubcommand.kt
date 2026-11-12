@@ -9,7 +9,6 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -154,8 +153,9 @@ private fun infoExecutor(blockRegistry: BukkitBlockRegistry): CommandAction<Comm
         )
 
         for (provider in providers) {
-            append("  ${provider.registry.id}: ", NamedTextColor.WHITE)
-            appendLine(provider.tryGetKnownIds().size.toString(), NamedTextColor.GRAY)
+            appendKey("  ${provider.registry.id}: ")
+            appendValue(provider.tryGetKnownIds().size.toString())
+            appendLine()
         }
         appendIdStat("Targeted block", targetedBlockId(blockRegistry, sender))
         appendIdStat("Item in hand places", itemInHandBlockId(blockRegistry, sender))
