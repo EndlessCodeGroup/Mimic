@@ -7,6 +7,7 @@ plugins {
     publish
     alias(libs.plugins.shadow)
     alias(libs.plugins.bukkitgradle)
+    alias(libs.plugins.minotaur)
     kotlin("plugin.serialization")
 }
 
@@ -95,6 +96,25 @@ kotlin {
 tasks.test {
     javaLauncher = javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+modrinth {
+    token = providers.environmentVariable("MODRINTH_TOKEN")
+    projectId = "mimic-api"
+    versionName = "Mimic ${project.version}"
+    versionType = "release"
+    uploadFile.set(tasks.shadowJar)
+    changelog = providers.environmentVariable("RELEASE_NOTES").orElse("")
+    loaders.addAll("paper", "purpur")
+    gameVersions.addAll(
+        "1.20.6",
+        "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6",
+        "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11",
+        "26.1", "26.1.1", "26.1.2",
+    )
+    dependencies {
+        optional.project("craftengine")
     }
 }
 

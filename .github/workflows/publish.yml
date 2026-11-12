@@ -33,3 +33,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "$GITHUB_REF_NAME" "Mimic-${GITHUB_REF_NAME}.jar" --title "Mimic $GITHUB_REF_NAME"
+
+      - name: Publish to Modrinth
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: |
+          # Release notes are the CHANGELOG section of the pushed tag
+          export RELEASE_NOTES="$(awk -v tag="$GITHUB_REF_NAME" 'index($0, "## [" tag "]") == 1 { found = 1; next } found && /^## \[/ { exit } found' CHANGELOG.md)"
+          ./gradlew :mimic-bukkit:modrinth

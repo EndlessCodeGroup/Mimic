@@ -24,6 +24,7 @@ gradlePlugin-bukkitgradle = "1.1.0"
 gradlePlugin-shadow = "9.6.1"
 gradlePlugin-versions = "0.67.0"
 gradlePlugin-mavenPublish = "0.37.0"
+gradlePlugin-minotaur = "2.10.0"
 
 [libraries]
 
@@ -59,6 +60,7 @@ mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.
 bukkitgradle = { id = "ru.endlesscode.bukkitgradle", version.ref = "gradlePlugin-bukkitgradle" }
 shadow = { id = "com.gradleup.shadow", version.ref = "gradlePlugin-shadow" }
 versions = { id = "io.github.ben-manes.versions", version.ref = "gradlePlugin-versions" }
+minotaur = { id = "com.modrinth.minotaur", version.ref = "gradlePlugin-minotaur" }
 
 [bundles]
 
