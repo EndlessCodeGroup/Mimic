@@ -29,11 +29,12 @@ With Mimic, you don't need to download all RPG plugins and write specific code f
   Enables plugins to check player class.
 - [PlayerInventory] *(experimental)* - API to access player's inventories content.
 - [ItemsRegistry] - API adding the possibility to create and validate custom items created with plugins.
+- [BlockRegistry] *(experimental)* - API to get, set and break custom blocks created with plugins.
 
 ### Implementations
 
 #### Bukkit
-- [mimic-bukkit-api](mimic-bukkit-api) - mimic-api adopted for Bukkit. Use it in Bukkit plugins.
+- [mimic-bukkit-api](mimic-bukkit-api) - mimic-api adopted for Bukkit. Use it in Paper plugins.
 - [mimic-bukkit](mimic-bukkit) - Bukkit plugin containing some APIs implementations.
 It also provides commands to test your API implementation.
 Use it as example of Mimic APIs usage and implementation.
@@ -43,6 +44,8 @@ Use it as example of Mimic APIs usage and implementation.
 If you are server owner, just get needed plugin from [Implementations](#implementations) section.
 If you are developer you can use [Gradle] or [Maven] to plug MimicAPI to your plugin.
 
+Mimic requires [Paper] 1.20.6+ and Java 21.
+
 ### Gradle
 
 ```kotlin
@@ -51,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("ru.endlesscode.mimic:mimic-bukkit-api:0.8.0")
+    compileOnly("ru.endlesscode.mimic:mimic-bukkit-api:0.9.0")
 }
 ```
 
@@ -60,7 +63,7 @@ dependencies {
 <dependency>
   <groupId>ru.endlesscode.mimic</groupId>
   <artifactId>mimic-bukkit-api</artifactId>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <scope>provided</scope>
 </dependency>
 ```
@@ -83,8 +86,10 @@ Please make sure to update tests as appropriate.
 [Vault]: https://github.com/MilkBowl/Vault
 [Gradle]: https://gradle.org/
 [Maven]: https://maven.apache.org/
+[Paper]: https://papermc.io/
 
 [LevelSystem]: mimic-api/src/main/kotlin/level/LevelSystem.kt
 [ClassSystem]: mimic-api/src/main/kotlin/classes/ClassSystem.kt
 [PlayerInventory]: mimic-api/src/main/kotlin/inventory/PlayerInventory.kt
 [ItemsRegistry]: mimic-api/src/main/kotlin/items/ItemsRegistry.kt
+[BlockRegistry]: mimic-api/src/main/kotlin/blocks/BlockRegistry.kt
