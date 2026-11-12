@@ -21,8 +21,8 @@ mavenPublishing {
 
         licenses {
             license {
-                name = "GNU Affero General Public License v3.0"
-                url = "https://choosealicense.com/licenses/agpl-3.0/"
+                name = "MIT License"
+                url = "https://opensource.org/license/mit"
             }
         }
 

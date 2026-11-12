@@ -1,21 +1,5 @@
-/*
- * This file is part of BukkitMimic.
- * Copyright (C) 2021 Osip Fatkullin
- * Copyright (C) 2021 EndlessCode Group and contributors
- *
- * BukkitMimic is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * BukkitMimic is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with BukkitMimic.  If not, see <http://www.gnu.org/licenses/>.
- */
+// Copyright (c) 2018 Osip Fatkullin, EndlessCode Group and contributors
+// SPDX-License-Identifier: MIT
 
 package ru.endlesscode.mimic
 
@@ -166,7 +150,6 @@ public class MimicPlugin : JavaPlugin() {
         mimic.registerPlayerInventoryProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
-    @OptIn(ExperimentalMimicApi::class)
     private fun hookItems(
         constructor: () -> BukkitItemsRegistry,
         priority: ServicePriority = Normal,
@@ -176,21 +159,14 @@ public class MimicPlugin : JavaPlugin() {
 
     @ExperimentalMimicApi
     private fun hookBlocks(
-        metrics.addCustomChart(SimplePie("inventory_provider") {
-            mimic.getPlayerInventoryProvider().id
-        })
         constructor: () -> BukkitBlockRegistry,
         priority: ServicePriority = Normal,
     ) {
         mimic.registerBlockRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
-        metrics.addCustomChart(AdvancedPie("block_registry_custom") {
-            mimic.getAllBlockRegistries().keys
-                .filterNot { it == MinecraftBlockRegistry.ID }
-                .associateWith { 1 }
-        })
     //</editor-fold>
 
+    @OptIn(ExperimentalMimicApi::class)
     private fun initMetrics() {
         val metrics = Metrics(this, 8413)
 
@@ -200,9 +176,17 @@ public class MimicPlugin : JavaPlugin() {
         metrics.addCustomChart(SimplePie("class_system") {
             mimic.getClassSystemProvider().id
         })
+        metrics.addCustomChart(SimplePie("inventory_provider") {
+            mimic.getPlayerInventoryProvider().id
+        })
         metrics.addCustomChart(AdvancedPie("items_registry_custom") {
             mimic.getAllItemsRegistries().keys
                 .filterNot { it == MinecraftItemsRegistry.ID }
+                .associateWith { 1 }
+        })
+        metrics.addCustomChart(AdvancedPie("block_registry_custom") {
+            mimic.getAllBlockRegistries().keys
+                .filterNot { it == MinecraftBlockRegistry.ID }
                 .associateWith { 1 }
         })
     }

@@ -1,3 +1,6 @@
+// Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
+// SPDX-License-Identifier: MIT
+
 package ru.endlesscode.mimic.level
 
 import org.bukkit.entity.Player

@@ -25,6 +25,7 @@ gradlePlugin-shadow = "9.6.1"
 gradlePlugin-versions = "0.67.0"
 gradlePlugin-mavenPublish = "0.37.0"
 gradlePlugin-minotaur = "2.10.0"
+gradlePlugin-spotless = "8.10.4"
 
 [libraries]
 
@@ -54,6 +55,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 # Build dependencies
 dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 mavenPublish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "gradlePlugin-mavenPublish" }
+spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "gradlePlugin-spotless" }
 
 [plugins]
 

@@ -1,3 +1,6 @@
+// Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
+// SPDX-License-Identifier: MIT
+
 package ru.endlesscode.mimic.command
 
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes

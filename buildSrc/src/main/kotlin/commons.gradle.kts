@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 plugins {
     kotlin("jvm")
     id("org.jetbrains.dokka")
+    id("com.diffplug.spotless")
 }
 
 tasks.withType<JavaCompile> {
@@ -14,6 +15,16 @@ tasks.withType<JavaCompile> {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.withType<Jar>().configureEach {
+    from(rootProject.file("LICENSE")) { into("META-INF") }
+}
+
+spotless {
+    kotlin {
+        licenseHeaderFile(rootProject.file("spotless.license.kt"))
+    }
 }
 
 kotlin {

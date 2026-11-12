@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+### Housekeeping
+
+- License changed to MIT.
+  Previously, the API modules were licensed under LGPL-3.0 and the plugin under GPL-3.0.
+
 ## [v0.9.0] (2026-11-12)
 
 ### Paper-first

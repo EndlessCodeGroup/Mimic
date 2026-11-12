@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Osip Fatkullin, EndlessCode Group and contributors
+// SPDX-License-Identifier: MIT
+
 @file:Suppress("UnstableApiUsage")
 
 package ru.endlesscode.mimic.command

@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Osip Fatkullin, EndlessCode Group and contributors
+// SPDX-License-Identifier: MIT
+
 package ru.endlesscode.mimic
 
 import io.kotest.matchers.collections.shouldBeEmpty
