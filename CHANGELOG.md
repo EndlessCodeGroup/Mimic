@@ -1,5 +1,20 @@
 ## [Unreleased]
 
+### Levels API
+
+New Levels API replaces `LevelSystem` ([#80](https://github.com/EndlessCodeGroup/Mimic/issues/80)).
+A player can now have many levels from several plugins at once: skills, jobs, classes or the vanilla level.
+See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#levels) for details and examples.
+
+- `Mimic.getLevels()` reads and changes players' levels: `getProgress`, `hasLevel`, `setLevel`, `giveExp` and `takeExp`.
+- `Mimic.registerLevelProvider()` makes a plugin's levels available.
+- Levels API requires Mimic API level `MimicApiLevel.VERSION_0_10`.
+- Levels are identified by keys with the plugin as namespace: `minecraft:level`, `auraskills:mining`.
+- `LevelSystem` API is deprecated, but keeps working.
+  Every level system is also available via Levels API as the single level `<id>:level`.
+- Config option `level-system` is renamed to `level-provider`, the old value is moved automatically.
+  Command `/mimic config level-system` is renamed to `/mimic config level-provider`.
+
 ### Plugin changes
 
 - Consistent colors in command output
@@ -9,6 +24,8 @@
 
 - License changed to MIT.
   Previously, the API modules were licensed under LGPL-3.0 and the plugin under GPL-3.0.
+- `Mimic.getItemsRegistry()` and `Mimic.getBlockRegistry()` became Kotlin properties `itemsRegistry` and `blockRegistry`.
+  Nothing changes for Java, Kotlin code should use the properties.
 
 ## [v0.9.0] (2026-11-12)
 

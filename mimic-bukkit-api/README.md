@@ -28,8 +28,8 @@ private boolean checkMimicEnabled() {
     }
 
     // You can also check if Mimic version is right
-    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_9)) {
-        getLogger().severe("Required at least Mimic 0.9!");
+    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)) {
+        getLogger().severe("Required at least Mimic 0.10!");
         return false;
     }
 
@@ -43,7 +43,7 @@ Another way is to add it to `softdepend` and show a clear error message to the s
 @Override
 public void onEnable() {
     if (!checkMimicEnabled()) {
-        getLogger().severe("Download latest version here: https://www.spigotmc.org/resources/82515/");
+        getLogger().severe("Download latest version: https://github.com/EndlessCodeGroup/Mimic/releases/latest");
         getServer().getPluginManager().disablePlugin(this);
         return;
     }
@@ -64,7 +64,7 @@ BukkitBlockRegistry blockRegistry = mimic.getBlockRegistry();
 Now you can use APIs:
 ```java
 // See the "Levels" section below for details
-Key playerLevel = Key.key("minecraft", "level");
+Key playerLevel = Key.key("minecraft:level");
 boolean isExperienced = levels.hasLevel(player, playerLevel, 30);
 levels.giveExp(player, playerLevel, 42);
 
@@ -85,12 +85,14 @@ boolean isPalmLog = blockRegistry.isSameBlock(block, "craftengine:default/palm_l
 blockRegistry.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.toArray(new ItemStack[0])).values());
 ```
 
-### Item and block IDs
+### IDs
 
-Mimic identifies items and blocks by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
-where the namespace is the ID of the registry: `minecraft:acacia_boat`, `craftengine:default/palm_log`.
+Mimic identifies items, blocks and level tracks by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
+where the namespace is the ID of the plugin's implementation: `minecraft:acacia_boat`, `craftengine:default/palm_log`, `auraskills:mining`.
 The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
-ID without namespace, or with the `mimic` namespace, is searched over all registries in order of priority.
+
+- **Items and blocks:** ID without namespace, or with the `mimic` namespace, is searched over all registries in order of priority.
+- **Level tracks:** the namespace is required, see [Track IDs](#track-ids).
 
 > Item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`) or with more than one `:` (`ia:itemsadder:ruby_sword`) are deprecated.
 > They still work but log a warning.
@@ -106,7 +108,8 @@ ID without namespace, or with the `mimic` namespace, is searched over all regist
     import ru.endlesscode.mimic.MimicApiLevel;
     import ru.endlesscode.mimic.classes.BukkitClassSystem;
     import ru.endlesscode.mimic.items.BukkitItemsRegistry;
-    import ru.endlesscode.mimic.level.BukkitLevelSystem;
+    import ru.endlesscode.mimic.level.Levels;
+    import net.kyori.adventure.key.Key;
     
     import java.util.Arrays;
     
@@ -114,8 +117,8 @@ ID without namespace, or with the `mimic` namespace, is searched over all regist
     
         private static Mimic mimic = null;
     
-        public static BukkitLevelSystem getLevelSystem(Player player) {
-            return mimic.getLevelSystem(player);
+        public static Levels getLevels() {
+            return mimic.getLevels();
         }
     
         public static BukkitClassSystem getClassSystem(Player player) {
@@ -129,7 +132,7 @@ ID without namespace, or with the `mimic` namespace, is searched over all regist
         @Override
         public void onEnable() {
             if (!checkMimicEnabled()) {
-                getLogger().severe("Download latest version here: https://www.spigotmc.org/resources/82515/");
+                getLogger().severe("Download latest version: https://github.com/EndlessCodeGroup/Mimic/releases/latest");
                 getServer().getPluginManager().disablePlugin(this);
                 return;
             }
@@ -144,8 +147,8 @@ ID without namespace, or with the `mimic` namespace, is searched over all regist
             }
 
             // You can also check if Mimic version is right
-            if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_9)) {
-                getLogger().severe("Required at least Mimic 0.9!");
+            if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)) {
+                getLogger().severe("Required at least Mimic 0.10!");
                 return false;
             }
 
@@ -154,10 +157,11 @@ ID without namespace, or with the `mimic` namespace, is searched over all regist
     
         // Method to demonstrate usage
         private void useApis(Player player) {
-            // LevelSystem and ClassSystem holds weak reference to player object and should not live a long time.
-            BukkitLevelSystem levelSystem = getLevelSystem(player);
-            int playerLevel = levelSystem.getLevel();
-            levelSystem.giveExp(42);
+            Key playerLevel = Key.key("minecraft:level");
+            boolean isExperienced = getLevels().hasLevel(player, playerLevel, 30);
+            getLevels().giveExp(player, playerLevel, 42);
+
+            // ClassSystem holds weak reference to player object and should not live a long time.
     
             BukkitClassSystem classSystem = getClassSystem(player);
             String playerPrimaryClass = classSystem.getPrimaryClass();
@@ -172,6 +176,85 @@ ID without namespace, or with the `mimic` namespace, is searched over all regist
     }
     ```
 </details>
+
+### Levels
+
+Levels API gives access to players' levels from all RPG plugins at once.
+A plugin may have one level or many: vanilla Minecraft has a single level,
+while skill plugins have a level per skill, and job plugins have a level per job.
+Each of these levels is called a **track**.
+
+Levels API requires Mimic 0.10, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)`.
+
+#### Track IDs
+
+Each track has an ID made of the plugin ID and the track name: `minecraft:level`, `auraskills:mining`, `myplugin:profession/fishing`.
+The plugin part is required, because different plugins may have tracks with the same name.
+See [IDs](#ids) for allowed characters.
+
+If you read track IDs from your config, check them when your plugin loads:
+
+```java
+Key trackId = Key.key(config.getString("track"));
+boolean exists = levels.getAllTracks().stream().anyMatch(track -> track.key().equals(trackId));
+```
+
+#### Reading levels
+
+If you just need "the player's level", use the primary track.
+Server owners choose which plugin provides it with the `level-provider` option in Mimic config.
+
+```java
+Levels levels = Mimic.getInstance().getLevels();
+
+LevelTrack track = levels.getPrimaryTrack(player);
+if (track == null) return; // The selected plugin has no primary track
+
+// Check the level quickly
+boolean isExperienced = levels.hasLevel(player, track.key(), 30);
+
+// Or read the level together with experience
+LevelProgress progress = levels.getProgress(player, track.key());
+if (progress != null) {
+    int level = progress.getLevel();
+    if (progress.hasMaxLevel()) {
+        int maxLevel = progress.getMaxLevel();
+    }
+    // Some tracks have levels only, and the experience needed for the next level may be unknown
+    if (progress.hasExp() && progress.hasExpToNextLevel()) {
+        double exp = progress.getExp();                       // experience within the current level
+        double expToNextLevel = progress.getExpToNextLevel(); // the whole step to the next level, 0.0 if it's free
+    }
+}
+```
+
+`getTracks(player)` lists the tracks the player has, and `getAllTracks()` lists all tracks of all plugins.
+
+#### Changing levels
+
+```java
+Key mining = Key.key("auraskills:mining");
+
+levels.giveExp(player, mining, 100); // 100 experience, without boosters and party sharing if the plugin allows
+levels.takeExp(player, mining, 50);  // Lowers the level if needed
+levels.setLevel(player, mining, 10); // Level 10 with 0 experience, kept within the track's min and max level
+```
+
+A change returns `true` if it was requested, and `false` if the plugin doesn't support it or the player's data isn't loaded yet.
+`true` doesn't guarantee the change: another plugin may cancel it.
+
+#### Rules
+
+See [Levels] for the rules: which players are supported, what `null` and `false` mean, caching and threading.
+
+#### Built-in tracks
+
+| Plugin                                                        | Tracks  |
+|---------------------------------------------------------------|---------|
+| `minecraft`                                                   | `level` |
+| `mmocore`, `heroes`, `skillapi`, `quantumrpg`, `battlelevels` | `level` |
+
+Plugins that still use the deprecated [BukkitLevelSystem] are available the same way, as the single track `<id>:level`.
 
 ### How to implement API in my plugin?
 
@@ -281,6 +364,80 @@ Invalid IDs returned by a registry are ignored with a warning.
     ```
 </details>
 
+<details>
+    <summary>Level provider example</summary>
+
+    ```java
+    import net.kyori.adventure.text.Component;
+    import org.bukkit.entity.Player;
+    import org.jetbrains.annotations.NotNull;
+    import org.jetbrains.annotations.Nullable;
+    import ru.endlesscode.mimic.level.LevelProgress;
+    import ru.endlesscode.mimic.level.LevelProvider;
+
+    import java.util.Collection;
+    import java.util.List;
+
+    public class MyLevelProvider implements LevelProvider {
+
+        @NotNull
+        @Override
+        public String getId() {
+            return "myplugin";
+        }
+
+        // Read on every request, so it can change on the plugin reload
+        @NotNull
+        @Override
+        public Collection<Track> getAllTracks() {
+            return MySkills.getAll().stream().map(MyLevelProvider::toTrack).toList();
+        }
+
+        @NotNull
+        @Override
+        public Collection<Track> getTracks(@NotNull Player player) {
+            return MySkills.getUnlocked(player).stream().map(MyLevelProvider::toTrack).toList();
+        }
+
+        @Nullable
+        @Override
+        public Track getPrimaryTrack(@NotNull Player player) {
+            return null; // No track represents the player's level
+        }
+
+        private static Track toTrack(MySkill skill) {
+            return new Track(skill.getId(), Component.text(skill.getDisplayName()));
+        }
+
+        @Nullable
+        @Override
+        public LevelProgress getProgress(@NotNull Player player, @NotNull String trackId) {
+            MySkillData data = MySkills.getData(player, trackId);
+            if (data == null) return null;
+            return LevelProgress.level(data.getLevel())
+                    .minLevel(1)
+                    .maxLevel(data.getMaxLevel())
+                    .exp(data.getExp())
+                    // The whole requirement for the step from the current level to the next one, not the remaining part
+                    .expToNextLevel(data.getExpToNextLevel())
+                    .build();
+        }
+
+        // Writes are optional, override only what your plugin supports
+        @Override
+        public boolean giveExp(@NotNull Player player, @NotNull String trackId, double amount) {
+            MySkillData data = MySkills.getData(player, trackId);
+            if (data == null) return false;
+            data.addRawExp(amount);
+            return true;
+        }
+    }
+    ```
+</details>
+
+A level provider returns track IDs without the plugin part: `mining`, and Mimic turns it into `myplugin:mining`.
+See [LevelProvider] for the rules about track IDs, unloaded data and threading.
+
 When you've implemented API, register it in method **`onLoad`** of your plugin:
 
 ```java
@@ -291,6 +448,7 @@ public void onLoad() {
     // Register your implementations and specify minimal required Mimic version for it.
     mimic.registerClassSystem(MyClassSystem::new, MimicApiLevel.CURRENT, this);
     mimic.registerBlockRegistry(new MyBlockRegistry(), MimicApiLevel.CURRENT, this);
+    mimic.registerLevelProvider(new MyLevelProvider(), MimicApiLevel.CURRENT, this);
 }
 ```
 
@@ -306,7 +464,8 @@ IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are res
 [MimicService]: ../mimic-api/src/main/kotlin/MimicService.kt
 [BukkitLevelSystem.Provider]: src/main/kotlin/level/BukkitLevelSystem.kt
 [BukkitLevelSystem]: src/main/kotlin/level/BukkitLevelSystem.kt
-[LevelProvider]: src/main/kotlin/level/LevelProvider.kt
+[Levels]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.level/-levels/index.html
+[LevelProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.level/-level-provider/index.html
 [BukkitClassSystem.Provider]: src/main/kotlin/classes/BukkitClassSystem.kt
 [BukkitPlayerInventory.Provider]: src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: src/main/kotlin/items/BukkitItemsRegistry.kt
