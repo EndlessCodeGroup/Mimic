@@ -1,0 +1,284 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>LevelProgress</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    mimic
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":mimic-bukkit-api/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":mimic-bukkit-api/main" data-filter=":mimic-bukkit-api/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    mimic
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="mimic-bukkit-api::ru.endlesscode.mimic.level/LevelProgress///PointingToDeclaration//-955813491">
+  <div class="breadcrumbs"><a href="../../index.html">mimic-bukkit-api</a><span class="delimiter">/</span><a href="../index.html">ru.endlesscode.mimic.level</a><span class="delimiter">/</span><span class="current">LevelProgress</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Level</span><wbr><span><span>Progress</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.NonExtendable///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.NonExtendable</span></span></div></div><span class="token keyword">interface </span><a href="index.html">LevelProgress</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//level/LevelProgress.kt#L24">source</a>)</span></span></div><p class="paragraph">Snapshot of a player's progress on a level track. The maximum level and experience requirements are the ones that apply to this player now, so they may differ between players on the same track.</p><p class="paragraph">Values are read together and may be stale right after a write, so don't cache them. Progress objects are equal if all their values are equal.</p><p class="paragraph">Create it with the builder:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">LevelProgress.level(5).minLevel(1).build();<br>LevelProgress.level(5).minLevel(0).maxLevel(99).exp(10.0).expToNextLevel(100.0).build();</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><span class="kdoc-tag"><h4 class="">Since</h4><p class="paragraph">0.10.0</p></span></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="938118073%2FClasslikes%2F-955813491" anchor-label="Builder" id="938118073%2FClasslikes%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-builder/index.html"><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="938118073%2FClasslikes%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-builder/index.html">Builder</a></div><div class="brief "><p class="paragraph">Builder of <a href="index.html">LevelProgress</a>, use <a href="-companion/level.html">LevelProgress.level</a> to create it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="388007080%2FClasslikes%2F-955813491" anchor-label="Companion" id="388007080%2FClasslikes%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="388007080%2FClasslikes%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-1915920668%2FProperties%2F-955813491" anchor-label="exp" id="-1915920668%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="exp.html"><span><span>exp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1915920668%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="exp.html">exp</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Experience within the current level, <code class="lang-kotlin">0.0</code> if the track has no experience. See <a href="has-exp.html">hasExp</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1039620352%2FProperties%2F-955813491" anchor-label="expToNextLevel" id="-1039620352%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="exp-to-next-level.html"><span>exp</span><wbr><span>To</span><wbr><span>Next</span><wbr><span><span>Level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1039620352%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="exp-to-next-level.html">expToNextLevel</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></div><div class="brief "><p class="paragraph">Total experience required for the step from the current level to the next one, not the remaining part. <code class="lang-kotlin">0.0</code> if the next level is free, <code class="lang-kotlin">-1</code> if the requirement is unknown or the level is maximal. See <a href="has-exp-to-next-level.html">hasExpToNextLevel</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1688651357%2FProperties%2F-955813491" anchor-label="level" id="1688651357%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="level.html"><span><span>level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1688651357%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="level.html">level</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">Current level. Never lower than <a href="min-level.html">minLevel</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="38165273%2FProperties%2F-955813491" anchor-label="maxLevel" id="38165273%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="max-level.html"><span>max</span><wbr><span><span>Level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="38165273%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="max-level.html">maxLevel</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The highest level the player can reach on the track, <code class="lang-kotlin">-1</code> if the level is unlimited. See <a href="has-max-level.html">hasMaxLevel</a>. It may depend on the player, for example on their permissions or class.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1924171655%2FProperties%2F-955813491" anchor-label="minLevel" id="1924171655%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="min-level.html"><span>min</span><wbr><span><span>Level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1924171655%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="min-level.html">minLevel</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div><div class="brief "><p class="paragraph">The lowest level on the track, <code class="lang-kotlin">0</code> or <code class="lang-kotlin">1</code> depending on the plugin. It is the same for all players.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1265078998%2FFunctions%2F-955813491" anchor-label="hasExp" id="1265078998%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-exp.html"><span>has</span><wbr><span><span>Exp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1265078998%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="has-exp.html"><span class="token function">hasExp</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns <code class="lang-kotlin">false</code> if the track has levels only, without experience.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="168749006%2FFunctions%2F-955813491" anchor-label="hasExpToNextLevel" id="168749006%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-exp-to-next-level.html"><span>has</span><wbr><span>Exp</span><wbr><span>To</span><wbr><span>Next</span><wbr><span><span>Level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="168749006%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-exp-to-next-level.html"><span class="token function">hasExpToNextLevel</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns <code class="lang-kotlin">false</code> if the experience required for the next level is unknown, or the level is maximal.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1493749351%2FFunctions%2F-955813491" anchor-label="hasMaxLevel" id="1493749351%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-max-level.html"><span>has</span><wbr><span>Max</span><wbr><span><span>Level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1493749351%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="has-max-level.html"><span class="token function">hasMaxLevel</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns <code class="lang-kotlin">false</code> if the level is unlimited.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

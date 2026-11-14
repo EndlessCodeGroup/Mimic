@@ -1,0 +1,246 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Levels</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    mimic
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":mimic-bukkit-api/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":mimic-bukkit-api/main" data-filter=":mimic-bukkit-api/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    mimic
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="mimic-bukkit-api::ru.endlesscode.mimic.level/Levels///PointingToDeclaration//-955813491">
+  <div class="breadcrumbs"><a href="../../index.html">mimic-bukkit-api</a><span class="delimiter">/</span><a href="../index.html">ru.endlesscode.mimic.level</a><span class="delimiter">/</span><span class="current">Levels</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Levels</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Levels</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//level/Levels.kt#L58">source</a>)</span></span></div><p class="paragraph">Levels of players from all RPG plugins supported by Mimic. Get it via <a href="../../ru.endlesscode.mimic/-mimic/levels.html">Mimic.levels</a>. To make your own plugin's levels available here, implement <a href="../-level-provider/index.html">LevelProvider</a> instead.</p><p class="paragraph">A <strong>track</strong> is one thing a player levels up in: a class, a skill, a profession, a job, or the single global level. A player may have many tracks from several plugins at once.</p><p class="paragraph">It replaces the deprecated <code class="lang-kotlin">LevelSystem</code> API, which supports only a single level per player.</p><h3 class="">Quick start</h3><p class="paragraph">If you need just "the player's level", use the primary track. Server owners choose its plugin in Mimic config:</p><div class="sample-container"><pre><code class="block lang-java" theme="idea">LevelTrack track = levels.getPrimaryTrack(player);<br>if (track == null) return; // The selected plugin has no primary track<br><br>// Check level quickly<br>if (levels.hasLevel(player, track.key(), 10)) { ... }<br><br>// Or get a progress object containing info about level and experience<br>LevelProgress progress = levels.getProgress(player, track.key());<br>if (progress != null &amp;&amp; progress.getLevel() &gt;= 10) { ... }</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><h3 class="">Track IDs</h3><p class="paragraph">Tracks are identified by <span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span>, which consists of a namespace and a path:</p><ul><li><p class="paragraph">The namespace is the ID of the plugin providing the track: <code class="lang-kotlin">minecraft</code>, <code class="lang-kotlin">auraskills</code>.</p></li><li><p class="paragraph">The path is the track within that plugin: <code class="lang-kotlin">level</code>, <code class="lang-kotlin">mining</code>.</p></li></ul><p class="paragraph">For example, <code class="lang-kotlin">minecraft</code> provides a single track <code class="lang-kotlin">minecraft:level</code> - the vanilla level, and a skills plugin may provide <code class="lang-kotlin">auraskills:mining</code> and <code class="lang-kotlin">auraskills:combat</code>.</p><p class="paragraph">The namespace is required, since the same path in different plugins means a different level. Note that <code class="lang-kotlin">Key.key("mining")</code> turns into <code class="lang-kotlin">minecraft:mining</code>, so check track IDs read from configs against <a href="get-all-tracks.html">getAllTracks</a> when your plugin loads.</p><h3 class="">Rules</h3><ul><li><p class="paragraph">Works only with online players.</p></li><li><p class="paragraph"><code class="lang-kotlin">null</code> or <code class="lang-kotlin">false</code> means "not possible right now": the track doesn't exist, the player doesn't have it, the plugin doesn't support this action, or the player's data isn't loaded yet.</p></li><li><p class="paragraph">Don't cache results. Read them again each time you need them.</p></li><li><p class="paragraph">Read from any thread. Change levels and experience only on the main thread (on Folia - on the player's thread).</p></li></ul><span class="kdoc-tag"><h4 class="">Since</h4><p class="paragraph">0.10.0</p></span></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-701229744%2FFunctions%2F-955813491" anchor-label="getAllTracks" id="-701229744%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-all-tracks.html"><span>get</span><wbr><span>All</span><wbr><span><span>Tracks</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-701229744%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-all-tracks.html"><span class="token function">getAllTracks</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-level-track/index.html">LevelTrack</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns all tracks of all providers, regardless of players. Use it for discovery and config validation. Tracks are sorted by provider priority, then in the order the provider returns them.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-795612270%2FFunctions%2F-955813491" anchor-label="getPrimaryTrack" id="-795612270%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-primary-track.html"><span>get</span><wbr><span>Primary</span><wbr><span><span>Track</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-795612270%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-primary-track.html"><span class="token function">getPrimaryTrack</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-level-track/index.html">LevelTrack</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the track that best represents the <a href="get-primary-track.html">player</a>'s overall level, or <code class="lang-kotlin">null</code> if there is no such track.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2131292794%2FFunctions%2F-955813491" anchor-label="getProgress" id="-2131292794%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-progress.html"><span>get</span><wbr><span><span>Progress</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2131292794%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-progress.html"><span class="token function">getProgress</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">trackId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-level-progress/index.html">LevelProgress</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns progress on the <a href="get-progress.html">trackId</a>, or <code class="lang-kotlin">null</code> if the <a href="get-progress.html">player</a> doesn't have the track or their data isn't loaded.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1204136019%2FFunctions%2F-955813491" anchor-label="getTracks" id="1204136019%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-tracks.html"><span>get</span><wbr><span><span>Tracks</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1204136019%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-tracks.html"><span class="token function">getTracks</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-level-track/index.html">LevelTrack</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns tracks the <a href="get-tracks.html">player</a> currently has. Tracks are sorted by provider priority, then in the order the provider returns them.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-846370334%2FFunctions%2F-955813491" anchor-label="giveExp" id="-846370334%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="give-exp.html"><span>give</span><wbr><span><span>Exp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-846370334%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="give-exp.html"><span class="token function">giveExp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">trackId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Gives exactly <a href="give-exp.html">amount</a> experience on the <a href="give-exp.html">trackId</a>, ignoring boosters, party sharing and other bonuses the plugin applies to experience earned in-game. Some plugins always apply their boosters, so the player may get more. The plugin's level-up rewards and messages still work as usual.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-487901902%2FFunctions%2F-955813491" anchor-label="hasLevel" id="-487901902%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has-level.html"><span>has</span><wbr><span><span>Level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-487901902%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="has-level.html"><span class="token function">hasLevel</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">trackId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns <code class="lang-kotlin">true</code> if the <a href="has-level.html">player</a> has the track with <a href="has-level.html">trackId</a> and their level on it is at least <a href="has-level.html">level</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-111673238%2FFunctions%2F-955813491" anchor-label="setLevel" id="-111673238%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-level.html"><span>set</span><wbr><span><span>Level</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-111673238%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="set-level.html"><span class="token function">setLevel</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">trackId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Sets <a href="set-level.html">level</a> with 0 experience within the level on the <a href="set-level.html">trackId</a>. The level is clamped to <a href="../-level-progress/min-level.html">LevelProgress.minLevel</a> and <a href="../-level-progress/max-level.html">LevelProgress.maxLevel</a>. Whether the player gets the plugin's level-up rewards (skill points, unlocks, messages) for skipped levels depends on the plugin. Lowering the level may not take rewards back.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-945352488%2FFunctions%2F-955813491" anchor-label="takeExp" id="-945352488%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="take-exp.html"><span>take</span><wbr><span><span>Exp</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-945352488%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="take-exp.html"><span class="token function">takeExp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">trackId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Takes experience <a href="take-exp.html">amount</a> on the <a href="take-exp.html">trackId</a>, lowering levels down to <a href="../-level-progress/min-level.html">LevelProgress.minLevel</a> if needed.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
