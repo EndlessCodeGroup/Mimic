@@ -21,6 +21,7 @@ import ru.endlesscode.mimic.impl.mimic.MimicLevels
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
@@ -146,8 +147,29 @@ internal class MimicImpl(
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): BukkitLevelSystem.Provider? = levelSystems.tryRegister(apiLevel, plugin, priority) {
-        WrappedLevelSystemProvider(provider, plugin)
+    ): BukkitLevelSystem.Provider? {
+        val levelSystem = levelSystems.tryRegister(apiLevel, plugin, priority) {
+            WrappedLevelSystemProvider(provider, plugin)
+        }
+        if (levelSystem != null) bridgeLevelSystem(levelSystem, plugin, priority)
+        return levelSystem
+    }
+
+    /** Makes the given [levelSystem] available via [levels], unless a level provider with the same ID is registered. */
+    private fun bridgeLevelSystem(levelSystem: BukkitLevelSystem.Provider, plugin: Plugin, priority: ServicePriority) {
+        val hasLevelProvider = levelProviders.entries.any { (service) ->
+            service.id == levelSystem.id && service !is LevelSystemTrackProvider
+        }
+        if (hasLevelProvider) return
+
+        levelProviders.register(LevelSystemTrackProvider(levelSystem), plugin, priority)
+        if (plugin != mimicPlugin) {
+            Log.w(
+                "LevelSystem '${levelSystem.id}' by $plugin uses deprecated LevelSystem API, " +
+                    "so it is available via Levels API as the single track '${levelSystem.id}:level'. " +
+                    "Please ask ${plugin.authorsMention} to migrate to LevelProvider."
+            )
+        }
     }
 
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = levelSystems.load(config.levelSystem)
@@ -160,8 +182,15 @@ internal class MimicImpl(
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): LevelProvider? =
-        levelProviders.tryRegister(apiLevel, plugin, priority) { WrappedLevelProvider(provider, plugin) }
+    ): LevelProvider? = levelProviders.tryRegister(apiLevel, plugin, priority) {
+        WrappedLevelProvider(provider, plugin).also { unregisterBridgedLevelSystem(it.id) }
+    }
+
+    /** Unregisters the level system bridged with the given [id], so a level provider always replaces it. */
+    private fun unregisterBridgedLevelSystem(id: String) {
+        val bridge = levelProviders.entries.find { (service) -> service.id == id && service is LevelSystemTrackProvider }
+        if (bridge != null) levelProviders.unregister(bridge.service)
+    }
 
     override val levels: Levels =
         MimicLevels(levelProviders, preferredProviderId = { config.levelProvider })

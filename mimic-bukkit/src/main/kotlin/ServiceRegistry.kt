@@ -91,6 +91,12 @@ internal class ServiceRegistry<T : MimicService>(
         return true
     }
 
+    /** Unregisters the given [service]. */
+    @Synchronized
+    fun unregister(service: T) {
+        entries = entries.filter { it.service !== service }
+    }
+
     /** Unregisters all services registered by the given [plugin]. */
     @Synchronized
     fun unregisterAll(plugin: Plugin) {
