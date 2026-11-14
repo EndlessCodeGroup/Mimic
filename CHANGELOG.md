@@ -24,7 +24,10 @@ See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 - Added [AuraSkills](https://modrinth.com/plugin/auraskills) integration: levels provider ([#22](https://github.com/EndlessCodeGroup/Mimic/issues/22)).
   Every skill is a track: `auraskills:mining`, `auraskills:farming`.
   The primary track is `auraskills:power`, the sum of skill levels, it is read-only.
-  It is available via `Levels` API only, not via the deprecated `LevelSystem` API.
+- Added [mcMMO](https://www.spigotmc.org/resources/64348/) integration: levels provider ([#55](https://github.com/EndlessCodeGroup/Mimic/issues/55)).
+  Every skill is a track: `mcmmo:mining`, `mcmmo:swords`.
+  The primary track is `mcmmo:power`, the sum of skill levels.
+  The primary track and child skills `mcmmo:salvage` and `mcmmo:smelting` are read-only.
 
 ### Plugin changes
 

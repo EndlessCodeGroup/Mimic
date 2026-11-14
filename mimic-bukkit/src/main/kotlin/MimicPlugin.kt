@@ -26,6 +26,7 @@ import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
+import ru.endlesscode.mimic.impl.mcmmo.McMmoLevelProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
@@ -121,6 +122,10 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("AuraSkills", "dev.aurelium.auraskills.api.AuraSkillsApi") {
             hookLevels(::AuraSkillsLevelProvider)
+        }
+
+        pluginHooks("mcMMO", "com.gmail.nossr50.mcMMO") {
+            hookLevels(::McMmoLevelProvider)
         }
     }
 

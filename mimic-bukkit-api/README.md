@@ -254,6 +254,7 @@ See [Levels] for the rules: which players are supported, what `null` and `false`
 | `minecraft`                                                   | `level`                                                                            |
 | `mmocore`, `heroes`, `skillapi`, `quantumrpg`, `battlelevels` | `level`                                                                            |
 | `auraskills`                                                  | Skills: `mining`, `farming`, … Primary: `power`, the read-only sum of skill levels |
+| `mcmmo`                                                       | Skills: `mining`, `swords`, … Primary: `power`, the read-only sum of skill levels  |
 
 Plugins that still use the deprecated [BukkitLevelSystem] are available the same way, as the single track `<id>:level`.
 

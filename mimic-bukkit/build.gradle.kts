@@ -31,6 +31,7 @@ bukkit {
             "QuantumRPG",
             "CraftEngine",
             "AuraSkills",
+            "mcMMO",
         )
     }
 
@@ -59,6 +60,11 @@ repositories {
             includeGroup("net.momirealms")
         }
     }
+    maven(url = "https://nexus.neetgames.com/repository/maven-releases/") {
+        content {
+            includeGroup("com.gmail.nossr50.mcMMO")
+        }
+    }
     aikar()
     codemc()
     // Uncomment if you want to get Heroes from maven repo
@@ -85,6 +91,7 @@ dependencies {
     testImplementation(libs.paperApi)
     testImplementation(libs.rpgplugins.skillapi)
     testImplementation(libs.rpgplugins.auraskills)
+    testImplementation(libs.rpgplugins.mcmmo) { isTransitive = false }
 }
 
 kotlin {
@@ -104,6 +111,8 @@ tasks.test {
 tasks.runServer {
     downloadPlugins {
         modrinth("auraskills", libs.versions.auraskills.get())
+        val mcmmoVersion = libs.versions.mcmmo.get()
+        url("https://nexus.neetgames.com/repository/maven-releases/com/gmail/nossr50/mcMMO/mcMMO/$mcmmoVersion/mcMMO-$mcmmoVersion.jar")
     }
 }
 
