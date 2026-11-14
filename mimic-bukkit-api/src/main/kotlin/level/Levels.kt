@@ -9,7 +9,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
 /**
- * Levels of players from all RPG plugins supported by Mimic. Get it via [Mimic.getLevels][ru.endlesscode.mimic.Mimic.getLevels].
+ * Levels of players from all RPG plugins supported by Mimic. Get it via [Mimic.levels][ru.endlesscode.mimic.Mimic.levels].
  * To make your own plugin's levels available here, implement [LevelProvider] instead.
  *
  * A **track** is one thing a player levels up in: a class, a skill, a profession, a job, or the single global level.

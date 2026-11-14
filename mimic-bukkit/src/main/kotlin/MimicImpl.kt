@@ -84,7 +84,7 @@ internal class MimicImpl(
     }
 
     @ExperimentalMimicApi
-    override fun getBlockRegistry(): BukkitBlockRegistry = blockRegistry
+    override val blockRegistry: BukkitBlockRegistry = MimicBlockRegistry(blockRegistries)
 
     @ExperimentalMimicApi
     override fun getAllBlockRegistries(): Map<String, BukkitBlockRegistry> = blockRegistries.loadAll()
@@ -101,6 +101,7 @@ internal class MimicImpl(
     }
 
     override fun getClassSystemProvider(): BukkitClassSystem.Provider = classSystems.load(config.classSystem)
+
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = classSystems.loadAll()
     // endregion
 
@@ -133,7 +134,7 @@ internal class MimicImpl(
         WrappedItemsRegistry(registry, plugin)
     }
 
-    override fun getItemsRegistry(): BukkitItemsRegistry = itemsRegistry
+    override val itemsRegistry: BukkitItemsRegistry = MimicItemsRegistry(itemsRegistries)
     override fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry> = itemsRegistries.loadAll()
     // endregion
 

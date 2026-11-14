@@ -38,9 +38,9 @@ private fun buildCommand(
     levelSystemSubcommand(mimic)
     classSystemSubcommand(mimic)
     inventorySubcommand(mimic)
-    itemsSubcommand(mimic.getItemsRegistry())
+    itemsSubcommand(mimic.itemsRegistry)
     @OptIn(ExperimentalMimicApi::class)
-    blocksSubcommand(mimic.getBlockRegistry())
+    blocksSubcommand(mimic.blockRegistry)
 }.build()
 
 private fun infoExecutor(pluginFullName: String): CommandAction<CommandSender> = { sender, _ ->

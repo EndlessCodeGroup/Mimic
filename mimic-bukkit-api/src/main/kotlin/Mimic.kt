@@ -71,8 +71,8 @@ public interface Mimic {
      * @since 0.9.0
      */
     @ExperimentalMimicApi
-    @ApiStatus.Experimental
-    public fun getBlockRegistry(): BukkitBlockRegistry
+    @get:ApiStatus.Experimental
+    public val blockRegistry: BukkitBlockRegistry
 
     /**
      * Returns map containing all known [BukkitBlockRegistry], where key is a block registry ID.
@@ -246,7 +246,7 @@ public interface Mimic {
     ): BukkitItemsRegistry?
 
     /** Returns [BukkitItemsRegistry] implementation. */
-    public fun getItemsRegistry(): BukkitItemsRegistry
+    public val itemsRegistry: BukkitItemsRegistry
 
     /** Returns map containing all known [BukkitItemsRegistry], where key is an item registry ID. */
     public fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry>
@@ -296,15 +296,15 @@ public interface Mimic {
      * Returns top priority [BukkitLevelSystem] for the given [player].
      * It is a shorthand for `getLevelSystemProvider().getSystem(player)`.
      */
-    @Deprecated("Use getLevels().getPrimaryTrack(player) and getLevels().getProgress(player, trackId) instead.")
+    @Deprecated("Use levels.getPrimaryTrack(player) and levels.getProgress(player, trackId) instead.")
     public fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
 
     /** Returns top priority [BukkitLevelSystem.Provider]. */
-    @Deprecated("Use getLevels() instead.", ReplaceWith("getLevels()"))
+    @Deprecated("Use levels instead.")
     public fun getLevelSystemProvider(): BukkitLevelSystem.Provider
 
     /** Returns map containing all known [BukkitLevelSystem.Provider]s, where key is a provider ID. */
-    @Deprecated("Use getLevels().getAllTracks() instead.")
+    @Deprecated("Use levels.getAllTracks() instead.")
     public fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider>
     // endregion
 
@@ -354,7 +354,7 @@ public interface Mimic {
      * To make your plugin's levels available here, use [registerLevelProvider].
      * @since 0.10.0
      */
-    public fun getLevels(): Levels
+    public val levels: Levels
     // endregion
 
     public companion object {
