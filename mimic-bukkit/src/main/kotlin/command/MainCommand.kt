@@ -35,7 +35,7 @@ private fun buildCommand(
     executesAny(infoExecutor(pluginFullName))
 
     configSubcommand(mimic, config)
-    levelSystemSubcommand(mimic)
+    levelsSubcommand(mimic)
     classSystemSubcommand(mimic)
     inventorySubcommand(mimic)
     itemsSubcommand(mimic.itemsRegistry)
@@ -48,7 +48,7 @@ private fun infoExecutor(pluginFullName: String): CommandAction<CommandSender> =
         appendHeader(pluginFullName)
         appendCommands(
             executedCommand("config", "/$COMMAND_NAME config", "See or change Mimic config"),
-            executedCommand("xp", "/$COMMAND_NAME xp", "Level system"),
+            executedCommand("levels", "/$COMMAND_NAME levels", "Player levels"),
             executedCommand("class", "/$COMMAND_NAME class", "Class system"),
             executedCommand("inventory", "/$COMMAND_NAME inventory", "Player inventory provider"),
             executedCommand("items", "/$COMMAND_NAME items", "Items registries"),

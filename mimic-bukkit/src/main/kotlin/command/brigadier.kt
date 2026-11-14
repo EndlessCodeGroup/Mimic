@@ -110,7 +110,10 @@ internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsIds(
     }
 }
 
-internal fun idHints(input: String, ids: Collection<String>): List<SuggestionHint> {
+internal fun idHints(input: String, ids: Collection<String>): List<SuggestionHint> =
+    collectIdHints(input, ids).distinctBy { it.text }
+
+private fun collectIdHints(input: String, ids: Collection<String>): List<SuggestionHint> {
     val parsedIds = ids.map { id -> ParsedId(id) }
     val namespaces = parsedIds.map { it.namespace }.toSet()
 
@@ -119,7 +122,7 @@ internal fun idHints(input: String, ids: Collection<String>): List<SuggestionHin
             .filter { it.startsWith(input) }
             .map { namespace ->
                 val hint = collapseFolders("$namespace:", parsedIds)
-                SuggestionHint(hint, Component.text(if (hint.endsWith(':')) "Namespace" else "Folder"))
+                SuggestionHint(hint, prefixTooltip(hint))
             }
     }
 
@@ -148,8 +151,18 @@ private fun pathHints(path: String, ids: List<ParsedId>): List<SuggestionHint> {
     val folders = ids
         .mapNotNull { id -> id.folderStartingWith(path)?.let { folder -> folder to id } }
         .groupBy(keySelector = { it.first }, valueTransform = { it.second })
-        .map { (folder, folderIds) -> SuggestionHint(collapseFolders(folder, folderIds), Component.text("Folder")) }
+        .map { (folder, folderIds) ->
+            val hint = collapseFolders(folder, folderIds)
+            SuggestionHint(hint, prefixTooltip(hint))
+        }
     return matchingIds + folders
+}
+
+/** Returns tooltip for the [hint] made by [collapseFolders], or `null` if it is collapsed to a single ID. */
+private fun prefixTooltip(hint: String): Component? = when {
+    hint.endsWith(':') -> Component.text("Namespace")
+    hint.endsWith('/') -> Component.text("Folder")
+    else -> null
 }
 
 /** Extends [prefix] with the folders shared by all [ids] starting with it, see [collapseFolders]. */
@@ -159,10 +172,12 @@ internal fun collapseFolders(prefix: String, ids: Collection<String>): String =
 /**
  * Extends [prefix] with the folders shared by all IDs starting with it,
  * so `craftengine:` becomes `craftengine:default/` if all IDs are inside `default/`.
+ * If only one ID starts with [prefix], returns this ID.
  */
 private fun collapseFolders(prefix: String, ids: List<ParsedId>): String {
-    val commonPath = ids
-        .filter { it.id.startsWith(prefix, ignoreCase = true) }
+    val matchingIds = ids.filter { it.id.startsWith(prefix, ignoreCase = true) }
+    matchingIds.singleOrNull()?.let { return it.id }
+    val commonPath = matchingIds
         .map { it.id.substring(prefix.length) }
         .reduceOrNull { common, path -> common.commonPrefixWith(path, ignoreCase = true) }
         .orEmpty()

@@ -46,6 +46,7 @@ internal class IdHintsTest {
             arguments("craftengine:", listOf("craftengine:default/trees/")),
             arguments("craftengine:d", listOf("craftengine:default/trees/palm_sapling", "craftengine:default/trees/oak_sapling", "craftengine:default/trees/")),
             arguments("minecraft:", listOf("minecraft:stone")),
+            arguments("mi", listOf("minecraft:stone")),
         )
 
         @JvmStatic
@@ -59,10 +60,10 @@ internal class IdHintsTest {
             arguments("def", listOf("craftengine:default/palm_log", "craftengine:default/palm_planks", "craftengine:default/trees/palm_sapling", "craftengine:default/")),
             arguments(
                 "default/",
-                listOf("craftengine:default/palm_log", "craftengine:default/palm_planks", "craftengine:default/trees/"),
+                listOf("craftengine:default/palm_log", "craftengine:default/palm_planks", "craftengine:default/trees/palm_sapling"),
             ),
             // With namespace
-            arguments("craftengine:", listOf("craftengine:default/", "craftengine:internal/")),
+            arguments("craftengine:", listOf("craftengine:default/", "craftengine:internal/stone_button")),
             arguments("craftengine:d", listOf("craftengine:default/palm_log", "craftengine:default/palm_planks", "craftengine:default/trees/palm_sapling", "craftengine:default/")),
             arguments(
                 "craftengine:palm",
@@ -70,9 +71,9 @@ internal class IdHintsTest {
             ),
             arguments(
                 "craftengine:default/",
-                listOf("craftengine:default/palm_log", "craftengine:default/palm_planks", "craftengine:default/trees/"),
+                listOf("craftengine:default/palm_log", "craftengine:default/palm_planks", "craftengine:default/trees/palm_sapling"),
             ),
-            arguments("craftengine:default/t", listOf("craftengine:default/trees/palm_sapling", "craftengine:default/trees/")),
+            arguments("craftengine:default/t", listOf("craftengine:default/trees/palm_sapling")),
             arguments("craftengine:default/trees/", listOf("craftengine:default/trees/palm_sapling")),
             arguments("minecraft:", listOf("minecraft:stone", "minecraft:stone_stairs")),
             // Search over all namespaces

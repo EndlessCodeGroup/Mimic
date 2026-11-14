@@ -14,6 +14,10 @@ See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
   Every level system is also available via Levels API as the single level `<id>:level`.
 - Config option `level-system` is renamed to `level-provider`, the old value is moved automatically.
   Command `/mimic config level-system` is renamed to `/mimic config level-provider`.
+- Command `/mimic xp` is replaced with `/mimic levels`:
+  - `/mimic levels (info) (player)` shows the player's tracks with progress.
+  - `/mimic levels set [track] [level] (player)` sets level, resetting exp within the level.
+  - `/mimic levels give|take [track] [exp] (player)` gives or takes exp points.
 
 ### Plugin changes
 
