@@ -6,6 +6,7 @@ package ru.endlesscode.mimic
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import ru.endlesscode.mimic.internal.Log
+import ru.endlesscode.mimic.internal.authorsMention
 
 /**
  * Registry of implementations of a single API, keyed by service ID.
@@ -25,7 +26,7 @@ import ru.endlesscode.mimic.internal.Log
 internal class ServiceRegistry<T : MimicService>(
     val apiName: String,
     private val mimicPlugin: Plugin,
-    private val defaultId: String,
+    val defaultId: String,
     private val disabledIds: () -> Set<String> = { emptySet() },
 ) {
 
@@ -82,7 +83,7 @@ internal class ServiceRegistry<T : MimicService>(
 
         // Sorting is stable, so services with equal priority keep registration order.
         // A replacing service takes the place of the replaced one.
-        val entry = ServiceEntry(service, plugin, priority)
+        val entry = ServiceEntry(service, plugin, priority, apiName)
         val newEntries = if (existing == null) entries + entry else entries.map { if (it === existing) entry else it }
         entries = newEntries.sortedWith(
             compareBy<ServiceEntry<T>> { it.service.id == defaultId }.thenByDescending { it.priority }
@@ -106,4 +107,22 @@ internal data class ServiceEntry<T : MimicService>(
     val service: T,
     val plugin: Plugin,
     val priority: ServicePriority,
+    val apiName: String,
 )
+
+/** Calls the [service][ServiceEntry.service], returning [default] and logging the error if it throws. */
+internal inline fun <T : MimicService, R> ServiceEntry<T>.call(default: R, block: T.() -> R): R =
+    try {
+        service.block()
+    } catch (e: Throwable) {
+        logImplementationError(e)
+        default
+    }
+
+/** Logs an error thrown by the [service][ServiceEntry.service], asking to report it to the plugin authors. */
+internal fun ServiceEntry<*>.logImplementationError(throwable: Throwable) {
+    Log.w(
+        throwable,
+        "Error in $apiName '${service.id}' implemented via $plugin. Please, report it to ${plugin.authorsMention}.",
+    )
+}

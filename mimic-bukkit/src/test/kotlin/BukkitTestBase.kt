@@ -41,6 +41,7 @@ open class BukkitTestBase {
 
     private fun mockPlayer(): Player = mockk(relaxUnitFun = true) {
         every { uniqueId } returns UUID.randomUUID()
+        every { isOnline } returns true
     }
 
     private companion object {

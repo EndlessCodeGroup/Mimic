@@ -1,6 +1,8 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION") // LevelSystem API is deprecated but still supported
+
 package ru.endlesscode.mimic
 
 import org.bukkit.event.EventHandler
@@ -15,17 +17,14 @@ import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
+import ru.endlesscode.mimic.impl.mimic.MimicLevels
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
-import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
-import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
-import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
-import ru.endlesscode.mimic.impl.vanilla.MinecraftPlayerInventory
+import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
-import ru.endlesscode.mimic.level.BukkitLevelSystem
-import ru.endlesscode.mimic.level.WrappedLevelSystemProvider
+import ru.endlesscode.mimic.level.*
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory.Provider as PlayerInventoryProvider
 
 /**
@@ -61,10 +60,13 @@ internal class MimicImpl(
         "LevelSystem",
         defaultId = MinecraftLevelSystem.ID,
     )
+    private val levelProviders = registry<LevelProvider>(
+        "LevelProvider",
+        defaultId = MinecraftLevelProvider.ID,
+    )
 
-    private val blockRegistry = MimicBlockRegistry(blockRegistries)
-    private val itemsRegistry = MimicItemsRegistry(itemsRegistries)
-    private val registries = listOf(blockRegistries, classSystems, playerInventories, itemsRegistries, levelSystems)
+    private val registries =
+        listOf(blockRegistries, classSystems, playerInventories, itemsRegistries, levelSystems, levelProviders)
 
     private fun <T : MimicService> registry(
         apiName: String,
@@ -150,6 +152,19 @@ internal class MimicImpl(
 
     override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = levelSystems.load(config.levelSystem)
     override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = levelSystems.loadAll()
+    // endregion
+
+    // region Levels
+    override fun registerLevelProvider(
+        provider: LevelProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): LevelProvider? =
+        levelProviders.tryRegister(apiLevel, plugin, priority) { WrappedLevelProvider(provider, plugin) }
+
+    override val levels: Levels =
+        MimicLevels(levelProviders, preferredProviderId = { config.levelProvider })
     // endregion
 
     @EventHandler
