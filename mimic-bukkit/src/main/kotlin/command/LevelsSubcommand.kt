@@ -15,6 +15,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.Mimic
@@ -23,7 +24,9 @@ import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
 import ru.endlesscode.mimic.level.LevelProgress
+import ru.endlesscode.mimic.level.LevelTrack
 import ru.endlesscode.mimic.level.Levels
+import java.util.Locale
 
 /**
  * Commands to deal with levels.
@@ -102,21 +105,26 @@ private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { 
     val primaryTrack = levels.getPrimaryTrack(target)
     val tracks = levels.getTracks(target)
 
+    val otherTracks = tracks.filter { it != primaryTrack }
+
     val message = text {
         appendHeader("Mimic Levels")
-        appendStats("Level provider" to (mimic.getPrimaryLevelProviderId() ?: "none"))
-        appendKey("${target.name}'s tracks:")
-        if (tracks.isEmpty()) appendValue(" none")
+        appendProviderStat("Level provider", mimic.getPrimaryLevelProviderId() ?: "none")
+        appendKey("${target.name}'s primary track: ")
+        if (primaryTrack == null) appendValue("none") else appendTrack(levels, target, primaryTrack)
         appendLine()
-        for (track in tracks) {
-            append("  ")
-            append(track.name())
-            append(" ")
-            appendId(track.key().asString())
-            if (track == primaryTrack) append(" (primary)", SECONDARY_COLOR)
-            append(": ")
-            appendValue(levels.getProgress(target, track.key())?.describe() ?: "not loaded")
+        if (otherTracks.isNotEmpty()) {
+            appendKey("Other tracks:")
             appendLine()
+        }
+        for ((namespace, namespaceTracks) in otherTracks.groupBy { it.key().namespace() }) {
+            appendValue("  $namespace")
+            appendLine()
+            for (track in namespaceTracks) {
+                append("    ")
+                appendTrack(levels, target, track)
+                appendLine()
+            }
         }
         appendCommands(
             suggestedCommand("set", "/mimic levels set [track] [level] (player)", "Set level, resetting exp within the level"),
@@ -140,20 +148,33 @@ private fun changeCommandExecutor(levels: Levels, change: LevelChange): CommandA
     sender.sendMessage(successText {
         append("New ${target.name}'s progress on ")
         appendId(trackId.asString())
-        append(": ${newProgress?.describe() ?: "unknown"}")
+        append(": ")
+        if (newProgress == null) append("unknown") else appendProgress(newProgress)
     })
 }
 
-private fun LevelProgress.describe(): String = buildString {
-    append("$level")
-    if (hasMaxLevel()) append("/$maxLevel")
-    append(" LVL")
-    if (hasExp()) {
-        append(", %.1f".format(exp))
-        if (hasExpToNextLevel()) append("/%.1f".format(expToNextLevel))
-        append(" XP")
+/** Appends the track name with its ID on hover, and the [player]'s progress on it. */
+private fun TextComponent.Builder.appendTrack(levels: Levels, player: Player, track: LevelTrack) {
+    appendNamedId(track.name(), track.key().asString())
+    append(" ")
+    val progress = levels.getProgress(player, track.key())
+    if (progress == null) appendValue("not loaded") else appendProgress(progress)
+}
+
+/** Appends progress like `Lv 2 / 100 · 50 / 500 XP`, limits are secondary. */
+private fun TextComponent.Builder.appendProgress(progress: LevelProgress) {
+    appendValue("Lv ${progress.level}")
+    if (progress.hasMaxLevel()) append(" / ${progress.maxLevel}", SECONDARY_COLOR)
+    if (progress.hasExp()) {
+        append(" · ", SECONDARY_COLOR)
+        appendValue(formatExp(progress.exp))
+        if (progress.hasExpToNextLevel()) append(" / ${formatExp(progress.expToNextLevel)}", SECONDARY_COLOR)
+        append(" XP", SECONDARY_COLOR)
     }
 }
+
+/** Formats [exp] with one decimal, dropping it if it is zero: `12.5`, `100`. */
+private fun formatExp(exp: Double): String = "%.1f".format(Locale.ROOT, exp).removeSuffix(".0")
 
 /** Track ID with namespace like `minecraft:level`, shown to the client as a key. */
 private object TrackArgumentType : CustomArgumentType<Key, Key> {

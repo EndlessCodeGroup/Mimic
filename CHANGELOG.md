@@ -28,6 +28,7 @@ See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 
 ### Plugin changes
 
+- `/mimic levels`, `/mimic class` and `/mimic inventory` have a `[change]` button next to the provider, opening `/mimic config`.
 - Consistent colors in command output
 - `/mimic config` hints say "Click to disable" and "Click to enable" for disabled registries instead of "Click to add" and "Click to remove".
 

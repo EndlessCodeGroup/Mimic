@@ -63,6 +63,19 @@ internal fun TextComponent.Builder.appendId(id: String) {
     )
 }
 
+/** Appends [name] in ID color, showing its [id] on hover and copying the [id] on click. */
+internal fun TextComponent.Builder.appendNamedId(name: Component, id: String) {
+    val hover = text {
+        appendLine(id, ID_COLOR)
+        append("Click to copy ID")
+    }
+    append(
+        name.colorIfAbsent(ID_COLOR)
+            .hoverEvent(HoverEvent.showText(hover))
+            .clickEvent(ClickEvent.copyToClipboard(id))
+    )
+}
+
 /** Appends the header separating this message from the previous ones. */
 internal fun TextComponent.Builder.appendHeader(title: String) {
     appendLine("----[ $title ]----", HEADER_COLOR)
