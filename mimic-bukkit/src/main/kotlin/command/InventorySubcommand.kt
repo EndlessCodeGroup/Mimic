@@ -35,8 +35,8 @@ private fun infoExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender,
 
     val message = text {
         appendHeader("Mimic Inventory")
+        appendProviderStat("Inventory provider", provider.id)
         appendStats(
-            "Inventory provider" to provider.id,
             "Count of Equipped" to inventory.equippedItems.size.toString(),
             "Count of Stored" to inventory.storedItems.size.toString(),
             "Total Count" to inventory.items.size.toString(),

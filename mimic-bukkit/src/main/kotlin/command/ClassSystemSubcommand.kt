@@ -46,8 +46,8 @@ private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { 
 
     val message = text {
         appendHeader("Mimic Classes")
+        appendProviderStat("System", provider.id)
         appendStats(
-            "System" to provider.id,
             "Classes" to system.classes.toString(),
             "Primary" to system.primaryClass.toString(),
         )

@@ -109,15 +109,29 @@ private fun descriptionText(description: String) = Component.text(description, S
 internal fun TextComponent.Builder.appendCommands(vararg commands: CommandHint) {
     appendKey("Commands:")
     for (command in commands) {
-        val hover = text {
-            appendLine(command.usage, ACTION_COLOR)
-            append(command.description)
-        }
         append(" ")
-        append(
-            Component.text("[${command.label}]", ACTION_COLOR)
-                .hoverEvent(HoverEvent.showText(hover))
-                .clickEvent(command.clickEvent)
-        )
+        appendCommand(command)
     }
+}
+
+/** Appends the line with the [provider] ID and a button opening Mimic config to change it. */
+internal fun TextComponent.Builder.appendProviderStat(key: String, provider: String) {
+    appendKey("$key: ")
+    appendValue(provider)
+    append(" ")
+    appendCommand(executedCommand("change", "/$COMMAND_NAME config", "Select another provider in Mimic config"))
+    appendLine()
+}
+
+/** Appends clickable [command] label showing its usage and description on hover. */
+private fun TextComponent.Builder.appendCommand(command: CommandHint) {
+    val hover = text {
+        appendLine(command.usage, ACTION_COLOR)
+        append(command.description)
+    }
+    append(
+        Component.text("[${command.label}]", ACTION_COLOR)
+            .hoverEvent(HoverEvent.showText(hover))
+            .clickEvent(command.clickEvent)
+    )
 }
