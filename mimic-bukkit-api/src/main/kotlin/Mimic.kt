@@ -1,6 +1,8 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // LevelSystem API is deprecated but still supported
+
 package ru.endlesscode.mimic
 
 import org.bukkit.Bukkit
@@ -262,6 +264,7 @@ public interface Mimic {
      * @param plugin The plugin implementing this level system.
      * @return registered level system or `null` if it was not registered.
      */
+    @Deprecated("Use registerLevelProvider instead.")
     public fun registerLevelSystem(
         provider: BukkitLevelSystem.Provider,
         apiLevel: Int,
@@ -281,6 +284,7 @@ public interface Mimic {
      *                 preferred service in config.
      * @return registered level system or `null` if it was not registered.
      */
+    @Deprecated("Use registerLevelProvider instead.")
     public fun registerLevelSystem(
         provider: BukkitLevelSystem.Provider,
         apiLevel: Int,
@@ -292,12 +296,15 @@ public interface Mimic {
      * Returns top priority [BukkitLevelSystem] for the given [player].
      * It is a shorthand for `getLevelSystemProvider().getSystem(player)`.
      */
+    @Deprecated("Use getLevels().getPrimaryTrack(player) and getLevels().getProgress(player, trackId) instead.")
     public fun getLevelSystem(player: Player): BukkitLevelSystem = getLevelSystemProvider().getSystem(player)
 
     /** Returns top priority [BukkitLevelSystem.Provider]. */
+    @Deprecated("Use getLevels() instead.", ReplaceWith("getLevels()"))
     public fun getLevelSystemProvider(): BukkitLevelSystem.Provider
 
     /** Returns map containing all known [BukkitLevelSystem.Provider]s, where key is a provider ID. */
+    @Deprecated("Use getLevels().getAllTracks() instead.")
     public fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider>
     // endregion
 

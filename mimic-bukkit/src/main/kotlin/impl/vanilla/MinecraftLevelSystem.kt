@@ -1,6 +1,8 @@
 // Copyright (c) 2018 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // LevelSystem API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.entity.Player

@@ -23,8 +23,9 @@ With Mimic, you don't need to download all RPG plugins and write specific code f
 
 ### Available APIs
 
-- [LevelSystem] - API to work with player's level and experience points.
-  Makes it possible to use in plugins levels and exp from another plugin.
+- [Levels] - API to work with player's levels: classes, skills, professions or jobs a player levels up in.
+  Makes it possible to use levels from several plugins at once.
+- [LevelSystem] *(deprecated, use [Levels])* - API to work with player's single level and experience points.
 - [ClassSystem] - API to work with player's classes.
   Enables plugins to check player class.
 - [PlayerInventory] *(experimental)* - API to access player's inventories content.
@@ -89,6 +90,7 @@ Please make sure to update tests as appropriate.
 [Paper]: https://papermc.io/
 
 [LevelSystem]: mimic-api/src/main/kotlin/level/LevelSystem.kt
+[Levels]: mimic-bukkit-api/src/main/kotlin/level/Levels.kt
 [ClassSystem]: mimic-api/src/main/kotlin/classes/ClassSystem.kt
 [PlayerInventory]: mimic-api/src/main/kotlin/inventory/PlayerInventory.kt
 [ItemsRegistry]: mimic-api/src/main/kotlin/items/ItemsRegistry.kt

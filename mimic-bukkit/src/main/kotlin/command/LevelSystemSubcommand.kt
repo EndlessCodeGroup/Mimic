@@ -1,6 +1,8 @@
 // Copyright (c) 2019 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // LevelSystem API is deprecated but still supported
+
 package ru.endlesscode.mimic.command
 
 import com.mojang.brigadier.LiteralMessage

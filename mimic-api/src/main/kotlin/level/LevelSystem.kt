@@ -10,6 +10,7 @@ package ru.endlesscode.mimic.level
  * and override all methods that works not properly for your case.
  */
 @Suppress("DEPRECATION") // Allow to use setExp
+@Deprecated("Use Levels API from mimic-bukkit-api instead, it supports several levels per player.")
 public interface LevelSystem {
 
     /** Assigned converter. */

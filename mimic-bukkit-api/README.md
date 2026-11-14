@@ -7,7 +7,8 @@ Mimic API adopted for Bukkit.
 All Mimic APIs should implement [MimicService].
 
 Available services:
-- [BukkitLevelSystem.Provider]
+- [LevelProvider]
+- [BukkitLevelSystem.Provider] *(deprecated, use [LevelProvider])*
 - [BukkitClassSystem.Provider]
 - [BukkitPlayerInventory.Provider] *(experimental)*
 - [BukkitItemsRegistry]
@@ -53,7 +54,7 @@ You can get needed APIs from Mimic in `onEnable` of your plugin or later:
 ```java
 Mimic mimic = Mimic.getInstance();
 
-BukkitLevelSystem levelSystem = mimic.getLevelSystem(player);
+Levels levels = mimic.getLevels();
 BukkitClassSystem classSystem = mimic.getClassSystem(player);
 BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
 BukkitItemsRegistry itemsRegistry = mimic.getItemsRegistry();
@@ -62,11 +63,12 @@ BukkitBlockRegistry blockRegistry = mimic.getBlockRegistry();
 
 Now you can use APIs:
 ```java
-// LevelSystem and ClassSystem holds a weak reference to a player object
-// and should not live a long time.
-int playerLevel = levelSystem.getLevel();
-levelSystem.giveExp(42);
+// See the "Levels" section below for details
+Key playerLevel = Key.key("minecraft", "level");
+boolean isExperienced = levels.hasLevel(player, playerLevel, 30);
+levels.giveExp(player, playerLevel, 42);
 
+// ClassSystem holds a weak reference to a player object and should not live a long time.
 String playerPrimaryClass = classSystem.getPrimaryClass();
 boolean isMage = classSystem.hasAnyOfClasses(Arrays.asList("Mage", "Druid", "Necromancer"));
 
@@ -303,6 +305,8 @@ IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are res
 
 [MimicService]: ../mimic-api/src/main/kotlin/MimicService.kt
 [BukkitLevelSystem.Provider]: src/main/kotlin/level/BukkitLevelSystem.kt
+[BukkitLevelSystem]: src/main/kotlin/level/BukkitLevelSystem.kt
+[LevelProvider]: src/main/kotlin/level/LevelProvider.kt
 [BukkitClassSystem.Provider]: src/main/kotlin/classes/BukkitClassSystem.kt
 [BukkitPlayerInventory.Provider]: src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: src/main/kotlin/items/BukkitItemsRegistry.kt
