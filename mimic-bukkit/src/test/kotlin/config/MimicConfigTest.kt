@@ -6,6 +6,7 @@ package ru.endlesscode.mimic.config
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeEmpty
+import io.kotest.matchers.string.shouldNotContain
 import org.junit.jupiter.api.io.TempDir
 import ru.endlesscode.mimic.BukkitTestBase
 import java.io.File
@@ -28,14 +29,30 @@ internal class MimicConfigTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when load legacy level system option - should move it to level provider`() {
+        file.writeText("level-system: custom\n")
+
+        loadConfig().levelProvider shouldBe "custom"
+        file.readText() shouldNotContain "level-system"
+    }
+
+    @Test
+    fun `when load both level options - should keep level provider`() {
+        file.writeText("level-system: legacy\nlevel-provider: custom\n")
+
+        loadConfig().levelProvider shouldBe "custom"
+        file.readText() shouldNotContain "level-system"
+    }
+
+    @Test
     fun `when reset string property - should save empty value`() {
         val config = loadConfig()
-        config.levelSystem = "custom"
+        config.levelProvider = "custom"
 
-        config.reset(MimicConfig.LEVEL_SYSTEM)
+        config.reset(MimicConfig.LEVEL_PROVIDER)
 
-        config.levelSystem.shouldBeEmpty()
-        loadConfig().levelSystem.shouldBeEmpty()
+        config.levelProvider.shouldBeEmpty()
+        loadConfig().levelProvider.shouldBeEmpty()
     }
 
     @Test

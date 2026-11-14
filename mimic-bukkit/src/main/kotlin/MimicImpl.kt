@@ -172,7 +172,14 @@ internal class MimicImpl(
         }
     }
 
-    override fun getLevelSystemProvider(): BukkitLevelSystem.Provider = levelSystems.load(config.levelSystem)
+    override fun getLevelSystemProvider(): BukkitLevelSystem.Provider {
+        // The preferred level system may be a level provider not available via LevelSystem API
+        val preferred = config.levelProvider
+        val isLevelProviderOnly = levelProviders.enabledEntries.any { it.service.id == preferred } &&
+                levelSystems.enabledEntries.none { it.service.id == preferred }
+        return levelSystems.load(if (isLevelProviderOnly) "" else preferred)
+    }
+
     override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = levelSystems.loadAll()
     // endregion
 

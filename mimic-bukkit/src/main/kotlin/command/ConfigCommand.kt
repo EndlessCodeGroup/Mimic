@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
+import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 
@@ -33,10 +34,10 @@ internal fun CommandBuilder.configSubcommand(
     // Show Mimic config
     executesAny { sender, _ -> showConfig(sender) }
 
-    // Change the preferred level system
-    literal("level-system") {
-        stringSetArgument(VALUE, "level system", { mimic.getAllLevelSystemProviders().keys }) { sender, value ->
-            config.levelSystem = value
+    // Change the plugin providing the player's level
+    literal("level-provider") {
+        stringSetArgument(VALUE, "level provider", { mimic.getLevelProviderIds() }) { sender, value ->
+            config.levelProvider = value
             showConfig(sender)
         }
     }

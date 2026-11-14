@@ -1,8 +1,6 @@
 // Copyright (c) 2026 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION") // LevelSystem API is deprecated but still supported
-
 package ru.endlesscode.mimic.impl.mimic
 
 import net.kyori.adventure.key.Key
@@ -38,7 +36,16 @@ internal class MimicLevels(
     val providers: List<LevelProviderEntry>
         get() = levelProviders.enabledEntries
 
-    /** The provider of the primary track. */
+    /** IDs of all registered providers, including disabled ones. */
+    val allProviderIds: Set<String>
+        get() = levelProviders.entries.mapTo(LinkedHashSet()) { it.service.id }
+
+    /**
+     * The preferred provider, or the provider with the highest priority, shown as selected in the config.
+     * It is only an approximation: without a preference, [getPrimaryTrack] skips providers without a primary track.
+     * It is `null` only while Mimic isn't enabled, before its `onEnable` and after its `onDisable`,
+     * because [providers] skips providers of disabled plugins, including Mimic's own `minecraft` provider.
+     */
     val primaryProvider: LevelProviderEntry?
         get() {
             val providers = providers
@@ -195,10 +202,8 @@ private class MimicLevelTrack(
     override fun toString(): String = "LevelTrack(${key.asString()})"
 }
 
-/** IDs of level systems and level providers, the values of `level-provider` config option. */
-internal fun Mimic.getLevelProviderIds(): Set<String> =
-    getAllLevelSystemProviders().keys + (levels as? MimicLevels)?.providers.orEmpty().map { it.service.id }
+/** IDs of all registered level providers, including bridged level systems, the values of `level-provider` config option. */
+internal fun Mimic.getLevelProviderIds(): Set<String> = (levels as MimicLevels).allProviderIds
 
 /** ID of the provider of the primary track. */
-internal fun Mimic.getPrimaryLevelProviderId(): String =
-    (levels as? MimicLevels)?.primaryProvider?.service?.id ?: getLevelSystemProvider().id
+internal fun Mimic.getPrimaryLevelProviderId(): String? = (levels as MimicLevels).primaryProvider?.service?.id

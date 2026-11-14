@@ -10,6 +10,8 @@ import ru.endlesscode.mimic.config.ConfigProperty
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.config.StringConfigProperty
 import ru.endlesscode.mimic.config.StringSetConfigProperty
+import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
+import ru.endlesscode.mimic.impl.mimic.getPrimaryLevelProviderId
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.internal.append
@@ -20,10 +22,10 @@ import ru.endlesscode.mimic.internal.text
 internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponent = text {
     appendHeader("Mimic Config")
     appendSelectablePropertyConfig(
-        property = MimicConfig.LEVEL_SYSTEM,
-        configuredValue = config.levelSystem,
-        selectedOption = mimic.getLevelSystemProvider().id,
-        options = mimic.getAllLevelSystemProviders().keys,
+        property = MimicConfig.LEVEL_PROVIDER,
+        configuredValue = config.levelProvider,
+        selectedOption = mimic.getPrimaryLevelProviderId().orEmpty(),
+        options = mimic.getLevelProviderIds(),
     )
     appendSelectablePropertyConfig(
         property = MimicConfig.CLASS_SYSTEM,
