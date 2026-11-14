@@ -18,6 +18,7 @@ import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
+import ru.endlesscode.mimic.impl.auraskills.AuraSkillsLevelProvider
 import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockRegistry
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
@@ -116,6 +117,10 @@ public class MimicPlugin : JavaPlugin() {
         pluginHooks("CraftEngine", "net.momirealms.craftengine.bukkit.api.CraftEngineBlocks") {
             hookItems(::CraftEngineItemsRegistry)
             hookBlocks(::CraftEngineBlockRegistry)
+        }
+
+        pluginHooks("AuraSkills", "dev.aurelium.auraskills.api.AuraSkillsApi") {
+            hookLevels(::AuraSkillsLevelProvider)
         }
     }
 

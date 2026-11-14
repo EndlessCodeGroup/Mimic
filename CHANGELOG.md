@@ -19,6 +19,13 @@ See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
   - `/mimic levels set [track] [level] (player)` sets level, resetting exp within the level.
   - `/mimic levels give|take [track] [exp] (player)` gives or takes exp points.
 
+### Integrations
+
+- Added [AuraSkills](https://modrinth.com/plugin/auraskills) integration: levels provider ([#22](https://github.com/EndlessCodeGroup/Mimic/issues/22)).
+  Every skill is a track: `auraskills:mining`, `auraskills:farming`.
+  The primary track is `auraskills:power`, the sum of skill levels, it is read-only.
+  It is available via `Levels` API only, not via the deprecated `LevelSystem` API.
+
 ### Plugin changes
 
 - Consistent colors in command output

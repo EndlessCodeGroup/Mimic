@@ -41,6 +41,7 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 ### [Level Systems][BukkitLevelSystem.Provider]
 
 - **[Minecraft][minecraft-exp]** _(Default)_
+- **[AuraSkills]** _(Levels API only)_ - every skill is a level track, the power level is the primary track
 - **[SkillAPI]**
 - **[ProSkillAPI]**
 - **[BattleLevels]**
@@ -147,6 +148,7 @@ It uses registry ID as a namespace for block IDs, like items registry does.
 [rpginventory]: https://www.spigotmc.org/resources/12498/
 [itemsadder]: https://www.spigotmc.org/resources/73355/
 [craftengine]: https://modrinth.com/plugin/craftengine
+[auraskills]: https://modrinth.com/plugin/auraskills
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 

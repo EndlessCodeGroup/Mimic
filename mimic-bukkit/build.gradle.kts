@@ -30,6 +30,7 @@ bukkit {
             "Heroes",
             "QuantumRPG",
             "CraftEngine",
+            "AuraSkills",
         )
     }
 
@@ -83,6 +84,7 @@ dependencies {
 
     testImplementation(libs.paperApi)
     testImplementation(libs.rpgplugins.skillapi)
+    testImplementation(libs.rpgplugins.auraskills)
 }
 
 kotlin {
@@ -96,6 +98,12 @@ kotlin {
 tasks.test {
     javaLauncher = javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.runServer {
+    downloadPlugins {
+        modrinth("auraskills", libs.versions.auraskills.get())
     }
 }
 
@@ -114,6 +122,7 @@ modrinth {
         "26.1", "26.1.1", "26.1.2",
     )
     dependencies {
+        optional.project("auraskills")
         optional.project("craftengine")
     }
 }
