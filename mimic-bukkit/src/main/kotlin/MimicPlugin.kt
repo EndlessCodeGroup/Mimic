@@ -33,14 +33,12 @@ import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgItemsRegistry
 import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgLevelSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
 import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
-import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
-import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
-import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelSystem
-import ru.endlesscode.mimic.impl.vanilla.MinecraftPlayerInventory
+import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
+import ru.endlesscode.mimic.level.LevelProvider
 import ru.endlesscode.mimic.util.checkClassesLoaded
 
 /** Main class of the plugin. */
@@ -76,6 +74,7 @@ public class MimicPlugin : JavaPlugin() {
         // Default systems
         Log.i(">>> Default systems")
         hookLevels(MinecraftLevelSystem::Provider, priority = Lowest)
+        hookLevels(::MinecraftLevelProvider, priority = Lowest)
         hookClasses(PermissionsClassSystem::Provider, priority = Lowest)
         hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
@@ -129,11 +128,20 @@ public class MimicPlugin : JavaPlugin() {
     }
 
     //<editor-fold defaultstate="collapsed" desc="hook* methods">
+    @JvmName("hookLevel_deprecated")
     private fun hookLevels(
         constructor: () -> BukkitLevelSystem.Provider,
         priority: ServicePriority = Normal,
     ) {
         mimic.registerLevelSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+    }
+
+    @Suppress("SameParameterValue")
+    private fun hookLevels(
+        constructor: () -> LevelProvider,
+        priority: ServicePriority = Normal,
+    ) {
+        mimic.registerLevelProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
     private fun hookClasses(
