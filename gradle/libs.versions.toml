@@ -8,8 +8,6 @@ annotations = "26.0.2"
 
 bstats = "3.2.1"
 
-skillapi = "3.102"
-battlelevels = "6.9.1"
 mmocore = "1.13.1-SNAPSHOT"
 mmoitems = "6.10.1-SNAPSHOT"
 mythiclib = "1.7.1-SNAPSHOT"
@@ -38,8 +36,6 @@ annotations = { module = "org.jetbrains:annotations", version.ref = "annotations
 
 bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 
-rpgplugins-skillapi = { module = "com.sucy:SkillAPI", version.ref = "skillapi" }
-rpgplugins-battlelevels = { module = "me.robin:BattleLevels", version.ref = "battlelevels" }
 rpgplugins-mmocore = { module = "net.Indyuce:MMOCore-API", version.ref = "mmocore" }
 rpgplugins-mmoitems = { module = "net.Indyuce:MMOItems-API", version.ref = "mmoitems" }
 rpgplugins-mythiclib = { module = "io.lumine:MythicLib-dist", version.ref = "mythiclib" }
@@ -71,8 +67,6 @@ minotaur = { id = "com.modrinth.minotaur", version.ref = "gradlePlugin-minotaur"
 [bundles]
 
 rpgplugins = [
-    "rpgplugins-skillapi",
-    "rpgplugins-battlelevels",
     "rpgplugins-mmocore",
     "rpgplugins-mmoitems",
     "rpgplugins-mythiclib",

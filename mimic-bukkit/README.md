@@ -43,22 +43,17 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 - **[Minecraft][minecraft-exp]** _(Default)_
 - **[AuraSkills]** _(Levels API only)_ - every skill is a level track, the power level is the primary track
 - **[mcMMO]** _(Levels API only)_ - every skill is a level track, the power level is the primary track
-- **[SkillAPI]**
 - **[ProSkillAPI]**
-- **[BattleLevels]**
 - **[MMOCore]**
 - **[Heroes]**
-- **[QuantumRPG]**
 - **[ProRPGItems]**
 
 ### [Class Systems][BukkitClassSystem.Provider]
 
 - **Permissions-based** _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
-- **[SkillAPI]**
 - **[ProSkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**
-- **[QuantumRPG]**
 - **[ProRPGItems]**
 
 ### [Player Inventory Providers][BukkitPlayerInventory.Provider]
@@ -97,11 +92,6 @@ Alternatively, [ItemMetaPayload] in HOCON format with MiniMessage support for na
 **ID Format:** `mmoitems:[id]`\
 **Payload:** *Not supported*
 
-#### [QuantumRPG]
-
-**ID Format:** `quantumrpg:[type]/[id]`\
-**Payload:** *Not supported*
-
 #### [ProRPGItems]
 
 **ID Format:** `prorpgitems:[type]/[id]`\
@@ -137,14 +127,11 @@ It uses registry ID as a namespace for block IDs, like items registry does.
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
 [item-components]: https://minecraft.wiki/w/Data_component_format
-[skillapi]: https://www.spigotmc.org/resources/4824/
 [proskillapi]: https://www.spigotmc.org/resources/91913/
-[battlelevels]: https://www.spigotmc.org/resources/2218/
 [customitems]: https://www.spigotmc.org/resources/63848/
 [mmocore]: https://www.spigotmc.org/resources/70575/
 [mmoitems]: https://www.spigotmc.org/resources/39267/
 [heroes]: https://www.spigotmc.org/resources/24734/
-[quantumrpg]: https://www.spigotmc.org/resources/40007/
 [prorpgitems]: https://www.spigotmc.org/resources/91386/
 [rpginventory]: https://www.spigotmc.org/resources/12498/
 [itemsadder]: https://www.spigotmc.org/resources/73355/

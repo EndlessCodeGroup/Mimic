@@ -248,7 +248,6 @@ See [Levels] for the rules: which players are supported, what `null` and `false`
 | Plugin                                   | Tracks                                                                                |
 |------------------------------------------|---------------------------------------------------------------------------------------|
 | `minecraft`                              | `level`                                                                               |
-| `skillapi`, `quantumrpg`, `battlelevels` | `level`                                                                               |
 | `mmocore`                                | Primary: `level`, the level of the current class. Professions: `profession/mining`, … |
 | `heroes`                                 | Classes: `warrior`, … Primary: the player's primary class                             |
 | `auraskills`                             | Skills: `mining`, `farming`, … Primary: `power`, the read-only sum of skill levels    |
@@ -325,11 +324,11 @@ See [Classes] for the rules: which players are supported, what `null` and `false
 |-----------------------------------------|-----------------------------------------|-----------------------|
 | `mmocore`                               | `class`                                 | `mmocore:level`       |
 | `heroes`                                | Primary: `primary`. `secondary`, `race` | The same as the class |
-| `skillapi`, `quantumrpg`, `permissions` | `class`                                 | none                  |
+| `permissions`                           | `class`                                 | none                  |
 
 Plugins that use the deprecated [BukkitClassSystem] are available as the single slot `<id>:class` holding the primary class.
 Class names are converted to IDs: `Arcane Mage` becomes `arcane_mage`.
-Built-in `skillapi`, `quantumrpg` and `permissions` integrations work this way too.
+Built-in `permissions` integration works this way too.
 
 The old API has limits:
 - It can't list classes, so its classes are missing from `getAllClasses()`. Don't reject such class IDs in your config validation.

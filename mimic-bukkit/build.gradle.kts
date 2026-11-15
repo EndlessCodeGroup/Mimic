@@ -22,13 +22,10 @@ bukkit {
         authors = listOf("osipxd", "EndlessCodeGroup")
         website = "https://github.com/EndlessCodeGroup/Mimic"
         loadBefore = listOf(
-            "SkillAPI",
-            "BattleLevels",
             "CustomItems",
             "MMOCore",
             "MMOItems",
             "Heroes",
-            "QuantumRPG",
             "CraftEngine",
             "AuraSkills",
             "mcMMO",
@@ -44,11 +41,6 @@ bukkit {
 repositories {
     papermc()
     maven(url = "https://gitlab.com/endlesscodegroup/mvn-repo/raw/master/")
-    maven(url = "https://mvn.lumine.io/repository/maven-public/") {
-        content {
-            includeModule("me.robin", "BattleLevels")
-        }
-    }
     maven("https://nexus.phoenixdevt.fr/repository/maven-public/") {
         content {
             includeGroup("net.Indyuce")
@@ -85,11 +77,8 @@ dependencies {
 
     // From libs/ directory
     compileOnly(":CustomItemsAPI")
-    compileOnly(":QuantumRPG:5.10.2")
-    compileOnly(":NexEngine:2.0.3") // Do not update NexEngine. QuantumRpgWrapper cannot compile with a higher version
 
     testImplementation(libs.paperApi)
-    testImplementation(libs.rpgplugins.skillapi)
     testImplementation(libs.rpgplugins.auraskills)
     testImplementation(libs.rpgplugins.mcmmo) { isTransitive = false }
     testImplementation(libs.rpgplugins.heroes) { isTransitive = false }

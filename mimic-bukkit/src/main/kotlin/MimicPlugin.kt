@@ -20,7 +20,6 @@ import ru.endlesscode.mimic.classes.ClassProvider
 import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.auraskills.AuraSkillsLevelProvider
-import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockRegistry
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
@@ -35,11 +34,6 @@ import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
-import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgClassSystem
-import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgItemsRegistry
-import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgLevelSystem
-import ru.endlesscode.mimic.impl.skillapi.SkillApiClassSystem
-import ru.endlesscode.mimic.impl.skillapi.SkillApiLevelSystem
 import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
@@ -87,15 +81,6 @@ public class MimicPlugin : JavaPlugin() {
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
         hookBlocks(::MinecraftBlockRegistry, priority = Lowest)
 
-        pluginHooks("SkillAPI", "com.sucy.skill.SkillAPI") {
-            hookLevels(SkillApiLevelSystem::Provider)
-            hookClasses(SkillApiClassSystem::Provider)
-        }
-
-        pluginHooks("BattleLevels", "me.robin.battlelevels.api.BattleLevelsAPI") {
-            hookLevels(BattleLevelsLevelSystem::Provider)
-        }
-
         pluginHooks("MMOCore", "net.Indyuce.mmocore.MMOCore") {
             hookLevels(MmoCoreLevelSystem::Provider)
             hookLevels(::MmoCoreLevelProvider)
@@ -108,12 +93,6 @@ public class MimicPlugin : JavaPlugin() {
             hookLevels(::HeroesLevelProvider)
             hookClasses(HeroesClassSystem::Provider)
             hookClasses(::HeroesClassProvider)
-        }
-
-        pluginHooks("QuantumRPG", "su.nightexpress.quantumrpg.QuantumRPG") {
-            hookLevels(QuantumRpgLevelSystem::Provider)
-            hookClasses(QuantumRpgClassSystem::Provider)
-            hookItems(::QuantumRpgItemsRegistry)
         }
 
         pluginHooks("CustomItems", "com.jojodmo.customitems.api.CustomItemsAPI") {

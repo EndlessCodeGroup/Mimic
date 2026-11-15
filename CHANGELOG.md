@@ -29,6 +29,8 @@ See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukki
 - MMOCore and Heroes support Levels and Classes API natively: class and profession levels, class slots and subclasses.
   This fixes class IDs in MMOCore ([#78](https://github.com/EndlessCodeGroup/Mimic/issues/78)) and reporting class history as classes in Heroes ([#79](https://github.com/EndlessCodeGroup/Mimic/issues/79)).
 - Fixed MMOCore experience to reach a level in the deprecated `LevelSystem` API ([#76](https://github.com/EndlessCodeGroup/Mimic/issues/76)).
+- Removed integrations with abandoned plugins: SkillAPI ([#58](https://github.com/EndlessCodeGroup/Mimic/issues/58)), QuantumRPG ([#59](https://github.com/EndlessCodeGroup/Mimic/issues/59)) and BattleLevels ([#77](https://github.com/EndlessCodeGroup/Mimic/issues/77)).
+  If one of them is selected in the config, Mimic warns and uses other available plugins.
 
 ### Plugin changes
 
