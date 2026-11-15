@@ -43,7 +43,7 @@ import org.bukkit.entity.Player
  *
  * The namespace is required, since the same path in different plugins means a different level.
  * Note that `Key.key("mining")` turns into `minecraft:mining`,
- * so check track IDs read from configs against [getAllTracks] when your plugin loads.
+ * so validate track IDs read from configs against [getAllTracks].
  *
  * ### Rules
  *

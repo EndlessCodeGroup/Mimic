@@ -49,6 +49,52 @@ public abstract class ru/endlesscode/mimic/classes/BukkitClassSystem : ru/endles
 public abstract interface class ru/endlesscode/mimic/classes/BukkitClassSystem$Provider : ru/endlesscode/mimic/PlayerSystemProviderService {
 }
 
+public abstract interface class ru/endlesscode/mimic/classes/CharacterClass : net/kyori/adventure/key/Keyed {
+	public abstract fun key ()Lnet/kyori/adventure/key/Key;
+	public abstract fun levelTrack ()Lnet/kyori/adventure/key/Key;
+	public abstract fun name ()Lnet/kyori/adventure/text/Component;
+}
+
+public abstract interface class ru/endlesscode/mimic/classes/ClassProvider : ru/endlesscode/mimic/MimicService {
+	public abstract fun getAllClasses ()Ljava/util/Collection;
+	public abstract fun getAllSlots ()Ljava/util/Collection;
+	public abstract fun getClasses (Lorg/bukkit/entity/Player;)Ljava/util/Map;
+	public abstract fun getPrimarySlot (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/classes/ClassProvider$Slot;
+	public fun setClass (Lorg/bukkit/entity/Player;Ljava/lang/String;Ljava/lang/String;)Z
+}
+
+public final class ru/endlesscode/mimic/classes/ClassProvider$ClassDefinition {
+	public fun <init> (Ljava/lang/String;Lnet/kyori/adventure/text/Component;)V
+	public fun <init> (Ljava/lang/String;Lnet/kyori/adventure/text/Component;Ljava/util/Set;)V
+	public fun <init> (Ljava/lang/String;Lnet/kyori/adventure/text/Component;Ljava/util/Set;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Lnet/kyori/adventure/text/Component;Ljava/util/Set;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getId ()Ljava/lang/String;
+	public final fun getLevelTrack ()Ljava/lang/String;
+	public final fun getName ()Lnet/kyori/adventure/text/Component;
+	public final fun getParents ()Ljava/util/Set;
+}
+
+public final class ru/endlesscode/mimic/classes/ClassProvider$Slot {
+	public fun <init> (Ljava/lang/String;Lnet/kyori/adventure/text/Component;)V
+	public final fun getId ()Ljava/lang/String;
+	public final fun getName ()Lnet/kyori/adventure/text/Component;
+}
+
+public abstract interface class ru/endlesscode/mimic/classes/ClassSlot : net/kyori/adventure/key/Keyed {
+	public abstract fun key ()Lnet/kyori/adventure/key/Key;
+	public abstract fun name ()Lnet/kyori/adventure/text/Component;
+}
+
+public abstract interface class ru/endlesscode/mimic/classes/Classes {
+	public abstract fun getAllClasses ()Ljava/util/List;
+	public abstract fun getAllSlots ()Ljava/util/List;
+	public abstract fun getClasses (Lorg/bukkit/entity/Player;)Ljava/util/Map;
+	public abstract fun getPrimaryClass (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/classes/CharacterClass;
+	public abstract fun hasClass (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;)Z
+	public abstract fun setClass (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;)Z
+	public abstract fun setClass (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;Lnet/kyori/adventure/key/Key;)Z
+}
+
 public abstract class ru/endlesscode/mimic/inventory/BukkitPlayerInventory : ru/endlesscode/mimic/inventory/PlayerInventory {
 	public fun <init> (Lorg/bukkit/entity/Player;)V
 	protected final fun collectEquippedItems ()Ljava/util/List;
