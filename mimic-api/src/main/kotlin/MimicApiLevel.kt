@@ -46,6 +46,7 @@ public object MimicApiLevel {
      * # Version 0.10
      * - Levels API, LevelSystem API is deprecated
      * - Classes API, ClassSystem API is deprecated
+     * - Resources API
      */
     public const val VERSION_0_10: Int = 6
 

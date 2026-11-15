@@ -16,6 +16,7 @@ public abstract interface class ru/endlesscode/mimic/Mimic {
 	public abstract fun getLevels ()Lru/endlesscode/mimic/level/Levels;
 	public fun getPlayerInventory (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory;
 	public abstract fun getPlayerInventoryProvider ()Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
+	public abstract fun getResources ()Lru/endlesscode/mimic/resources/Resources;
 	public fun registerBlockRegistry (Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
 	public abstract fun registerBlockRegistry (Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
 	public fun registerClassProvider (Lru/endlesscode/mimic/classes/ClassProvider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/classes/ClassProvider;
@@ -30,6 +31,8 @@ public abstract interface class ru/endlesscode/mimic/Mimic {
 	public abstract fun registerLevelSystem (Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/level/BukkitLevelSystem$Provider;
 	public fun registerPlayerInventoryProvider (Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
 	public abstract fun registerPlayerInventoryProvider (Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
+	public fun registerResourceProvider (Lru/endlesscode/mimic/resources/ResourceProvider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/resources/ResourceProvider;
+	public abstract fun registerResourceProvider (Lru/endlesscode/mimic/resources/ResourceProvider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/resources/ResourceProvider;
 }
 
 public final class ru/endlesscode/mimic/Mimic$Companion {
@@ -178,5 +181,44 @@ public abstract interface class ru/endlesscode/mimic/level/Levels {
 	public abstract fun hasLevel (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;I)Z
 	public abstract fun setLevel (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;I)Z
 	public abstract fun takeExp (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
+}
+
+public abstract interface class ru/endlesscode/mimic/resources/Resource : net/kyori/adventure/key/Keyed {
+	public abstract fun key ()Lnet/kyori/adventure/key/Key;
+	public abstract fun name ()Lnet/kyori/adventure/text/Component;
+}
+
+public abstract interface class ru/endlesscode/mimic/resources/ResourceProvider : ru/endlesscode/mimic/MimicService {
+	public abstract fun getAllResources ()Ljava/util/Collection;
+	public abstract fun getPrimaryResource (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/resources/ResourceProvider$ResourceDefinition;
+	public abstract fun getState (Lorg/bukkit/entity/Player;Ljava/lang/String;)Lru/endlesscode/mimic/resources/ResourceState;
+	public fun setAmount (Lorg/bukkit/entity/Player;Ljava/lang/String;D)Z
+}
+
+public final class ru/endlesscode/mimic/resources/ResourceProvider$ResourceDefinition {
+	public fun <init> (Ljava/lang/String;Lnet/kyori/adventure/text/Component;)V
+	public final fun getId ()Ljava/lang/String;
+	public final fun getName ()Lnet/kyori/adventure/text/Component;
+}
+
+public abstract interface class ru/endlesscode/mimic/resources/ResourceState {
+	public static final field Companion Lru/endlesscode/mimic/resources/ResourceState$Companion;
+	public abstract fun getAmount ()D
+	public abstract fun getMax ()D
+	public static fun of (DD)Lru/endlesscode/mimic/resources/ResourceState;
+}
+
+public final class ru/endlesscode/mimic/resources/ResourceState$Companion {
+	public final fun of (DD)Lru/endlesscode/mimic/resources/ResourceState;
+}
+
+public abstract interface class ru/endlesscode/mimic/resources/Resources {
+	public abstract fun getAllResources ()Ljava/util/List;
+	public abstract fun getPrimaryResource (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/resources/Resource;
+	public abstract fun getState (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;)Lru/endlesscode/mimic/resources/ResourceState;
+	public abstract fun give (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
+	public abstract fun has (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
+	public abstract fun set (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
+	public abstract fun take (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
 }
 

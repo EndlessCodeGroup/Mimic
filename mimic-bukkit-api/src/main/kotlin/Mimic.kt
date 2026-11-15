@@ -20,6 +20,8 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.LevelProvider
 import ru.endlesscode.mimic.level.Levels
+import ru.endlesscode.mimic.resources.ResourceProvider
+import ru.endlesscode.mimic.resources.Resources
 
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
@@ -411,6 +413,55 @@ public interface Mimic {
      * @since 0.10.0
      */
     public val classes: Classes
+    // endregion
+
+    // region Resources
+    /**
+     * Registers the given [provider] of resources with normal priority.
+     *
+     * @param provider The [ResourceProvider] implementation.
+     * @param apiLevel Minimal required API level for this resource provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this resource provider.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.10.0
+     */
+    public fun registerResourceProvider(
+        provider: ResourceProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): ResourceProvider? = registerResourceProvider(provider, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [provider] of resources.
+     *
+     * @param provider The [ResourceProvider] implementation.
+     * @param apiLevel Minimal required API level for this resource provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this resource provider.
+     * @param priority Default priority. If user have not configured `resource-provider` option in config,
+     *                 the primary resource is taken from the first provider in order of priority that has one.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.10.0
+     */
+    public fun registerResourceProvider(
+        provider: ResourceProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): ResourceProvider?
+
+    /**
+     * Resources of players from all RPG plugins, like mana and stamina: read them, take costs, give them back.
+     * See [Resources] for details and examples.
+     * To make your plugin's resources available here, use [registerResourceProvider].
+     * @since 0.10.0
+     */
+    public val resources: Resources
     // endregion
 
     public companion object {
