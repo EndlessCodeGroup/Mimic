@@ -2,75 +2,41 @@
 
 ### Levels API
 
-New Levels API replaces `LevelSystem` ([#80](https://github.com/EndlessCodeGroup/Mimic/issues/80)).
-A player can now have many levels from several plugins at once: skills, jobs, classes or the vanilla level.
+New Levels API replaces `LevelSystem` ([#80](https://github.com/EndlessCodeGroup/Mimic/issues/80)): a player can have many levels from several plugins at once.
 See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#levels) for details and examples.
 
-- `Mimic.getLevels()` reads and changes players' levels: `getProgress`, `hasLevel`, `setLevel`, `giveExp` and `takeExp`.
-- `Mimic.registerLevelProvider()` makes a plugin's levels available.
-- Levels API requires Mimic API level `MimicApiLevel.VERSION_0_10`.
-- Levels are identified by keys with the plugin as namespace: `minecraft:level`, `auraskills:mining`.
-- `LevelSystem` API is deprecated, but keeps working.
-  Every level system is also available via Levels API as the single level `<id>:level`.
+- `Mimic.getLevels()` reads and changes levels, `Mimic.registerLevelProvider()` makes a plugin's levels available.
+  Requires Mimic API level `MimicApiLevel.VERSION_0_10`.
+- `LevelSystem` API is deprecated but keeps working, every level system is available via Levels API as `<id>:level`.
 - Config option `level-system` is renamed to `level-provider`, the old value is moved automatically.
-  Command `/mimic config level-system` is renamed to `/mimic config level-provider`.
-- Command `/mimic xp` is replaced with `/mimic levels`:
-  - `/mimic levels (info) (player)` shows the player's tracks with progress.
-  - `/mimic levels set [track] [level] (player)` sets level, resetting exp within the level.
-  - `/mimic levels give|take [track] [exp] (player)` gives or takes exp points.
+- Command `/mimic xp` is replaced with `/mimic levels`, which can also set, give and take levels.
 
 ### Classes API
 
-New Classes API replaces `ClassSystem` ([#81](https://github.com/EndlessCodeGroup/Mimic/issues/81)).
-Plugins hold classes in slots: a class, a race, a primary and a secondary class.
+New Classes API replaces `ClassSystem` ([#81](https://github.com/EndlessCodeGroup/Mimic/issues/81)): classes in slots like class and race, subclasses and class levels.
 See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#classes) for details and examples.
 
-- `Mimic.getClasses()` reads and changes players' classes: `getClasses`, `getPrimaryClass`, `hasClass` (including subclasses) and `setClass`.
-- A class may link to the level track holding its level.
-- `Mimic.registerClassProvider()` makes a plugin's classes available.
-- Classes API requires Mimic API level `MimicApiLevel.VERSION_0_10`.
-- Slots and classes are identified by keys with the plugin as namespace: `fabled:race`, `fabled:warrior`.
-- `ClassSystem` API is deprecated, but keeps working.
-  Every class system is also available via Classes API as the single slot `<id>:class` holding the primary class.
-  Other classes and class parents aren't available this way, so `hasClass` checks only the primary class.
-  Built-in SkillAPI, QuantumRPG and permissions integrations work this way.
+- `Mimic.getClasses()` reads and changes classes, `Mimic.registerClassProvider()` makes a plugin's classes available.
+  Requires Mimic API level `MimicApiLevel.VERSION_0_10`.
+- `ClassSystem` API is deprecated but keeps working, every class system is available via Classes API as `<id>:class`.
 - Config option `class-system` is renamed to `class-provider`, the old value is moved automatically.
-  Command `/mimic config class-system` is renamed to `/mimic config class-provider`.
-- Command `/mimic class` is replaced with `/mimic classes`:
-  - `/mimic classes (info) (player)` shows the player's classes.
-  - `/mimic classes check [class] (player)` checks that the player has the class or its subclass.
-  - `/mimic classes set [class] (slot) (player)` sets the class.
+- Command `/mimic class` is replaced with `/mimic classes`, which can also set classes.
 
 ### Integrations
 
-- Added [AuraSkills](https://modrinth.com/plugin/auraskills) integration: levels provider ([#22](https://github.com/EndlessCodeGroup/Mimic/issues/22)).
-  Every skill is a track: `auraskills:mining`, `auraskills:farming`.
-  The primary track is `auraskills:power`, the sum of skill levels, it is read-only.
-- Added [mcMMO](https://www.spigotmc.org/resources/64348/) integration: levels provider ([#55](https://github.com/EndlessCodeGroup/Mimic/issues/55)).
-  Every skill is a track: `mcmmo:mining`, `mcmmo:swords`.
-  The primary track is `mcmmo:power`, the sum of skill levels.
-  The primary track and child skills `mcmmo:salvage` and `mcmmo:smelting` are read-only.
-- MMOCore and Heroes integrations support Levels and Classes API natively, with all their levels and classes:
-  - MMOCore: the primary track `mmocore:level` is the level of the current class, professions are tracks `mmocore:profession/mining`.
-    The class is in the slot `mmocore:class`, parent classes are taken from MMOCore subclasses.
-    Class IDs are fixed: `mmocore:arcane_mage` instead of the display name ([#78](https://github.com/EndlessCodeGroup/Mimic/issues/78)).
-  - Heroes: every class is a track with the class ID `heroes:warrior`, the primary track is the player's primary class.
-    Classes are in slots `heroes:primary`, `heroes:secondary` and `heroes:race`, strong and weak parents count as parents.
-    Only the current classes are reported, not all classes the player ever had ([#79](https://github.com/EndlessCodeGroup/Mimic/issues/79)).
-  - Default classes meaning "not chosen yet" are reported as empty slots. The Heroes default race is a race.
-- Fixed MMOCore experience to reach a level in the deprecated `LevelSystem` API, it was taken from the next level ([#76](https://github.com/EndlessCodeGroup/Mimic/issues/76)).
-  Formula curves still return the requirement of the player's current level for any level, use Levels API instead.
+- Added [AuraSkills](https://modrinth.com/plugin/auraskills) levels provider ([#22](https://github.com/EndlessCodeGroup/Mimic/issues/22)).
+- Added [mcMMO](https://www.spigotmc.org/resources/64348/) levels provider ([#55](https://github.com/EndlessCodeGroup/Mimic/issues/55)).
+- MMOCore and Heroes support Levels and Classes API natively: class and profession levels, class slots and subclasses.
+  This fixes class IDs in MMOCore ([#78](https://github.com/EndlessCodeGroup/Mimic/issues/78)) and reporting class history as classes in Heroes ([#79](https://github.com/EndlessCodeGroup/Mimic/issues/79)).
+- Fixed MMOCore experience to reach a level in the deprecated `LevelSystem` API ([#76](https://github.com/EndlessCodeGroup/Mimic/issues/76)).
 
 ### Plugin changes
 
-- `/mimic levels`, `/mimic classes` and `/mimic inventory` have a `[change]` button next to the provider, opening `/mimic config`.
-- Consistent colors in command output
-- `/mimic config` hints say "Click to disable" and "Click to enable" for disabled registries instead of "Click to add" and "Click to remove".
+- `/mimic levels`, `/mimic classes` and `/mimic inventory` have a `[change]` button opening `/mimic config`.
 
 ### Housekeeping
 
-- License changed to MIT.
-  Previously, the API modules were licensed under LGPL-3.0 and the plugin under GPL-3.0.
+- License changed to MIT. Previously, the API modules were licensed under LGPL-3.0 and the plugin under GPL-3.0.
 - `Mimic.getItemsRegistry()` and `Mimic.getBlockRegistry()` became Kotlin properties `itemsRegistry` and `blockRegistry`.
   Nothing changes for Java, Kotlin code should use the properties.
 
