@@ -14,6 +14,7 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
  *
  * Supports one class per player.
  */
+@Deprecated("Use Classes API instead, the MMOCore class is in the slot `mmocore:class`.")
 public class MmoCoreClassSystem private constructor(
     player: Player,
     private val mmoCore: MmoCoreWrapper,

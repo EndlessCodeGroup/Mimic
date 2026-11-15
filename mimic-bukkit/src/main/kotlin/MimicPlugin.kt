@@ -30,7 +30,9 @@ import ru.endlesscode.mimic.impl.heroes.HeroesLevelProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
 import ru.endlesscode.mimic.impl.mcmmo.McMmoLevelProvider
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
+import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
+import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
 import ru.endlesscode.mimic.impl.quantumrpg.QuantumRpgClassSystem
@@ -96,7 +98,9 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("MMOCore", "net.Indyuce.mmocore.MMOCore") {
             hookLevels(MmoCoreLevelSystem::Provider)
+            hookLevels(::MmoCoreLevelProvider)
             hookClasses(MmoCoreClassSystem::Provider)
+            hookClasses(::MmoCoreClassProvider)
         }
 
         pluginHooks("Heroes", "com.herocraftonline.heroes.Heroes") {

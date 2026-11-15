@@ -93,6 +93,8 @@ dependencies {
     testImplementation(libs.rpgplugins.auraskills)
     testImplementation(libs.rpgplugins.mcmmo) { isTransitive = false }
     testImplementation(libs.rpgplugins.heroes) { isTransitive = false }
+    testImplementation(libs.rpgplugins.mmocore) { isTransitive = false }
+    testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
 }
 
 kotlin {

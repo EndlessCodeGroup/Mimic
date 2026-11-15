@@ -13,6 +13,7 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.ExpLevelConverter
 
 /** Implementation of LevelSystem using MMOCore. */
+@Deprecated("Use Levels API instead, MMOCore levels are tracks `mmocore:level` and `mmocore:profession/mining`.")
 public class MmoCoreLevelSystem private constructor(
     player: Player,
     private val mmoCore: MmoCoreWrapper,
