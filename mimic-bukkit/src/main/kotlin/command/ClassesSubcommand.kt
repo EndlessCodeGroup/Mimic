@@ -80,8 +80,17 @@ private fun Classes.slotIdsFor(context: CommandContext<CommandSourceStack>): Lis
     return getAllSlots().map { it.key() }.filter { it.namespace() == namespace }.map { it.asString() }
 }
 
-private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
+private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = info@{ sender, context ->
     val target = context.getPlayerOrSender(TARGET, sender)
+    val providerId = mimic.getPrimaryClassProviderId()
+    if (providerId == null) {
+        sender.sendMessage(text {
+            appendHeader("Mimic Classes")
+            append("No class plugins found, so there are no classes.", SECONDARY_COLOR)
+        })
+        return@info
+    }
+
     val classes = mimic.classes
     val primaryClass = classes.getPrimaryClass(target)
     val otherClasses = classes.getClasses(target).filterValues { it != primaryClass }
@@ -89,7 +98,7 @@ private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { 
 
     val message = text {
         appendHeader("Mimic Classes")
-        appendProviderStat("Class provider", mimic.getPrimaryClassProviderId() ?: "none")
+        appendProviderStat("Class provider", providerId)
         appendKey("${target.name}'s primary class: ")
         if (primaryClass == null) appendValue("none") else appendClass(primaryClass)
         appendLine()

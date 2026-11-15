@@ -32,7 +32,7 @@ internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponen
     appendSelectablePropertyConfig(
         property = MimicConfig.CLASS_PROVIDER,
         configuredValue = config.classProvider,
-        selectedOption = mimic.getPrimaryClassProviderId().orEmpty(),
+        selectedOption = mimic.getPrimaryClassProviderId() ?: "none",
         options = mimic.getClassProviderIds(),
     )
     appendSelectablePropertyConfig(

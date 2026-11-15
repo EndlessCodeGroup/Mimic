@@ -19,6 +19,8 @@ See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukki
 - `Mimic.getClasses()` reads and changes classes, `Mimic.registerClassProvider()` makes a plugin's classes available.
   Requires Mimic API level `MimicApiLevel.VERSION_0_10`.
 - `ClassSystem` API is deprecated but keeps working, every class system is available via Classes API as `<id>:class`.
+  The built-in `permissions` is the exception: it can't list its classes and a player may have several of them, while a slot holds one.
+  `PermissionsClassSystem` is deprecated, it stays the default of `ClassSystem` API.
 - Config option `class-system` is renamed to `class-provider`, the old value is moved automatically.
 - Command `/mimic class` is replaced with `/mimic classes`, which can also set classes.
 

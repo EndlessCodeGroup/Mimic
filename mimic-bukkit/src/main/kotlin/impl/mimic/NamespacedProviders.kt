@@ -35,8 +35,8 @@ internal class NamespacedProviders<T : MimicService>(
     /**
      * The preferred provider, or the provider with the highest priority, shown as selected in the config.
      * It is only an approximation: without a preference, [selectPrimary] skips providers without a primary value.
-     * It is `null` only while Mimic isn't enabled, before its `onEnable` and after its `onDisable`,
-     * because [enabled] skips providers of disabled plugins, including Mimic's own default provider.
+     * It is `null` if there are no enabled providers: the API has no default provider and no plugin provides it,
+     * or Mimic isn't enabled, because [enabled] skips providers of disabled plugins.
      */
     val primary: ServiceEntry<T>?
         get() = selectPrimary { it }

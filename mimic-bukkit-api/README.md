@@ -328,11 +328,12 @@ See [Classes] for the rules: which players are supported, what `null` and `false
 | `mmocore`                               | `class`                                 | `mmocore:level`       |
 | `heroes`                                | Primary: `primary`. `secondary`, `race` | The same as the class |
 | `fabled`                                | Class groups: `class`, `race`, …        | The same as the slot  |
-| `permissions`                           | `class`                                 | none                  |
 
 Plugins that use the deprecated [BukkitClassSystem] are available as the single slot `<id>:class` holding the primary class.
 Class names are converted to IDs: `Arcane Mage` becomes `arcane_mage`.
-Built-in `permissions` integration works this way too.
+The built-in `permissions` class system is the exception: it is available only via the deprecated API,
+because it can't list its classes and a player may have several of them.
+So without a class plugin there are no slots and classes, and `getPrimaryClass()` returns `null`.
 
 The old API has limits:
 - It can't list classes, so its classes are missing from `getAllClasses()`. Don't reject such class IDs in your config validation.

@@ -48,6 +48,7 @@ internal class MimicImpl(
         "ClassSystem",
         defaultId = PermissionsClassSystem.ID,
     )
+    // There is no default class provider, the ID is only reserved, see registerClassSystem
     val classProviders = registry<ClassProvider>(
         "ClassProvider",
         defaultId = PermissionsClassSystem.ID,
@@ -115,7 +116,9 @@ internal class MimicImpl(
         val classSystem = classSystems.tryRegister(apiLevel, plugin, priority) {
             WrappedClassSystemProvider(provider, plugin)
         }
-        if (classSystem != null) {
+        // Permissions class system isn't bridged: it can't list its classes,
+        // and a player may have several classes while a slot holds only one.
+        if (classSystem != null && classSystem.id != PermissionsClassSystem.ID) {
             classProviders.registerBridge(ClassSystemSlotProvider(classSystem), plugin, priority) {
                 "ClassSystem '${classSystem.id}' by $plugin uses deprecated ClassSystem API, " +
                     "so it is available via Classes API as the single slot '${classSystem.id}:class'. " +
@@ -214,8 +217,11 @@ internal class MimicImpl(
         WrappedClassProvider(provider, plugin)
     }
 
-    override val classes: Classes =
-        MimicClasses(classProviders, preferredProviderId = { config.classProvider })
+    // The 'permissions' value selects the class system of the deprecated API, there is no such class provider
+    override val classes: Classes = MimicClasses(
+        classProviders,
+        preferredProviderId = { config.classProvider.takeUnless { it == PermissionsClassSystem.ID }.orEmpty() },
+    )
     // endregion
 
     // region Bridges from deprecated APIs

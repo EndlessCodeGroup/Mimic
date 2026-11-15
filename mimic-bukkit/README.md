@@ -53,7 +53,7 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 
 ### [Class Systems][BukkitClassSystem.Provider]
 
-- **Permissions-based** _(Default)_ - give permission `mimic.class.[class_name]` to assign class to player
+- **Permissions-based** _(Default, ClassSystem API only)_ - give permission `mimic.class.[class_name]` to assign class to player
 - **[ProSkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**

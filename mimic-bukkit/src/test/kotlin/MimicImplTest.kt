@@ -5,7 +5,10 @@
 
 package ru.endlesscode.mimic
 
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.maps.shouldBeEmpty
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
@@ -18,6 +21,7 @@ import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.ClassProvider
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.MimicLevels
+import ru.endlesscode.mimic.impl.mimic.getPrimaryClassProviderId
 import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelProvider
 import ru.endlesscode.mimic.level.*
 import kotlin.test.Test
@@ -146,8 +150,7 @@ internal class MimicImplTest : BukkitTestBase() {
     fun `when class system is registered - should provide it via classes as a single slot`() {
         mimic.registerClassSystem(TestClassSystemProvider("legacy"), MimicApiLevel.CURRENT, thirdParty, Normal)
 
-        mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly
-            listOf("legacy:class", "permissions:class")
+        mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly listOf("legacy:class")
         mimic.classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
     }
 
@@ -156,8 +159,7 @@ internal class MimicImplTest : BukkitTestBase() {
         mimic.registerClassSystem(TestClassSystemProvider("rpg"), MimicApiLevel.CURRENT, thirdParty, High)
         mimic.registerClassProvider(TestClassProvider("rpg"), MimicApiLevel.CURRENT, otherPlugin, Normal)
 
-        mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly
-            listOf("rpg:native", "permissions:class")
+        mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly listOf("rpg:native")
     }
 
     @Test
@@ -165,23 +167,42 @@ internal class MimicImplTest : BukkitTestBase() {
         mimic.registerClassProvider(TestClassProvider("rpg"), MimicApiLevel.CURRENT, thirdParty, Normal)
         mimic.registerClassSystem(TestClassSystemProvider("rpg"), MimicApiLevel.CURRENT, otherPlugin, High)
 
-        mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly
-            listOf("rpg:native", "permissions:class")
+        mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly listOf("rpg:native")
     }
 
     @Test
-    fun `when class provider uses reserved ID - should keep the default bridge`() {
+    fun `when class provider uses reserved ID - should not register it`() {
         mimic.registerClassProvider(TestClassProvider("permissions"), MimicApiLevel.CURRENT, thirdParty, Normal) shouldBe null
+    }
 
-        mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly listOf("permissions:class")
+    @Test
+    fun `when there are no class plugins - should provide permissions only via class system`() {
+        mimic.getClassSystemProvider().id shouldBe "permissions"
+
+        mimic.classes.getAllSlots().shouldBeEmpty()
+        mimic.classes.getAllClasses().shouldBeEmpty()
+        mimic.classes.getClasses(player).shouldBeEmpty()
+        mimic.classes.getPrimaryClass(player).shouldBeNull()
+        mimic.getPrimaryClassProviderId().shouldBeNull()
     }
 
     @Test
     fun `when preferred class system is a bridged class system - should use it`() {
         mimic.registerClassSystem(TestClassSystemProvider("legacy"), MimicApiLevel.CURRENT, thirdParty, Normal)
+        mimic.registerClassSystem(TestClassSystemProvider("other"), MimicApiLevel.CURRENT, otherPlugin, High)
+        preferredClassProvider = "legacy"
+
+        mimic.getClassSystemProvider().id shouldBe "legacy"
+        mimic.classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
+    }
+
+    @Test
+    fun `when preferred class system is permissions - should use it only as class system`() {
+        mimic.registerClassSystem(TestClassSystemProvider("legacy"), MimicApiLevel.CURRENT, thirdParty, Normal)
         preferredClassProvider = "permissions"
 
         mimic.getClassSystemProvider().id shouldBe "permissions"
+        mimic.classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
     }
 
     @Test

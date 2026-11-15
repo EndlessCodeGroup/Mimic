@@ -42,8 +42,8 @@ internal class MimicClassesTest : BukkitTestBase() {
     // SUT
     private val classes = MimicClasses(classProviders, preferredProviderId = { preferredProviderId })
 
-    private val permissions = TestClassProvider(
-        id = "permissions",
+    private val legacy = TestClassProvider(
+        id = "legacy",
         slots = listOf("class"),
         classes = listOf(definition("mage")),
         playerClasses = mapOf("class" to "mage"),
@@ -61,7 +61,7 @@ internal class MimicClassesTest : BukkitTestBase() {
     )
 
     init {
-        classProviders.register(permissions, plugin, Lowest)
+        classProviders.register(legacy, plugin, Lowest)
         classProviders.register(rpg, thirdParty, Normal)
     }
 
@@ -70,14 +70,14 @@ internal class MimicClassesTest : BukkitTestBase() {
         classes.getAllSlots().map { it.key().asString() } shouldContainExactly listOf(
             "rpg:class",
             "rpg:race",
-            "permissions:class",
+            "legacy:class",
         )
         classes.getAllClasses().keys() shouldContainExactly listOf(
             "rpg:warrior",
             "rpg:paladin",
             "rpg:templar",
             "rpg:elf",
-            "permissions:mage",
+            "legacy:mage",
         )
     }
 
@@ -107,7 +107,7 @@ internal class MimicClassesTest : BukkitTestBase() {
             .shouldContainExactly(
                 "rpg:class" to "rpg:paladin",
                 "rpg:race" to "rpg:elf",
-                "permissions:class" to "permissions:mage",
+                "legacy:class" to "legacy:mage",
             )
     }
 
@@ -146,8 +146,8 @@ internal class MimicClassesTest : BukkitTestBase() {
 
     @Test
     fun `when preferred provider is set - should use its primary class`() {
-        preferredProviderId = "permissions"
-        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "permissions:mage"
+        preferredProviderId = "legacy"
+        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
     }
 
     @Test
@@ -160,7 +160,7 @@ internal class MimicClassesTest : BukkitTestBase() {
     @Test
     fun `when preferred provider is not set and the first one has no primary class - should use the next one`() {
         rpg.primarySlot = null
-        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "permissions:mage"
+        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
     }
 
     @Test
@@ -177,7 +177,7 @@ internal class MimicClassesTest : BukkitTestBase() {
         "warrior,  rpg:paladin,     false",
         "paladin,  rpg:templar,     false",
         "paladin,  rpg:elf,         false",
-        "paladin,  permissions:mage, true",
+        "paladin,  legacy:mage,     true",
         "paladin,  unknown:paladin, false",
     )
     fun `when check class - should check the class and its subclasses`(playerClass: String, classId: String, expected: Boolean) {
@@ -215,7 +215,7 @@ internal class MimicClassesTest : BukkitTestBase() {
         rpg.primarySlot = "Invalid"
         rpg.playerClasses = mapOf("Invalid" to "paladin", "race" to "elf")
 
-        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "permissions:mage"
+        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
     }
 
     @Test
@@ -236,9 +236,9 @@ internal class MimicClassesTest : BukkitTestBase() {
 
     @Test
     fun `when set class in a slot of another provider - should not call providers`() {
-        classes.setClass(player, Key.key("rpg:warrior"), Key.key("permissions:class")).shouldBeFalse()
+        classes.setClass(player, Key.key("rpg:warrior"), Key.key("legacy:class")).shouldBeFalse()
         rpg.writes.shouldBeEmpty()
-        permissions.writes.shouldBeEmpty()
+        legacy.writes.shouldBeEmpty()
     }
 
     @Test
@@ -259,9 +259,9 @@ internal class MimicClassesTest : BukkitTestBase() {
     fun `when provider throws - should skip it`() {
         rpg.failure = IllegalStateException("Test exception")
 
-        classes.getAllClasses().keys() shouldContainExactly listOf("permissions:mage")
-        classes.getClasses(player).keys.map { it.asString() } shouldContainExactly listOf("permissions:class")
-        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "permissions:mage"
+        classes.getAllClasses().keys() shouldContainExactly listOf("legacy:mage")
+        classes.getClasses(player).keys.map { it.asString() } shouldContainExactly listOf("legacy:class")
+        classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
         classes.hasClass(player, Key.key("rpg:warrior")).shouldBeFalse()
         classes.setClass(player, Key.key("rpg:warrior")).shouldBeFalse()
     }

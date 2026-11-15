@@ -17,6 +17,7 @@ import ru.endlesscode.mimic.internal.authorsMention
  *
  * [defaultId] is the ID of Mimic default implementation.
  * It can be registered only by Mimic itself and is always placed after other services, regardless of priority.
+ * The registry may have no default implementation, then the ID is only reserved.
  * IDs `mimic` and `minecraft` are reserved for Mimic too.
  *
  * Registration rules for a service with an already registered ID:

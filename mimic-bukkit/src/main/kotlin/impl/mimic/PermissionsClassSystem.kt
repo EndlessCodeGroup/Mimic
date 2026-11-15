@@ -17,6 +17,7 @@ import java.util.*
  * - mimic.class.ClassTwo
  * First class will be used as primary.
  */
+@Deprecated("Classes API has no permissions-based classes, use a plugin providing classes instead.")
 public class PermissionsClassSystem private constructor(player: Player) : BukkitClassSystem(player) {
 
     override val classes: List<String>
