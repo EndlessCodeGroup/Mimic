@@ -73,7 +73,7 @@ private fun <T : Any> CommandBuilder.changeSubcommand(
     change: LevelChange,
 ) = literal(name) {
     argument(TRACK, KeyArgumentType("track", "minecraft:level")) {
-        suggestsIds({ sender -> trackHints(levels, sender) }) { levels.trackIds() }
+        suggestsIds({ context -> trackHints(levels, context.source.sender) }) { levels.trackIds() }
         argument(amountName, amountType) {
             executesPlayer(changeCommandExecutor(levels, change))
             argument(TARGET, ArgumentTypes.player()) {

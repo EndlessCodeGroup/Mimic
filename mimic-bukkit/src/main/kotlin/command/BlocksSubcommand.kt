@@ -119,7 +119,7 @@ private fun CommandBuilder.blockArgument(
     blockRegistry: BukkitBlockRegistry,
     configure: CommandBuilder.() -> Unit,
 ) = argument(BLOCK, ResourceLocationArgumentType) {
-    suggestsIds({ sender -> blockHints(blockRegistry, sender) }) { blockRegistry.knownIds }
+    suggestsIds({ context -> blockHints(blockRegistry, context.source.sender) }) { blockRegistry.knownIds }
     configure()
 }
 

@@ -89,7 +89,7 @@ private fun CommandBuilder.itemArgument(
     itemRegistry: BukkitItemsRegistry,
     configure: CommandBuilder.() -> Unit,
 ) = argument(ITEM, ResourceLocationArgumentType) {
-    suggestsIds({ sender -> itemHints(itemRegistry, sender) }) { itemRegistry.knownIds }
+    suggestsIds({ context -> itemHints(itemRegistry, context.source.sender) }) { itemRegistry.knownIds }
     configure()
 }
 

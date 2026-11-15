@@ -3,6 +3,8 @@
 
 package ru.endlesscode.mimic.command
 
+import com.mojang.brigadier.context.CommandContext
+import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
@@ -55,7 +57,9 @@ internal fun CommandBuilder.classesSubcommand(mimic: Mimic) = literal("classes")
                 executesAny(setCommandExecutor(classes))
             }
             argument(SLOT, KeyArgumentType("slot", "fabled:race")) {
-                suggestsIds({ _ -> namespaceHints(classes.slotIds()) { "Slots from $it" } }) { classes.slotIds() }
+                suggestsIds({ context -> classes.slotIdsFor(context).map(::SuggestionHint) }) { context ->
+                    classes.slotIdsFor(context)
+                }
                 executesPlayer(setCommandExecutor(classes))
                 argument(TARGET, ArgumentTypes.player()) {
                     executesAny(setCommandExecutor(classes))
@@ -72,7 +76,12 @@ private fun CommandBuilder.classArgument(classes: Classes, configure: CommandBui
     }
 
 private fun Classes.classIds(): List<String> = getAllClasses().map { it.key().asString() }
-private fun Classes.slotIds(): List<String> = getAllSlots().map { it.key().asString() }
+
+/** Slots of the plugin owning the class being set: a class can be set only in a slot of the same plugin. */
+private fun Classes.slotIdsFor(context: CommandContext<CommandSourceStack>): List<String> {
+    val namespace = context.getArgument<Key>(CLASS).namespace()
+    return getAllSlots().map { it.key() }.filter { it.namespace() == namespace }.map { it.asString() }
+}
 
 private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
     val target = context.getPlayerOrSender(TARGET, sender)

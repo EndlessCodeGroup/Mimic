@@ -96,15 +96,15 @@ internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsStrings(prov
  * - `path` without namespace: [path hints][pathHints] from all namespaces and namespaces starting with `path`.
  */
 internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsIds(
-    provideEmptyInputHints: (CommandSender) -> List<SuggestionHint>,
-    provideIds: () -> Collection<String>,
+    provideEmptyInputHints: (CommandContext<CommandSourceStack>) -> List<SuggestionHint>,
+    provideIds: (CommandContext<CommandSourceStack>) -> Collection<String>,
 ) {
     suggests { context, builder ->
         val input = builder.remainingLowerCase
         val hints = if (input.isEmpty()) {
-            provideEmptyInputHints(context.source.sender)
+            provideEmptyInputHints(context)
         } else {
-            idHints(input, provideIds())
+            idHints(input, provideIds(context))
         }
         hints.distinctBy { it.text }.forEach { builder.suggest(it) }
         builder.buildFuture()
