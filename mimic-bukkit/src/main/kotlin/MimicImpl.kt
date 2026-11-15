@@ -39,7 +39,7 @@ internal class MimicImpl(
     private val config: MimicConfig,
 ) : Mimic, Listener {
 
-    private val blockRegistries = registry<BukkitBlockRegistry>(
+    val blockRegistries = registry<BukkitBlockRegistry>(
         "BlockRegistry",
         defaultId = MinecraftBlockRegistry.ID,
         disabledIds = { config.disabledBlockRegistries },
@@ -48,7 +48,7 @@ internal class MimicImpl(
         "ClassSystem",
         defaultId = PermissionsClassSystem.ID,
     )
-    private val classProviders = registry<ClassProvider>(
+    val classProviders = registry<ClassProvider>(
         "ClassProvider",
         defaultId = PermissionsClassSystem.ID,
     )
@@ -56,7 +56,7 @@ internal class MimicImpl(
         "PlayerInventory",
         defaultId = MinecraftPlayerInventory.ID,
     )
-    private val itemsRegistries = registry<BukkitItemsRegistry>(
+    val itemsRegistries = registry<BukkitItemsRegistry>(
         "ItemsRegistry",
         defaultId = MinecraftItemsRegistry.ID,
         disabledIds = { config.disabledItemsRegistries },
@@ -65,7 +65,7 @@ internal class MimicImpl(
         "LevelSystem",
         defaultId = MinecraftLevelSystem.ID,
     )
-    private val levelProviders = registry<LevelProvider>(
+    val levelProviders = registry<LevelProvider>(
         "LevelProvider",
         defaultId = MinecraftLevelProvider.ID,
     )

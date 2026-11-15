@@ -5,9 +5,6 @@
 
 package ru.endlesscode.mimic
 
-import org.bstats.bukkit.Metrics
-import org.bstats.charts.AdvancedPie
-import org.bstats.charts.SimplePie
 import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.Lowest
@@ -43,6 +40,7 @@ import ru.endlesscode.mimic.level.LevelProvider
 import ru.endlesscode.mimic.util.checkClassesLoaded
 
 /** Main class of the plugin. */
+@Suppress("UnstableApiUsage")
 public class MimicPlugin : JavaPlugin() {
 
     private val isReleased = !pluginMeta.version.endsWith("-SNAPSHOT")
@@ -61,7 +59,7 @@ public class MimicPlugin : JavaPlugin() {
     }
 
     override fun onEnable() {
-        if (isReleased) initMetrics()
+        if (isReleased) initMetrics(mimic)
         registerCommand(mimic, config)
         pluginManager.registerEvents(mimic, this)
 
@@ -180,29 +178,4 @@ public class MimicPlugin : JavaPlugin() {
         mimic.registerBlockRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
     //</editor-fold>
-
-    @OptIn(ExperimentalMimicApi::class)
-    private fun initMetrics() {
-        val metrics = Metrics(this, 8413)
-
-        metrics.addCustomChart(SimplePie("level_system") {
-            mimic.getLevelSystemProvider().id
-        })
-        metrics.addCustomChart(SimplePie("class_system") {
-            mimic.getClassSystemProvider().id
-        })
-        metrics.addCustomChart(SimplePie("inventory_provider") {
-            mimic.getPlayerInventoryProvider().id
-        })
-        metrics.addCustomChart(AdvancedPie("items_registry_custom") {
-            mimic.getAllItemsRegistries().keys
-                .filterNot { it == MinecraftItemsRegistry.ID }
-                .associateWith { 1 }
-        })
-        metrics.addCustomChart(AdvancedPie("block_registry_custom") {
-            mimic.getAllBlockRegistries().keys
-                .filterNot { it == MinecraftBlockRegistry.ID }
-                .associateWith { 1 }
-        })
-    }
 }
