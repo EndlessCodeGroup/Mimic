@@ -1,6 +1,8 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ClassSystem API is deprecated but still supported
+
 package ru.endlesscode.mimic.classes
 
 import org.bukkit.entity.Player

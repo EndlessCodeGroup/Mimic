@@ -1,7 +1,7 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION") // LevelSystem API is deprecated but still supported
+@file:Suppress("DEPRECATION") // LevelSystem and ClassSystem APIs are deprecated but still supported
 
 package ru.endlesscode.mimic
 
@@ -97,6 +97,7 @@ public interface Mimic {
      * @param plugin The plugin implementing this class system.
      * @return registered class system or `null` if it was not registered.
      */
+    @Deprecated("Use registerClassProvider instead.")
     public fun registerClassSystem(
         provider: BukkitClassSystem.Provider,
         apiLevel: Int,
@@ -116,6 +117,7 @@ public interface Mimic {
      *                 preferred service in config.
      * @return registered class system or `null` if it was not registered.
      */
+    @Deprecated("Use registerClassProvider instead.")
     public fun registerClassSystem(
         provider: BukkitClassSystem.Provider,
         apiLevel: Int,
@@ -127,12 +129,15 @@ public interface Mimic {
      * Returns top priority [BukkitClassSystem] for the given [player].
      * It is a shorthand for `getClassSystemProvider().getSystem(player)`.
      */
+    @Deprecated("Use classes.getPrimaryClass(player) or classes.getClasses(player) instead.")
     public fun getClassSystem(player: Player): BukkitClassSystem = getClassSystemProvider().getSystem(player)
 
     /** Returns top priority [BukkitClassSystem.Provider]. */
+    @Deprecated("Use classes instead.")
     public fun getClassSystemProvider(): BukkitClassSystem.Provider
 
     /** Returns map containing all known [BukkitClassSystem.Provider]s, where key is a provider ID. */
+    @Deprecated("Use classes.getAllSlots() and classes.getAllClasses() instead.")
     public fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider>
     // endregion
 

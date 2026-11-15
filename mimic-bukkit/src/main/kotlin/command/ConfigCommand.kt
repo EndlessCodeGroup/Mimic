@@ -43,6 +43,7 @@ internal fun CommandBuilder.configSubcommand(
     }
 
     // Change the preferred class system
+    @Suppress("DEPRECATION") // ClassSystem API is deprecated but still supported
     literal("class-system") {
         stringSetArgument(VALUE, "class system", { mimic.getAllClassSystemProviders().keys }) { sender, value ->
             config.classSystem = value

@@ -9,6 +9,7 @@ package ru.endlesscode.mimic.classes
  * Before implementing run an eye over all default method implementations
  * and override all methods that work not properly for your case.
  */
+@Deprecated("Use Classes API from mimic-bukkit-api instead, it supports class slots, subclasses and class levels.")
 public interface ClassSystem {
 
     /**

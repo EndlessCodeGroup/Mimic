@@ -19,6 +19,7 @@ import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
 
 @OptIn(ExperimentalMimicApi::class)
+@Suppress("DEPRECATION") // ClassSystem API is deprecated but still supported
 internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponent = text {
     appendHeader("Mimic Config")
     appendSelectablePropertyConfig(
