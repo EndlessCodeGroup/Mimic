@@ -9,6 +9,7 @@ import com.herocraftonline.heroes.characters.Hero
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 
+@Deprecated("Use Classes API instead, Heroes classes are in slots `heroes:primary`, `heroes:secondary` and `heroes:race`.")
 public class HeroesClassSystem private constructor(
     player: Player,
     private val heroes: HeroesWrapper,

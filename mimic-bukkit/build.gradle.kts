@@ -92,6 +92,7 @@ dependencies {
     testImplementation(libs.rpgplugins.skillapi)
     testImplementation(libs.rpgplugins.auraskills)
     testImplementation(libs.rpgplugins.mcmmo) { isTransitive = false }
+    testImplementation(libs.rpgplugins.heroes) { isTransitive = false }
 }
 
 kotlin {

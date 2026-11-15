@@ -47,8 +47,9 @@ import ru.endlesscode.mimic.MimicService
  * - Don't change data until the player's data is loaded, even if your plugin's API allows it.
  * - Report only active classes. Unlocked but inactive classes, classes the player has left, jobs and professions
  *   aren't classes here.
- * - Report a default class or a "no class" placeholder as an empty slot,
+ * - Report a placeholder meaning "no class yet", like a starting class, as an empty slot,
  *   so consumers can tell whether the player has picked a class.
+ *   A default that is a real choice, like a starting race, is a class.
  * - Reads may be called from any thread. If your plugin can't read data there, return `null` or empty instead of throwing.
  * - Writes are expected on the main thread (on Folia - on the player's thread), but Mimic doesn't enforce it.
  *

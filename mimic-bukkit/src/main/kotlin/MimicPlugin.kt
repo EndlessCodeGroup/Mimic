@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.classes.ClassProvider
 import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.auraskills.AuraSkillsLevelProvider
@@ -23,10 +24,12 @@ import ru.endlesscode.mimic.impl.battlelevels.BattleLevelsLevelSystem
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockRegistry
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
+import ru.endlesscode.mimic.impl.heroes.HeroesClassProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
+import ru.endlesscode.mimic.impl.heroes.HeroesLevelProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
-import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mcmmo.McMmoLevelProvider
+import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
@@ -98,7 +101,9 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("Heroes", "com.herocraftonline.heroes.Heroes") {
             hookLevels(HeroesLevelSystem::Provider)
+            hookLevels(::HeroesLevelProvider)
             hookClasses(HeroesClassSystem::Provider)
+            hookClasses(::HeroesClassProvider)
         }
 
         pluginHooks("QuantumRPG", "su.nightexpress.quantumrpg.QuantumRPG") {
@@ -146,7 +151,6 @@ public class MimicPlugin : JavaPlugin() {
         mimic.registerLevelSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
-    @Suppress("SameParameterValue")
     private fun hookLevels(
         constructor: () -> LevelProvider,
         priority: ServicePriority = Normal,
@@ -154,11 +158,19 @@ public class MimicPlugin : JavaPlugin() {
         mimic.registerLevelProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
+    @JvmName("hookClasses_deprecated")
     private fun hookClasses(
         constructor: () -> BukkitClassSystem.Provider,
         priority: ServicePriority = Normal,
     ) {
         mimic.registerClassSystem(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+    }
+
+    private fun hookClasses(
+        constructor: () -> ClassProvider,
+        priority: ServicePriority = Normal,
+    ) {
+        mimic.registerClassProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
     @Suppress("SameParameterValue")

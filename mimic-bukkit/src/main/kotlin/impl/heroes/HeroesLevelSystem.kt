@@ -10,6 +10,7 @@ import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.ExpLevelConverter
 
+@Deprecated("Use Levels API instead, every Heroes class is a track: `heroes:warrior`.")
 public class HeroesLevelSystem private constructor(
     player: Player,
     private val heroes: HeroesWrapper,
