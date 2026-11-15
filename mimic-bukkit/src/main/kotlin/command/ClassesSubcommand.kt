@@ -23,7 +23,7 @@ import ru.endlesscode.mimic.internal.text
  * ```
  * /mimic classes (info) (player)
  * /mimic classes check [class] (player)
- * /mimic classes set [class] (slot) (player)
+ * /mimic classes set [class] (player) (slot)
  * ```
  */
 internal fun CommandBuilder.classesSubcommand(mimic: Mimic) = literal("classes") {
@@ -49,19 +49,16 @@ internal fun CommandBuilder.classesSubcommand(mimic: Mimic) = literal("classes")
     }
 
     // Set the class in the slot chosen by the plugin or in the given slot.
-    // Only the slot argument has server-side suggestions, so it doesn't conflict with the player argument.
+    // The slot goes after the player, so their suggestions don't mix.
     literal("set") {
         classArgument(classes) {
             executesPlayer(setCommandExecutor(classes))
             argument(TARGET, ArgumentTypes.player()) {
                 executesAny(setCommandExecutor(classes))
-            }
-            argument(SLOT, KeyArgumentType("slot", "fabled:race")) {
-                suggestsIds({ context -> classes.slotIdsFor(context).map(::SuggestionHint) }) { context ->
-                    classes.slotIdsFor(context)
-                }
-                executesPlayer(setCommandExecutor(classes))
-                argument(TARGET, ArgumentTypes.player()) {
+                argument(SLOT, KeyArgumentType("slot", "fabled:race")) {
+                    suggestsIds({ context -> namespaceHints(classes.slotIdsFor(context)) { "Slots from $it" } }) { context ->
+                        classes.slotIdsFor(context)
+                    }
                     executesAny(setCommandExecutor(classes))
                 }
             }
@@ -113,7 +110,7 @@ private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { 
         }
         appendCommands(
             suggestedCommand("check", "/mimic classes check [class] (player)", "Check that player has the class or any of its subclasses"),
-            suggestedCommand("set", "/mimic classes set [class] (slot) (player)", "Set the class, in the given slot or in the slot chosen by the plugin"),
+            suggestedCommand("set", "/mimic classes set [class] (player) (slot)", "Set the class, in the given slot or in the slot chosen by the plugin"),
             suggestedCommand("info", "/mimic classes info (player)", "Show player's classes"),
         )
     }
