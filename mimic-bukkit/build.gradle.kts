@@ -31,6 +31,7 @@ bukkit {
             "AuraSkills",
             "mcMMO",
             "Jobs",
+            "Fabled",
         )
     }
 
@@ -64,6 +65,11 @@ repositories {
             includeGroup("com.github.Zrips")
         }
     }
+    maven(url = "https://repo.travja.dev/releases/") {
+        content {
+            includeGroup("studio.magemonkey")
+        }
+    }
     aikar()
     codemc()
     // Uncomment if you want to get Heroes from maven repo
@@ -93,6 +99,8 @@ dependencies {
     testImplementation(libs.rpgplugins.heroes) { isTransitive = false }
     testImplementation(libs.rpgplugins.mmocore) { isTransitive = false }
     testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
+    testImplementation(libs.rpgplugins.fabled) { isTransitive = false }
+    testImplementation(libs.rpgplugins.codex) { isTransitive = false }
 }
 
 kotlin {
@@ -118,6 +126,10 @@ tasks.runServer {
         url("https://jitpack.io/com/github/Zrips/Jobs/$jobsVersion/Jobs-$jobsVersion.jar")
         val cmilibVersion = libs.versions.cmilib.get()
         url("https://jitpack.io/com/github/Zrips/CMILib/$cmilibVersion/CMILib-$cmilibVersion.jar")
+        val fabledVersion = libs.versions.fabled.get()
+        url("https://repo.travja.dev/releases/studio/magemonkey/fabled/$fabledVersion/fabled-$fabledVersion.jar")
+        val codexVersion = libs.versions.codex.get()
+        url("https://repo.travja.dev/releases/studio/magemonkey/codex/$codexVersion/codex-$codexVersion.jar")
     }
 }
 
@@ -156,6 +168,7 @@ hangarPublish {
                 platformVersions = supportedGameVersions
                 dependencies {
                     hangar("AuraSkills") { required = false }
+                    hangar("Fabled") { required = false }
                     url("CraftEngine", "https://modrinth.com/plugin/craftengine") { required = false }
                 }
             }

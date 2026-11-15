@@ -47,6 +47,7 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 - **[ProSkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**
+- **[Fabled]** _(Levels API only)_ - every class group is a level track
 - **[ProRPGItems]**
 
 ### [Class Systems][BukkitClassSystem.Provider]
@@ -55,6 +56,7 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 - **[ProSkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**
+- **[Fabled]** _(Classes API only)_ - every class group is a slot
 - **[ProRPGItems]**
 
 ### [Player Inventory Providers][BukkitPlayerInventory.Provider]
@@ -140,6 +142,7 @@ It uses registry ID as a namespace for block IDs, like items registry does.
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
 [jobs reborn]: https://www.spigotmc.org/resources/4216/
+[fabled]: https://www.spigotmc.org/resources/91913/
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 

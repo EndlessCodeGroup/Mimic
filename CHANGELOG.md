@@ -27,6 +27,7 @@ See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukki
 - Added [AuraSkills](https://modrinth.com/plugin/auraskills) levels provider ([#22](https://github.com/EndlessCodeGroup/Mimic/issues/22)).
 - Added [mcMMO](https://www.spigotmc.org/resources/64348/) levels provider ([#55](https://github.com/EndlessCodeGroup/Mimic/issues/55)).
 - Added [Jobs Reborn](https://www.spigotmc.org/resources/4216/) levels provider ([#57](https://github.com/EndlessCodeGroup/Mimic/issues/57)).
+- Added [Fabled](https://www.spigotmc.org/resources/91913/) levels and classes providers ([#48](https://github.com/EndlessCodeGroup/Mimic/issues/48)): class groups are slots and level tracks.
 - MMOCore and Heroes support Levels and Classes API natively: class and profession levels, class slots and subclasses.
   This fixes class IDs in MMOCore ([#78](https://github.com/EndlessCodeGroup/Mimic/issues/78)) and reporting class history as classes in Heroes ([#79](https://github.com/EndlessCodeGroup/Mimic/issues/79)).
 - Fixed MMOCore experience to reach a level in the deprecated `LevelSystem` API ([#76](https://github.com/EndlessCodeGroup/Mimic/issues/76)).

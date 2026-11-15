@@ -20,6 +20,8 @@ import ru.endlesscode.mimic.impl.auraskills.AuraSkillsLevelProvider
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockRegistry
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
+import ru.endlesscode.mimic.impl.fabled.FabledClassProvider
+import ru.endlesscode.mimic.impl.fabled.FabledLevelProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesClassProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelProvider
@@ -117,6 +119,11 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("Jobs", "com.gamingmesh.jobs.Jobs") {
             hookLevels(::JobsLevelProvider)
+        }
+
+        pluginHooks("Fabled", "studio.magemonkey.fabled.Fabled") {
+            hookLevels(::FabledLevelProvider)
+            hookClasses(::FabledClassProvider)
         }
     }
 

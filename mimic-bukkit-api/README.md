@@ -253,6 +253,7 @@ See [Levels] for the rules: which players are supported, what `null` and `false`
 | `auraskills`                             | Skills: `mining`, `farming`, … Primary: `power`, the read-only sum of skill levels    |
 | `mcmmo`                                  | Skills: `mining`, `swords`, … Primary: `power`, the read-only sum of skill levels     |
 | `jobs`                                   | Joined jobs: `miner`, `woodcutter`, … Primary: `total`, the read-only sum of job levels |
+| `fabled`                                 | Class groups: `class`, `race`, … Primary: the group of the main class                 |
 
 Plugins that still use the deprecated [BukkitLevelSystem] are available the same way, as the single track `<id>:level`.
 
@@ -325,6 +326,7 @@ See [Classes] for the rules: which players are supported, what `null` and `false
 |-----------------------------------------|-----------------------------------------|-----------------------|
 | `mmocore`                               | `class`                                 | `mmocore:level`       |
 | `heroes`                                | Primary: `primary`. `secondary`, `race` | The same as the class |
+| `fabled`                                | Class groups: `class`, `race`, …        | The same as the slot  |
 | `permissions`                           | `class`                                 | none                  |
 
 Plugins that use the deprecated [BukkitClassSystem] are available as the single slot `<id>:class` holding the primary class.
