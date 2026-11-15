@@ -245,12 +245,14 @@ See [Levels] for the rules: which players are supported, what `null` and `false`
 
 #### Built-in tracks
 
-| Plugin                                                        | Tracks                                                                             |
-|---------------------------------------------------------------|------------------------------------------------------------------------------------|
-| `minecraft`                                                   | `level`                                                                            |
-| `mmocore`, `heroes`, `skillapi`, `quantumrpg`, `battlelevels` | `level`                                                                            |
-| `auraskills`                                                  | Skills: `mining`, `farming`, … Primary: `power`, the read-only sum of skill levels |
-| `mcmmo`                                                       | Skills: `mining`, `swords`, … Primary: `power`, the read-only sum of skill levels  |
+| Plugin                                   | Tracks                                                                                |
+|------------------------------------------|---------------------------------------------------------------------------------------|
+| `minecraft`                              | `level`                                                                               |
+| `skillapi`, `quantumrpg`, `battlelevels` | `level`                                                                               |
+| `mmocore`                                | Primary: `level`, the level of the current class. Professions: `profession/mining`, … |
+| `heroes`                                 | Classes: `warrior`, … Primary: the player's primary class                             |
+| `auraskills`                             | Skills: `mining`, `farming`, … Primary: `power`, the read-only sum of skill levels    |
+| `mcmmo`                                  | Skills: `mining`, `swords`, … Primary: `power`, the read-only sum of skill levels     |
 
 Plugins that still use the deprecated [BukkitLevelSystem] are available the same way, as the single track `<id>:level`.
 
@@ -319,13 +321,15 @@ See [Classes] for the rules: which players are supported, what `null` and `false
 
 #### Built-in classes
 
-| Plugin                                                       | Slots   |
-|--------------------------------------------------------------|---------|
-| `mmocore`, `heroes`, `skillapi`, `quantumrpg`, `permissions` | `class` |
+| Plugin                                  | Slots                                   | Class level track     |
+|-----------------------------------------|-----------------------------------------|-----------------------|
+| `mmocore`                               | `class`                                 | `mmocore:level`       |
+| `heroes`                                | Primary: `primary`. `secondary`, `race` | The same as the class |
+| `skillapi`, `quantumrpg`, `permissions` | `class`                                 | none                  |
 
 Plugins that use the deprecated [BukkitClassSystem] are available as the single slot `<id>:class` holding the primary class.
 Class names are converted to IDs: `Arcane Mage` becomes `arcane_mage`.
-Built-in integrations work this way too for now, native ones are planned.
+Built-in `skillapi`, `quantumrpg` and `permissions` integrations work this way too.
 
 The old API has limits:
 - It can't list classes, so its classes are missing from `getAllClasses()`. Don't reject such class IDs in your config validation.

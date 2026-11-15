@@ -33,7 +33,7 @@ See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukki
 - `ClassSystem` API is deprecated, but keeps working.
   Every class system is also available via Classes API as the single slot `<id>:class` holding the primary class.
   Other classes and class parents aren't available this way, so `hasClass` checks only the primary class.
-  Built-in integrations work this way for now, native ones are planned.
+  Built-in SkillAPI, QuantumRPG and permissions integrations work this way.
 - Config option `class-system` is renamed to `class-provider`, the old value is moved automatically.
   Command `/mimic config class-system` is renamed to `/mimic config class-provider`.
 - Command `/mimic class` is replaced with `/mimic classes`:
@@ -50,6 +50,16 @@ See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukki
   Every skill is a track: `mcmmo:mining`, `mcmmo:swords`.
   The primary track is `mcmmo:power`, the sum of skill levels.
   The primary track and child skills `mcmmo:salvage` and `mcmmo:smelting` are read-only.
+- MMOCore and Heroes integrations support Levels and Classes API natively, with all their levels and classes:
+  - MMOCore: the primary track `mmocore:level` is the level of the current class, professions are tracks `mmocore:profession/mining`.
+    The class is in the slot `mmocore:class`, parent classes are taken from MMOCore subclasses.
+    Class IDs are fixed: `mmocore:arcane_mage` instead of the display name ([#78](https://github.com/EndlessCodeGroup/Mimic/issues/78)).
+  - Heroes: every class is a track with the class ID `heroes:warrior`, the primary track is the player's primary class.
+    Classes are in slots `heroes:primary`, `heroes:secondary` and `heroes:race`, strong and weak parents count as parents.
+    Only the current classes are reported, not all classes the player ever had ([#79](https://github.com/EndlessCodeGroup/Mimic/issues/79)).
+  - Default classes meaning "not chosen yet" are reported as empty slots. The Heroes default race is a race.
+- Fixed MMOCore experience to reach a level in the deprecated `LevelSystem` API, it was taken from the next level ([#76](https://github.com/EndlessCodeGroup/Mimic/issues/76)).
+  Formula curves still return the requirement of the player's current level for any level, use Levels API instead.
 
 ### Plugin changes
 
