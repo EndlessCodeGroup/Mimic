@@ -14,6 +14,7 @@ import studio.magemonkey.fabled.listener.MainListener
 
 internal class FabledWrapper {
     val isEnabled: Boolean get() = Fabled.isLoaded()
+    val isManaEnabled: Boolean get() = Fabled.getSettings().isManaEnabled
 
     /** Class groups having at least one class. */
     val groups: List<String> get() = Fabled.getGroups()

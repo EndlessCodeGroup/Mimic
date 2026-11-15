@@ -17,15 +17,18 @@ import ru.endlesscode.mimic.classes.ClassProvider
 import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.auraskills.AuraSkillsLevelProvider
+import ru.endlesscode.mimic.impl.auraskills.AuraSkillsResourceProvider
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockRegistry
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.fabled.FabledClassProvider
 import ru.endlesscode.mimic.impl.fabled.FabledLevelProvider
+import ru.endlesscode.mimic.impl.fabled.FabledResourceProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesClassProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
+import ru.endlesscode.mimic.impl.heroes.HeroesResourceProvider
 import ru.endlesscode.mimic.impl.jobs.JobsLevelProvider
 import ru.endlesscode.mimic.impl.mcmmo.McMmoLevelProvider
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
@@ -33,6 +36,7 @@ import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
+import ru.endlesscode.mimic.impl.mmocore.MmoCoreResourceProvider
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
 import ru.endlesscode.mimic.impl.valhallammo.ValhallaMmoLevelProvider
 import ru.endlesscode.mimic.impl.vanilla.*
@@ -90,6 +94,7 @@ public class MimicPlugin : JavaPlugin() {
             hookLevels(::MmoCoreLevelProvider)
             hookClasses(MmoCoreClassSystem::Provider)
             hookClasses(::MmoCoreClassProvider)
+            hookResources(::MmoCoreResourceProvider)
         }
 
         pluginHooks("Heroes", "com.herocraftonline.heroes.Heroes") {
@@ -97,6 +102,7 @@ public class MimicPlugin : JavaPlugin() {
             hookLevels(::HeroesLevelProvider)
             hookClasses(HeroesClassSystem::Provider)
             hookClasses(::HeroesClassProvider)
+            hookResources(::HeroesResourceProvider)
         }
 
         pluginHooks("CustomItems", "com.jojodmo.customitems.api.CustomItemsAPI") {
@@ -114,6 +120,7 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("AuraSkills", "dev.aurelium.auraskills.api.AuraSkillsApi") {
             hookLevels(::AuraSkillsLevelProvider)
+            hookResources(::AuraSkillsResourceProvider)
         }
 
         pluginHooks("mcMMO", "com.gmail.nossr50.mcMMO") {
@@ -127,6 +134,7 @@ public class MimicPlugin : JavaPlugin() {
         pluginHooks("Fabled", "studio.magemonkey.fabled.Fabled") {
             hookLevels(::FabledLevelProvider)
             hookClasses(::FabledClassProvider)
+            hookResources(::FabledResourceProvider)
         }
 
         pluginHooks("ValhallaMMO", "me.athlaeos.valhallammo.ValhallaMMO") {
