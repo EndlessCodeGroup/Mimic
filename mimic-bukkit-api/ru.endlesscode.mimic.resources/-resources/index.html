@@ -1,0 +1,231 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Resources</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    mimic
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":mimic-bukkit-api/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":mimic-bukkit-api/main" data-filter=":mimic-bukkit-api/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    mimic
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="mimic-bukkit-api::ru.endlesscode.mimic.resources/Resources///PointingToDeclaration//-955813491">
+  <div class="breadcrumbs"><a href="../../index.html">mimic-bukkit-api</a><span class="delimiter">/</span><a href="../index.html">ru.endlesscode.mimic.resources</a><span class="delimiter">/</span><span class="current">Resources</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Resources</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Resources</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//resources/Resources.kt#L59">source</a>)</span></span></div><p class="paragraph">Resources of players from all RPG plugins supported by Mimic: mana, stamina and similar. Get it via <a href="../../ru.endlesscode.mimic/-mimic/resources.html">Mimic.resources</a>. To make your own plugin's resources available here, implement <a href="../-resource-provider/index.html">ResourceProvider</a> instead.</p><p class="paragraph">A <strong>resource</strong> is something a player spends and gets back, with a current amount and a maximum. A player may have resources from several plugins at once.</p><h3 class="">Quick start</h3><div class="sample-container"><pre><code class="block lang-java" theme="idea">// Pay a cost. Nothing is taken if the player doesn't have enough<br>Key mana = Key.key("mmocore:mana");<br>if (!resources.take(player, mana, 20.0)) {<br>    player.sendMessage("Not enough mana!");<br>    return;<br>}<br><br>// Use the player's mana whatever plugin it comes from, server owners choose the plugin in Mimic config<br>Resource resource = resources.getPrimaryResource(player);<br>if (resource == null) return; // There is no mana on this server<br>ResourceState state = resources.getState(player, resource.key());</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><h3 class="">IDs</h3><p class="paragraph">Resources are identified by <span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span>, which consists of a namespace and a path:</p><ul><li><p class="paragraph">The namespace is the ID of the plugin providing the resource: <code class="lang-kotlin">mmocore</code>, <code class="lang-kotlin">heroes</code>.</p></li><li><p class="paragraph">The path is the resource within that plugin: <code class="lang-kotlin">mana</code>, <code class="lang-kotlin">stamina</code>.</p></li></ul><p class="paragraph">The namespace is required, since the same path in different plugins means a different resource. Note that <code class="lang-kotlin">Key.key("mana")</code> turns into <code class="lang-kotlin">minecraft:mana</code>, so validate resource IDs read from configs against <a href="get-all-resources.html">getAllResources</a>.</p><h3 class="">Rules</h3><ul><li><p class="paragraph">Works only with online players.</p></li><li><p class="paragraph"><code class="lang-kotlin">null</code> or <code class="lang-kotlin">false</code> means "not possible right now": the resource doesn't exist, the player doesn't have it, the plugin doesn't support this action, or the player's data isn't loaded yet.</p></li><li><p class="paragraph">Don't cache results. Amounts change all the time because of regeneration, and a class change may replace them.</p></li><li><p class="paragraph">Plugins storing whole numbers round amounts down. So <a href="take.html">take</a> may take a bit more, and <a href="give.html">give</a> a bit less. An amount smaller than the plugin can store, like a millionth of health, isn't taken at all.</p></li><li><p class="paragraph">Mimic never sends messages to the player.</p></li><li><p class="paragraph">Read from any thread. Change resources only on the main thread (on Folia - on the player's thread).</p></li></ul><span class="kdoc-tag"><h4 class="">Since</h4><p class="paragraph">0.10.0</p></span></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-526034670%2FFunctions%2F-955813491" anchor-label="getAllResources" id="-526034670%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-all-resources.html"><span>get</span><wbr><span>All</span><wbr><span><span>Resources</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-526034670%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-all-resources.html"><span class="token function">getAllResources</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-resource/index.html">Resource</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns all resources of all providers, regardless of players. Use it for discovery and config validation. Resources are sorted by provider priority, then in the order the provider returns them.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1643225390%2FFunctions%2F-955813491" anchor-label="getPrimaryResource" id="1643225390%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-primary-resource.html"><span>get</span><wbr><span>Primary</span><wbr><span><span>Resource</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1643225390%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-primary-resource.html"><span class="token function">getPrimaryResource</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-resource/index.html">Resource</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the resource the <a href="get-primary-resource.html">player</a> spends on abilities by default, like mana, or <code class="lang-kotlin">null</code> if there is no such resource.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1982597221%2FFunctions%2F-955813491" anchor-label="getState" id="1982597221%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-state.html"><span>get</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1982597221%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-state.html"><span class="token function">getState</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">resourceId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-resource-state/index.html">ResourceState</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns how much of the <a href="get-state.html">resourceId</a> the <a href="get-state.html">player</a> has, or <code class="lang-kotlin">null</code> if the player doesn't have the resource or their data isn't loaded.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1304244052%2FFunctions%2F-955813491" anchor-label="give" id="1304244052%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="give.html"><span><span>give</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1304244052%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="give.html"><span class="token function">give</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">resourceId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Gives <a href="give.html">amount</a> of the <a href="give.html">resourceId</a>, but not above <a href="../-resource-state/max.html">ResourceState.max</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1057305111%2FFunctions%2F-955813491" anchor-label="has" id="-1057305111%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="has.html"><span><span>has</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1057305111%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="has.html"><span class="token function">has</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">resourceId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Returns <code class="lang-kotlin">true</code> if the <a href="has.html">player</a> has at least <a href="has.html">amount</a> of the <a href="has.html">resourceId</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1141966625%2FFunctions%2F-955813491" anchor-label="set" id="1141966625%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set.html"><span><span>set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1141966625%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="set.html"><span class="token function">set</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">resourceId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Sets the current <a href="set.html">amount</a> of the <a href="set.html">resourceId</a>. The amount is kept between 0 and <a href="../-resource-state/max.html">ResourceState.max</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-51389410%2FFunctions%2F-955813491" anchor-label="take" id="-51389410%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="take.html"><span><span>take</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-51389410%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="take.html"><span class="token function">take</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">resourceId<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.key/Key///PointingToDeclaration/">Key</span><span class="token punctuation">, </span></span><span class="parameter ">amount<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Takes <a href="take.html">amount</a> of the <a href="take.html">resourceId</a>, or nothing if the <a href="take.html">player</a> has less. The plugin may take a different amount by its own rules, for example with a discount.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
