@@ -9,7 +9,8 @@ All Mimic APIs should implement [MimicService].
 Available services:
 - [LevelProvider]
 - [BukkitLevelSystem.Provider] *(deprecated, use [LevelProvider])*
-- [BukkitClassSystem.Provider]
+- [ClassProvider]
+- [BukkitClassSystem.Provider] *(deprecated, use [ClassProvider])*
 - [BukkitPlayerInventory.Provider] *(experimental)*
 - [BukkitItemsRegistry]
 - [BukkitBlockRegistry] *(experimental)*
@@ -55,7 +56,7 @@ You can get needed APIs from Mimic in `onEnable` of your plugin or later:
 Mimic mimic = Mimic.getInstance();
 
 Levels levels = mimic.getLevels();
-BukkitClassSystem classSystem = mimic.getClassSystem(player);
+Classes classes = mimic.getClasses();
 BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
 BukkitItemsRegistry itemsRegistry = mimic.getItemsRegistry();
 BukkitBlockRegistry blockRegistry = mimic.getBlockRegistry();
@@ -68,9 +69,9 @@ Key playerLevel = Key.key("minecraft:level");
 boolean isExperienced = levels.hasLevel(player, playerLevel, 30);
 levels.giveExp(player, playerLevel, 42);
 
-// ClassSystem holds a weak reference to a player object and should not live a long time.
-String playerPrimaryClass = classSystem.getPrimaryClass();
-boolean isMage = classSystem.hasAnyOfClasses(Arrays.asList("Mage", "Druid", "Necromancer"));
+// See the "Classes" section below for details
+boolean isWarrior = classes.hasClass(player, Key.key("fabled:warrior"));
+CharacterClass playerClass = classes.getPrimaryClass(player);
 
 // ItemsRegistry is not related to player so it can be used without provider
 ItemStack stick = itemsRegistry.getItem("minecraft:stick");
@@ -87,12 +88,13 @@ blockRegistry.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.t
 
 ### IDs
 
-Mimic identifies items, blocks and level tracks by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
+Mimic identifies items, blocks, level tracks and classes by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
 where the namespace is the ID of the plugin's implementation: `minecraft:acacia_boat`, `craftengine:default/palm_log`, `auraskills:mining`.
 The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
 
 - **Items and blocks:** ID without namespace, or with the `mimic` namespace, is searched over all registries in order of priority.
 - **Level tracks:** the namespace is required, see [Track IDs](#track-ids).
+- **Classes and class slots:** the namespace is required, see [Class IDs](#class-ids).
 
 > Item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`) or with more than one `:` (`ia:itemsadder:ruby_sword`) are deprecated.
 > They still work but log a warning.
@@ -106,12 +108,10 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
     import org.bukkit.plugin.java.JavaPlugin;
     import ru.endlesscode.mimic.Mimic;
     import ru.endlesscode.mimic.MimicApiLevel;
-    import ru.endlesscode.mimic.classes.BukkitClassSystem;
+    import ru.endlesscode.mimic.classes.Classes;
     import ru.endlesscode.mimic.items.BukkitItemsRegistry;
     import ru.endlesscode.mimic.level.Levels;
     import net.kyori.adventure.key.Key;
-    
-    import java.util.Arrays;
     
     public class MyPlugin extends JavaPlugin {
     
@@ -121,8 +121,8 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
             return mimic.getLevels();
         }
     
-        public static BukkitClassSystem getClassSystem(Player player) {
-            return mimic.getClassSystem(player);
+        public static Classes getClasses() {
+            return mimic.getClasses();
         }
     
         public static BukkitItemsRegistry getItemsRegistry() {
@@ -161,11 +161,7 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
             boolean isExperienced = getLevels().hasLevel(player, playerLevel, 30);
             getLevels().giveExp(player, playerLevel, 42);
 
-            // ClassSystem holds weak reference to player object and should not live a long time.
-    
-            BukkitClassSystem classSystem = getClassSystem(player);
-            String playerPrimaryClass = classSystem.getPrimaryClass();
-            boolean isMage = classSystem.hasAnyOfClasses(Arrays.asList("Mage", "Druid", "Necromancer"));
+            boolean isWarrior = getClasses().hasClass(player, Key.key("fabled:warrior"));
     
             // ItemsRegistry is not related to player so it can be used without provider
             BukkitItemsRegistry itemsRegistry = getItemsRegistry();
@@ -192,7 +188,7 @@ Each track has an ID made of the plugin ID and the track name: `minecraft:level`
 The plugin part is required, because different plugins may have tracks with the same name.
 See [IDs](#ids) for allowed characters.
 
-If you read track IDs from your config, check them when your plugin loads:
+If you read track IDs from your config, validate them:
 
 ```java
 Key trackId = Key.key(config.getString("track"));
@@ -258,34 +254,140 @@ See [Levels] for the rules: which players are supported, what `null` and `false`
 
 Plugins that still use the deprecated [BukkitLevelSystem] are available the same way, as the single track `<id>:level`.
 
+### Classes
+
+Classes API gives access to players' classes from all RPG plugins at once.
+A **slot** holds at most one of the player's classes:
+one plugin has a single class per player, another has a primary and a secondary class, or a class and a race.
+Races are classes too, held in a race slot.
+A player may have classes from several plugins at once, for example a class from one plugin and a race from another.
+
+Classes API requires Mimic 0.10, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)`.
+
+#### Class IDs
+
+Slots and classes have IDs made of the plugin ID and the slot or class name: `fabled:race`, `fabled:warrior`.
+The plugin part is required, because different plugins may have classes with the same name.
+See [IDs](#ids) for allowed characters.
+
+If you read class IDs from your config, validate them:
+
+```java
+Key classId = Key.key(config.getString("class"));
+boolean exists = classes.getAllClasses().stream().anyMatch(c -> c.key().equals(classId));
+```
+
+Classes of plugins using the deprecated [BukkitClassSystem] are missing from `getAllClasses()`, see [Built-in classes](#built-in-classes).
+
+#### Reading classes
+
+```java
+Classes classes = Mimic.getInstance().getClasses();
+
+// Check the class, a subclass counts too: a paladin is a warrior if the plugin says so
+boolean isWarrior = classes.hasClass(player, Key.key("fabled:warrior"));
+
+// If you just need "the player's class", use the primary class.
+// Server owners choose which plugin provides it with the `class-provider` option in Mimic config.
+CharacterClass playerClass = classes.getPrimaryClass(player);
+if (playerClass == null) return; // The player hasn't picked a class yet
+
+// A class may have a level, read it with Levels API
+Key levelTrack = playerClass.levelTrack();
+boolean isExperienced = levelTrack != null && levels.hasLevel(player, levelTrack, 30);
+
+// All classes of the player, where key is a slot ID. Empty slots are omitted.
+Map<Key, CharacterClass> playerClasses = classes.getClasses(player);
+```
+
+`getAllClasses()` and `getAllSlots()` list all classes and slots of all plugins.
+
+#### Changing classes
+
+```java
+classes.setClass(player, Key.key("fabled:paladin"));                         // The plugin chooses the slot
+classes.setClass(player, Key.key("fabled:elf"), Key.key("fabled:race"));      // In the given slot
+```
+
+It works like the plugin's admin command changing the class, with its usual side effects:
+the plugin may keep or reset the class progress, give items, or run commands.
+A change returns `true` if it was requested, and `false` if the plugin doesn't support it or the player's data isn't loaded yet.
+
+#### Rules
+
+See [Classes] for the rules: which players are supported, what `null` and `false` mean, caching and threading.
+
+#### Built-in classes
+
+| Plugin                                                       | Slots   |
+|--------------------------------------------------------------|---------|
+| `mmocore`, `heroes`, `skillapi`, `quantumrpg`, `permissions` | `class` |
+
+Plugins that use the deprecated [BukkitClassSystem] are available as the single slot `<id>:class` holding the primary class.
+Class names are converted to IDs: `Arcane Mage` becomes `arcane_mage`.
+Built-in integrations work this way too for now, native ones are planned.
+
+The old API has limits:
+- It can't list classes, so its classes are missing from `getAllClasses()`. Don't reject such class IDs in your config validation.
+- It has no subclasses, class levels and class changes, and only the primary class is available.
+
 ### How to implement API in my plugin?
 
 Create the class implementing one of Mimic APIs.
 For implementations examples, look [impl] package in [mimic-bukkit].
 
 ```java
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import ru.endlesscode.mimic.classes.BukkitClassSystem;
+import org.jetbrains.annotations.Nullable;
+import ru.endlesscode.mimic.classes.ClassProvider;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
-// Declare class implementing needed API. In this case we need to implement classes system.
-public class MyClassSystem extends BukkitClassSystem {
+// Declare class implementing needed API. In this case we need to implement classes.
+public class MyClassProvider implements ClassProvider {
+
+    private static final Slot CLASS_SLOT = new Slot("class", Component.text("Class"));
 
     // ID used to identify your implementation, usually it matches the name of the plugin
-    public static final String ID = "myplugin";
-
-    private Map<UUID, List<String>> playersClassesMap = new HashMap<>();
-
-    public MyClassSystem(@NotNull Player player) {
-        super(player);
+    @NotNull
+    @Override
+    public String getId() {
+        return "myplugin";
     }
 
     @NotNull
     @Override
-    public List<String> getClasses() {
-        return playersClassesMap.getOrDefault(getPlayer().getUniqueId(), Collections.emptyList());
+    public Collection<Slot> getAllSlots() {
+        return List.of(CLASS_SLOT);
+    }
+
+    // Read on every request, so it can change on the plugin reload
+    @NotNull
+    @Override
+    public Collection<ClassDefinition> getAllClasses() {
+        return MyClasses.getAll().stream().map(MyClassProvider::toDefinition).toList();
+    }
+
+    @NotNull
+    @Override
+    public Map<String, ClassDefinition> getClasses(@NotNull Player player) {
+        MyClass playerClass = MyClasses.getClass(player);
+        if (playerClass == null) return Map.of(); // The player hasn't picked a class yet
+        return Map.of(CLASS_SLOT.getId(), toDefinition(playerClass));
+    }
+
+    @Nullable
+    @Override
+    public Slot getPrimarySlot(@NotNull Player player) {
+        return CLASS_SLOT;
+    }
+
+    private static ClassDefinition toDefinition(MyClass myClass) {
+        return new ClassDefinition(myClass.getId(), Component.text(myClass.getDisplayName()), myClass.getParentIds());
     }
 }
 ```
@@ -439,6 +541,7 @@ Invalid IDs returned by a registry are ignored with a warning.
 
 A level provider returns track IDs without the plugin part: `mining`, and Mimic turns it into `myplugin:mining`.
 See [LevelProvider] for the rules about track IDs, unloaded data and threading.
+A class provider does the same with slot and class IDs, see [ClassProvider].
 
 When you've implemented API, register it in method **`onLoad`** of your plugin:
 
@@ -448,7 +551,7 @@ public void onLoad() {
     Mimic mimic = Mimic.getInstance();
     
     // Register your implementations and specify minimal required Mimic version for it.
-    mimic.registerClassSystem(MyClassSystem::new, MimicApiLevel.CURRENT, this);
+    mimic.registerClassProvider(new MyClassProvider(), MimicApiLevel.CURRENT, this);
     mimic.registerBlockRegistry(new MyBlockRegistry(), MimicApiLevel.CURRENT, this);
     mimic.registerLevelProvider(new MyLevelProvider(), MimicApiLevel.CURRENT, this);
 }
@@ -468,7 +571,10 @@ IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are res
 [BukkitLevelSystem]: src/main/kotlin/level/BukkitLevelSystem.kt
 [Levels]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.level/-levels/index.html
 [LevelProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.level/-level-provider/index.html
+[Classes]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.classes/-classes/index.html
+[ClassProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.classes/-class-provider/index.html
 [BukkitClassSystem.Provider]: src/main/kotlin/classes/BukkitClassSystem.kt
+[BukkitClassSystem]: src/main/kotlin/classes/BukkitClassSystem.kt
 [BukkitPlayerInventory.Provider]: src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: src/main/kotlin/items/BukkitItemsRegistry.kt
 [BukkitBlockRegistry]: src/main/kotlin/blocks/BukkitBlockRegistry.kt

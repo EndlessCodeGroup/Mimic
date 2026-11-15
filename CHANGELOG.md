@@ -19,6 +19,28 @@ See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
   - `/mimic levels set [track] [level] (player)` sets level, resetting exp within the level.
   - `/mimic levels give|take [track] [exp] (player)` gives or takes exp points.
 
+### Classes API
+
+New Classes API replaces `ClassSystem` ([#81](https://github.com/EndlessCodeGroup/Mimic/issues/81)).
+Plugins hold classes in slots: a class, a race, a primary and a secondary class.
+See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#classes) for details and examples.
+
+- `Mimic.getClasses()` reads and changes players' classes: `getClasses`, `getPrimaryClass`, `hasClass` (including subclasses) and `setClass`.
+- A class may link to the level track holding its level.
+- `Mimic.registerClassProvider()` makes a plugin's classes available.
+- Classes API requires Mimic API level `MimicApiLevel.VERSION_0_10`.
+- Slots and classes are identified by keys with the plugin as namespace: `fabled:race`, `fabled:warrior`.
+- `ClassSystem` API is deprecated, but keeps working.
+  Every class system is also available via Classes API as the single slot `<id>:class` holding the primary class.
+  Other classes and class parents aren't available this way, so `hasClass` checks only the primary class.
+  Built-in integrations work this way for now, native ones are planned.
+- Config option `class-system` is renamed to `class-provider`, the old value is moved automatically.
+  Command `/mimic config class-system` is renamed to `/mimic config class-provider`.
+- Command `/mimic class` is replaced with `/mimic classes`:
+  - `/mimic classes (info) (player)` shows the player's classes.
+  - `/mimic classes check [class] (player)` checks that the player has the class or its subclass.
+  - `/mimic classes set [class] (slot) (player)` sets the class.
+
 ### Integrations
 
 - Added [AuraSkills](https://modrinth.com/plugin/auraskills) integration: levels provider ([#22](https://github.com/EndlessCodeGroup/Mimic/issues/22)).
@@ -31,7 +53,7 @@ See [Levels](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 
 ### Plugin changes
 
-- `/mimic levels`, `/mimic class` and `/mimic inventory` have a `[change]` button next to the provider, opening `/mimic config`.
+- `/mimic levels`, `/mimic classes` and `/mimic inventory` have a `[change]` button next to the provider, opening `/mimic config`.
 - Consistent colors in command output
 - `/mimic config` hints say "Click to disable" and "Click to enable" for disabled registries instead of "Click to add" and "Click to remove".
 

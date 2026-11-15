@@ -41,7 +41,7 @@ All commands require the `mimic.admin` permission.
 | `/mimic`           | Show Mimic status                    |
 | `/mimic config`    | Show and change Mimic config         |
 | `/mimic levels`    | Manage player's levels               |
-| `/mimic class`     | Check player's classes               |
+| `/mimic classes`   | Manage player's classes              |
 | `/mimic inventory` | Player's inventory info              |
 | `/mimic items`     | Give, find and compare items         |
 | `/mimic blocks`    | Set, break, find and compare blocks  |

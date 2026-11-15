@@ -27,7 +27,7 @@ You can configure in `config.yml` what APIs implementations should be used, or u
 | `/mimic`           | Show mimic status                    |
 | `/mimic config`    | Show and change Mimic config         |
 | `/mimic levels`    | Manage player's levels               |
-| `/mimic class`     | Check player's classes               |
+| `/mimic classes`   | Manage player's classes              |
 | `/mimic inventory` | Player's inventory info              |
 | `/mimic items`     | Deal with items                      |
 | `/mimic blocks`    | Deal with blocks                     |
