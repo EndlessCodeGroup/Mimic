@@ -126,7 +126,7 @@ internal class MimicImpl(
     }
 
     override fun getClassSystemProvider(): BukkitClassSystem.Provider =
-        classSystems.loadPreferredOrDefault(config.classSystem, newApiRegistry = classProviders)
+        classSystems.loadPreferredOrDefault(config.classProvider, newApiRegistry = classProviders)
 
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = classSystems.loadAll()
     // endregion
@@ -215,7 +215,7 @@ internal class MimicImpl(
     }
 
     override val classes: Classes =
-        MimicClasses(classProviders, preferredProviderId = { config.classSystem })
+        MimicClasses(classProviders, preferredProviderId = { config.classProvider })
     // endregion
 
     // region Bridges from deprecated APIs

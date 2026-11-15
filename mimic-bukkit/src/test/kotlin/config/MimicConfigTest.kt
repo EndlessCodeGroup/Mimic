@@ -45,6 +45,14 @@ internal class MimicConfigTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when load legacy class system option - should move it to class provider`() {
+        file.writeText("class-system: custom\n")
+
+        loadConfig().classProvider shouldBe "custom"
+        file.readText() shouldNotContain "class-system"
+    }
+
+    @Test
     fun `when reset string property - should save empty value`() {
         val config = loadConfig()
         config.levelProvider = "custom"

@@ -23,7 +23,7 @@ internal class MimicConfig(
 ) {
 
     var levelProvider: String by configuration.property(LEVEL_PROVIDER)
-    var classSystem: String by configuration.property(CLASS_SYSTEM)
+    var classProvider: String by configuration.property(CLASS_PROVIDER)
     var inventoryProvider: String by configuration.property(INVENTORY_PROVIDER)
     var disabledItemsRegistries: Set<String> by configuration.property(DISABLED_ITEMS_REGISTRIES)
     var disabledBlockRegistries: Set<String> by configuration.property(DISABLED_BLOCK_REGISTRIES)
@@ -50,7 +50,8 @@ internal class MimicConfig(
                 file.createNewFile()
             }
             configuration.load(file)
-            migrateLevelSystem()
+            migrateOption(LEGACY_LEVEL_SYSTEM_PATH, LEVEL_PROVIDER)
+            migrateOption(LEGACY_CLASS_SYSTEM_PATH, CLASS_PROVIDER)
             validateConfigValues()
         } catch (e: Throwable) {
             Log.w(e, "Failed to load config.")
@@ -58,12 +59,12 @@ internal class MimicConfig(
         save()
     }
 
-    /** Moves the value of the legacy option `level-system` to `level-provider`, if the latter isn't set. */
-    private fun migrateLevelSystem() {
-        val levelSystem = configuration.getString(LEGACY_LEVEL_SYSTEM_PATH) ?: return
-        if (!configuration.isSet(LEVEL_PROVIDER.path)) configuration.set(LEVEL_PROVIDER.path, levelSystem)
-        configuration.set(LEGACY_LEVEL_SYSTEM_PATH, null)
-        Log.i("Config: Option '$LEGACY_LEVEL_SYSTEM_PATH' is renamed to '${LEVEL_PROVIDER.path}'.")
+    /** Moves the value of the option with [legacyPath] to the [property], if the latter isn't set. */
+    private fun migrateOption(legacyPath: String, property: ConfigProperty<*>) {
+        val value = configuration.getString(legacyPath) ?: return
+        if (!configuration.isSet(property.path)) configuration.set(property.path, value)
+        configuration.set(legacyPath, null)
+        Log.i("Config: Option '$legacyPath' is renamed to '${property.path}'.")
     }
 
     private fun validateConfigValues() {
@@ -117,6 +118,7 @@ internal class MimicConfig(
             "If the value is empty, will be used implementation with the highest priority."
 
         private const val LEGACY_LEVEL_SYSTEM_PATH = "level-system"
+        private const val LEGACY_CLASS_SYSTEM_PATH = "class-system"
 
         val LEVEL_PROVIDER = StringConfigProperty(
             path = "level-provider",
@@ -128,12 +130,14 @@ internal class MimicConfig(
                 "from the highest priority, and uses the first one that has the player's level.",
             )
         )
-        val CLASS_SYSTEM = StringConfigProperty(
-            path = "class-system",
-            title = "ClassSystem API",
+        val CLASS_PROVIDER = StringConfigProperty(
+            path = "class-provider",
+            title = "Classes API",
             comments = arrayOf(
-                "Specify here the preferred class system implementation.",
-                EMPTY_VALUE_MESSAGE,
+                "Specify here the plugin providing the player's class.",
+                "The class in its primary slot is used as the player's class.",
+                "If the value is empty or the plugin isn't installed, Mimic asks plugins one by one,",
+                "from the highest priority, and uses the first one that has the player's class.",
             ),
         )
         val INVENTORY_PROVIDER = StringConfigProperty(
@@ -166,7 +170,7 @@ internal class MimicConfig(
 
         val properties = listOf(
             LEVEL_PROVIDER,
-            CLASS_SYSTEM,
+            CLASS_PROVIDER,
             INVENTORY_PROVIDER,
             DISABLED_ITEMS_REGISTRIES,
             DISABLED_BLOCK_REGISTRIES,

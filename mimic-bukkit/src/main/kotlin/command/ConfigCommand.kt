@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
+import ru.endlesscode.mimic.impl.mimic.getClassProviderIds
 import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
@@ -42,11 +43,10 @@ internal fun CommandBuilder.configSubcommand(
         }
     }
 
-    // Change the preferred class system
-    @Suppress("DEPRECATION") // ClassSystem API is deprecated but still supported
-    literal("class-system") {
-        stringSetArgument(VALUE, "class system", { mimic.getAllClassSystemProviders().keys }) { sender, value ->
-            config.classSystem = value
+    // Change the plugin providing the player's class
+    literal("class-provider") {
+        stringSetArgument(VALUE, "class provider", { mimic.getClassProviderIds() }) { sender, value ->
+            config.classProvider = value
             showConfig(sender)
         }
     }

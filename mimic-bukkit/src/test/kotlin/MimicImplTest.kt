@@ -33,7 +33,7 @@ internal class MimicImplTest : BukkitTestBase() {
     private var preferredClassProvider = ""
     private val config: MimicConfig = mockk {
         every { levelProvider } answers { preferredLevelProvider }
-        every { classSystem } answers { preferredClassProvider }
+        every { classProvider } answers { preferredClassProvider }
     }
 
     // SUT

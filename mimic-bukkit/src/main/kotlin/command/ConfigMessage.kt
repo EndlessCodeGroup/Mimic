@@ -10,7 +10,9 @@ import ru.endlesscode.mimic.config.ConfigProperty
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.config.StringConfigProperty
 import ru.endlesscode.mimic.config.StringSetConfigProperty
+import ru.endlesscode.mimic.impl.mimic.getClassProviderIds
 import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
+import ru.endlesscode.mimic.impl.mimic.getPrimaryClassProviderId
 import ru.endlesscode.mimic.impl.mimic.getPrimaryLevelProviderId
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
@@ -19,7 +21,6 @@ import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
 
 @OptIn(ExperimentalMimicApi::class)
-@Suppress("DEPRECATION") // ClassSystem API is deprecated but still supported
 internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponent = text {
     appendHeader("Mimic Config")
     appendSelectablePropertyConfig(
@@ -29,10 +30,10 @@ internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponen
         options = mimic.getLevelProviderIds(),
     )
     appendSelectablePropertyConfig(
-        property = MimicConfig.CLASS_SYSTEM,
-        configuredValue = config.classSystem,
-        selectedOption = mimic.getClassSystemProvider().id,
-        options = mimic.getAllClassSystemProviders().keys,
+        property = MimicConfig.CLASS_PROVIDER,
+        configuredValue = config.classProvider,
+        selectedOption = mimic.getPrimaryClassProviderId().orEmpty(),
+        options = mimic.getClassProviderIds(),
     )
     appendSelectablePropertyConfig(
         property = MimicConfig.INVENTORY_PROVIDER,
