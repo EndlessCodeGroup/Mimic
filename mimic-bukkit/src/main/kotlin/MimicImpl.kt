@@ -13,9 +13,13 @@ import org.bukkit.plugin.ServicePriority
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.WrappedBlockRegistry
 import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.classes.ClassProvider
+import ru.endlesscode.mimic.classes.Classes
+import ru.endlesscode.mimic.classes.WrappedClassProvider
 import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
+import ru.endlesscode.mimic.impl.mimic.MimicClasses
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicLevels
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
@@ -61,13 +65,25 @@ internal class MimicImpl(
         "LevelSystem",
         defaultId = MinecraftLevelSystem.ID,
     )
+    private val classProviders = registry<ClassProvider>(
+        "ClassProvider",
+        defaultId = PermissionsClassSystem.ID,
+    )
     private val levelProviders = registry<LevelProvider>(
         "LevelProvider",
         defaultId = MinecraftLevelProvider.ID,
     )
 
     private val registries =
-        listOf(blockRegistries, classSystems, playerInventories, itemsRegistries, levelSystems, levelProviders)
+        listOf(
+            blockRegistries,
+            classSystems,
+            classProviders,
+            playerInventories,
+            itemsRegistries,
+            levelSystems,
+            levelProviders,
+        )
 
     private fun <T : MimicService> registry(
         apiName: String,
@@ -201,6 +217,20 @@ internal class MimicImpl(
 
     override val levels: Levels =
         MimicLevels(levelProviders, preferredProviderId = { config.levelProvider })
+    // endregion
+
+    // region Classes
+    override fun registerClassProvider(
+        provider: ClassProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): ClassProvider? = classProviders.tryRegister(apiLevel, plugin, priority) {
+        WrappedClassProvider(provider, plugin)
+    }
+
+    override val classes: Classes =
+        MimicClasses(classProviders, preferredProviderId = { config.classSystem })
     // endregion
 
     @EventHandler

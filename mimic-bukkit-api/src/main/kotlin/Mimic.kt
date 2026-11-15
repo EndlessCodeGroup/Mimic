@@ -13,6 +13,8 @@ import org.jetbrains.annotations.ApiStatus
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
+import ru.endlesscode.mimic.classes.ClassProvider
+import ru.endlesscode.mimic.classes.Classes
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
@@ -355,6 +357,55 @@ public interface Mimic {
      * @since 0.10.0
      */
     public val levels: Levels
+    // endregion
+
+    // region Classes
+    /**
+     * Registers the given [provider] of classes with normal priority.
+     *
+     * @param provider The [ClassProvider] implementation.
+     * @param apiLevel Minimal required API level for this class provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this class provider.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.10.0
+     */
+    public fun registerClassProvider(
+        provider: ClassProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): ClassProvider? = registerClassProvider(provider, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [provider] of classes.
+     *
+     * @param provider The [ClassProvider] implementation.
+     * @param apiLevel Minimal required API level for this class provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this class provider.
+     * @param priority Default priority. If user have not configured `class-provider` option in config,
+     *                 the primary class is taken from the first provider in order of priority that has one.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.10.0
+     */
+    public fun registerClassProvider(
+        provider: ClassProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): ClassProvider?
+
+    /**
+     * Classes of players from all RPG plugins: read them, check class requirements, change classes.
+     * See [Classes] for details and examples.
+     * To make your plugin's classes available here, use [registerClassProvider].
+     * @since 0.10.0
+     */
+    public val classes: Classes
     // endregion
 
     public companion object {
