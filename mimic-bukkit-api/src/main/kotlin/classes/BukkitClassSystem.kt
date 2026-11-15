@@ -18,7 +18,11 @@ public abstract class BukkitClassSystem(player: Player) : ClassSystem {
 
     private val playerRef: ExistingWeakReference<Player> = ExistingWeakReference(player)
 
-    /** Provider of Bukkit class systems. */
+    /**
+     * Provider of Bukkit class systems.
+     * It is also available via [Classes] as the single slot `<id>:class` holding the primary class,
+     * unless a [ClassProvider] with the same ID is registered.
+     */
     @Deprecated("Use ClassProvider instead.")
     public fun interface Provider : PlayerSystemProviderService<BukkitClassSystem>
 }

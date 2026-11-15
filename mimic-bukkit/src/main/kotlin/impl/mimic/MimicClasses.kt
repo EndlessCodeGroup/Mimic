@@ -21,6 +21,8 @@ internal typealias ClassProviderEntry = ServiceEntry<ClassProvider>
  * Classes combining slots and classes of all class providers, using provider IDs as namespaces:
  * `warrior` -> `fabled:warrior`.
  *
+ * Deprecated class systems are registered here as providers of the single slot `class`,
+ * see `MimicImpl.registerClassSystem`.
  * The primary class is taken from the provider with [preferredProviderId].
  * If it isn't set, the primary class is taken from the first provider in order of priority that has one for the player.
  */

@@ -19,6 +19,8 @@ import ru.endlesscode.mimic.internal.authorsMention
  * ID `mimic` is reserved for Mimic too.
  *
  * Registration rules for a service with an already registered ID:
+ * - A service of this API replaces a bridge exposing a service of a deprecated API, regardless of plugin and priority.
+ * - A bridge is skipped if a service of this API is already registered.
  * - A service registered again by the same plugin replaces the previous one.
  * - A service registered by another plugin replaces the one built into Mimic, regardless of priority.
  * - A service built into Mimic is skipped if another plugin has already registered the ID.
@@ -48,12 +50,15 @@ internal class ServiceRegistry<T : MimicService>(
             }
         }
 
-    /** Registers the given [service], returns `true` if it was registered. */
+    /**
+     * Registers the given [service], returns `true` if it was registered.
+     * Pass [isBridge] if the [service] exposes a service of a deprecated API via this API.
+     */
     @Synchronized
-    fun register(service: T, plugin: Plugin, priority: ServicePriority): Boolean {
+    fun register(service: T, plugin: Plugin, priority: ServicePriority, isBridge: Boolean = false): Boolean {
         val id = service.id
         val isBuiltIn = plugin == mimicPlugin
-        if (!isBuiltIn && (id == defaultId || id == MIMIC_ID)) {
+        if (isReserved(id, plugin)) {
             Log.w("$apiName '$id' by $plugin is not registered, because the ID is reserved by Mimic.")
             return false
         }
@@ -62,6 +67,10 @@ internal class ServiceRegistry<T : MimicService>(
         if (existing != null) {
             val existingIsBuiltIn = existing.plugin == mimicPlugin
             when {
+                existing.isBridge && !isBridge -> Log.i("$apiName '$id' bridged from a deprecated API replaced by $plugin")
+
+                !existing.isBridge && isBridge -> return false
+
                 existing.plugin == plugin -> Log.i("$apiName '$id' re-registered by $plugin")
 
                 existingIsBuiltIn && !isBuiltIn -> Log.i("Built-in $apiName '$id' replaced by $plugin")
@@ -87,7 +96,7 @@ internal class ServiceRegistry<T : MimicService>(
 
         // Sorting is stable, so services with equal priority keep registration order.
         // A replacing service takes the place of the replaced one.
-        val entry = ServiceEntry(service, plugin, priority, apiName, warnings)
+        val entry = ServiceEntry(service, plugin, priority, apiName, warnings, isBridge)
         val newEntries = if (existing == null) entries + entry else entries.map { if (it === existing) entry else it }
         entries = newEntries.sortedWith(
             compareBy<ServiceEntry<T>> { it.service.id == defaultId }.thenByDescending { it.priority }
@@ -95,11 +104,8 @@ internal class ServiceRegistry<T : MimicService>(
         return true
     }
 
-    /** Unregisters the given [service]. */
-    @Synchronized
-    fun unregister(service: T) {
-        entries = entries.filter { it.service !== service }
-    }
+    /** Returns `true` if the [id] is reserved by Mimic, so the [plugin] can't register a service with it. */
+    private fun isReserved(id: String, plugin: Plugin): Boolean = plugin != mimicPlugin && (id == defaultId || id == MIMIC_ID)
 
     /** Unregisters all services registered by the given [plugin]. */
     @Synchronized
@@ -113,13 +119,17 @@ internal class ServiceRegistry<T : MimicService>(
     }
 }
 
-/** Registered [service], [warnings] are shared by all services of the registry. */
+/**
+ * Registered [service], [warnings] are shared by all services of the registry.
+ * A [bridge][isBridge] exposes a service of a deprecated API via this API.
+ */
 internal data class ServiceEntry<T : MimicService>(
     val service: T,
     val plugin: Plugin,
     val priority: ServicePriority,
     val apiName: String,
     val warnings: OnceWarnings,
+    val isBridge: Boolean = false,
 )
 
 /** Calls the [service][ServiceEntry.service], returning [default] and logging the error if it throws. */

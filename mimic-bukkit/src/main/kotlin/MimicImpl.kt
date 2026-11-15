@@ -12,11 +12,7 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.WrappedBlockRegistry
-import ru.endlesscode.mimic.classes.BukkitClassSystem
-import ru.endlesscode.mimic.classes.ClassProvider
-import ru.endlesscode.mimic.classes.Classes
-import ru.endlesscode.mimic.classes.WrappedClassProvider
-import ru.endlesscode.mimic.classes.WrappedClassSystemProvider
+import ru.endlesscode.mimic.classes.*
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicClasses
@@ -52,6 +48,10 @@ internal class MimicImpl(
         "ClassSystem",
         defaultId = PermissionsClassSystem.ID,
     )
+    private val classProviders = registry<ClassProvider>(
+        "ClassProvider",
+        defaultId = PermissionsClassSystem.ID,
+    )
     private val playerInventories = registry<PlayerInventoryProvider>(
         "PlayerInventory",
         defaultId = MinecraftPlayerInventory.ID,
@@ -64,10 +64,6 @@ internal class MimicImpl(
     private val levelSystems = registry<BukkitLevelSystem.Provider>(
         "LevelSystem",
         defaultId = MinecraftLevelSystem.ID,
-    )
-    private val classProviders = registry<ClassProvider>(
-        "ClassProvider",
-        defaultId = PermissionsClassSystem.ID,
     )
     private val levelProviders = registry<LevelProvider>(
         "LevelProvider",
@@ -115,11 +111,22 @@ internal class MimicImpl(
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): BukkitClassSystem.Provider? = classSystems.tryRegister(apiLevel, plugin, priority) {
-        WrappedClassSystemProvider(provider, plugin)
+    ): BukkitClassSystem.Provider? {
+        val classSystem = classSystems.tryRegister(apiLevel, plugin, priority) {
+            WrappedClassSystemProvider(provider, plugin)
+        }
+        if (classSystem != null) {
+            classProviders.registerBridge(ClassSystemSlotProvider(classSystem), plugin, priority) {
+                "ClassSystem '${classSystem.id}' by $plugin uses deprecated ClassSystem API, " +
+                    "so it is available via Classes API as the single slot '${classSystem.id}:class'. " +
+                    "Please ask ${plugin.authorsMention} to migrate to ClassProvider."
+            }
+        }
+        return classSystem
     }
 
-    override fun getClassSystemProvider(): BukkitClassSystem.Provider = classSystems.load(config.classSystem)
+    override fun getClassSystemProvider(): BukkitClassSystem.Provider =
+        classSystems.loadPreferredOrDefault(config.classSystem, newApiRegistry = classProviders)
 
     override fun getAllClassSystemProviders(): Map<String, BukkitClassSystem.Provider> = classSystems.loadAll()
     // endregion
@@ -167,34 +174,18 @@ internal class MimicImpl(
         val levelSystem = levelSystems.tryRegister(apiLevel, plugin, priority) {
             WrappedLevelSystemProvider(provider, plugin)
         }
-        if (levelSystem != null) bridgeLevelSystem(levelSystem, plugin, priority)
-        return levelSystem
-    }
-
-    /** Makes the given [levelSystem] available via [levels], unless a level provider with the same ID is registered. */
-    private fun bridgeLevelSystem(levelSystem: BukkitLevelSystem.Provider, plugin: Plugin, priority: ServicePriority) {
-        val hasLevelProvider = levelProviders.entries.any { (service) ->
-            service.id == levelSystem.id && service !is LevelSystemTrackProvider
-        }
-        if (hasLevelProvider) return
-
-        levelProviders.register(LevelSystemTrackProvider(levelSystem), plugin, priority)
-        if (plugin != mimicPlugin) {
-            Log.w(
+        if (levelSystem != null) {
+            levelProviders.registerBridge(LevelSystemTrackProvider(levelSystem), plugin, priority) {
                 "LevelSystem '${levelSystem.id}' by $plugin uses deprecated LevelSystem API, " +
                     "so it is available via Levels API as the single track '${levelSystem.id}:level'. " +
                     "Please ask ${plugin.authorsMention} to migrate to LevelProvider."
-            )
+            }
         }
+        return levelSystem
     }
 
-    override fun getLevelSystemProvider(): BukkitLevelSystem.Provider {
-        // The preferred level system may be a level provider not available via LevelSystem API
-        val preferred = config.levelProvider
-        val isLevelProviderOnly = levelProviders.enabledEntries.any { it.service.id == preferred } &&
-                levelSystems.enabledEntries.none { it.service.id == preferred }
-        return levelSystems.load(if (isLevelProviderOnly) "" else preferred)
-    }
+    override fun getLevelSystemProvider(): BukkitLevelSystem.Provider =
+        levelSystems.loadPreferredOrDefault(config.levelProvider, newApiRegistry = levelProviders)
 
     override fun getAllLevelSystemProviders(): Map<String, BukkitLevelSystem.Provider> = levelSystems.loadAll()
     // endregion
@@ -206,13 +197,7 @@ internal class MimicImpl(
         plugin: Plugin,
         priority: ServicePriority,
     ): LevelProvider? = levelProviders.tryRegister(apiLevel, plugin, priority) {
-        WrappedLevelProvider(provider, plugin).also { unregisterBridgedLevelSystem(it.id) }
-    }
-
-    /** Unregisters the level system bridged with the given [id], so a level provider always replaces it. */
-    private fun unregisterBridgedLevelSystem(id: String) {
-        val bridge = levelProviders.entries.find { (service) -> service.id == id && service is LevelSystemTrackProvider }
-        if (bridge != null) levelProviders.unregister(bridge.service)
+        WrappedLevelProvider(provider, plugin)
     }
 
     override val levels: Levels =
@@ -231,6 +216,36 @@ internal class MimicImpl(
 
     override val classes: Classes =
         MimicClasses(classProviders, preferredProviderId = { config.classSystem })
+    // endregion
+
+    // region Bridges from deprecated APIs
+    /**
+     * Registers the given [bridge] exposing a service of a deprecated API via the new API.
+     * A service of the new API with the same ID always takes precedence over it, see [ServiceRegistry].
+     * Logs the [deprecationMessage] if the bridge is registered and isn't built into Mimic.
+     */
+    private fun <T : MimicService> ServiceRegistry<T>.registerBridge(
+        bridge: T,
+        plugin: Plugin,
+        priority: ServicePriority,
+        deprecationMessage: () -> String,
+    ) {
+        if (register(bridge, plugin, priority, isBridge = true) && plugin != mimicPlugin) Log.w(deprecationMessage())
+    }
+
+    /**
+     * Loads the [preferred] service of a deprecated API.
+     * The preferred service may be available only via the new API, then the default service is loaded quietly.
+     */
+    private fun <T : MimicService> ServiceRegistry<T>.loadPreferredOrDefault(
+        preferred: String,
+        newApiRegistry: ServiceRegistry<*>,
+    ): T {
+        if (preferred.isEmpty()) return load(preferred)
+        val isNewApiOnly = enabledEntries.none { it.service.id == preferred } &&
+            newApiRegistry.enabledEntries.any { it.service.id == preferred }
+        return load(if (isNewApiOnly) "" else preferred)
+    }
     // endregion
 
     @EventHandler
