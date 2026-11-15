@@ -10,6 +10,7 @@ import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.ExpLevelConverter
 
 /** Vanilla experience bar system. */
+@Deprecated("Use Levels API instead, the vanilla level is the track `minecraft:level`.")
 public class MinecraftLevelSystem private constructor(player: Player) : BukkitLevelSystem(player) {
 
     override val converter: ExpLevelConverter
