@@ -57,6 +57,7 @@ Mimic mimic = Mimic.getInstance();
 
 Levels levels = mimic.getLevels();
 Classes classes = mimic.getClasses();
+Resources resources = mimic.getResources();
 BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
 BukkitItemsRegistry itemsRegistry = mimic.getItemsRegistry();
 BukkitBlockRegistry blockRegistry = mimic.getBlockRegistry();
@@ -73,6 +74,9 @@ levels.giveExp(player, playerLevel, 42);
 boolean isWarrior = classes.hasClass(player, Key.key("fabled:warrior"));
 CharacterClass playerClass = classes.getPrimaryClass(player);
 
+// See the "Resources" section below for details
+boolean isPaid = resources.take(player, Key.key("mmocore:mana"), 20.0);
+
 // ItemsRegistry is not related to player so it can be used without provider
 ItemStack stick = itemsRegistry.getItem("minecraft:stick");
 boolean isPalmLogInHand = itemsRegistry.isSameItem(player.getInventory().getItemInMainHand(), "craftengine:default/palm_log");
@@ -88,13 +92,14 @@ blockRegistry.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.t
 
 ### IDs
 
-Mimic identifies items, blocks, level tracks and classes by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
+Mimic identifies items, blocks, level tracks, classes and resources by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
 where the namespace is the ID of the plugin's implementation: `minecraft:acacia_boat`, `craftengine:default/palm_log`, `auraskills:mining`.
 The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
 
 - **Items and blocks:** ID without namespace, or with the `mimic` namespace, is searched over all registries in order of priority.
 - **Level tracks:** the namespace is required, see [Track IDs](#track-ids).
 - **Classes and class slots:** the namespace is required, see [Class IDs](#class-ids).
+- **Resources:** the namespace is required, see [Resource IDs](#resource-ids).
 
 > Item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`) or with more than one `:` (`ia:itemsadder:ruby_sword`) are deprecated.
 > They still work but log a warning.
@@ -339,6 +344,85 @@ The old API has limits:
 - It can't list classes, so its classes are missing from `getAllClasses()`. Don't reject such class IDs in your config validation.
 - It has no subclasses, class levels and class changes, and only the primary class is available.
 
+### Resources
+
+Resources API gives access to players' mana, stamina and similar resources from all RPG plugins at once.
+A **resource** is something a player spends and gets back, with a current amount and a maximum.
+
+Resources API requires Mimic 0.10, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)`.
+
+#### Resource IDs
+
+Resources have IDs made of the plugin ID and the resource name: `mmocore:mana`, `heroes:stamina`.
+The plugin part is required, because different plugins may have resources with the same name.
+Note that `Key.key("mana")` turns into `minecraft:mana`, so validate IDs read from your config:
+
+```java
+Key resourceId = Key.key(config.getString("resource")); // "mmocore:mana"
+boolean exists = resources.getAllResources().stream().anyMatch(r -> r.key().equals(resourceId));
+```
+
+If your config just says "mana", use the primary resource. Server owners choose its plugin with `resource-provider` in Mimic config:
+
+```java
+Resource mana = resources.getPrimaryResource(player);
+if (mana == null) return; // There is no mana on this server
+```
+
+Vanilla resources `minecraft:health`, `minecraft:food` and `minecraft:air` are never primary, so mana never means the food bar.
+
+#### Reading resources
+
+```java
+Resources resources = Mimic.getInstance().getResources();
+Key mana = Key.key("mmocore:mana");
+
+ResourceState state = resources.getState(player, mana);
+if (state != null) {
+    double percent = state.getAmount() / state.getMax() * 100;
+}
+
+boolean canCast = resources.has(player, mana, 20.0);
+```
+
+#### Changing resources
+
+```java
+// Pay a cost. Takes the amount or nothing, and never sends messages to the player
+if (!resources.take(player, mana, 20.0)) {
+    player.sendMessage("Not enough mana!");
+    return;
+}
+
+resources.give(player, mana, 5.0); // Not above the maximum
+resources.set(player, mana, 0.0);  // Kept between 0 and the maximum
+```
+
+`take` returns `true` only if the resource was taken: `false` means the player doesn't have enough,
+another plugin cancelled the change, or the plugin doesn't support it.
+The plugin may take a different amount by its own rules, for example with a discount.
+Plugins storing whole numbers round amounts down, so `take` may take a bit more and `give` a bit less.
+
+`give` and `set` return `true` if the change was requested, another plugin may still cancel it.
+
+#### Rules
+
+See [Resources] for the rules: which players are supported, what `null` and `false` mean, caching and threading.
+To make resources of your plugin available, implement [ResourceProvider]: only reading the state and setting the amount.
+
+#### Built-in resources
+
+| Plugin       | Resources                                 | Values        |
+|--------------|-------------------------------------------|---------------|
+| `minecraft`  | `health`, `food`, `air` (in ticks). No primary | `health` is decimal, others are whole numbers |
+| `mmocore`    | Primary: `mana`. `stamina`, `stellium`    | Decimal       |
+| `heroes`     | Primary: `mana`. `stamina`                | Whole numbers |
+| `auraskills` | Primary: `mana`                           | Decimal       |
+| `fabled`     | Primary: `mana`, shared by all classes    | Decimal       |
+
+`minecraft:health` is changed directly, as a cost and not as damage: no damage or regain events are fired,
+armor and absorption hearts are ignored, and taking all health kills the player.
+
 ### How to implement API in my plugin?
 
 Create the class implementing one of Mimic APIs.
@@ -581,6 +665,8 @@ IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are res
 [LevelProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.level/-level-provider/index.html
 [Classes]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.classes/-classes/index.html
 [ClassProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.classes/-class-provider/index.html
+[Resources]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.resources/-resources/index.html
+[ResourceProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.resources/-resource-provider/index.html
 [BukkitClassSystem.Provider]: src/main/kotlin/classes/BukkitClassSystem.kt
 [BukkitClassSystem]: src/main/kotlin/classes/BukkitClassSystem.kt
 [BukkitPlayerInventory.Provider]: src/main/kotlin/inventory/BukkitPlayerInventory.kt

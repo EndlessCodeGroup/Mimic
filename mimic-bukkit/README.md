@@ -28,6 +28,7 @@ You can configure in `config.yml` what APIs implementations should be used, or u
 | `/mimic config`    | Show and change Mimic config         |
 | `/mimic levels`    | Manage player's levels               |
 | `/mimic classes`   | Manage player's classes              |
+| `/mimic resources` | Manage player's mana and similar     |
 | `/mimic inventory` | Player's inventory info              |
 | `/mimic items`     | Deal with items                      |
 | `/mimic blocks`    | Deal with blocks                     |
@@ -59,6 +60,14 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 - **[Heroes]**
 - **[Fabled]** _(Classes API only)_ - every class group is a slot
 - **[ProRPGItems]**
+
+### [Resource Providers][ResourceProvider]
+
+- **Minecraft** _(Default)_ - health `minecraft:health`, food level `minecraft:food` and remaining air `minecraft:air`, no primary resource
+- **[MMOCore]** - `mmocore:mana` (primary), `mmocore:stamina` and `mmocore:stellium`
+- **[Heroes]** - `heroes:mana` (primary) and `heroes:stamina`
+- **[AuraSkills]** - `auraskills:mana`
+- **[Fabled]** - `fabled:mana`
 
 ### [Player Inventory Providers][BukkitPlayerInventory.Provider]
 
@@ -150,6 +159,7 @@ It uses registry ID as a namespace for block IDs, like items registry does.
 
 [BukkitLevelSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/level/BukkitLevelSystem.kt
 [BukkitClassSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/classes/BukkitClassSystem.kt
+[ResourceProvider]: ../mimic-bukkit-api/src/main/kotlin/resources/ResourceProvider.kt
 [BukkitPlayerInventory.Provider]: ../mimic-bukkit-api/src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: ../mimic-bukkit-api/src/main/kotlin/items/BukkitItemsRegistry.kt
 [BukkitBlockRegistry]: ../mimic-bukkit-api/src/main/kotlin/blocks/BukkitBlockRegistry.kt

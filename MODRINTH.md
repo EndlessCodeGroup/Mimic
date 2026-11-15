@@ -1,7 +1,7 @@
 ![Mimic](https://raw.githubusercontent.com/EndlessCodeGroup/Mimic/develop/images/logo.png)
 
 **One API for every RPG plugin.**  
-Think of it as [Vault](https://www.spigotmc.org/resources/34315/) for RPG plugins: Vault connects plugins to any economy or permissions plugin, Mimic does the same for levels, classes, items and blocks.
+Think of it as [Vault](https://www.spigotmc.org/resources/34315/) for RPG plugins: Vault connects plugins to any economy or permissions plugin, Mimic does the same for levels, classes, resources like mana, items and blocks.
 
 You only need Mimic if another plugin requires it.
 
@@ -19,6 +19,7 @@ That's it. Mimic detects installed RPG plugins automatically.
 |----------------|------------------------------------------------------------------------------------------|
 | **Levels**     | Vanilla experience, AuraSkills, mcMMO, ValhallaMMO, Jobs Reborn, MMOCore, Heroes, Fabled |
 | **Classes**    | MMOCore, Heroes, Fabled                                                                  |
+| **Resources**  | Vanilla health, food and air, MMOCore, Heroes, AuraSkills, Fabled                        |
 | **Items**      | Vanilla items, CraftEngine, MMOItems, CustomItems, ItemsAdder¹, RPGInventory¹            |
 | **Blocks**     | Vanilla blocks, CraftEngine                                                              |
 | **Inventory**  | Vanilla inventory, RPGInventory¹                                                         |
@@ -42,6 +43,7 @@ All commands require the `mimic.admin` permission.
 | `/mimic config`    | Show and change Mimic config         |
 | `/mimic levels`    | Manage player's levels               |
 | `/mimic classes`   | Manage player's classes              |
+| `/mimic resources` | Manage player's mana and similar     |
 | `/mimic inventory` | Player's inventory info              |
 | `/mimic items`     | Give, find and compare items         |
 | `/mimic blocks`    | Set, break, find and compare blocks  |

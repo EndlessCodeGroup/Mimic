@@ -24,6 +24,18 @@ See [Classes](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukki
 - Config option `class-system` is renamed to `class-provider`, the old value is moved automatically.
 - Command `/mimic class` is replaced with `/mimic classes`, which can also set classes.
 
+### Resources API
+
+New Resources API for mana, stamina and similar resources ([#29](https://github.com/EndlessCodeGroup/Mimic/issues/29)).
+See [Resources](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#resources) for details and examples.
+
+- `Mimic.getResources()` reads, takes and gives resources, `Mimic.registerResourceProvider()` makes a plugin's resources available.
+  Requires Mimic API level `MimicApiLevel.VERSION_0_10`.
+- `take` takes the whole amount or nothing and never sends messages to the player.
+- New config option `resource-provider` selects the plugin providing the player's mana.
+- New command `/mimic resources` shows resources and can take, give and set them.
+- Built-in resources: vanilla health, food and air, MMOCore, Heroes, AuraSkills and Fabled.
+
 ### Integrations
 
 - Added [AuraSkills](https://modrinth.com/plugin/auraskills) levels provider ([#22](https://github.com/EndlessCodeGroup/Mimic/issues/22)).
