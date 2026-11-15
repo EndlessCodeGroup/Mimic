@@ -3,16 +3,12 @@
 
 package ru.endlesscode.mimic.command
 
-import com.mojang.brigadier.LiteralMessage
-import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.DoubleArgumentType
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
-import io.papermc.paper.command.brigadier.argument.CustomArgumentType
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
@@ -26,7 +22,7 @@ import ru.endlesscode.mimic.internal.text
 import ru.endlesscode.mimic.level.LevelProgress
 import ru.endlesscode.mimic.level.LevelTrack
 import ru.endlesscode.mimic.level.Levels
-import java.util.Locale
+import java.util.*
 
 /**
  * Commands to deal with levels.
@@ -76,8 +72,8 @@ private fun <T : Any> CommandBuilder.changeSubcommand(
     amountType: ArgumentType<T>,
     change: LevelChange,
 ) = literal(name) {
-    argument(TRACK, TrackArgumentType) {
-        suggestsIds({ sender -> trackHints(levels, sender) }) { trackIds(levels) }
+    argument(TRACK, KeyArgumentType("track", "minecraft:level")) {
+        suggestsIds({ sender -> trackHints(levels, sender) }) { levels.trackIds() }
         argument(amountName, amountType) {
             executesPlayer(changeCommandExecutor(levels, change))
             argument(TARGET, ArgumentTypes.player()) {
@@ -87,16 +83,13 @@ private fun <T : Any> CommandBuilder.changeSubcommand(
     }
 }
 
-private fun trackIds(levels: Levels): List<String> = levels.getAllTracks().map { it.key().asString() }
+private fun Levels.trackIds(): List<String> = getAllTracks().map { it.key().asString() }
 
 /** Suggests the primary track of the sender and namespaces of tracks. */
 private fun trackHints(levels: Levels, sender: CommandSender): List<SuggestionHint> {
     val primaryTrack = (sender as? Player)?.let(levels::getPrimaryTrack)
-    val trackIds = trackIds(levels)
-    val namespaces = levels.getAllTracks().map { it.key().namespace() }.distinct()
-
     return listOfNotNull(primaryTrack?.let { SuggestionHint(it.key().asString(), Component.text("Your primary track")) }) +
-        namespaces.map { SuggestionHint(collapseFolders("$it:", trackIds), Component.text("Tracks from $it")) }
+            namespaceHints(levels.trackIds()) { "Tracks from $it" }
 }
 
 private fun infoCommandExecutor(mimic: Mimic): CommandAction<CommandSender> = { sender, context ->
@@ -175,26 +168,6 @@ private fun TextComponent.Builder.appendProgress(progress: LevelProgress) {
 
 /** Formats [exp] with one decimal, dropping it if it is zero: `12.5`, `100`. */
 private fun formatExp(exp: Double): String = "%.1f".format(Locale.ROOT, exp).removeSuffix(".0")
-
-/** Track ID with namespace like `minecraft:level`, shown to the client as a key. */
-private object TrackArgumentType : CustomArgumentType<Key, Key> {
-
-    private val invalidTrack = DynamicCommandExceptionType { id ->
-        LiteralMessage("Invalid track ID '$id'. Expected ID with namespace, for example minecraft:level.")
-    }
-
-    override fun parse(reader: StringReader): Key {
-        val start = reader.cursor
-        val id = ResourceLocationArgumentType.parse(reader)
-        if (':' !in id || !Key.parseable(id)) {
-            reader.cursor = start
-            throw invalidTrack.createWithContext(reader, id)
-        }
-        return Key.key(id)
-    }
-
-    override fun getNativeType(): ArgumentType<Key> = ArgumentTypes.key()
-}
 
 private const val TARGET = "target"
 private const val TRACK = "track"

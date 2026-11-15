@@ -36,7 +36,7 @@ private fun buildCommand(
 
     configSubcommand(mimic, config)
     levelsSubcommand(mimic)
-    classSystemSubcommand(mimic)
+    classesSubcommand(mimic)
     inventorySubcommand(mimic)
     itemsSubcommand(mimic.itemsRegistry)
     @OptIn(ExperimentalMimicApi::class)
@@ -49,7 +49,7 @@ private fun infoExecutor(pluginFullName: String): CommandAction<CommandSender> =
         appendCommands(
             executedCommand("config", "/$COMMAND_NAME config", "See or change Mimic config"),
             executedCommand("levels", "/$COMMAND_NAME levels", "Player levels"),
-            executedCommand("class", "/$COMMAND_NAME class", "Class system"),
+            executedCommand("classes", "/$COMMAND_NAME classes", "Player classes"),
             executedCommand("inventory", "/$COMMAND_NAME inventory", "Player inventory provider"),
             executedCommand("items", "/$COMMAND_NAME items", "Items registries"),
             executedCommand("blocks", "/$COMMAND_NAME blocks", "Block registries"),

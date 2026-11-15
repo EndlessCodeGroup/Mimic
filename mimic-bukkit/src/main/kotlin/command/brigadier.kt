@@ -14,6 +14,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.CommandSyntaxException
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import io.papermc.paper.command.brigadier.CommandSourceStack
@@ -165,6 +166,14 @@ private fun prefixTooltip(hint: String): Component? = when {
     else -> null
 }
 
+/** Suggests namespaces of the given [ids] collapsed to shared folders, with the [tooltip] for each namespace. */
+internal fun namespaceHints(ids: List<String>, tooltip: (namespace: String) -> String): List<SuggestionHint> =
+    ids.map(::ParsedId)
+        .groupBy { it.namespace }
+        .map { (namespace, namespaceIds) ->
+            SuggestionHint(collapseFolders("$namespace:", namespaceIds), Component.text(tooltip(namespace)))
+        }
+
 /** Extends [prefix] with the folders shared by all [ids] starting with it, see [collapseFolders]. */
 internal fun collapseFolders(prefix: String, ids: Collection<String>): String =
     collapseFolders(prefix, ids.map(::ParsedId))
@@ -251,4 +260,28 @@ internal object ResourceLocationArgumentType : CustomArgumentType<String, Key> {
     override fun getNativeType(): ArgumentType<Key> = ArgumentTypes.key()
 
     private fun Char.isAllowedInResourceLocation() = this in 'a'..'z' || this in '0'..'9' || this in "_-.:/"
+}
+
+/**
+ * ID with namespace like `minecraft:level`, shown to the client as a key.
+ * Unlike [ArgumentTypes.key], requires the namespace instead of adding `minecraft`.
+ * The [valueName] and the [example] are used in the error message: `track` and `minecraft:level`.
+ */
+internal class KeyArgumentType(valueName: String, example: String) : CustomArgumentType<Key, Key> {
+
+    private val invalidId = DynamicCommandExceptionType { id ->
+        LiteralMessage("Invalid $valueName ID '$id'. Expected ID with namespace, for example $example.")
+    }
+
+    override fun parse(reader: StringReader): Key {
+        val start = reader.cursor
+        val id = ResourceLocationArgumentType.parse(reader)
+        if (':' !in id || !Key.parseable(id)) {
+            reader.cursor = start
+            throw invalidId.createWithContext(reader, id)
+        }
+        return Key.key(id)
+    }
+
+    override fun getNativeType(): ArgumentType<Key> = ArgumentTypes.key()
 }
