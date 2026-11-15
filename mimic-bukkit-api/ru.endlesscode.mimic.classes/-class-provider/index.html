@@ -1,0 +1,273 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ClassProvider</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    mimic
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":mimic-bukkit-api/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":mimic-bukkit-api/main" data-filter=":mimic-bukkit-api/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    mimic
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="mimic-bukkit-api::ru.endlesscode.mimic.classes/ClassProvider///PointingToDeclaration//-955813491">
+  <div class="breadcrumbs"><a href="../../index.html">mimic-bukkit-api</a><span class="delimiter">/</span><a href="../index.html">ru.endlesscode.mimic.classes</a><span class="delimiter">/</span><span class="current">ClassProvider</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Class</span><wbr><span><span>Provider</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">ClassProvider</a> : <a href="../../../mimic-api/ru.endlesscode.mimic/-mimic-service/index.html">MimicService</a><span class="source-link-wrapper"><span class="source-link" data-element-type="source-link">(<a href="https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api/src/main/kotlin//classes/ClassProvider.kt#L60">source</a>)</span></span></div><p class="paragraph">Implement it to make your plugin's classes available via <a href="../-classes/index.html">Classes</a>. Register it in <code class="lang-kotlin">onLoad</code> via <a href="../../ru.endlesscode.mimic/-mimic/register-class-provider.html">Mimic.registerClassProvider</a>. To read or change classes of players, use <a href="../-classes/index.html">Classes</a> instead.</p><p class="paragraph">A <strong>slot</strong> holds at most one of the player's classes: a class group, a primary or secondary class, a race. Races are classes too, held in a race slot. Your plugin may have one slot or many.</p><p class="paragraph">It replaces the deprecated <code class="lang-kotlin">ClassSystem</code> API, which supports only a flat list of class names.</p><h3 class="">What to implement</h3><ul><li><p class="paragraph">Required: <a href="all-slots.html">allSlots</a>, <a href="all-classes.html">allClasses</a>, <a href="get-classes.html">getClasses</a> and <a href="get-primary-slot.html">getPrimarySlot</a>.</p></li><li><p class="paragraph">Optional: <a href="set-class.html">setClass</a>. Skip it if your plugin can't change classes, it returns <code class="lang-kotlin">false</code> by default.</p></li></ul><h3 class="">IDs</h3><p class="paragraph">Mimic adds your provider <a href="../../ru.endlesscode.mimic.level/-level-provider/index.html#-683893447%2FProperties%2F-955813491">id</a> as the namespace, so return slot and class IDs without it: <code class="lang-kotlin">warrior</code> becomes <code class="lang-kotlin">myplugin:warrior</code>. Don't change <a href="../../ru.endlesscode.mimic.level/-level-provider/index.html#-683893447%2FProperties%2F-955813491">id</a> later, it breaks consumers' configs. Class IDs are unique within your provider, regardless of the slot.</p><p class="paragraph">If your plugin has its own namespaced IDs, convert them to paths:</p><ul><li><p class="paragraph">Drop your plugin's own namespace: <code class="lang-kotlin">origins:human</code> -&gt;<code class="lang-kotlin">human</code>.</p></li><li><p class="paragraph">Keep other namespaces as the first path part: <code class="lang-kotlin">myaddon:elf</code> -&gt;<code class="lang-kotlin">myaddon/elf</code>.</p></li></ul><p class="paragraph">Other rules:</p><ul><li><p class="paragraph">Allowed characters: <code class="lang-kotlin">a-z</code>, <code class="lang-kotlin">0-9</code>, <code class="lang-kotlin">.</code>, <code class="lang-kotlin">_</code>, <code class="lang-kotlin">-</code> and <code class="lang-kotlin">/</code>. Slots and classes with other characters are ignored.</p></li><li><p class="paragraph">To convert other IDs, lowercase them and replace other characters with <code class="lang-kotlin">_</code>. Keep a map back to the original IDs.</p></li><li><p class="paragraph">If two IDs become the same (<code class="lang-kotlin">Warrior</code> and <code class="lang-kotlin">warrior</code>), log a warning and keep one of them.</p></li></ul><h3 class="">Rules</h3><ul><li><p class="paragraph">Only online players are passed to the provider.</p></li><li><p class="paragraph">Never throw. If the player's data isn't loaded yet, return <code class="lang-kotlin">null</code> or empty from reads and <code class="lang-kotlin">false</code> from writes.</p></li><li><p class="paragraph">Don't change data until the player's data is loaded, even if your plugin's API allows it.</p></li><li><p class="paragraph">Report only active classes. Unlocked but inactive classes, classes the player has left, jobs and professions aren't classes here.</p></li><li><p class="paragraph">Report a default class or a "no class" placeholder as an empty slot, so consumers can tell whether the player has picked a class.</p></li><li><p class="paragraph">Reads may be called from any thread. If your plugin can't read data there, return <code class="lang-kotlin">null</code> or empty instead of throwing.</p></li><li><p class="paragraph">Writes are expected on the main thread (on Folia - on the player's thread), but Mimic doesn't enforce it.</p></li></ul><p class="paragraph">Mimic does the rest: selects the provider by the ID namespace, finds subclasses using <a href="-class-definition/parents.html">ClassDefinition.parents</a>, and catches errors thrown by the provider.</p><span class="kdoc-tag"><h4 class="">Since</h4><p class="paragraph">0.10.0</p></span></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-1996814065%2FClasslikes%2F-955813491" anchor-label="ClassDefinition" id="-1996814065%2FClasslikes%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-class-definition/index.html"><span>Class</span><wbr><span><span>Definition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1996814065%2FClasslikes%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-class-definition/index.html">ClassDefinition</a>&nbsp;<span><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-jvm-overloads/index.html"><span class="token annotation builtin">JvmOverloads</span></a>&nbsp;</span><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="net.kyori.adventure.key/KeyPattern.Value///PointingToDeclaration/"><span class="token annotation builtin">KeyPattern.Value</span></span>&nbsp;</span><span class="token keyword">val </span>id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.text/Component///PointingToDeclaration/">Component</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>parents<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptySet()<span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="net.kyori.adventure.key/KeyPattern.Value///PointingToDeclaration/"><span class="token annotation builtin">KeyPattern.Value</span></span>&nbsp;</span><span class="token keyword">val </span>levelTrack<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Class of a <a href="index.html">ClassProvider</a>. Classes are immutable, so they can be cached and reused.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="895919146%2FClasslikes%2F-955813491" anchor-label="Slot" id="895919146%2FClasslikes%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-slot/index.html"><span><span>Slot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="895919146%2FClasslikes%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-slot/index.html">Slot</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="net.kyori.adventure.key/KeyPattern.Value///PointingToDeclaration/"><span class="token annotation builtin">KeyPattern.Value</span></span>&nbsp;</span><span class="token keyword">val </span>id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><span data-unresolved-link="net.kyori.adventure.text/Component///PointingToDeclaration/">Component</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Slot of a <a href="index.html">ClassProvider</a>. Slots are immutable, so they can be cached and reused.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1467188622%2FProperties%2F-955813491" anchor-label="allClasses" id="1467188622%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="all-classes.html"><span>all</span><wbr><span><span>Classes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1467188622%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="all-classes.html">allClasses</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="-class-definition/index.html">ClassProvider.ClassDefinition</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">All classes this provider knows, regardless of players. The list may change at runtime, so it is read on every request.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="29124639%2FProperties%2F-955813491" anchor-label="allSlots" id="29124639%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="all-slots.html"><span>all</span><wbr><span><span>Slots</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="29124639%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="all-slots.html">allSlots</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="-slot/index.html">ClassProvider.Slot</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">All slots this provider knows, regardless of players. The list may change at runtime, so it is read on every request.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Inherited properties</h2>
+        <div class="table"><a data-name="-683893447%2FProperties%2F-955813491" anchor-label="id" id="-683893447%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../ru.endlesscode.mimic.level/-level-provider/index.html#-683893447%2FProperties%2F-955813491"><span><span>id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-683893447%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../ru.endlesscode.mimic.level/-level-provider/index.html#-683893447%2FProperties%2F-955813491">id</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="979844815%2FProperties%2F-955813491" anchor-label="isEnabled" id="979844815%2FProperties%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../ru.endlesscode.mimic.level/-level-provider/index.html#979844815%2FProperties%2F-955813491"><span>is</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="979844815%2FProperties%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../ru.endlesscode.mimic.level/-level-provider/index.html#979844815%2FProperties%2F-955813491">isEnabled</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-584363299%2FFunctions%2F-955813491" anchor-label="getClasses" id="-584363299%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-classes.html"><span>get</span><wbr><span><span>Classes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-584363299%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-classes.html"><span class="token function">getClasses</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="-class-definition/index.html">ClassProvider.ClassDefinition</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns classes the <a href="get-classes.html">player</a> has, where key is a slot ID. Empty slots are omitted. Return the same <a href="-class-definition/parents.html">ClassDefinition.parents</a> and <a href="-class-definition/level-track.html">ClassDefinition.levelTrack</a> as in <a href="all-classes.html">allClasses</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="866456867%2FFunctions%2F-955813491" anchor-label="getPrimarySlot" id="866456867%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-primary-slot.html"><span>get</span><wbr><span>Primary</span><wbr><span><span>Slot</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="866456867%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="get-primary-slot.html"><span class="token function">getPrimarySlot</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-slot/index.html">ClassProvider.Slot</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Returns the slot holding the class that best represents the <a href="get-primary-slot.html">player</a>'s class, or <code class="lang-kotlin">null</code> if there is no such slot.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1787371614%2FFunctions%2F-955813491" anchor-label="setClass" id="-1787371614%2FFunctions%2F-955813491" data-filterable-set=":mimic-bukkit-api/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":mimic-bukkit-api/main" data-filterable-set=":mimic-bukkit-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-class.html"><span>set</span><wbr><span><span>Class</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1787371614%2FFunctions%2F-955813491"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":mimic-bukkit-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="set-class.html"><span class="token function">setClass</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html">Player</a><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="net.kyori.adventure.key/KeyPattern.Value///PointingToDeclaration/"><span class="token annotation builtin">KeyPattern.Value</span></span>&nbsp;</span>classId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="net.kyori.adventure.key/KeyPattern.Value///PointingToDeclaration/"><span class="token annotation builtin">KeyPattern.Value</span></span>&nbsp;</span>slotId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Sets the class with <a href="set-class.html">classId</a> in the slot with <a href="set-class.html">slotId</a>, or in the slot chosen by your plugin if <a href="set-class.html">slotId</a> is <code class="lang-kotlin">null</code>. Do the same as your plugin's admin command changing the class, with its usual side effects. Check that <a href="set-class.html">classId</a> is one of your classes, and that the class can be held in the slot.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
