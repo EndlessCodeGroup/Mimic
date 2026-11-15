@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.shadow)
     alias(libs.plugins.bukkitgradle)
     alias(libs.plugins.minotaur)
+    alias(libs.plugins.hangar)
     kotlin("plugin.serialization")
 }
 
@@ -108,6 +109,13 @@ tasks.runServer {
     }
 }
 
+val supportedGameVersions = listOf(
+    "1.20.6",
+    "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6",
+    "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11",
+    "26.1", "26.1.1", "26.1.2",
+)
+
 modrinth {
     token = providers.environmentVariable("MODRINTH_TOKEN")
     projectId = "mimic-api"
@@ -116,15 +124,30 @@ modrinth {
     uploadFile.set(tasks.shadowJar)
     changelog = providers.environmentVariable("RELEASE_NOTES").orElse("")
     loaders.addAll("paper", "purpur")
-    gameVersions.addAll(
-        "1.20.6",
-        "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6",
-        "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11",
-        "26.1", "26.1.1", "26.1.2",
-    )
+    gameVersions.addAll(supportedGameVersions)
     dependencies {
         optional.project("auraskills")
         optional.project("craftengine")
+    }
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        apiKey = providers.environmentVariable("HANGAR_API_TOKEN")
+        id = "Mimic"
+        version = project.version.toString()
+        channel = "Release"
+        changelog = providers.environmentVariable("RELEASE_NOTES").orElse("")
+        platforms {
+            paper {
+                jar = tasks.shadowJar.flatMap { it.archiveFile }
+                platformVersions = supportedGameVersions
+                dependencies {
+                    hangar("AuraSkills") { required = false }
+                    url("CraftEngine", "https://modrinth.com/plugin/craftengine") { required = false }
+                }
+            }
+        }
     }
 }
 

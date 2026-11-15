@@ -25,6 +25,7 @@ gradlePlugin-shadow = "9.6.1"
 gradlePlugin-versions = "0.67.0"
 gradlePlugin-mavenPublish = "0.37.0"
 gradlePlugin-minotaur = "2.10.0"
+gradlePlugin-hangar = "0.1.4"
 gradlePlugin-spotless = "8.10.4"
 
 [libraries]
@@ -63,6 +64,7 @@ bukkitgradle = { id = "ru.endlesscode.bukkitgradle", version.ref = "gradlePlugin
 shadow = { id = "com.gradleup.shadow", version.ref = "gradlePlugin-shadow" }
 versions = { id = "io.github.ben-manes.versions", version.ref = "gradlePlugin-versions" }
 minotaur = { id = "com.modrinth.minotaur", version.ref = "gradlePlugin-minotaur" }
+hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "gradlePlugin-hangar" }
 
 [bundles]
 
