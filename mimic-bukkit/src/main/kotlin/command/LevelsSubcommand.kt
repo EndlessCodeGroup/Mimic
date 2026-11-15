@@ -22,7 +22,6 @@ import ru.endlesscode.mimic.internal.text
 import ru.endlesscode.mimic.level.LevelProgress
 import ru.endlesscode.mimic.level.LevelTrack
 import ru.endlesscode.mimic.level.Levels
-import java.util.*
 
 /**
  * Commands to deal with levels.
@@ -160,14 +159,11 @@ private fun TextComponent.Builder.appendProgress(progress: LevelProgress) {
     if (progress.hasMaxLevel()) append(" / ${progress.maxLevel}", SECONDARY_COLOR)
     if (progress.hasExp()) {
         append(" · ", SECONDARY_COLOR)
-        appendValue(formatExp(progress.exp))
-        if (progress.hasExpToNextLevel()) append(" / ${formatExp(progress.expToNextLevel)}", SECONDARY_COLOR)
+        appendValue(formatNumber(progress.exp))
+        if (progress.hasExpToNextLevel()) append(" / ${formatNumber(progress.expToNextLevel)}", SECONDARY_COLOR)
         append(" XP", SECONDARY_COLOR)
     }
 }
-
-/** Formats [exp] with one decimal, dropping it if it is zero: `12.5`, `100`. */
-private fun formatExp(exp: Double): String = "%.1f".format(Locale.ROOT, exp).removeSuffix(".0")
 
 private const val TARGET = "target"
 private const val TRACK = "track"

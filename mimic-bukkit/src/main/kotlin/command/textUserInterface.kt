@@ -12,6 +12,7 @@ import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendClickable
 import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
+import java.util.Locale
 
 // Colors used in command messages. Each color has a single meaning.
 private val HEADER_COLOR = NamedTextColor.GOLD
@@ -30,6 +31,9 @@ internal fun successText(builder: TextComponent.Builder.() -> Unit): TextCompone
     color(VALUE_COLOR)
     builder()
 }
+
+/** Formats [value] with one decimal, dropping it if it is zero: `12.5`, `100`. */
+internal fun formatNumber(value: Double): String = "%.1f".format(Locale.ROOT, value).removeSuffix(".0")
 
 /** Appends a key of key-value pair. */
 internal fun TextComponent.Builder.appendKey(key: String) = append(key, KEY_COLOR)
