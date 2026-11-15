@@ -10,11 +10,9 @@ import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
-import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.MimicId
 import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.internal.parseMimicId
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Block registry combining all block registries, using their IDs as namespaces.
@@ -38,9 +36,6 @@ public class MimicBlockRegistry internal constructor(
 
     internal val providers: List<BlockRegistryProvider>
         get() = registries.enabledEntries
-
-    /** IDs of registries which returned invalid IDs, to warn about each registry once. */
-    private val invalidRegistries = ConcurrentHashMap.newKeySet<String>()
 
     override fun isSameBlock(block: Block, blockId: String): Boolean {
         val id = parseMimicId(blockId) ?: return false
@@ -118,12 +113,10 @@ public class MimicBlockRegistry internal constructor(
         val namespacedId = "${registry.id}:$blockId"
         if (parseMimicId(namespacedId) != null) return namespacedId
 
-        if (invalidRegistries.add(registry.id)) {
-            Log.w(
-                "Block registry '${registry.id}' returned invalid ID '$blockId', such blocks are ignored. " +
-                    "IDs may contain only a-z, 0-9, '.', '_', '-' and '/'. " +
-                    "Please, report it to ${plugin.authorsMention}."
-            )
+        warnings.warn("invalid:${registry.id}") {
+            "Block registry '${registry.id}' returned invalid ID '$blockId', such blocks are ignored. " +
+                "IDs may contain only a-z, 0-9, '.', '_', '-' and '/'. " +
+                "Please, report it to ${plugin.authorsMention}."
         }
         return null
     }

@@ -44,7 +44,7 @@ internal class MimicClasses(
 
         return buildMap {
             for (provider in providers.enabled) {
-                for ((slotId, definition) in provider.getClasses(player)) {
+                for ((slotId, definition) in provider.validClasses(player)) {
                     put(provider.key(slotId), provider.characterClass(definition))
                 }
             }
@@ -61,7 +61,7 @@ internal class MimicClasses(
         val provider = findProvider(classId) ?: return false
 
         val path = classId.value()
-        val playerClasses = provider.getClasses(player).values
+        val playerClasses = provider.validClasses(player).values
         if (playerClasses.any { it.id == path }) return true
 
         val queue = ArrayDeque(playerClasses.flatMap { it.parents }.distinct())
@@ -69,7 +69,7 @@ internal class MimicClasses(
         if (path in queue) return true
 
         // Breadth-first search through ancestors of all player classes, cycles are ignored.
-        val parents = provider.call(emptyMap()) {
+        val parents = provider.call(default = emptyMap()) {
             buildMap { for (definition in allClasses) putIfAbsent(definition.id, definition.parents) }
         }
         val visited = queue.toMutableSet()
@@ -91,31 +91,31 @@ internal class MimicClasses(
     private fun setClass(player: Player, classId: Key, slotPath: String?): Boolean {
         if (!player.isOnline) return false
         val provider = findProvider(classId) ?: return false
-        return provider.call(false) { setClass(player, classId.value(), slotPath) }
+        return provider.call(default = false) { setClass(player, classId.value(), slotPath) }
     }
 
     private fun findProvider(classId: Key): ClassProviderEntry? =
-        providers.find(classId, CLASS) { path -> call(false) { allClasses.any { it.id == path } } }
+        providers.find(classId, CLASS) { path -> call(default = false) { allClasses.any { it.id == path } } }
 
     // Values are checked inside call, so a provider returning nulls from Java is skipped
     private fun ClassProviderEntry.getAllSlots(): List<ClassSlot> =
-        call(emptyList()) { validValues(allSlots, SLOT) { it.id }.map { classSlot(it) } }
+        call(default = emptyList()) { validValues(allSlots, SLOT) { it.id }.map { classSlot(it) } }
 
     /** Returns all classes of this provider, skipping classes with invalid or duplicated IDs. */
     private fun ClassProviderEntry.getAllClasses(): List<ClassProvider.ClassDefinition> =
-        call(emptyList()) { validValues(allClasses, CLASS) { it.id } }
+        call(default = emptyList()) { validValues(allClasses, CLASS) { it.id } }
 
     /** Returns classes the [player] has, skipping entries with invalid slot or class IDs. */
-    private fun ClassProviderEntry.getClasses(player: Player): Map<String, ClassProvider.ClassDefinition> =
-        call(emptyMap()) {
+    private fun ClassProviderEntry.validClasses(player: Player): Map<String, ClassProvider.ClassDefinition> =
+        call(default = emptyMap()) {
             getClasses(player).filter { (slotId, definition) ->
                 isValidPath(slotId, SLOT) && isValidPath(definition.id, CLASS)
             }
         }
 
     private fun ClassProviderEntry.getPrimaryClass(player: Player): CharacterClass? {
-        val slot = call(null) { getPrimarySlot(player) } ?: return null
-        val definition = getClasses(player)[slot.id] ?: return null
+        val slot = call(default = null) { getPrimarySlot(player) } ?: return null
+        val definition = validClasses(player)[slot.id] ?: return null
         return characterClass(definition)
     }
 

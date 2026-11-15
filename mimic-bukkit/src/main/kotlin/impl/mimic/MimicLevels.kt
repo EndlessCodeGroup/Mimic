@@ -36,7 +36,7 @@ internal class MimicLevels(
 
     override fun getTracks(player: Player): List<LevelTrack> {
         if (!player.isOnline) return emptyList()
-        return providers.enabled.flatMap { provider -> provider.getTracks(player) }
+        return providers.enabled.flatMap { provider -> provider.validTracks(player) }
     }
 
     override fun getPrimaryTrack(player: Player): LevelTrack? {
@@ -47,7 +47,7 @@ internal class MimicLevels(
     override fun getProgress(player: Player, trackId: Key): LevelProgress? {
         if (!player.isOnline) return null
         val provider = findProvider(trackId) ?: return null
-        return provider.call(null) { getProgress(player, trackId.value()) }
+        return provider.call(default = null) { getProgress(player, trackId.value()) }
     }
 
     override fun hasLevel(player: Player, trackId: Key, level: Int): Boolean {
@@ -58,42 +58,43 @@ internal class MimicLevels(
     override fun setLevel(player: Player, trackId: Key, level: Int): Boolean {
         if (!player.isOnline) return false
         val provider = findProvider(trackId) ?: return false
-        val progress = provider.call(null) { getProgress(player, trackId.value()) } ?: return false
+        val progress = provider.call(default = null) { getProgress(player, trackId.value()) } ?: return false
         var clampedLevel = level.coerceAtLeast(progress.minLevel)
         if (progress.hasMaxLevel()) clampedLevel = clampedLevel.coerceAtMost(progress.maxLevel)
-        return provider.call(false) { setLevel(player, trackId.value(), clampedLevel) }
+        return provider.call(default = false) { setLevel(player, trackId.value(), clampedLevel) }
     }
 
     override fun giveExp(player: Player, trackId: Key, amount: Double): Boolean {
         requireValidAmount(amount)
         if (!player.isOnline) return false
         val provider = findProvider(trackId) ?: return false
-        return provider.call(false) { giveExp(player, trackId.value(), amount) }
+        return provider.call(default = false) { giveExp(player, trackId.value(), amount) }
     }
 
     override fun takeExp(player: Player, trackId: Key, amount: Double): Boolean {
         requireValidAmount(amount)
         if (!player.isOnline) return false
         val provider = findProvider(trackId) ?: return false
-        return provider.call(false) { takeExp(player, trackId.value(), amount) }
+        return provider.call(default = false) { takeExp(player, trackId.value(), amount) }
     }
 
     private fun LevelProviderEntry.primaryTrack(player: Player): LevelTrack? {
-        val track = call(null) { getPrimaryTrack(player) } ?: return null
+        val track = call(default = null) { getPrimaryTrack(player) } ?: return null
         return if (isValidPath(track.id, TRACK)) levelTrack(track) else null
     }
 
     private fun findProvider(trackId: Key): LevelProviderEntry? =
-        providers.find(trackId, TRACK) { path -> call(false) { allTracks.any { it.id == path } } }
+        providers.find(trackId, TRACK) { path -> call(default = false) { allTracks.any { it.id == path } } }
 
     private fun requireValidAmount(amount: Double) {
         require(amount >= 0 && amount.isFinite()) { "'amount' should be non-negative and finite, but it was $amount" }
     }
 
     // Tracks are converted inside call, so a provider returning null tracks from Java is skipped
-    private fun LevelProviderEntry.getAllTracks(): List<LevelTrack> = call(emptyList()) { levelTracks(allTracks) }
-    private fun LevelProviderEntry.getTracks(player: Player): List<LevelTrack> =
-        call(emptyList()) { levelTracks(getTracks(player)) }
+    private fun LevelProviderEntry.getAllTracks(): List<LevelTrack> =
+        call(default = emptyList()) { levelTracks(allTracks) }
+    private fun LevelProviderEntry.validTracks(player: Player): List<LevelTrack> =
+        call(default = emptyList()) { levelTracks(getTracks(player)) }
 
     /** Returns the given [tracks] of this provider, skipping tracks with invalid or duplicated IDs. */
     private fun LevelProviderEntry.levelTracks(tracks: Collection<LevelProvider.Track>): List<LevelTrack> =

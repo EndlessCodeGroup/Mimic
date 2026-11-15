@@ -5,12 +5,10 @@ package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.ServiceRegistry
-import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.MimicId
 import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.internal.parseMimicId
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Items registry combining all items registries, using their IDs as namespaces: `acacia_boat` -> `minecraft:acacia_boat`.
@@ -30,9 +28,6 @@ public class MimicItemsRegistry internal constructor(
 
     internal val providers: List<ItemsRegistryProvider>
         get() = registries.enabledEntries
-
-    /** Keys of the warnings already logged, to log each warning once. */
-    private val loggedWarnings = ConcurrentHashMap.newKeySet<String>()
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
         val id = parse(itemId) ?: return false
@@ -71,10 +66,10 @@ public class MimicItemsRegistry internal constructor(
         val id = parseMimicId(lowercaseId, allowLegacy = true) ?: return null
 
         if (lowercaseId != itemId) {
-            warnOnce("uppercase:$itemId") { "Item ID '$itemId' is deprecated, use '$lowercaseId' instead." }
+            registries.warnings.warn("uppercase:$itemId") { "Item ID '$itemId' is deprecated, use '$lowercaseId' instead." }
         }
         if (id.isLegacy) {
-            warnOnce("legacy") { "Item ID '$itemId' contains more than one ':', this is deprecated." }
+            registries.warnings.warn("legacy") { "Item ID '$itemId' contains more than one ':', this is deprecated." }
         }
         return id
     }
@@ -84,23 +79,19 @@ public class MimicItemsRegistry internal constructor(
         val namespacedId = "${registry.id}:$itemId"
         val id = parseMimicId(namespacedId, allowLegacy = true)
         when {
-            id == null -> warnOnce("invalid:${registry.id}") {
+            id == null -> warnings.warn("invalid:${registry.id}") {
                 "Items registry '${registry.id}' returned invalid ID '$itemId', such items are ignored. " +
                     "IDs may contain only a-z, 0-9, '.', '_', '-' and '/'. " +
                     "Please, report it to ${plugin.authorsMention}."
             }
 
-            id.isLegacy -> warnOnce("legacy:${registry.id}") {
+            id.isLegacy -> warnings.warn("legacy:${registry.id}") {
                 "Items registry '${registry.id}' returned ID '$itemId' containing ':', this is deprecated. " +
                     "Use '/' instead: '${itemId.replace(':', '/')}'. " +
                     "Please, report it to ${plugin.authorsMention}."
             }
         }
         return namespacedId.takeIf { id != null }
-    }
-
-    private inline fun warnOnce(key: String, message: () -> String) {
-        if (loggedWarnings.add(key)) Log.w(message())
     }
 
     public companion object {
