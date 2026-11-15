@@ -29,17 +29,22 @@ jobs:
       - name: Copy plugin to root directory
         run: cp ./mimic-bukkit/build/libs/*-all.jar "Mimic-${GITHUB_REF_NAME}.jar"
 
+      - name: Extract release notes
+        # Release notes are the CHANGELOG section of the pushed tag
+        run: |
+          awk -v tag="$GITHUB_REF_NAME" 'index($0, "## [" tag "]") == 1 { found = 1; next } found && /^## \[/ { exit } found' CHANGELOG.md > release-notes.md
+          test -s release-notes.md || { echo "No CHANGELOG section for $GITHUB_REF_NAME"; exit 1; }
+
       - name: Create Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" "Mimic-${GITHUB_REF_NAME}.jar" --title "Mimic $GITHUB_REF_NAME"
+        run: gh release create "$GITHUB_REF_NAME" "Mimic-${GITHUB_REF_NAME}.jar" --title "Mimic $GITHUB_REF_NAME" --notes-file release-notes.md
 
       - name: Publish to Modrinth and Hangar
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
         run: |
-          # Release notes are the CHANGELOG section of the pushed tag
-          export RELEASE_NOTES="$(awk -v tag="$GITHUB_REF_NAME" 'index($0, "## [" tag "]") == 1 { found = 1; next } found && /^## \[/ { exit } found' CHANGELOG.md)"
+          export RELEASE_NOTES="$(cat release-notes.md)"
           # --continue: a failure on one platform doesn't block the other
           ./gradlew :mimic-bukkit:modrinth :mimic-bukkit:publishPluginPublicationToHangar --continue
