@@ -3,6 +3,7 @@
 
 package ru.endlesscode.mimic
 
+import net.kyori.adventure.key.Key
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import ru.endlesscode.mimic.internal.Log
@@ -16,7 +17,7 @@ import ru.endlesscode.mimic.internal.authorsMention
  *
  * [defaultId] is the ID of Mimic default implementation.
  * It can be registered only by Mimic itself and is always placed after other services, regardless of priority.
- * ID `mimic` is reserved for Mimic too.
+ * IDs `mimic` and `minecraft` are reserved for Mimic too.
  *
  * Registration rules for a service with an already registered ID:
  * - A service of this API replaces a bridge exposing a service of a deprecated API, regardless of plugin and priority.
@@ -58,7 +59,7 @@ internal class ServiceRegistry<T : MimicService>(
     fun register(service: T, plugin: Plugin, priority: ServicePriority, isBridge: Boolean = false): Boolean {
         val id = service.id
         val isBuiltIn = plugin == mimicPlugin
-        if (isReserved(id, plugin)) {
+        if (!isBuiltIn && isReserved(id)) {
             Log.w("$apiName '$id' by $plugin is not registered, because the ID is reserved by Mimic.")
             return false
         }
@@ -104,8 +105,8 @@ internal class ServiceRegistry<T : MimicService>(
         return true
     }
 
-    /** Returns `true` if the [id] is reserved by Mimic, so the [plugin] can't register a service with it. */
-    private fun isReserved(id: String, plugin: Plugin): Boolean = plugin != mimicPlugin && (id == defaultId || id == MIMIC_ID)
+    /** Returns `true` if the [id] is reserved by Mimic, so other plugins can't register a service with it. */
+    private fun isReserved(id: String): Boolean = id == defaultId || id == MIMIC_ID || id == Key.MINECRAFT_NAMESPACE
 
     /** Unregisters all services registered by the given [plugin]. */
     @Synchronized

@@ -15,6 +15,7 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.ValueSource
 import kotlin.test.Test
 
 internal class ServiceRegistryTest : BukkitTestBase() {
@@ -97,9 +98,10 @@ internal class ServiceRegistryTest : BukkitTestBase() {
         registry.registeredIds() shouldContainExactly emptyList()
     }
 
-    @Test
-    fun `when third party registers mimic ID - should not register it`() {
-        registry.register(TestService("mimic"), thirdParty, Highest).shouldBeFalse()
+    @ParameterizedTest
+    @ValueSource(strings = ["mimic", "minecraft"])
+    fun `when third party registers ID reserved for Mimic - should not register it`(id: String) {
+        registry.register(TestService(id), thirdParty, Highest).shouldBeFalse()
         registry.registeredIds() shouldContainExactly emptyList()
     }
 
