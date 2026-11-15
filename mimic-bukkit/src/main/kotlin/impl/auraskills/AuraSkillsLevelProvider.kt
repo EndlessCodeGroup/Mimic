@@ -8,7 +8,6 @@ import dev.aurelium.auraskills.api.registry.NamespacedId
 import dev.aurelium.auraskills.api.skill.Skill
 import dev.aurelium.auraskills.api.user.SkillsUser
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.LevelProgress
 import ru.endlesscode.mimic.level.LevelProvider
@@ -18,13 +17,13 @@ import ru.endlesscode.mimic.level.LevelProvider
  * The primary track is the read-only `auraskills:power`, the sum of all skill levels.
  */
 internal class AuraSkillsLevelProvider(
-    private val getApi: () -> AuraSkillsApi = AuraSkillsApi::get,
+    private val auraSkills: AuraSkillsWrapper = AuraSkillsWrapper(),
 ) : LevelProvider {
 
     override val id: String = ID
-    override val isEnabled: Boolean get() = Bukkit.getPluginManager().isPluginEnabled("AuraSkills")
+    override val isEnabled: Boolean get() = auraSkills.isEnabled
 
-    private val api: AuraSkillsApi get() = getApi()
+    private val api: AuraSkillsApi get() = auraSkills.api
 
     override val allTracks: Collection<LevelProvider.Track>
         get() {

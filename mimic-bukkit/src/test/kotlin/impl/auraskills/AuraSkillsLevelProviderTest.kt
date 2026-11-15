@@ -51,7 +51,12 @@ internal class AuraSkillsLevelProviderTest : BukkitTestBase() {
     }
 
     // SUT
-    private val provider = AuraSkillsLevelProvider { api }
+    private val auraSkills: AuraSkillsWrapper = mockk()
+    private val provider = AuraSkillsLevelProvider(auraSkills)
+
+    init {
+        every { auraSkills.api } returns api
+    }
 
     @Test
     fun `when get all tracks - should return enabled skills and power`() {

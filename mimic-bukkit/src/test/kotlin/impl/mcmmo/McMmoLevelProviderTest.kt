@@ -44,14 +44,14 @@ internal class McMmoLevelProviderTest : BukkitTestBase() {
         every { getLocalizedSkillName(any()) } answers { firstArg<PrimarySkillType>().name }
         every { getLevelCap(any()) } returns Int.MAX_VALUE
     }
-    private var powerLevelCap = Int.MAX_VALUE
+    private val mcMmo: McMmoWrapper = mockk {
+        every { getPlayer(player) } answers { if (isLoaded) mcMmoPlayer else null }
+        every { skillTools } returns this@McMmoLevelProviderTest.skillTools
+        every { powerLevelCap } returns Int.MAX_VALUE
+    }
 
     // SUT
-    private val provider = McMmoLevelProvider(
-        getMcMmoPlayer = { if (isLoaded) mcMmoPlayer else null },
-        getSkillTools = { skillTools },
-        getPowerLevelCap = { powerLevelCap },
-    )
+    private val provider = McMmoLevelProvider(mcMmo)
 
     @Test
     fun `when get all tracks - should return skills and power`() {
@@ -112,7 +112,7 @@ internal class McMmoLevelProviderTest : BukkitTestBase() {
     @Test
     fun `when get power progress - should return power level with cap`() {
         every { mcMmoPlayer.powerLevel } returns 7
-        powerLevelCap = 1000
+        every { mcMmo.powerLevelCap } returns 1000
 
         provider.getProgress(player, "power") shouldBe LevelProgress.level(7).minLevel(0).maxLevel(1000).build()
     }

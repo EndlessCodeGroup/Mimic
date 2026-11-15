@@ -3,13 +3,9 @@
 
 package ru.endlesscode.mimic.impl.mcmmo
 
-import com.gmail.nossr50.datatypes.player.McMMOPlayer
 import com.gmail.nossr50.datatypes.skills.PrimarySkillType
-import com.gmail.nossr50.mcMMO
-import com.gmail.nossr50.util.player.UserManager
 import com.gmail.nossr50.util.skills.SkillTools
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.endlesscode.mimic.level.LevelProgress
 import ru.endlesscode.mimic.level.LevelProvider
@@ -19,17 +15,15 @@ import ru.endlesscode.mimic.level.LevelProvider
  * Child skills (`mcmmo:salvage`, `mcmmo:smelting`) and the primary track `mcmmo:power` are read-only.
  */
 internal class McMmoLevelProvider(
-    private val getMcMmoPlayer: (Player) -> McMMOPlayer? = UserManager::getPlayer,
-    private val getSkillTools: () -> SkillTools = { mcMMO.p.skillTools },
-    private val getPowerLevelCap: () -> Int = { mcMMO.p.generalConfig.powerLevelCap },
+    private val mcMmo: McMmoWrapper = McMmoWrapper(),
 ) : LevelProvider {
 
     override val id: String = ID
-    override val isEnabled: Boolean get() = Bukkit.getPluginManager().isPluginEnabled("mcMMO")
+    override val isEnabled: Boolean get() = mcMmo.isEnabled
 
     override val allTracks: Collection<LevelProvider.Track>
         get() {
-            val skillTools = getSkillTools()
+            val skillTools = mcMmo.skillTools
             val skillTracks = PrimarySkillType.entries.map { skill ->
                 LevelProvider.Track(skill.trackId, Component.text(skillTools.getLocalizedSkillName(skill)))
             }
@@ -37,16 +31,16 @@ internal class McMmoLevelProvider(
         }
 
     override fun getTracks(player: Player): Collection<LevelProvider.Track> =
-        if (getMcMmoPlayer(player) != null) allTracks else emptyList()
+        if (mcMmo.getPlayer(player) != null) allTracks else emptyList()
 
     override fun getPrimaryTrack(player: Player): LevelProvider.Track = POWER_TRACK
 
     override fun getProgress(player: Player, trackId: String): LevelProgress? {
-        val mcMmoPlayer = getMcMmoPlayer(player) ?: return null
+        val mcMmoPlayer = mcMmo.getPlayer(player) ?: return null
         if (trackId == POWER_TRACK.id) {
             return LevelProgress.level(mcMmoPlayer.powerLevel)
                 .minLevel(0)
-                .maxLevelIfCapped(getPowerLevelCap())
+                .maxLevelIfCapped(mcMmo.powerLevelCap)
                 .build()
         }
 
@@ -55,7 +49,7 @@ internal class McMmoLevelProvider(
         // Child skill levels are calculated from their parent skills, they have no experience
         if (SkillTools.isChildSkill(skill)) return LevelProgress.level(level).minLevel(0).build()
 
-        val levelCap = getSkillTools().getLevelCap(skill)
+        val levelCap = mcMmo.skillTools.getLevelCap(skill)
         val builder = LevelProgress.level(level)
             .minLevel(0)
             .maxLevelIfCapped(levelCap)
@@ -65,7 +59,7 @@ internal class McMmoLevelProvider(
     }
 
     override fun setLevel(player: Player, trackId: String, level: Int): Boolean {
-        val mcMmoPlayer = getMcMmoPlayer(player) ?: return false
+        val mcMmoPlayer = mcMmo.getPlayer(player) ?: return false
         val skill = findParentSkill(trackId) ?: return false
         val currentLevel = mcMmoPlayer.getSkillLevel(skill)
         // Both reset experience within the level.
@@ -79,7 +73,7 @@ internal class McMmoLevelProvider(
     }
 
     override fun giveExp(player: Player, trackId: String, amount: Double): Boolean {
-        val mcMmoPlayer = getMcMmoPlayer(player) ?: return false
+        val mcMmoPlayer = mcMmo.getPlayer(player) ?: return false
         val skill = findParentSkill(trackId) ?: return false
         // Skips multipliers and party sharing, but keeps level-ups and their rewards
         mcMmoPlayer.addXp(skill, amount.toFloat())
@@ -87,7 +81,7 @@ internal class McMmoLevelProvider(
     }
 
     override fun takeExp(player: Player, trackId: String, amount: Double): Boolean {
-        val mcMmoPlayer = getMcMmoPlayer(player) ?: return false
+        val mcMmoPlayer = mcMmo.getPlayer(player) ?: return false
         val skill = findParentSkill(trackId) ?: return false
 
         // mcMMO can't lower levels by taking experience, so lower them one by one.
