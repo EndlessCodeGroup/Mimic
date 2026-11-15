@@ -34,6 +34,7 @@ import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
+import ru.endlesscode.mimic.impl.valhallammo.ValhallaMmoLevelProvider
 import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
@@ -124,6 +125,10 @@ public class MimicPlugin : JavaPlugin() {
         pluginHooks("Fabled", "studio.magemonkey.fabled.Fabled") {
             hookLevels(::FabledLevelProvider)
             hookClasses(::FabledClassProvider)
+        }
+
+        pluginHooks("ValhallaMMO", "me.athlaeos.valhallammo.ValhallaMMO") {
+            hookLevels(::ValhallaMmoLevelProvider)
         }
     }
 

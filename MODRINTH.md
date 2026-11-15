@@ -17,7 +17,7 @@ That's it. Mimic detects installed RPG plugins automatically.
 
 | API            | Plugins                                                                                  |
 |----------------|------------------------------------------------------------------------------------------|
-| **Levels**     | Vanilla experience, AuraSkills, mcMMO, Jobs Reborn, MMOCore, Heroes, Fabled              |
+| **Levels**     | Vanilla experience, AuraSkills, mcMMO, ValhallaMMO, Jobs Reborn, MMOCore, Heroes, Fabled |
 | **Classes**    | Permissions (`mimic.class.<name>`), MMOCore, Heroes, Fabled                              |
 | **Items**      | Vanilla items, CraftEngine, MMOItems, CustomItems, ItemsAdder¹, RPGInventory¹            |
 | **Blocks**     | Vanilla blocks, CraftEngine                                                              |

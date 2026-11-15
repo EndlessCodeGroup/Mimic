@@ -32,6 +32,7 @@ bukkit {
             "mcMMO",
             "Jobs",
             "Fabled",
+            "ValhallaMMO",
         )
     }
 
@@ -70,6 +71,11 @@ repositories {
             includeGroup("studio.magemonkey")
         }
     }
+    maven(url = "https://repo.repsy.io/mvn/athlaeos/valhallammo/") {
+        content {
+            includeGroup("me.athlaeos")
+        }
+    }
     aikar()
     codemc()
     // Uncomment if you want to get Heroes from maven repo
@@ -96,6 +102,7 @@ dependencies {
     testImplementation(libs.rpgplugins.mcmmo) { isTransitive = false }
     testImplementation(libs.rpgplugins.jobs) { isTransitive = false }
     testImplementation(libs.rpgplugins.cmilib) { isTransitive = false }
+    testImplementation(libs.rpgplugins.valhallammo) { isTransitive = false }
     testImplementation(libs.rpgplugins.heroes) { isTransitive = false }
     testImplementation(libs.rpgplugins.mmocore) { isTransitive = false }
     testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
@@ -120,6 +127,7 @@ tasks.test {
 tasks.runServer {
     downloadPlugins {
         modrinth("auraskills", libs.versions.auraskills.get())
+        modrinth("valhallammo", libs.versions.valhallammo.free.get())
         val mcmmoVersion = libs.versions.mcmmo.get()
         url("https://nexus.neetgames.com/repository/maven-releases/com/gmail/nossr50/mcMMO/mcMMO/$mcmmoVersion/mcMMO-$mcmmoVersion.jar")
         val jobsVersion = libs.versions.jobs.get()
@@ -152,6 +160,7 @@ modrinth {
     dependencies {
         optional.project("auraskills")
         optional.project("craftengine")
+        optional.project("valhallammo")
     }
 }
 
@@ -169,6 +178,7 @@ hangarPublish {
                 dependencies {
                     hangar("AuraSkills") { required = false }
                     hangar("Fabled") { required = false }
+                    hangar("ValhallaMMO") { required = false }
                     url("CraftEngine", "https://modrinth.com/plugin/craftengine") { required = false }
                 }
             }
