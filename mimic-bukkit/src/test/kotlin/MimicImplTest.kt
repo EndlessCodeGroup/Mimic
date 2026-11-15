@@ -134,7 +134,7 @@ internal class MimicImplTest : BukkitTestBase() {
         mimic.registerLevelSystem(TestLevelSystemProvider("builtin"), MimicApiLevel.CURRENT, mimicPlugin, Normal)
         mimic.registerLevelSystem(TestLevelSystemProvider("builtin"), MimicApiLevel.CURRENT, thirdParty, Normal)
 
-        (mimic.levels as MimicLevels).providers.single { it.service.id == "builtin" }.plugin shouldBe thirdParty
+        (mimic.levels as MimicLevels).providers.enabled.single { it.service.id == "builtin" }.plugin shouldBe thirdParty
     }
 
     private fun List<LevelTrack>.keys() = map { it.key().asString() }

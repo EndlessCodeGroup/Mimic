@@ -10,13 +10,10 @@ import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.call
-import ru.endlesscode.mimic.internal.Log
-import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.level.LevelProgress
 import ru.endlesscode.mimic.level.LevelProvider
 import ru.endlesscode.mimic.level.LevelTrack
 import ru.endlesscode.mimic.level.Levels
-import java.util.concurrent.ConcurrentHashMap
 
 internal typealias LevelProviderEntry = ServiceEntry<LevelProvider>
 
@@ -28,50 +25,23 @@ internal typealias LevelProviderEntry = ServiceEntry<LevelProvider>
  * If it isn't set, the primary track is taken from the first provider in order of priority that has one for the player.
  */
 internal class MimicLevels(
-    private val levelProviders: ServiceRegistry<LevelProvider>,
-    private val preferredProviderId: () -> String,
+    levelProviders: ServiceRegistry<LevelProvider>,
+    preferredProviderId: () -> String,
 ) : Levels {
 
-    /** Enabled providers in order of priority, Mimic default implementations last. */
-    val providers: List<LevelProviderEntry>
-        get() = levelProviders.enabledEntries
+    val providers = NamespacedProviders(levelProviders, "primary track", preferredProviderId)
 
-    /** IDs of all registered providers, including disabled ones. */
-    val allProviderIds: Set<String>
-        get() = levelProviders.entries.mapTo(LinkedHashSet()) { it.service.id }
-
-    /**
-     * The preferred provider, or the provider with the highest priority, shown as selected in the config.
-     * It is only an approximation: without a preference, [getPrimaryTrack] skips providers without a primary track.
-     * It is `null` only while Mimic isn't enabled, before its `onEnable` and after its `onDisable`,
-     * because [providers] skips providers of disabled plugins, including Mimic's own `minecraft` provider.
-     */
-    val primaryProvider: LevelProviderEntry?
-        get() {
-            val providers = providers
-            return preferredProvider(providers) ?: providers.firstOrNull()
-        }
-
-    /** Keys of the warnings already logged, to log each warning once. */
-    private val loggedWarnings = ConcurrentHashMap.newKeySet<String>()
-
-    override fun getAllTracks(): List<LevelTrack> = providers.flatMap { provider ->
-        provider.call(emptyList()) { provider.levelTracks(allTracks) }
-    }
+    override fun getAllTracks(): List<LevelTrack> =
+        providers.enabled.flatMap { provider -> provider.getAllTracks() }
 
     override fun getTracks(player: Player): List<LevelTrack> {
         if (!player.isOnline) return emptyList()
-        return providers.flatMap { provider ->
-            provider.call(emptyList()) { provider.levelTracks(getTracks(player)) }
-        }
+        return providers.enabled.flatMap { provider -> provider.getTracks(player) }
     }
 
     override fun getPrimaryTrack(player: Player): LevelTrack? {
         if (!player.isOnline) return null
-        val providers = providers
-        val preferredProvider = preferredProvider(providers)
-        if (preferredProvider != null) return preferredProvider.primaryTrack(player)
-        return providers.firstNotNullOfOrNull { it.primaryTrack(player) }
+        return providers.selectPrimary { it.primaryTrack(player) }
     }
 
     override fun getProgress(player: Player, trackId: Key): LevelProgress? {
@@ -108,86 +78,32 @@ internal class MimicLevels(
         return provider.call(false) { takeExp(player, trackId.value(), amount) }
     }
 
-    /** Returns the provider selected in the config, or `null` if it isn't selected or isn't available. */
-    private fun preferredProvider(providers: List<LevelProviderEntry>): LevelProviderEntry? {
-        val preferredId = preferredProviderId()
-        if (preferredId.isEmpty()) return null
-        val provider = providers.find { it.service.id == preferredId }
-        if (provider == null) {
-            warnOnce("unknown-preferred-provider:$preferredId") {
-                "Level provider '$preferredId' set in config isn't available, " +
-                    "the primary track is taken from other providers."
-            }
-        }
-        return provider
-    }
-
     private fun LevelProviderEntry.primaryTrack(player: Player): LevelTrack? {
         val track = call(null) { getPrimaryTrack(player) } ?: return null
-        return if (isValidPath(track.id)) levelTrack(track) else null
+        return if (isValidPath(track.id, TRACK)) levelTrack(track) else null
     }
 
-    private fun findProvider(trackId: Key): LevelProviderEntry? {
-        val provider = providers.find { it.service.id == trackId.namespace() }
-        if (trackId.namespace() == Key.MINECRAFT_NAMESPACE) warnIfUnknownMinecraftTrack(trackId, provider)
-        return provider
-    }
-
-    /**
-     * `Key.key(String)` adds the `minecraft:` namespace, so an unknown `minecraft:` track likely misses its namespace.
-     */
-    private fun warnIfUnknownMinecraftTrack(trackId: Key, provider: LevelProviderEntry?) {
-        val isKnown = provider != null && provider.call(emptyList()) { allTracks }.any { it.id == trackId.value() }
-        if (isKnown) return
-
-        warnOnce("unknown-minecraft-track:${trackId.asString()}") {
-            val suggestions = getAllTracks()
-                .map { it.key() }
-                .filter { it.value() == trackId.value() && it.namespace() != Key.MINECRAFT_NAMESPACE }
-            buildString {
-                append("Track '${trackId.asString()}' doesn't exist. ")
-                append("Track ID should have the namespace of its plugin, but `Key.key(\"${trackId.value()}\")` adds 'minecraft:'.")
-                if (suggestions.isNotEmpty()) append(" Did you mean ${suggestions.joinToString { "'${it.asString()}'" }}?")
-            }
-        }
-    }
+    private fun findProvider(trackId: Key): LevelProviderEntry? =
+        providers.find(trackId, TRACK) { path -> call(false) { allTracks.any { it.id == path } } }
 
     private fun requireValidAmount(amount: Double) {
         require(amount >= 0 && amount.isFinite()) { "'amount' should be non-negative and finite, but it was $amount" }
     }
 
+    // Tracks are converted inside call, so a provider returning null tracks from Java is skipped
+    private fun LevelProviderEntry.getAllTracks(): List<LevelTrack> = call(emptyList()) { levelTracks(allTracks) }
+    private fun LevelProviderEntry.getTracks(player: Player): List<LevelTrack> =
+        call(emptyList()) { levelTracks(getTracks(player)) }
+
     /** Returns the given [tracks] of this provider, skipping tracks with invalid or duplicated IDs. */
     private fun LevelProviderEntry.levelTracks(tracks: Collection<LevelProvider.Track>): List<LevelTrack> =
-        tracks
-            .filter { isValidPath(it.id) }
-            .groupBy { it.id }
-            .map { (path, tracks) ->
-                if (tracks.size > 1) {
-                    warnOnce("duplicate-track:${service.id}:$path") {
-                        "Level provider '${service.id}' has ${tracks.size} tracks with the same ID '$path', " +
-                                "only the first one is used. Please, report it to ${plugin.authorsMention}."
-                    }
-                }
-                levelTrack(tracks.first())
-            }
-
-    private fun LevelProviderEntry.isValidPath(path: String): Boolean {
-        val isValid = path.isNotEmpty() && Key.parseableValue(path)
-        if (!isValid) {
-            warnOnce("invalid-path:${service.id}:$path") {
-                "Level provider '${service.id}' returned invalid track ID '$path', such tracks are ignored. " +
-                        "Track IDs may contain only a-z, 0-9, '.', '_', '-' and '/'. " +
-                        "Please, report it to ${plugin.authorsMention}."
-            }
-        }
-        return isValid
-    }
+        validValues(tracks, TRACK) { it.id }.map { levelTrack(it) }
 
     private fun LevelProviderEntry.levelTrack(track: LevelProvider.Track): LevelTrack =
-        MimicLevelTrack(Key.key(service.id, track.id), track.name)
+        MimicLevelTrack(key(track.id), track.name)
 
-    private inline fun warnOnce(key: String, message: () -> String) {
-        if (loggedWarnings.add(key)) Log.w(message())
+    private companion object {
+        const val TRACK = "track"
     }
 }
 
@@ -203,7 +119,7 @@ private class MimicLevelTrack(
 }
 
 /** IDs of all registered level providers, including bridged level systems, the values of `level-provider` config option. */
-internal fun Mimic.getLevelProviderIds(): Set<String> = (levels as MimicLevels).allProviderIds
+internal fun Mimic.getLevelProviderIds(): Set<String> = (levels as MimicLevels).providers.allIds
 
 /** ID of the provider of the primary track. */
-internal fun Mimic.getPrimaryLevelProviderId(): String? = (levels as MimicLevels).primaryProvider?.service?.id
+internal fun Mimic.getPrimaryLevelProviderId(): String? = (levels as MimicLevels).providers.primary?.service?.id

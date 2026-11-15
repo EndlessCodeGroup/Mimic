@@ -247,6 +247,13 @@ internal class MimicLevelsTest : BukkitTestBase() {
         warnings.single() shouldContain "Did you mean 'skills:mining'?"
     }
 
+    @Test
+    fun `when use track of non-minecraft namespace - should not read all tracks`() {
+        levels.getProgress(player, key("skills:mining"))
+        levels.giveExp(player, key("skills:mining"), 1.0)
+        skills.allTracksReads shouldBe 0
+    }
+
     private fun key(id: String) = Key.key(id)
 
     private fun List<LevelTrack>.keys() = map { it.key().asString() }
@@ -261,9 +268,10 @@ internal class MimicLevelsTest : BukkitTestBase() {
         var primaryTrack: String? = paths.first()
         var progress: LevelProgress? = progress()
         val writes = mutableListOf<String>()
+        var allTracksReads = 0
 
         override val allTracks: Collection<LevelProvider.Track> = paths.map(::track)
-            get() = checked { field }
+            get() = checked { allTracksReads++; field }
 
         override fun getTracks(player: Player): Collection<LevelProvider.Track> = checked { playerTracks.map(::track) }
         override fun getPrimaryTrack(player: Player): LevelProvider.Track? = checked { primaryTrack?.let(::track) }
