@@ -10,6 +10,7 @@ import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.getClassProviderIds
 import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
+import ru.endlesscode.mimic.impl.mimic.getResourceProviderIds
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 
@@ -47,6 +48,14 @@ internal fun CommandBuilder.configSubcommand(
     literal("class-provider") {
         stringSetArgument(VALUE, "class provider", { mimic.getClassProviderIds() }) { sender, value ->
             config.classProvider = value
+            showConfig(sender)
+        }
+    }
+
+    // Change the plugin providing the player's mana
+    literal("resource-provider") {
+        stringSetArgument(VALUE, "resource provider", { mimic.getResourceProviderIds() }) { sender, value ->
+            config.resourceProvider = value
             showConfig(sender)
         }
     }

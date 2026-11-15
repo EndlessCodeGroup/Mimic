@@ -18,6 +18,7 @@ import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicClasses
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicLevels
+import ru.endlesscode.mimic.impl.mimic.MimicResources
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
@@ -26,6 +27,9 @@ import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.*
+import ru.endlesscode.mimic.resources.ResourceProvider
+import ru.endlesscode.mimic.resources.Resources
+import ru.endlesscode.mimic.resources.WrappedResourceProvider
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory.Provider as PlayerInventoryProvider
 
 /**
@@ -70,6 +74,10 @@ internal class MimicImpl(
         "LevelProvider",
         defaultId = MinecraftLevelProvider.ID,
     )
+    val resourceProviders = registry<ResourceProvider>(
+        "ResourceProvider",
+        defaultId = MinecraftResourceProvider.ID,
+    )
 
     private val registries =
         listOf(
@@ -80,6 +88,7 @@ internal class MimicImpl(
             itemsRegistries,
             levelSystems,
             levelProviders,
+            resourceProviders,
         )
 
     private fun <T : MimicService> registry(
@@ -222,6 +231,20 @@ internal class MimicImpl(
         classProviders,
         preferredProviderId = { config.classProvider.takeUnless { it == PermissionsClassSystem.ID }.orEmpty() },
     )
+    // endregion
+
+    // region Resources
+    override fun registerResourceProvider(
+        provider: ResourceProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): ResourceProvider? = resourceProviders.tryRegister(apiLevel, plugin, priority) {
+        WrappedResourceProvider(provider, plugin)
+    }
+
+    override val resources: Resources =
+        MimicResources(resourceProviders, preferredProviderId = { config.resourceProvider })
     // endregion
 
     // region Bridges from deprecated APIs

@@ -41,6 +41,7 @@ import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.LevelProvider
+import ru.endlesscode.mimic.resources.ResourceProvider
 import ru.endlesscode.mimic.util.checkClassesLoaded
 
 /** Main class of the plugin. */
@@ -79,6 +80,7 @@ public class MimicPlugin : JavaPlugin() {
         hookLevels(MinecraftLevelSystem::Provider, priority = Lowest)
         hookLevels(::MinecraftLevelProvider, priority = Lowest)
         hookClasses(PermissionsClassSystem::Provider, priority = Lowest)
+        hookResources(::MinecraftResourceProvider, priority = Lowest)
         hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
         hookBlocks(::MinecraftBlockRegistry, priority = Lowest)
@@ -169,6 +171,13 @@ public class MimicPlugin : JavaPlugin() {
         priority: ServicePriority = Normal,
     ) {
         mimic.registerClassProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+    }
+
+    private fun hookResources(
+        constructor: () -> ResourceProvider,
+        priority: ServicePriority = Normal,
+    ) {
+        mimic.registerResourceProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
     @Suppress("SameParameterValue")

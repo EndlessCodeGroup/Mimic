@@ -24,6 +24,7 @@ internal class MimicConfig(
 
     var levelProvider: String by configuration.property(LEVEL_PROVIDER)
     var classProvider: String by configuration.property(CLASS_PROVIDER)
+    var resourceProvider: String by configuration.property(RESOURCE_PROVIDER)
     var inventoryProvider: String by configuration.property(INVENTORY_PROVIDER)
     var disabledItemsRegistries: Set<String> by configuration.property(DISABLED_ITEMS_REGISTRIES)
     var disabledBlockRegistries: Set<String> by configuration.property(DISABLED_BLOCK_REGISTRIES)
@@ -140,6 +141,16 @@ internal class MimicConfig(
                 "from the highest priority, and uses the first one that has the player's class.",
             ),
         )
+        val RESOURCE_PROVIDER = StringConfigProperty(
+            path = "resource-provider",
+            title = "Resources API",
+            comments = arrayOf(
+                "Specify here the plugin providing the player's mana.",
+                "Its primary resource is used as the player's mana.",
+                "If the value is empty or the plugin isn't installed, Mimic asks plugins one by one,",
+                "from the highest priority, and uses the first one that has the player's mana.",
+            ),
+        )
         val INVENTORY_PROVIDER = StringConfigProperty(
             path = "inventory-provider",
             title = "PlayerInventory API",
@@ -171,6 +182,7 @@ internal class MimicConfig(
         val properties = listOf(
             LEVEL_PROVIDER,
             CLASS_PROVIDER,
+            RESOURCE_PROVIDER,
             INVENTORY_PROVIDER,
             DISABLED_ITEMS_REGISTRIES,
             DISABLED_BLOCK_REGISTRIES,

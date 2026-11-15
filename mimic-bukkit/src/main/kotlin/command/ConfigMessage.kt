@@ -14,6 +14,8 @@ import ru.endlesscode.mimic.impl.mimic.getClassProviderIds
 import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
 import ru.endlesscode.mimic.impl.mimic.getPrimaryClassProviderId
 import ru.endlesscode.mimic.impl.mimic.getPrimaryLevelProviderId
+import ru.endlesscode.mimic.impl.mimic.getPrimaryResourceProviderId
+import ru.endlesscode.mimic.impl.mimic.getResourceProviderIds
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.internal.append
@@ -34,6 +36,12 @@ internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponen
         configuredValue = config.classProvider,
         selectedOption = mimic.getPrimaryClassProviderId() ?: "none",
         options = mimic.getClassProviderIds(),
+    )
+    appendSelectablePropertyConfig(
+        property = MimicConfig.RESOURCE_PROVIDER,
+        configuredValue = config.resourceProvider,
+        selectedOption = mimic.getPrimaryResourceProviderId().orEmpty(),
+        options = mimic.getResourceProviderIds(),
     )
     appendSelectablePropertyConfig(
         property = MimicConfig.INVENTORY_PROVIDER,
