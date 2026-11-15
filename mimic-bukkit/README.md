@@ -43,6 +43,7 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 - **[Minecraft][minecraft-exp]** _(Default)_
 - **[AuraSkills]** _(Levels API only)_ - every skill is a level track, the power level is the primary track
 - **[mcMMO]** _(Levels API only)_ - every skill is a level track, the power level is the primary track
+- **[Jobs Reborn]** _(Levels API only)_ - every job is a level track, the total level is the primary track
 - **[ProSkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**
@@ -138,6 +139,7 @@ It uses registry ID as a namespace for block IDs, like items registry does.
 [craftengine]: https://modrinth.com/plugin/craftengine
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
+[jobs reborn]: https://www.spigotmc.org/resources/4216/
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 

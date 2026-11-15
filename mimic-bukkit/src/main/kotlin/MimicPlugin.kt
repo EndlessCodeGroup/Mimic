@@ -24,6 +24,7 @@ import ru.endlesscode.mimic.impl.heroes.HeroesClassProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
+import ru.endlesscode.mimic.impl.jobs.JobsLevelProvider
 import ru.endlesscode.mimic.impl.mcmmo.McMmoLevelProvider
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassProvider
@@ -112,6 +113,10 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("mcMMO", "com.gmail.nossr50.mcMMO") {
             hookLevels(::McMmoLevelProvider)
+        }
+
+        pluginHooks("Jobs", "com.gamingmesh.jobs.Jobs") {
+            hookLevels(::JobsLevelProvider)
         }
     }
 

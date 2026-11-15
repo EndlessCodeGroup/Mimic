@@ -30,6 +30,7 @@ bukkit {
             "CraftEngine",
             "AuraSkills",
             "mcMMO",
+            "Jobs",
         )
     }
 
@@ -58,6 +59,11 @@ repositories {
             includeGroup("com.gmail.nossr50.mcMMO")
         }
     }
+    maven(url = "https://jitpack.io") {
+        content {
+            includeGroup("com.github.Zrips")
+        }
+    }
     aikar()
     codemc()
     // Uncomment if you want to get Heroes from maven repo
@@ -82,6 +88,8 @@ dependencies {
     testImplementation(libs.paperApi)
     testImplementation(libs.rpgplugins.auraskills)
     testImplementation(libs.rpgplugins.mcmmo) { isTransitive = false }
+    testImplementation(libs.rpgplugins.jobs) { isTransitive = false }
+    testImplementation(libs.rpgplugins.cmilib) { isTransitive = false }
     testImplementation(libs.rpgplugins.heroes) { isTransitive = false }
     testImplementation(libs.rpgplugins.mmocore) { isTransitive = false }
     testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
@@ -106,6 +114,10 @@ tasks.runServer {
         modrinth("auraskills", libs.versions.auraskills.get())
         val mcmmoVersion = libs.versions.mcmmo.get()
         url("https://nexus.neetgames.com/repository/maven-releases/com/gmail/nossr50/mcMMO/mcMMO/$mcmmoVersion/mcMMO-$mcmmoVersion.jar")
+        val jobsVersion = libs.versions.jobs.get()
+        url("https://jitpack.io/com/github/Zrips/Jobs/$jobsVersion/Jobs-$jobsVersion.jar")
+        val cmilibVersion = libs.versions.cmilib.get()
+        url("https://jitpack.io/com/github/Zrips/CMILib/$cmilibVersion/CMILib-$cmilibVersion.jar")
     }
 }
 

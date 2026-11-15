@@ -252,6 +252,7 @@ See [Levels] for the rules: which players are supported, what `null` and `false`
 | `heroes`                                 | Classes: `warrior`, … Primary: the player's primary class                             |
 | `auraskills`                             | Skills: `mining`, `farming`, … Primary: `power`, the read-only sum of skill levels    |
 | `mcmmo`                                  | Skills: `mining`, `swords`, … Primary: `power`, the read-only sum of skill levels     |
+| `jobs`                                   | Joined jobs: `miner`, `woodcutter`, … Primary: `total`, the read-only sum of job levels |
 
 Plugins that still use the deprecated [BukkitLevelSystem] are available the same way, as the single track `<id>:level`.
 
