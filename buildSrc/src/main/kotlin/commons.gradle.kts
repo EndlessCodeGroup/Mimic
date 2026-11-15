@@ -59,9 +59,17 @@ dokka {
             localDirectory = file("src/main/kotlin/")
             remoteUrl("https://github.com/EndlessCodeGroup/Mimic/tree/develop/${project.name}/src/main/kotlin/")
         }
-        externalDocumentationLinks.register("spigot") {
-            url("https://hub.spigotmc.org/javadocs/spigot/")
-            packageListUrl("https://gist.githubusercontent.com/osipxd/604c9b3f91c3a6c56050f4a3b027f333/raw/package-list")
+        externalDocumentationLinks.register("paper") {
+            url("https://jd.papermc.io/paper/1.20.6/")
+            packageListUrl("https://jd.papermc.io/paper/1.20.6/element-list")
+        }
+        externalDocumentationLinks.register("adventure-api") {
+            url("https://jd.advntr.dev/api/4.17.0/")
+            packageListUrl("https://jd.advntr.dev/api/4.17.0/element-list")
+        }
+        externalDocumentationLinks.register("adventure-key") {
+            url("https://jd.advntr.dev/key/4.17.0/")
+            packageListUrl("https://jd.advntr.dev/key/4.17.0/element-list")
         }
     }
     pluginsConfiguration.html {

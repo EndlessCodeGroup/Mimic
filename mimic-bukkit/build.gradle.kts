@@ -119,6 +119,12 @@ kotlin {
     }
 }
 
+dokka {
+    dokkaSourceSets.configureEach {
+        reportUndocumented = false
+    }
+}
+
 tasks.test {
     javaLauncher = javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.of(21)
