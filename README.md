@@ -31,7 +31,8 @@ With Mimic, you don't need to download all RPG plugins and write specific code f
 - [ClassSystem] *(deprecated, use [Classes])* - API to work with player's classes.
 - [Resources] - API to work with player's resources: mana, stamina and similar. Read them, take costs, give them back.
 - [PlayerInventory] *(experimental)* - API to access player's inventories content.
-- [ItemsRegistry] - API adding the possibility to create and validate custom items created with plugins.
+- [Items] - API to create and identify vanilla items and custom items created with plugins.
+- [ItemsRegistry] *(deprecated, use [Items])* - API to create and validate custom items created with plugins.
 - [Blocks] - API to identify, set and break vanilla blocks and custom blocks created with plugins.
 
 ### Implementations
@@ -97,5 +98,6 @@ Please make sure to update tests as appropriate.
 [ClassSystem]: mimic-api/src/main/kotlin/classes/ClassSystem.kt
 [Resources]: mimic-bukkit-api/src/main/kotlin/resources/Resources.kt
 [PlayerInventory]: mimic-api/src/main/kotlin/inventory/PlayerInventory.kt
+[Items]: mimic-bukkit-api/src/main/kotlin/items/Items.kt
 [ItemsRegistry]: mimic-api/src/main/kotlin/items/ItemsRegistry.kt
 [Blocks]: mimic-bukkit-api/src/main/kotlin/blocks/Blocks.kt
