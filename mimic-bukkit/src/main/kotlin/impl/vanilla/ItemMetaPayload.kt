@@ -13,6 +13,8 @@ import kotlinx.serialization.hocon.decodeFromConfig
 import net.kyori.adventure.text.Component
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
+import org.bukkit.inventory.meta.Damageable
+import org.bukkit.inventory.meta.ItemMeta
 import ru.endlesscode.mimic.internal.*
 
 /**
@@ -84,4 +86,21 @@ public data class ItemMetaPayload(
             }
         }
     }
+}
+
+internal fun ItemMeta.applyPayload(payload: ItemMetaPayload): ItemMeta {
+    // Apply text options
+    displayName(payload.name)
+    lore(payload.lore)
+
+    // Apply damage and custom model data
+    isUnbreakable = payload.isUnbreakable
+    (this as? Damageable)?.damage = payload.damage
+    if (payload.customModelData != null) setCustomModelData(payload.customModelData)
+
+    // Apply enchants and item flags
+    payload.enchantments.forEach { (enchant, level) -> addEnchant(enchant, level, true) }
+    addItemFlags(*payload.flags.toTypedArray())
+
+    return this
 }
