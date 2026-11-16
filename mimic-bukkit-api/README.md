@@ -12,7 +12,8 @@ Available services:
 - [ClassProvider]
 - [BukkitClassSystem.Provider] *(deprecated, use [ClassProvider])*
 - [BukkitPlayerInventory.Provider] *(experimental)*
-- [BukkitItemsRegistry]
+- [ItemProvider]
+- [BukkitItemsRegistry] *(deprecated, use [ItemProvider])*
 - [BlockProvider]
 
 > Experimental APIs may change in future versions.
@@ -59,7 +60,7 @@ Levels levels = mimic.getLevels();
 Classes classes = mimic.getClasses();
 Resources resources = mimic.getResources();
 BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
-BukkitItemsRegistry itemsRegistry = mimic.getItemsRegistry();
+Items items = mimic.getItems();
 Blocks blocks = mimic.getBlocks();
 ```
 
@@ -77,10 +78,9 @@ CharacterClass playerClass = classes.getPrimaryClass(player);
 // See the "Resources" section below for details
 boolean isPaid = resources.take(player, Key.key("mmocore:mana"), 20.0);
 
-// ItemsRegistry is not related to player so it can be used without provider
-ItemStack stick = itemsRegistry.getItem("minecraft:stick");
-boolean isPalmLogInHand = itemsRegistry.isSameItem(player.getInventory().getItemInMainHand(), "craftengine:default/palm_log");
-boolean isPalmLogExists = itemsRegistry.isItemExists("craftengine:default/palm_log");
+// See the "Items" section below for details
+ItemStack sword = items.createItem(Key.key("mmoitems:sword/excalibur"), 1, player);
+boolean isSwordInHand = items.isItem(player.getInventory().getItemInMainHand(), Key.key("mmoitems:sword/excalibur"));
 
 // See the "Blocks" section below for details
 boolean isPalmLog = blocks.isBlock(block, Key.key("craftengine:default/palm_log"));
@@ -93,14 +93,15 @@ Mimic identifies items, blocks, level tracks, classes and resources by [resource
 where the namespace is the ID of the plugin's implementation: `minecraft:acacia_boat`, `craftengine:default/palm_log`, `auraskills:mining`.
 The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
 
-- **Items:** ID without namespace, or with the `mimic` namespace, is searched over all registries in order of priority.
+- **Items:** the namespace is required, see [Item IDs](#item-ids).
 - **Blocks:** the namespace is required, see [Block IDs](#block-ids).
 - **Level tracks:** the namespace is required, see [Track IDs](#track-ids).
 - **Classes and class slots:** the namespace is required, see [Class IDs](#class-ids).
 - **Resources:** the namespace is required, see [Resource IDs](#resource-ids).
 
-> Item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`) or with more than one `:` (`ia:itemsadder:ruby_sword`) are deprecated.
-> They still work but log a warning.
+> The deprecated `ItemsRegistry` API still searches an item ID without namespace, or with the `mimic` namespace, over all plugins.
+> It also accepts item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`), with more than one `:` (`ia:itemsadder:ruby_sword`)
+> and MMOItems IDs without item type (`mmoitems:excalibur`), but logs a warning.
 
 <details>
     <summary>Full example</summary>
@@ -112,7 +113,7 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
     import ru.endlesscode.mimic.Mimic;
     import ru.endlesscode.mimic.MimicApiLevel;
     import ru.endlesscode.mimic.classes.Classes;
-    import ru.endlesscode.mimic.items.BukkitItemsRegistry;
+    import ru.endlesscode.mimic.items.Items;
     import ru.endlesscode.mimic.level.Levels;
     import net.kyori.adventure.key.Key;
     
@@ -128,8 +129,8 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
             return mimic.getClasses();
         }
     
-        public static BukkitItemsRegistry getItemsRegistry() {
-            return mimic.getItemsRegistry();
+        public static Items getItems() {
+            return mimic.getItems();
         }
     
         @Override
@@ -166,11 +167,9 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
 
             boolean isWarrior = getClasses().hasClass(player, Key.key("fabled:warrior"));
     
-            // ItemsRegistry is not related to player so it can be used without provider
-            BukkitItemsRegistry itemsRegistry = getItemsRegistry();
-            ItemStack stick = itemsRegistry.getItem("minecraft:stick");
-            boolean isPalmLogInHand = itemsRegistry.isSameItem(player.getInventory().getItemInMainHand(), "craftengine:default/palm_log");
-            boolean isPalmLogExists = itemsRegistry.isItemExists("craftengine:default/palm_log");
+            Key excalibur = Key.key("mmoitems:sword/excalibur");
+            ItemStack sword = getItems().createItem(excalibur, 1, player);
+            boolean isSwordInHand = getItems().isItem(player.getInventory().getItemInMainHand(), excalibur);
         }
     }
     ```
@@ -420,6 +419,85 @@ To make resources of your plugin available, implement [ResourceProvider]: only r
 
 `minecraft:health` is changed directly, as a cost and not as damage: no damage or regain events are fired,
 armor and absorption hearts are ignored, and taking all health kills the player.
+### Items
+
+[Items] gives access to vanilla items and custom items of all supported plugins:
+create an item by its ID, get the ID of a stack, check that a stack is a specific item.
+
+#### Item IDs
+
+An item ID is a `Key` like `mmoitems:sword/excalibur`: the namespace is the ID of the plugin providing the item,
+the path is the item within that plugin.
+The namespace is required, there is no search over all plugins.
+`Key.key("excalibur")` turns into `minecraft:excalibur`, so validate IDs read from configs:
+
+```java
+Key itemId = Key.key(config.getString("item"));
+if (!items.hasItem(itemId)) {
+    getLogger().warning("Unknown item " + itemId.asString());
+}
+```
+
+`items.getAllItems()` lists all IDs, for example, for tab completion.
+See ID formats of the supported plugins in [Supported Implementations](../mimic-bukkit/README.md#supported-implementations).
+
+#### Identifying items
+
+An item belongs to the plugin with the highest priority that recognizes it, and vanilla items belong to `minecraft`.
+So a ruby built on a diamond is never `minecraft:diamond`.
+Items are compared by ID only: amount, stats, durability and lore of the stack are ignored.
+
+```java
+Key itemId = items.getItemId(stack); // null if no plugin recognizes the item
+boolean isExcalibur = items.isItem(stack, Key.key("mmoitems:sword/excalibur"));
+// Any diamond, vanilla or a custom item built on it
+boolean isDiamond = stack.getType() == Material.DIAMOND;
+```
+
+#### Creating items
+
+```java
+// A new stack with a single item, or null if the item doesn't exist
+ItemStack stick = items.createItem(Key.key("minecraft:stick"));
+ItemStack palmLogs = items.createItem(Key.key("craftengine:default/palm_log"), 16);
+
+// Create the item for the player: some plugins scale items to the player's level
+ItemStack excalibur = items.createItem(Key.key("mmoitems:sword/excalibur"), 1, player);
+
+// The payload is in the format of the plugin providing the item, with an invalid payload the item is not created
+ItemStack sword = items.createItem(Key.key("minecraft:diamond_sword"), 1, player, "[damage=10]");
+```
+
+In Kotlin, the parameters have default values: `items.createItem(itemId, player = player)`.
+
+The amount is kept within `1` and the maximum stack size of the item.
+Each call returns a new stack, so it is safe to change it.
+
+#### Rules
+
+- Call `createItem` on the main thread. Other methods may be called from any thread.
+- Item IDs may be unknown until their plugins finish loading, and may change when a plugin reloads.
+  Don't keep created stacks across reloads.
+- A payload is passed only to the plugin named by the item ID. Plugins taking no payload ignore it.
+
+#### Migration from ItemsRegistry
+
+`ItemsRegistry` API is deprecated but keeps working: every registered items registry is available via [Items],
+and `Mimic.getItemsRegistry()` shows items of all item providers.
+
+| ItemsRegistry                        | Items                                               |
+|--------------------------------------|-----------------------------------------------------|
+| `getItem(id, payload, amount)`       | `createItem(id, amount, player, payload)`           |
+| `getItemId(item)`                    | `getItemId(item)`                                   |
+| `isSameItem(item, id)`               | `isItem(item, id)`                                  |
+| `isItemExists(id)`                   | `hasItem(id)`                                       |
+| `getKnownIds()`                      | `getAllItems()`                                     |
+
+- IDs are `Key`s with a required namespace. To keep accepting IDs without a namespace in your configs,
+  look them up in `getAllItems()` yourself.
+- MMOItems IDs include the item type: `mmoitems:sword/excalibur` instead of `mmoitems:excalibur`.
+- The payload is a `String`.
+
 ### Blocks
 
 [Blocks] gives access to vanilla blocks and custom blocks of all supported plugins:
@@ -537,10 +615,55 @@ public class MyClassProvider implements ClassProvider {
 }
 ```
 
-Items registries and block providers receive and return IDs without the namespace, Mimic adds it.
+Item providers and block providers receive and return IDs without the namespace, Mimic adds it.
 Mapping the plugin's own IDs to valid Mimic IDs is up to the implementation, for example `default:palm_log` → `default/palm_log`.
 Invalid IDs returned by an implementation are ignored with a warning.
-See [BlockProvider] for the rules about block IDs, ownership of blocks and threading.
+See [ItemProvider] and [BlockProvider] for the rules about IDs, ownership of items and blocks, and threading.
+
+<details>
+    <summary>Item provider example</summary>
+
+    ```java
+    import org.bukkit.entity.Player;
+    import org.bukkit.inventory.ItemStack;
+    import org.jetbrains.annotations.NotNull;
+    import org.jetbrains.annotations.Nullable;
+    import ru.endlesscode.mimic.items.ItemProvider;
+
+    import java.util.Collection;
+
+    public class MyItemProvider implements ItemProvider {
+
+        @NotNull
+        @Override
+        public String getId() {
+            return "myplugin";
+        }
+
+        // Read on every request, so it can change on the plugin reload
+        @NotNull
+        @Override
+        public Collection<String> getAllItems() {
+            return MyItems.getIds();
+        }
+
+        // Return null for items of other plugins and for vanilla items
+        @Nullable
+        @Override
+        public String getItemId(@NotNull ItemStack item) {
+            return MyItems.getId(item);
+        }
+
+        // Return a new stack on every call, or null if the item is unknown.
+        // This provider takes no payload, so it is ignored
+        @Nullable
+        @Override
+        public ItemStack createItem(@NotNull String itemId, int amount, @Nullable Player player, @Nullable String payload) {
+            return MyItems.create(itemId, amount, player);
+        }
+    }
+    ```
+</details>
 
 <details>
     <summary>Block provider example</summary>
@@ -696,6 +819,7 @@ public void onLoad() {
     
     // Register your implementations and specify minimal required Mimic version for it.
     mimic.registerClassProvider(new MyClassProvider(), MimicApiLevel.CURRENT, this);
+    mimic.registerItemProvider(new MyItemProvider(), MimicApiLevel.CURRENT, this);
     mimic.registerBlockProvider(new MyBlockProvider(), MimicApiLevel.CURRENT, this);
     mimic.registerLevelProvider(new MyLevelProvider(), MimicApiLevel.CURRENT, this);
 }
@@ -704,6 +828,8 @@ public void onLoad() {
 Each ID belongs to a single implementation.
 If your plugin registers an implementation with the same ID as a Mimic built-in integration, yours replaces the built-in one.
 So you can ship the integration with your plugin and keep it up to date.
+An implementation of a deprecated API doesn't replace a built-in implementation of the API replacing it:
+an `ItemsRegistry` with the ID `mmoitems` doesn't replace the built-in `mmoitems` item provider.
 If two plugins register the same ID, the one with higher priority is used.
 IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are reserved.
 
@@ -723,6 +849,8 @@ IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are res
 [BukkitClassSystem]: src/main/kotlin/classes/BukkitClassSystem.kt
 [BukkitPlayerInventory.Provider]: src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: src/main/kotlin/items/BukkitItemsRegistry.kt
+[Items]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.items/-items/index.html
+[ItemProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.items/-item-provider/index.html
 [Blocks]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.blocks/-blocks/index.html
 [BlockProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.blocks/-block-provider/index.html
 

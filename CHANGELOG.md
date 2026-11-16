@@ -1,5 +1,34 @@
 ## [Unreleased]
 
+### Items API
+
+New Items API replaces `ItemsRegistry` ([#95](https://github.com/EndlessCodeGroup/Mimic/issues/95)).
+See [Items](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#items) for details and examples.
+
+- `Mimic.getItems()` creates and identifies items, `Mimic.registerItemProvider()` makes a plugin's items available.
+  Requires Mimic API level `MimicApiLevel.VERSION_0_11`. The API is stable.
+- Item IDs are `Key`s with a required namespace: `minecraft:diamond`, `craftengine:default/palm_log`.
+  There is no search over all providers in the new API.
+- An item belongs to the provider with the highest priority recognizing it,
+  so a custom item no longer matches the ID of its vanilla base ([#86](https://github.com/EndlessCodeGroup/Mimic/issues/86)).
+- Items can be created for a player, MMOItems and CraftEngine use it.
+- A provider may override `ItemProvider.hasItem` to check an item faster, or if it can't list its items.
+- The payload is a `String` in the format of the item's provider. An item is not created if its payload is invalid.
+  A blank payload is the same as no payload.
+- `ItemsRegistry` API is deprecated but keeps working, every items registry is available via Items API.
+  `Mimic.getItemsRegistry()` shows items of all item providers and still accepts IDs without a namespace.
+- Items registries' own `isSameItem` is used again ([#85](https://github.com/EndlessCodeGroup/Mimic/issues/85)).
+- **Changed:** MMOItems IDs include the item type: `mmoitems:sword/excalibur` instead of `mmoitems:excalibur` ([#87](https://github.com/EndlessCodeGroup/Mimic/issues/87)).
+  `ItemsRegistry` API still accepts IDs without the type if only one type has the item, but logs a warning.
+- **Changed:** `ItemsRegistry.getItem` returns `null` if an item provider can't use the payload. Previously, the payload was ignored.
+  A payload which isn't a `String`, like an `ItemMetaPayload` instance, is passed only to items registries.
+- **Changed:** A built-in item provider is replaced only by an `ItemProvider` with the same ID, not by an `ItemsRegistry`.
+- **Deprecated:** The HOCON payload (`ItemMetaPayload`) of `minecraft` items still works, but logs a warning.
+  Use item components instead, for example `[damage=10,unbreakable={}]`.
+- **Changed:** Empty stacks have no ID, and `minecraft:air` is not an item.
+- Config option `disabled-items-registries` is renamed to `disabled-item-providers`, the old value is moved automatically.
+- `/mimic items` requires item IDs with a namespace and gives items created for the target player.
+
 ### Blocks API
 
 New Blocks API replaces the experimental `BlockRegistry` ([#96](https://github.com/EndlessCodeGroup/Mimic/issues/96)).
@@ -11,9 +40,11 @@ See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
   The package is the same, it is no longer experimental.
 - Block IDs are `Key`s with a required namespace: `minecraft:stone`, `craftengine:default/palm_log`.
   IDs without a namespace and the `mimic:` namespace are no longer searched over all providers.
+- A provider may override `BlockProvider.hasBlock` to check a block faster, or if it can't list its blocks.
 - **Breaking:** `BlockRegistry`, `BukkitBlockRegistry`, `Mimic.getBlockRegistry()`, `Mimic.registerBlockRegistry()`
   and `Mimic.getAllBlockRegistries()` are removed without replacement bridges.
 - **Breaking:** A block is not set if its state is invalid. Previously, the default state was used.
+  A blank state is the same as no state.
 - Config option `disabled-block-registries` is renamed to `disabled-block-providers`, the old value is moved automatically.
 - `/mimic blocks` requires block IDs with a namespace, `payload` argument of `/mimic blocks set` is renamed to `state`.
 

@@ -30,7 +30,7 @@ You can configure in `config.yml` what APIs implementations should be used, or u
 | `/mimic classes`   | Manage player's classes              |
 | `/mimic resources` | Manage player's mana and similar     |
 | `/mimic inventory` | Player's inventory info              |
-| `/mimic items`     | Deal with items                      |
+| `/mimic items`     | Give, find and compare items         |
 | `/mimic blocks`    | Deal with blocks                     |
 
 Commands without arguments show info and list available subcommands: click a subcommand to use it, hover to see usage.
@@ -74,21 +74,22 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 - **[Minecraft][minecraft-inv]** _(Default)_
 - **[RPGInventory]**
 
-### [Items Registries][BukkitItemsRegistry]
+### [Item Providers][ItemProvider]
 
-#### [MimicItemsRegistry] 
+Items of all providers are available via [Items], with the provider ID as a namespace of item IDs.
+The namespace is required.
+An item belongs to the provider with the highest priority that recognizes it, vanilla items belong to `minecraft`.
 
-Items registry combining all others items registries.
-It uses registry ID as a namespace for items IDs.\
-For example: `acacia_boat -> minecraft:acacia_boat`.
+> The deprecated [ItemsRegistry][MimicItemsRegistry] API also accepts item ID without a namespace or with the `mimic` namespace
+> and searches it over all providers. Plugins using this API accept MMOItems IDs without item type too, if only one type has the item.
 
-> If you use item ID without a namespace or with the `mimic` namespace, it will search over all registries.
+Providers marked with _(deprecated API)_ are provided by the plugin itself via the deprecated [ItemsRegistry][BukkitItemsRegistry] API.
 
-#### [Minecraft][MinecraftItemsRegistry]
+#### [Minecraft][MinecraftItemProvider]
 
 **ID Format:** `minecraft:[id]`\
 **Payload:** [Item components][item-components] in the format of `/give` command, for example `[damage=10,unbreakable={}]`.\
-Alternatively, [ItemMetaPayload] in HOCON format with MiniMessage support for name and lore, for example `{name: "<gold>Sword", unbreakable: true}`.
+[ItemMetaPayload] in HOCON format is deprecated: it still works, but logs a warning.
 
 #### [CraftEngine]
 
@@ -102,20 +103,21 @@ Alternatively, [ItemMetaPayload] in HOCON format with MiniMessage support for na
 
 #### [MMOItems]
 
-**ID Format:** `mmoitems:[id]`\
-**Payload:** *Not supported*
+**ID Format:** `mmoitems:[type]/[id]`, for example `mmoitems:sword/excalibur`\
+**Payload:** *Not supported*\
+An item given to a player is built by MMOItems for this player.
 
-#### [ProRPGItems]
+#### [ProRPGItems] _(deprecated API)_
 
 **ID Format:** `prorpgitems:[type]/[id]`\
 **Payload:** *Not supported*
 
-#### [RPGInventory]
+#### [RPGInventory] _(deprecated API)_
 
 **ID Format:** `rpginventory:[id]`\
 **Payload:** *Not supported*
 
-#### [ItemsAdder]
+#### [ItemsAdder] _(deprecated API)_
 
 **ID Format:** `ia:[id]`\
 **Payload:** *Not supported*
@@ -165,5 +167,7 @@ A block belongs to the provider with the highest priority that recognizes it, va
 [Blocks]: ../mimic-bukkit-api/src/main/kotlin/blocks/Blocks.kt
 [MinecraftBlockProvider]: src/main/kotlin/impl/vanilla/MinecraftBlockProvider.kt
 [MimicItemsRegistry]: src/main/kotlin/impl/mimic/MimicItemsRegistry.kt
-[MinecraftItemsRegistry]: src/main/kotlin/impl/vanilla/MinecraftItemsRegistry.kt
+[ItemProvider]: ../mimic-bukkit-api/src/main/kotlin/items/ItemProvider.kt
+[Items]: ../mimic-bukkit-api/src/main/kotlin/items/Items.kt
+[MinecraftItemProvider]: src/main/kotlin/impl/vanilla/MinecraftItemProvider.kt
 [ItemMetaPayload]: src/main/kotlin/impl/vanilla/ItemMetaPayload.kt
