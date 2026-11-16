@@ -3,7 +3,6 @@ $dokka.linkExtension:html
 
 module:mimic-api
 ru.endlesscode.mimic
-ru.endlesscode.mimic.blocks
 ru.endlesscode.mimic.classes
 ru.endlesscode.mimic.inventory
 ru.endlesscode.mimic.items
