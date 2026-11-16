@@ -190,6 +190,16 @@ internal class MimicBlocksTest : BukkitTestBase() {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = ["", " "])
+    fun `when set block with blank state - should pass null to the provider`(state: String) {
+        // The fake provider keeps the last state, so set it first to see that it is replaced
+        blocks.setBlock(mockBlock(Material.AIR), Key.key("minecraft:stone"), "[facing=north]")
+
+        blocks.setBlock(mockBlock(Material.AIR), Key.key("minecraft:stone"), state).shouldBeTrue()
+        minecraft.lastState.shouldBeNull()
+    }
+
     @Test
     fun `when set custom block - should set block`() {
         val block = mockBlock(Material.AIR)

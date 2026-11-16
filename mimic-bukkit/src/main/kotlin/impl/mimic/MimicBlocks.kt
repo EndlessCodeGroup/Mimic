@@ -49,7 +49,8 @@ internal class MimicBlocks(blockProviders: ServiceRegistry<BlockProvider>) : Blo
     override fun setBlock(block: Block, blockId: Key, state: String?): Boolean {
         if (!block.isEmpty) return false
         val provider = findProvider(blockId) ?: return false
-        return provider.call(default = false) { setBlock(block, blockId.value(), state) }
+        val nonBlankState = state?.takeIf { it.isNotBlank() }
+        return provider.call(default = false) { setBlock(block, blockId.value(), nonBlankState) }
     }
 
     override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer): Boolean {

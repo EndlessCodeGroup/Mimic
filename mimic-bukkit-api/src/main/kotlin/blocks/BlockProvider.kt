@@ -87,7 +87,7 @@ public interface BlockProvider : MimicService {
      * Apply block physics as usual, so neighboring blocks are updated.
      *
      * @param state State of the block in the format of its provider, usually block state properties
-     *   like `[facing=north]`, or `null` for the default state.
+     *   like `[facing=north]`, or `null` for the default state. It is never blank.
      *   If the state is invalid, log a warning and don't set the block.
      * @return `false` if the ID is unknown, the state is invalid, or the block can't be set.
      */

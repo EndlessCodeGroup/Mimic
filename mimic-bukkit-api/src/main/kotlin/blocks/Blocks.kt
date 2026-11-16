@@ -102,7 +102,7 @@ public interface Blocks {
      * Block physics is applied as usual, so neighboring blocks are updated.
      *
      * @param state State of the block in the format of its provider, usually block state properties
-     *   like `[facing=north]`, or `null` for the default state.
+     *   like `[facing=north]`. A blank state is the same as `null`: the default state.
      *   If the state is invalid, the block is not set and a warning is logged.
      * @return `false` if the [block] is not empty, the ID is unknown, the state is invalid, or the block can't be set.
      */
