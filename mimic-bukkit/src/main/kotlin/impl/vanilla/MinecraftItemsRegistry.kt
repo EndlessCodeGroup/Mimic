@@ -6,8 +6,6 @@ package ru.endlesscode.mimic.impl.vanilla
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.Damageable
-import org.bukkit.inventory.meta.ItemMeta
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
@@ -65,23 +63,6 @@ public class MinecraftItemsRegistry : BukkitItemsRegistry {
     private fun getMaterial(name: String): Material? {
         return Material.getMaterial(name.uppercase())
             ?.takeIf { it.isItem }
-    }
-
-    private fun ItemMeta.applyPayload(payload: ItemMetaPayload): ItemMeta {
-        // Apply text options
-        displayName(payload.name)
-        lore(payload.lore)
-
-        // Apply damage and custom model data
-        isUnbreakable = payload.isUnbreakable
-        (this as? Damageable)?.damage = payload.damage
-        if (payload.customModelData != null) setCustomModelData(payload.customModelData)
-
-        // Apply enchants and item flags
-        payload.enchantments.forEach { (enchant, level) -> addEnchant(enchant, level, true) }
-        addItemFlags(*payload.flags.toTypedArray())
-
-        return this
     }
 
     public companion object {

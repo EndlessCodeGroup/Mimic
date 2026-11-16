@@ -18,27 +18,19 @@ public class MmoItemsRegistry private constructor(private val mmoItems: MmoItems
         get() = templates.map { it.id.lowercase() }
 
     private val templates: Collection<MMOItemTemplate>
-        get() = mmoItems.templatesManager.collectTemplates()
+        get() = mmoItems.templates
 
     override fun isItemExists(itemId: String): Boolean = itemId in knownIds
 
     override fun getItemId(item: ItemStack): String? {
-        val nbtItem = mmoItems.getNbtItem(item)
-        return nbtItem.getString("MMOITEMS_ITEM_ID")?.lowercase()
+        return mmoItems.getId(item)?.lowercase()
     }
 
     override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
         val template = templates.find { it.id.equals(itemId, ignoreCase = true) } ?: return null
 
-        return template.buildItemStack()
+        return mmoItems.buildItem(template, player = null)
             ?.also { it.amount = amount.coerceIn(1, it.maxStackSize) }
-    }
-
-    private fun MMOItemTemplate.buildItemStack(): ItemStack? {
-        return newBuilder(0, null)
-            .build()
-            .newBuilder()
-            .build()
     }
 
     public companion object {
