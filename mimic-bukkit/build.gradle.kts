@@ -105,19 +105,8 @@ dependencies {
     compileOnly(":CustomItemsAPI")
 
     testImplementation(libs.paperApi)
-    testImplementation(libs.rpgplugins.auraskills)
-    testImplementation(libs.rpgplugins.mcmmo) { isTransitive = false }
-    testImplementation(libs.rpgplugins.jobs) { isTransitive = false }
+    testImplementation(libs.bundles.rpgplugins) { isTransitive = false }
     testImplementation(libs.rpgplugins.cmilib) { isTransitive = false }
-    testImplementation(libs.rpgplugins.valhallammo) { isTransitive = false }
-    testImplementation(libs.rpgplugins.heroes) { isTransitive = false }
-    testImplementation(libs.rpgplugins.mmocore) { isTransitive = false }
-    testImplementation(libs.rpgplugins.mmoitems) { isTransitive = false }
-    testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
-    testImplementation(libs.rpgplugins.fabled) { isTransitive = false }
-    testImplementation(libs.rpgplugins.codex) { isTransitive = false }
-    testImplementation(libs.rpgplugins.itemsadder)
-    testImplementation(libs.rpgplugins.oraxen) { isTransitive = false }
 }
 
 kotlin {
