@@ -23,6 +23,7 @@ import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemProvider
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsItemProvider
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
+import ru.endlesscode.mimic.impl.executableitems.ExecutableItemsItemProvider
 import ru.endlesscode.mimic.impl.fabled.FabledClassProvider
 import ru.endlesscode.mimic.impl.fabled.FabledLevelProvider
 import ru.endlesscode.mimic.impl.fabled.FabledResourceProvider
@@ -145,6 +146,10 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("MythicMobs", "io.lumine.mythic.bukkit.MythicBukkit") {
             hookItems(::MythicMobsItemProvider)
+        }
+
+        pluginHooks("ExecutableItems", "com.ssomar.score.api.executableitems.ExecutableItemsAPI") {
+            hookItems(::ExecutableItemsItemProvider)
         }
 
         pluginHooks("AuraSkills", "dev.aurelium.auraskills.api.AuraSkillsApi") {

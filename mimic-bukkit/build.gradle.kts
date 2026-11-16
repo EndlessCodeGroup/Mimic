@@ -37,6 +37,7 @@ bukkit {
             "ItemsAdder",
             "Nexo",
             "MythicMobs",
+            "ExecutableItems",
         )
     }
 
@@ -73,6 +74,7 @@ repositories {
     maven(url = "https://jitpack.io") {
         content {
             includeGroup("com.github.Zrips")
+            includeGroup("com.github.Ssomar-Developement")
         }
     }
     maven(url = "https://repo.travja.dev/releases/") {
