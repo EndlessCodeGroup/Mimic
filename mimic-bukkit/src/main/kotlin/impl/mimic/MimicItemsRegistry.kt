@@ -1,66 +1,67 @@
 // Copyright (c) 2020 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION", "TYPEALIAS_EXPANSION_DEPRECATION") // ItemsRegistry API is deprecated but still supported
+@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
 
 package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
-import ru.endlesscode.mimic.ServiceRegistry
+import ru.endlesscode.mimic.call
+import ru.endlesscode.mimic.impl.mmoitems.MmoItemsItemProvider
 import ru.endlesscode.mimic.internal.MimicId
-import ru.endlesscode.mimic.internal.authorsMention
+import ru.endlesscode.mimic.internal.OnceWarnings
 import ru.endlesscode.mimic.internal.parseMimicId
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.ItemsRegistryItemProvider
 
 /**
- * Items registry combining all items registries, using their IDs as namespaces: `acacia_boat` -> `minecraft:acacia_boat`.
- * ID without namespace or with the `mimic` namespace is searched over all registries.
- * Deprecated IDs with uppercase letters or more than one `:` are accepted with a warning.
+ * Items registry showing items of all item providers via the deprecated ItemsRegistry API,
+ * using provider IDs as namespaces: `acacia_boat` -> `minecraft:acacia_boat`.
+ *
+ * Unlike Items API, it accepts IDs deprecated there:
+ * - ID without namespace or with the `mimic` namespace is searched over all providers.
+ * - IDs with uppercase letters or more than one `:` are accepted with a warning.
+ * - MMOItems ID without item type (`mmoitems:excalibur`) is accepted with a warning if only one type has this item.
  */
 @Deprecated("Use Items API instead.")
-public class MimicItemsRegistry internal constructor(
-    private val registries: ServiceRegistry<BukkitItemsRegistry>,
-) : BukkitItemsRegistry {
+public class MimicItemsRegistry internal constructor(private val items: MimicItems) : BukkitItemsRegistry {
 
     override val id: String = ID
 
     override val knownIds: Collection<String>
-        get() = providers.flatMap { provider ->
-            provider.tryGetKnownIds().mapNotNull { provider.namespaced(it) }
-        }
+        get() = items.getAllItems().map { it.asString() }
 
-    internal val providers: List<ItemsRegistryProvider>
-        get() = registries.enabledEntries
+    private val warnings: OnceWarnings
+        get() = items.providers.registry.warnings
 
     override fun isSameItem(item: ItemStack, itemId: String): Boolean {
-        val id = parse(itemId) ?: return false
-        return getRegistries(id)
-            .any { provider -> provider.tryIsSameItem(item, id.path) }
+        val (owner, ownerId) = items.owner(item) ?: return false
+        return candidates(itemId) { it == owner }.any { (provider, path) ->
+            path == ownerId.value() || provider.isSameItemInRegistry(item, path)
+        }
     }
 
-    override fun isItemExists(itemId: String): Boolean {
-        val id = parse(itemId) ?: return false
-        return getRegistries(id)
-            .any { provider -> provider.tryIsItemExists(id.path) }
-    }
+    override fun isItemExists(itemId: String): Boolean =
+        candidates(itemId).any { (provider, path) -> provider.hasItem(path) }
 
-    override fun getItemId(item: ItemStack): String? {
-        val (provider, itemId) = providers.firstNotNullOfOrNull { provider ->
-            provider.tryGetItemId(item)?.let { provider to it }
-        } ?: return null
-        return provider.namespaced(itemId)
-    }
+    override fun getItemId(item: ItemStack): String? = items.getItemId(item)?.asString()
 
-    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? {
-        val id = parse(itemId) ?: return null
-        return getRegistries(id)
-            .mapNotNull { service -> service.tryGetItem(id.path, payload, amount) }
-            .firstOrNull()
-    }
+    override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? =
+        candidates(itemId).firstNotNullOfOrNull { (provider, path) -> provider.getItem(path, payload, amount) }
 
-    private fun getRegistries(id: MimicId): Sequence<ItemsRegistryProvider> {
-        return providers.asSequence()
-            .filter { id.matches(it.registry.id) }
+    /**
+     * Returns providers that may have the item with the given [itemId], paired with the ID of the item in the provider.
+     * Only providers matching the [filter] are returned.
+     */
+    private inline fun candidates(
+        itemId: String,
+        filter: (ItemProviderEntry) -> Boolean = { true },
+    ): List<Pair<ItemProviderEntry, String>> {
+        val id = parse(itemId) ?: return emptyList()
+        val path = id.path.replace(':', '/')
+        return items.providers.enabled
+            .filter { id.matches(it.service.id) && filter(it) }
+            .map { provider -> provider to provider.withMmoItemsType(path) }
     }
 
     /** Parses the given [itemId], or returns `null` if it is invalid. */
@@ -69,32 +70,56 @@ public class MimicItemsRegistry internal constructor(
         val id = parseMimicId(lowercaseId, allowLegacy = true) ?: return null
 
         if (lowercaseId != itemId) {
-            registries.warnings.warn("uppercase:$itemId") { "Item ID '$itemId' is deprecated, use '$lowercaseId' instead." }
+            warnings.warn("uppercase:$itemId") { "Item ID '$itemId' is deprecated, use '$lowercaseId' instead." }
         }
         if (id.isLegacy) {
-            registries.warnings.warn("legacy") { "Item ID '$itemId' contains more than one ':', this is deprecated." }
+            warnings.warn("legacy:$itemId") {
+                "Item ID '$itemId' contains more than one ':', this is deprecated. Use '/' instead of the next ones."
+            }
         }
         return id
     }
 
-    /** Returns the given [itemId] prefixed with the registry ID, or `null` if the result is invalid. */
-    private fun ItemsRegistryProvider.namespaced(itemId: String): String? {
-        val namespacedId = "${registry.id}:$itemId"
-        val id = parseMimicId(namespacedId, allowLegacy = true)
-        when {
-            id == null -> warnings.warn("invalid:${registry.id}") {
-                "Items registry '${registry.id}' returned invalid ID '$itemId', such items are ignored. " +
-                    "IDs may contain only a-z, 0-9, '.', '_', '-' and '/'. " +
-                    "Please, report it to ${plugin.authorsMention}."
-            }
+    /**
+     * MMOItems IDs had no item type before Mimic 0.11: `mmoitems:excalibur` instead of `mmoitems:sword/excalibur`.
+     * Returns the [path] with the type if this is MMOItems provider and only one type has the item.
+     */
+    private fun ItemProviderEntry.withMmoItemsType(path: String): String {
+        if (service.id != MmoItemsItemProvider.ID || '/' in path) return path
+        val paths = call(default = emptyList()) { allItems.filter { it.substringAfter('/') == path } }
+        if (paths.isEmpty()) return path
 
-            id.isLegacy -> warnings.warn("legacy:${registry.id}") {
-                "Items registry '${registry.id}' returned ID '$itemId' containing ':', this is deprecated. " +
-                    "Use '/' instead: '${itemId.replace(':', '/')}'. " +
-                    "Please, report it to ${plugin.authorsMention}."
+        val typedPath = paths.singleOrNull()
+        warnings.warn("mmoitems-type:$path") {
+            if (typedPath != null) {
+                "Item ID '${service.id}:$path' without item type is deprecated, use '${service.id}:$typedPath' instead."
+            } else {
+                "Item ID '${service.id}:$path' is ambiguous, specify item type: ${paths.joinToString { "'${service.id}:$it'" }}."
             }
         }
-        return namespacedId.takeIf { id != null }
+        return typedPath ?: path
+    }
+
+    /** Asks the registry behind this provider to compare items, so its own rules still work, like ignoring a part of the ID. */
+    private fun ItemProviderEntry.isSameItemInRegistry(item: ItemStack, path: String): Boolean {
+        val registry = service as? ItemsRegistryItemProvider ?: return false
+        return call(default = false) { registry.isSameItem(item, path) }
+    }
+
+    /** Payload may be of any type in ItemsRegistry API, but only registries may take a payload which isn't a string. */
+    private fun ItemProviderEntry.getItem(path: String, payload: Any?, amount: Int): ItemStack? {
+        val registry = service as? ItemsRegistryItemProvider
+        return when {
+            payload == null || payload is String -> createItem(path, amount, player = null, payload as String?)
+            registry != null -> call(default = null) { registry.getItem(path, payload, amount) }
+            else -> {
+                warnings.warn("payload-type:${service.id}:${payload.javaClass.name}") {
+                    "$apiName '${service.id}' takes only string payloads, but got ${payload.javaClass.name}. " +
+                        "Items with such payloads aren't created."
+                }
+                null
+            }
+        }
     }
 
     public companion object {

@@ -198,7 +198,10 @@ public interface Mimic {
         priority: ServicePriority,
     ): BukkitItemsRegistry?
 
-    /** Returns [BukkitItemsRegistry] implementation. */
+    /**
+     * Returns [BukkitItemsRegistry] combining items of all item providers.
+     * Unlike [items], it searches an ID without a namespace over all providers.
+     */
     @Deprecated("Use items instead.")
     public val itemsRegistry: BukkitItemsRegistry
 

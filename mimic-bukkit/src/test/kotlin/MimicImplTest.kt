@@ -9,12 +9,15 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.maps.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import net.kyori.adventure.text.Component
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.server.PluginDisableEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority.*
 import ru.endlesscode.mimic.classes.BukkitClassSystem
@@ -23,6 +26,8 @@ import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.MimicLevels
 import ru.endlesscode.mimic.impl.mimic.getPrimaryClassProviderId
 import ru.endlesscode.mimic.impl.vanilla.MinecraftLevelProvider
+import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.ItemProvider
 import ru.endlesscode.mimic.level.*
 import kotlin.test.Test
 
@@ -38,6 +43,7 @@ internal class MimicImplTest : BukkitTestBase() {
     private val config: MimicConfig = mockk {
         every { levelProvider } answers { preferredLevelProvider }
         every { classProvider } answers { preferredClassProvider }
+        every { disabledItemsRegistries } returns emptySet()
     }
 
     // SUT
@@ -213,6 +219,49 @@ internal class MimicImplTest : BukkitTestBase() {
         mimic.getClassSystemProvider().id shouldBe "permissions"
     }
 
+    @Test
+    fun `when items registry is registered - should provide its items via items`() {
+        mimic.registerItemsRegistry(TestItemsRegistry("legacy"), MimicApiLevel.CURRENT, thirdParty, Normal)
+
+        mimic.items.getAllItems().map { it.asString() } shouldContainExactly listOf("legacy:registry_item")
+        mimic.itemsRegistry.knownIds shouldContainExactly listOf("legacy:registry_item")
+        mimic.getAllItemsRegistries().keys shouldContainExactly listOf("legacy")
+    }
+
+    // https://github.com/EndlessCodeGroup/Mimic/issues/85
+    @Test
+    fun `when items registry is registered - should keep its own way to compare items`() {
+        val registry = mimic.registerItemsRegistry(TestItemsRegistry("legacy"), MimicApiLevel.CURRENT, thirdParty, Normal)
+
+        registry?.isSameItem(ItemStack(Material.STONE), "any").shouldBeTrue()
+    }
+
+    @Test
+    fun `when item provider is registered after items registry by another plugin - should replace it`() {
+        mimic.registerItemsRegistry(TestItemsRegistry("custom"), MimicApiLevel.CURRENT, thirdParty, High)
+        mimic.registerItemProvider(TestItemProvider("custom"), MimicApiLevel.CURRENT, otherPlugin, Normal)
+
+        mimic.items.getAllItems().map { it.asString() } shouldContainExactly listOf("custom:provider_item")
+    }
+
+    @Test
+    fun `when items registry is registered after item provider with the same ID - should not bridge it`() {
+        mimic.registerItemProvider(TestItemProvider("custom"), MimicApiLevel.CURRENT, thirdParty, Normal)
+        mimic.registerItemsRegistry(TestItemsRegistry("custom"), MimicApiLevel.CURRENT, otherPlugin, High)
+
+        mimic.items.getAllItems().map { it.asString() } shouldContainExactly listOf("custom:provider_item")
+    }
+
+    @Test
+    fun `when plugin is disabled - should unregister its items registries and item providers`() {
+        mimic.registerItemsRegistry(TestItemsRegistry("legacy"), MimicApiLevel.CURRENT, thirdParty, Normal)
+        mimic.registerItemProvider(TestItemProvider("custom"), MimicApiLevel.CURRENT, thirdParty, Normal)
+
+        mimic.onPluginDisable(PluginDisableEvent(thirdParty))
+
+        mimic.items.getAllItems().shouldBeEmpty()
+    }
+
     private fun List<LevelTrack>.keys() = map { it.key().asString() }
 
     private fun Levels.trackName(id: String) = getAllTracks().single { it.key().asString() == id }.name()
@@ -240,6 +289,20 @@ internal class MimicImplTest : BukkitTestBase() {
         override val allClasses: Collection<ClassProvider.ClassDefinition> = emptyList()
         override fun getClasses(player: Player): Map<String, ClassProvider.ClassDefinition> = emptyMap()
         override fun getPrimarySlot(player: Player): ClassProvider.Slot? = null
+    }
+
+    private class TestItemProvider(override val id: String) : ItemProvider {
+        override val allItems: Collection<String> = listOf("provider_item")
+        override fun getItemId(item: ItemStack): String? = null
+        override fun createItem(itemId: String, amount: Int, player: Player?, payload: String?): ItemStack? = null
+    }
+
+    private class TestItemsRegistry(override val id: String) : BukkitItemsRegistry {
+        override val knownIds: Collection<String> = listOf("registry_item")
+        override fun isSameItem(item: ItemStack, itemId: String): Boolean = true
+        override fun isItemExists(itemId: String): Boolean = itemId in knownIds
+        override fun getItemId(item: ItemStack): String? = null
+        override fun getItem(itemId: String, payload: Any?, amount: Int): ItemStack? = null
     }
 
     private class TestClassSystemProvider(override val id: String) : BukkitClassSystem.Provider {

@@ -28,6 +28,7 @@ import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 import ru.endlesscode.mimic.items.ItemProvider
+import ru.endlesscode.mimic.items.ItemsRegistryItemProvider
 import ru.endlesscode.mimic.items.WrappedItemProvider
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.*
@@ -65,10 +66,9 @@ internal class MimicImpl(
         "PlayerInventory",
         defaultId = MinecraftPlayerInventory.ID,
     )
-    val itemsRegistries = registry<BukkitItemsRegistry>(
+    private val itemsRegistries = registry<BukkitItemsRegistry>(
         "ItemsRegistry",
         defaultId = MinecraftItemsRegistry.ID,
-        disabledIds = { config.disabledItemsRegistries },
     )
     val itemProviders = registry<ItemProvider>(
         "ItemProvider",
@@ -160,11 +160,20 @@ internal class MimicImpl(
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): BukkitItemsRegistry? = itemsRegistries.tryRegister(apiLevel, plugin, priority) {
-        WrappedItemsRegistry(registry, plugin)
+    ): BukkitItemsRegistry? {
+        val itemsRegistry = itemsRegistries.tryRegister(apiLevel, plugin, priority) {
+            WrappedItemsRegistry(registry, plugin)
+        }
+        if (itemsRegistry != null) {
+            itemProviders.registerBridge(ItemsRegistryItemProvider(itemsRegistry), plugin, priority) {
+                "ItemsRegistry '${itemsRegistry.id}' by $plugin uses deprecated ItemsRegistry API, " +
+                    "so its items are available via Items API as '${itemsRegistry.id}:<item>'. " +
+                    "Please ask ${plugin.authorsMention} to migrate to ItemProvider."
+            }
+        }
+        return itemsRegistry
     }
 
-    override val itemsRegistry: BukkitItemsRegistry = MimicItemsRegistry(itemsRegistries)
     override fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry> = itemsRegistries.loadAll()
     // endregion
 
@@ -179,6 +188,7 @@ internal class MimicImpl(
     }
 
     override val items = MimicItems(itemProviders)
+    override val itemsRegistry: BukkitItemsRegistry = MimicItemsRegistry(items)
     // endregion
 
     // region Level System

@@ -18,6 +18,8 @@ internal class WrappedItemsRegistry(
 
     override val knownIds: Collection<String> by delegate::knownIds
 
+    override fun isSameItem(item: ItemStack, itemId: String) = delegate.isSameItem(item, itemId)
+
     override fun isItemExists(itemId: String) = delegate.isItemExists(itemId)
 
     override fun getItemId(item: ItemStack) = delegate.getItemId(item)
