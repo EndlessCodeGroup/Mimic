@@ -17,6 +17,7 @@ import ru.endlesscode.mimic.classes.*
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.MimicBlocks
 import ru.endlesscode.mimic.impl.mimic.MimicClasses
+import ru.endlesscode.mimic.impl.mimic.MimicItems
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicLevels
 import ru.endlesscode.mimic.impl.mimic.MimicResources
@@ -26,6 +27,8 @@ import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.ItemProvider
+import ru.endlesscode.mimic.items.WrappedItemProvider
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.*
 import ru.endlesscode.mimic.resources.ResourceProvider
@@ -67,6 +70,11 @@ internal class MimicImpl(
         defaultId = MinecraftItemsRegistry.ID,
         disabledIds = { config.disabledItemsRegistries },
     )
+    val itemProviders = registry<ItemProvider>(
+        "ItemProvider",
+        defaultId = MinecraftItemsRegistry.ID,
+        disabledIds = { config.disabledItemsRegistries },
+    )
     private val levelSystems = registry<BukkitLevelSystem.Provider>(
         "LevelSystem",
         defaultId = MinecraftLevelSystem.ID,
@@ -87,6 +95,7 @@ internal class MimicImpl(
             classProviders,
             playerInventories,
             itemsRegistries,
+            itemProviders,
             levelSystems,
             levelProviders,
             resourceProviders,
@@ -157,6 +166,19 @@ internal class MimicImpl(
 
     override val itemsRegistry: BukkitItemsRegistry = MimicItemsRegistry(itemsRegistries)
     override fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry> = itemsRegistries.loadAll()
+    // endregion
+
+    // region Items
+    override fun registerItemProvider(
+        provider: ItemProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): ItemProvider? = itemProviders.tryRegister(apiLevel, plugin, priority) {
+        WrappedItemProvider(provider, plugin)
+    }
+
+    override val items = MimicItems(itemProviders)
     // endregion
 
     // region Level System
