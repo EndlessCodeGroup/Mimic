@@ -12,13 +12,14 @@ import ru.endlesscode.mimic.config.StringConfigProperty
 import ru.endlesscode.mimic.config.StringSetConfigProperty
 import ru.endlesscode.mimic.impl.mimic.getBlockProviderIds
 import ru.endlesscode.mimic.impl.mimic.getClassProviderIds
+import ru.endlesscode.mimic.impl.mimic.getItemProviderIds
 import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
 import ru.endlesscode.mimic.impl.mimic.getPrimaryClassProviderId
 import ru.endlesscode.mimic.impl.mimic.getPrimaryLevelProviderId
 import ru.endlesscode.mimic.impl.mimic.getPrimaryResourceProviderId
 import ru.endlesscode.mimic.impl.mimic.getResourceProviderIds
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockProvider
-import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemProvider
 import ru.endlesscode.mimic.internal.append
 import ru.endlesscode.mimic.internal.appendLine
 import ru.endlesscode.mimic.internal.text
@@ -51,10 +52,10 @@ internal fun buildConfigMessage(mimic: Mimic, config: MimicConfig): TextComponen
         options = mimic.getAllPlayerInventoryProviders().keys,
     )
     appendSetPropertyConfig(
-        property = MimicConfig.DISABLED_ITEMS_REGISTRIES,
-        values = config.disabledItemsRegistries,
-        options = mimic.getAllItemsRegistries().keys,
-        permanentOptions = setOf(MinecraftItemsRegistry.ID),
+        property = MimicConfig.DISABLED_ITEM_PROVIDERS,
+        values = config.disabledItemProviders,
+        options = mimic.getItemProviderIds(),
+        permanentOptions = setOf(MinecraftItemProvider.ID),
     )
     appendSetPropertyConfig(
         property = MimicConfig.DISABLED_BLOCK_PROVIDERS,

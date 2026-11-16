@@ -1,12 +1,15 @@
 // Copyright (c) 2020 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.customitems
 
 import com.jojodmo.customitems.api.CustomItemsAPI
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
+@Deprecated("Use Items API instead, CustomItems items have the same IDs there.")
 public class CustomItemsRegistry : BukkitItemsRegistry {
 
     override val id: String = ID

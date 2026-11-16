@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.craftengine
 
 import net.momirealms.craftengine.bukkit.item.BukkitItemDefinition
@@ -12,6 +14,7 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
  * CraftEngine namespace becomes the first path segment of item ID: `default:palm_log` -> `default/palm_log`.
  * Vanilla items modified by CraftEngine are left to the vanilla registry.
  */
+@Deprecated("Use Items API instead, CraftEngine items have the same IDs there.")
 public class CraftEngineItemsRegistry private constructor(
     private val craftEngine: CraftEngineWrapper,
 ) : BukkitItemsRegistry {

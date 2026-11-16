@@ -38,7 +38,7 @@ private fun buildCommand(
     classesSubcommand(mimic)
     resourcesSubcommand(mimic)
     inventorySubcommand(mimic)
-    itemsSubcommand(mimic.itemsRegistry)
+    itemsSubcommand(mimic.items)
     blocksSubcommand(mimic.blocks)
 }.build()
 
@@ -51,7 +51,7 @@ private fun infoExecutor(pluginFullName: String): CommandAction<CommandSender> =
             executedCommand("classes", "/$COMMAND_NAME classes", "Player classes"),
             executedCommand("resources", "/$COMMAND_NAME resources", "Player resources: mana, stamina and similar"),
             executedCommand("inventory", "/$COMMAND_NAME inventory", "Player inventory provider"),
-            executedCommand("items", "/$COMMAND_NAME items", "Items registries"),
+            executedCommand("items", "/$COMMAND_NAME items", "Vanilla and custom items"),
             executedCommand("blocks", "/$COMMAND_NAME blocks", "Vanilla and custom blocks"),
         )
     }

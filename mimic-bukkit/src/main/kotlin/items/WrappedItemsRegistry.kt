@@ -1,6 +1,8 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.items
 
 import org.bukkit.inventory.ItemStack
@@ -15,6 +17,8 @@ internal class WrappedItemsRegistry(
     constructor(delegate: BukkitItemsRegistry, plugin: Plugin) : this(delegate, plugin.name)
 
     override val knownIds: Collection<String> by delegate::knownIds
+
+    override fun isSameItem(item: ItemStack, itemId: String) = delegate.isSameItem(item, itemId)
 
     override fun isItemExists(itemId: String) = delegate.isItemExists(itemId)
 

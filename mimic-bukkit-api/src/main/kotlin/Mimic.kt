@@ -1,7 +1,7 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION") // LevelSystem and ClassSystem APIs are deprecated but still supported
+@file:Suppress("DEPRECATION") // LevelSystem, ClassSystem and ItemsRegistry APIs are deprecated but still supported
 
 package ru.endlesscode.mimic
 
@@ -18,6 +18,8 @@ import ru.endlesscode.mimic.classes.ClassProvider
 import ru.endlesscode.mimic.classes.Classes
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.ItemProvider
+import ru.endlesscode.mimic.items.Items
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.LevelProvider
 import ru.endlesscode.mimic.level.Levels
@@ -168,6 +170,7 @@ public interface Mimic {
      * @param plugin The plugin implementing this item registry.
      * @return registered registry or `null` if it was not registered.
      */
+    @Deprecated("Use registerItemProvider instead.")
     public fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
         apiLevel: Int,
@@ -187,6 +190,7 @@ public interface Mimic {
      *                 preferred service in config.
      * @return registered registry or `null` if it was not registered.
      */
+    @Deprecated("Use registerItemProvider instead.")
     public fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
         apiLevel: Int,
@@ -194,11 +198,65 @@ public interface Mimic {
         priority: ServicePriority,
     ): BukkitItemsRegistry?
 
-    /** Returns [BukkitItemsRegistry] implementation. */
+    /**
+     * Returns [BukkitItemsRegistry] combining items of all item providers.
+     * Unlike [items], it searches an ID without a namespace over all providers.
+     */
+    @Deprecated("Use items instead.")
     public val itemsRegistry: BukkitItemsRegistry
 
     /** Returns map containing all known [BukkitItemsRegistry], where key is an item registry ID. */
+    @Deprecated("Use items.getAllItems() instead.")
     public fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry>
+    // endregion
+
+    // region Items
+    /**
+     * Registers the given [provider] of items with normal priority.
+     *
+     * @param provider The [ItemProvider] implementation.
+     * @param apiLevel Minimal required API level for this item provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this item provider.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.11.0
+     */
+    public fun registerItemProvider(
+        provider: ItemProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): ItemProvider? = registerItemProvider(provider, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [provider] of items.
+     *
+     * @param provider The [ItemProvider] implementation.
+     * @param apiLevel Minimal required API level for this item provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this item provider.
+     * @param priority Default priority. An item recognized by several providers belongs to the provider
+     *                 with the highest priority.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.11.0
+     */
+    public fun registerItemProvider(
+        provider: ItemProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): ItemProvider?
+
+    /**
+     * Vanilla and custom items from all plugins: create them by ID, identify stacks, list and validate IDs.
+     * See [Items] for details and examples.
+     * To make your plugin's items available here, use [registerItemProvider].
+     * @since 0.11.0
+     */
+    public val items: Items
     // endregion
 
     // region Level System

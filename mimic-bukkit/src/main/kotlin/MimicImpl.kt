@@ -1,7 +1,7 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION") // LevelSystem and ClassSystem APIs are deprecated but still supported
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION") // LevelSystem, ClassSystem and ItemsRegistry APIs are deprecated but still supported
 
 package ru.endlesscode.mimic
 
@@ -17,6 +17,7 @@ import ru.endlesscode.mimic.classes.*
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.MimicBlocks
 import ru.endlesscode.mimic.impl.mimic.MimicClasses
+import ru.endlesscode.mimic.impl.mimic.MimicItems
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicLevels
 import ru.endlesscode.mimic.impl.mimic.MimicResources
@@ -26,6 +27,10 @@ import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.inventory.WrappedPlayerInventoryProvider
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.ItemProvider
+import ru.endlesscode.mimic.items.Items
+import ru.endlesscode.mimic.items.ItemsRegistryItemProvider
+import ru.endlesscode.mimic.items.WrappedItemProvider
 import ru.endlesscode.mimic.items.WrappedItemsRegistry
 import ru.endlesscode.mimic.level.*
 import ru.endlesscode.mimic.resources.ResourceProvider
@@ -62,10 +67,14 @@ internal class MimicImpl(
         "PlayerInventory",
         defaultId = MinecraftPlayerInventory.ID,
     )
-    val itemsRegistries = registry<BukkitItemsRegistry>(
+    private val itemsRegistries = registry<BukkitItemsRegistry>(
         "ItemsRegistry",
         defaultId = MinecraftItemsRegistry.ID,
-        disabledIds = { config.disabledItemsRegistries },
+    )
+    val itemProviders = registry<ItemProvider>(
+        "ItemProvider",
+        defaultId = MinecraftItemProvider.ID,
+        disabledIds = { config.disabledItemProviders },
     )
     private val levelSystems = registry<BukkitLevelSystem.Provider>(
         "LevelSystem",
@@ -87,6 +96,7 @@ internal class MimicImpl(
             classProviders,
             playerInventories,
             itemsRegistries,
+            itemProviders,
             levelSystems,
             levelProviders,
             resourceProviders,
@@ -151,12 +161,36 @@ internal class MimicImpl(
         apiLevel: Int,
         plugin: Plugin,
         priority: ServicePriority,
-    ): BukkitItemsRegistry? = itemsRegistries.tryRegister(apiLevel, plugin, priority) {
-        WrappedItemsRegistry(registry, plugin)
+    ): BukkitItemsRegistry? {
+        val itemsRegistry = itemsRegistries.tryRegister(apiLevel, plugin, priority) {
+            WrappedItemsRegistry(registry, plugin)
+        }
+        if (itemsRegistry != null) {
+            itemProviders.registerBridge(ItemsRegistryItemProvider(itemsRegistry), plugin, priority) {
+                "ItemsRegistry '${itemsRegistry.id}' by $plugin uses deprecated ItemsRegistry API, " +
+                    "so its items are available via Items API as '${itemsRegistry.id}:<item>'. " +
+                    "Please ask ${plugin.authorsMention} to migrate to ItemProvider."
+            }
+        }
+        return itemsRegistry
     }
 
-    override val itemsRegistry: BukkitItemsRegistry = MimicItemsRegistry(itemsRegistries)
     override fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry> = itemsRegistries.loadAll()
+    // endregion
+
+    // region Items
+    override fun registerItemProvider(
+        provider: ItemProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): ItemProvider? = itemProviders.tryRegister(apiLevel, plugin, priority) {
+        WrappedItemProvider(provider, plugin)
+    }
+
+    private val mimicItems = MimicItems(itemProviders)
+    override val items: Items get() = mimicItems
+    override val itemsRegistry: BukkitItemsRegistry = MimicItemsRegistry(mimicItems)
     // endregion
 
     // region Level System

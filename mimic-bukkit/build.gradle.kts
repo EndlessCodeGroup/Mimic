@@ -105,6 +105,7 @@ dependencies {
     testImplementation(libs.rpgplugins.valhallammo) { isTransitive = false }
     testImplementation(libs.rpgplugins.heroes) { isTransitive = false }
     testImplementation(libs.rpgplugins.mmocore) { isTransitive = false }
+    testImplementation(libs.rpgplugins.mmoitems) { isTransitive = false }
     testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
     testImplementation(libs.rpgplugins.fabled) { isTransitive = false }
     testImplementation(libs.rpgplugins.codex) { isTransitive = false }
