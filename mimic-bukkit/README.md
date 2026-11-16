@@ -83,49 +83,22 @@ An item belongs to the provider with the highest priority that recognizes it, va
 > The deprecated [ItemsRegistry][MimicItemsRegistry] API also accepts item ID without a namespace or with the `mimic` namespace
 > and searches it over all providers. Plugins using this API accept MMOItems IDs without item type too, if only one type has the item.
 
-Providers marked with _(deprecated API)_ are provided by the plugin itself via the deprecated [ItemsRegistry][BukkitItemsRegistry] API.
+| Plugin                             | ID format                      | Payload          | Notes                                            |
+|------------------------------------|--------------------------------|------------------|--------------------------------------------------|
+| [Minecraft][MinecraftItemProvider] | `minecraft:[id]`               | Item components¹ |                                                  |
+| [CraftEngine]                      | `craftengine:[namespace]/[id]` | -                |                                                  |
+| [CustomItems]                      | `customitems:[id]`             | -                |                                                  |
+| [ItemsAdder]                       | `itemsadder:[namespace]/[id]`  | -                | `itemsadder:[id]` for the `itemsadder` namespace |
+| [MMOItems]                         | `mmoitems:[type]/[id]`         | -                | Built by MMOItems for the player                 |
+| [Nexo]                             | `nexo:[id]`                    | -                | Converted ID²                                    |
+| [Oraxen]                           | `oraxen:[id]`                  | -                | Converted ID²                                    |
+| [ProRPGItems]                      | `prorpgitems:[type]/[id]`      | -                | Deprecated API³                                  |
+| [RPGInventory]                     | `rpginventory:[id]`            | -                | Deprecated API³                                  |
 
-#### [Minecraft][MinecraftItemProvider]
-
-**ID Format:** `minecraft:[id]`\
-**Payload:** [Item components][item-components] in the format of `/give` command, for example `[damage=10,unbreakable={}]`.\
-[ItemMetaPayload] in HOCON format is deprecated: it still works, but logs a warning.
-
-#### [CraftEngine]
-
-**ID Format:** `craftengine:[namespace]/[id]`\
-**Payload:** *Not supported*
-
-#### [Oraxen]
-
-**ID Format:** `oraxen:[id]`\
-**Payload:** *Not supported*
-
-#### [CustomItems]
-
-**ID Format:** `customitems:[id]`\
-**Payload:** *Not supported*
-
-#### [MMOItems]
-
-**ID Format:** `mmoitems:[type]/[id]`, for example `mmoitems:sword/excalibur`\
-**Payload:** *Not supported*\
-An item given to a player is built by MMOItems for this player.
-
-#### [ProRPGItems] _(deprecated API)_
-
-**ID Format:** `prorpgitems:[type]/[id]`\
-**Payload:** *Not supported*
-
-#### [RPGInventory] _(deprecated API)_
-
-**ID Format:** `rpginventory:[id]`\
-**Payload:** *Not supported*
-
-#### [ItemsAdder]
-
-**ID Format:** `itemsadder:[id]` for the default `itemsadder` namespace, `itemsadder:[namespace]/[id]` for others\
-**Payload:** *Not supported*
+¹ [Item components][item-components] in the format of `/give` command, for example `[damage=10,unbreakable={}]`.\
+² The plugin's ID is lowercased and characters not allowed in IDs are replaced with `_`: `Ruby Sword` -> `ruby_sword`.
+If several IDs become the same, only one of the items is available.\
+³ Provided via the deprecated [ItemsRegistry][BukkitItemsRegistry] API.
 
 ### [Block Providers][BlockProvider]
 
@@ -133,25 +106,19 @@ Blocks of all providers are available via [Blocks], with the provider ID as a na
 The namespace is required.
 A block belongs to the provider with the highest priority that recognizes it, vanilla blocks belong to `minecraft`.
 
-#### [Minecraft][MinecraftBlockProvider]
+| Plugin                              | ID format                      | State        | Notes                                            |
+|-------------------------------------|--------------------------------|--------------|--------------------------------------------------|
+| [Minecraft][MinecraftBlockProvider] | `minecraft:[id]`               | Block state¹ |                                                  |
+| [CraftEngine]                       | `craftengine:[namespace]/[id]` | Block state¹ |                                                  |
+| [ItemsAdder]                        | `itemsadder:[namespace]/[id]`  | -            | `itemsadder:[id]` for the `itemsadder` namespace |
+| [Nexo]                              | `nexo:[id]`                    | -            | Item-based², note, string and chorus blocks³     |
+| [Oraxen]                            | `oraxen:[id]`                  | -            | Item-based²                                      |
 
-**ID Format:** `minecraft:[id]`\
-**State:** Block state properties, for example `[facing=north]`
-
-#### [CraftEngine]
-
-**ID Format:** `craftengine:[namespace]/[id]`\
-**State:** Block state properties, for example `[facing=north]`
-
-#### [ItemsAdder]
-
-**ID Format:** `itemsadder:[id]` for the default `itemsadder` namespace, `itemsadder:[namespace]/[id]` for others\
-**State:** *Not supported*
-
-#### [Oraxen]
-
-**ID Format:** `oraxen:[id]`, where ID is the ID of the item placing the block\
-**State:** *Not supported*
+¹ Block state properties, for example `[facing=north]`.\
+² The block ID is the converted ID of the item placing the block, as for items.
+Variants of a directional block and their items have the ID of their parent block.
+Content of a storage block is dropped on the ground when the block is broken. Furniture is not a block.\
+³ Every level of a stackable block has the ID of the block.
 
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
@@ -166,6 +133,7 @@ A block belongs to the provider with the highest priority that recognizes it, va
 [itemsadder]: https://www.spigotmc.org/resources/73355/
 [craftengine]: https://modrinth.com/plugin/craftengine
 [oraxen]: https://github.com/oraxen/oraxen
+[nexo]: https://nexomc.com/
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
 [jobs reborn]: https://www.spigotmc.org/resources/4216/

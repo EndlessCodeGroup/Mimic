@@ -20,8 +20,8 @@ That's it. Mimic detects installed RPG plugins automatically.
 | **Levels**     | Vanilla experience, AuraSkills, mcMMO, ValhallaMMO, Jobs Reborn, MMOCore, Heroes, Fabled |
 | **Classes**    | MMOCore, Heroes, Fabled                                                                  |
 | **Resources**  | Vanilla health, food and air, MMOCore, Heroes, AuraSkills, Fabled                        |
-| **Items**      | Vanilla items, CraftEngine, Oraxen, MMOItems, CustomItems, ItemsAdder, RPGInventory¹    |
-| **Blocks**     | Vanilla blocks, CraftEngine, ItemsAdder, Oraxen                                          |
+| **Items**      | Vanilla items, CraftEngine, Oraxen, Nexo, MMOItems, CustomItems, ItemsAdder, RPGInventory¹ |
+| **Blocks**     | Vanilla blocks, CraftEngine, ItemsAdder, Oraxen, Nexo                                    |
 | **Inventory**  | Vanilla inventory, RPGInventory¹                                                         |
 
 ¹ Support is provided by the plugin itself.

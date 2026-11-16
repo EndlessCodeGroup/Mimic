@@ -51,7 +51,8 @@ See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 ### Integrations
 
 - New item and block providers: [ItemsAdder](https://www.spigotmc.org/resources/73355/) ([#49](https://github.com/EndlessCodeGroup/Mimic/issues/49)),
-  [Oraxen](https://github.com/oraxen/oraxen) ([#51](https://github.com/EndlessCodeGroup/Mimic/issues/51)).
+  [Oraxen](https://github.com/oraxen/oraxen) ([#51](https://github.com/EndlessCodeGroup/Mimic/issues/51)),
+  [Nexo](https://nexomc.com/) ([#50](https://github.com/EndlessCodeGroup/Mimic/issues/50)).
 - **Changed:** The `ia` items registry provided by ItemsAdder itself is not available via Items API, Mimic warns about it.
   Use `itemsadder:ruby_sword` instead of `ia:itemsadder:ruby_sword`.
 

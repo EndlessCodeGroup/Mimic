@@ -23,6 +23,7 @@ codex = "1.2.0"
 valhallammo = "premium_1.14.1"
 valhallammo-free = "1.10.4"
 itemsadder = "4.0.17"
+nexo = "1.30.2"
 
 junit = "6.1.3"
 kotest = "6.2.6"
@@ -60,6 +61,7 @@ rpgplugins-fabled = { module = "studio.magemonkey:fabled", version.ref = "fabled
 rpgplugins-codex = { module = "studio.magemonkey:codex", version.ref = "codex" }
 rpgplugins-valhallammo = { module = "me.athlaeos:valhallammo-core", version.ref = "valhallammo" }
 rpgplugins-itemsadder = { module = "beer.devs:itemsadder-api", version.ref = "itemsadder" }
+rpgplugins-nexo = { module = "com.nexomc:nexo", version.ref = "nexo" }
 
 # Test dependencies
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -98,4 +100,5 @@ rpgplugins = [
     "rpgplugins-codex",
     "rpgplugins-valhallammo",
     "rpgplugins-itemsadder",
+    "rpgplugins-nexo",
 ]

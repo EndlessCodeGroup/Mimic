@@ -35,6 +35,7 @@ bukkit {
             "Fabled",
             "ValhallaMMO",
             "ItemsAdder",
+            "Nexo",
         )
     }
 
@@ -81,6 +82,11 @@ repositories {
     maven(url = "https://repo.repsy.io/mvn/athlaeos/valhallammo/") {
         content {
             includeGroup("me.athlaeos")
+        }
+    }
+    maven(url = "https://repo.nexomc.com/releases/") {
+        content {
+            includeGroup("com.nexomc")
         }
     }
     aikar()
