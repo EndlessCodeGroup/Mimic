@@ -101,6 +101,11 @@ Providers marked with _(deprecated API)_ are provided by the plugin itself via t
 **ID Format:** `customitems:[id]`\
 **Payload:** *Not supported*
 
+#### [Nexo]
+
+**ID Format:** `nexo:[id]`\
+**Payload:** *Not supported*
+
 #### [MMOItems]
 
 **ID Format:** `mmoitems:[type]/[id]`, for example `mmoitems:sword/excalibur`\
@@ -138,6 +143,12 @@ A block belongs to the provider with the highest priority that recognizes it, va
 **ID Format:** `craftengine:[namespace]/[id]`\
 **State:** Block state properties, for example `[facing=north]`
 
+#### [Nexo]
+
+**ID Format:** `nexo:[id]`, the same as the ID of the item placing the block\
+**State:** *Not supported*\
+Note blocks, string blocks and chorus blocks are supported. Furniture is not a block.
+
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
 [item-components]: https://minecraft.wiki/w/Data_component_format
@@ -150,6 +161,7 @@ A block belongs to the provider with the highest priority that recognizes it, va
 [rpginventory]: https://www.spigotmc.org/resources/12498/
 [itemsadder]: https://www.spigotmc.org/resources/73355/
 [craftengine]: https://modrinth.com/plugin/craftengine
+[nexo]: https://nexomc.com/
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
 [jobs reborn]: https://www.spigotmc.org/resources/4216/

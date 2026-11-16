@@ -41,6 +41,8 @@ import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreResourceProvider
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsItemProvider
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
+import ru.endlesscode.mimic.impl.nexo.NexoBlockProvider
+import ru.endlesscode.mimic.impl.nexo.NexoItemProvider
 import ru.endlesscode.mimic.impl.valhallammo.ValhallaMmoLevelProvider
 import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
@@ -124,6 +126,11 @@ public class MimicPlugin : JavaPlugin() {
             hookItems(::CraftEngineItemProvider)
             hookItems(::CraftEngineItemsRegistry)
             hookBlocks(::CraftEngineBlockProvider)
+        }
+
+        pluginHooks("Nexo", "com.nexomc.nexo.api.NexoBlocks") {
+            hookItems(::NexoItemProvider)
+            hookBlocks(::NexoBlockProvider)
         }
 
         pluginHooks("AuraSkills", "dev.aurelium.auraskills.api.AuraSkillsApi") {

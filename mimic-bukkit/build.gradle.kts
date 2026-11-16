@@ -33,6 +33,7 @@ bukkit {
             "Jobs",
             "Fabled",
             "ValhallaMMO",
+            "Nexo",
         )
     }
 
@@ -76,6 +77,11 @@ repositories {
             includeGroup("me.athlaeos")
         }
     }
+    maven(url = "https://repo.nexomc.com/releases/") {
+        content {
+            includeGroup("com.nexomc")
+        }
+    }
     aikar()
     codemc()
     // Uncomment if you want to get Heroes from maven repo
@@ -109,6 +115,7 @@ dependencies {
     testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
     testImplementation(libs.rpgplugins.fabled) { isTransitive = false }
     testImplementation(libs.rpgplugins.codex) { isTransitive = false }
+    testImplementation(libs.rpgplugins.nexo) { isTransitive = false }
 }
 
 kotlin {
