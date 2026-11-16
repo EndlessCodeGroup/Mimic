@@ -48,6 +48,11 @@ See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 - Config option `disabled-block-registries` is renamed to `disabled-block-providers`, the old value is moved automatically.
 - `/mimic blocks` requires block IDs with a namespace, `payload` argument of `/mimic blocks set` is renamed to `state`.
 
+### Integrations
+
+- Added MythicMobs integration: item provider, including items of MythicCrucible ([#38](https://github.com/EndlessCodeGroup/Mimic/issues/38)).
+  Mythic IDs are lowercased: `mythicmobs:skeletonkingsword`.
+
 ## [v0.10.0] (2026-11-15)
 
 ### Levels API
