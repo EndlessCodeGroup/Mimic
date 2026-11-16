@@ -50,8 +50,10 @@ See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 
 ### Integrations
 
-- Added [Oraxen](https://github.com/oraxen/oraxen) items and blocks providers ([#51](https://github.com/EndlessCodeGroup/Mimic/issues/51)).
-  Block ID is the ID of the item placing the block, block states are not supported.
+- New item and block providers: [ItemsAdder](https://www.spigotmc.org/resources/73355/) ([#49](https://github.com/EndlessCodeGroup/Mimic/issues/49)),
+  [Oraxen](https://github.com/oraxen/oraxen) ([#51](https://github.com/EndlessCodeGroup/Mimic/issues/51)).
+- **Changed:** The `ia` items registry provided by ItemsAdder itself is not available via Items API, Mimic warns about it.
+  Use `itemsadder:ruby_sword` instead of `ia:itemsadder:ruby_sword`.
 
 
 ## [v0.10.0] (2026-11-15)
@@ -99,10 +101,6 @@ See [Resources](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-buk
 - Added [Jobs Reborn](https://www.spigotmc.org/resources/4216/) levels provider ([#57](https://github.com/EndlessCodeGroup/Mimic/issues/57)).
 - Added [Fabled](https://www.spigotmc.org/resources/91913/) levels and classes providers ([#48](https://github.com/EndlessCodeGroup/Mimic/issues/48)): class groups are slots and level tracks.
 - Added [ValhallaMMO](https://modrinth.com/plugin/valhallammo) levels provider ([#99](https://github.com/EndlessCodeGroup/Mimic/issues/99)).
-- Added [ItemsAdder](https://www.spigotmc.org/resources/73355/) items and blocks providers ([#49](https://github.com/EndlessCodeGroup/Mimic/issues/49)).
-  IDs are `itemsadder:ruby_sword` for the default `itemsadder` namespace and `itemsadder:my_items/ruby_sword` for others.
-  **Changed:** The `ia` items registry provided by ItemsAdder itself is not available via Items API, Mimic warns about it.
-  Use `itemsadder:ruby_sword` instead of `ia:itemsadder:ruby_sword`.
 - MMOCore and Heroes support Levels and Classes API natively: class and profession levels, class slots and subclasses.
   This fixes class IDs in MMOCore ([#78](https://github.com/EndlessCodeGroup/Mimic/issues/78)) and reporting class history as classes in Heroes ([#79](https://github.com/EndlessCodeGroup/Mimic/issues/79)).
 - Fixed MMOCore experience to reach a level in the deprecated `LevelSystem` API ([#76](https://github.com/EndlessCodeGroup/Mimic/issues/76)).
