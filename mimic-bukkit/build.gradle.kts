@@ -33,6 +33,7 @@ bukkit {
             "Jobs",
             "Fabled",
             "ValhallaMMO",
+            "ExecutableItems",
         )
     }
 
@@ -64,6 +65,7 @@ repositories {
     maven(url = "https://jitpack.io") {
         content {
             includeGroup("com.github.Zrips")
+            includeGroup("com.github.Ssomar-Developement")
         }
     }
     maven(url = "https://repo.travja.dev/releases/") {
@@ -109,6 +111,7 @@ dependencies {
     testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
     testImplementation(libs.rpgplugins.fabled) { isTransitive = false }
     testImplementation(libs.rpgplugins.codex) { isTransitive = false }
+    testImplementation(libs.rpgplugins.score) { isTransitive = false }
 }
 
 kotlin {

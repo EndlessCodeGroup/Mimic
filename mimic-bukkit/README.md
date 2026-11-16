@@ -101,6 +101,12 @@ Providers marked with _(deprecated API)_ are provided by the plugin itself via t
 **ID Format:** `customitems:[id]`\
 **Payload:** *Not supported*
 
+#### [ExecutableItems]
+
+**ID Format:** `executableitems:[id]`, ExecutableItems ID is lowercased and characters not allowed in IDs are replaced with `_`\
+**Payload:** *Not supported*\
+An item given to a player is built by ExecutableItems with this player as its owner.
+
 #### [MMOItems]
 
 **ID Format:** `mmoitems:[type]/[id]`, for example `mmoitems:sword/excalibur`\
@@ -150,6 +156,7 @@ A block belongs to the provider with the highest priority that recognizes it, va
 [rpginventory]: https://www.spigotmc.org/resources/12498/
 [itemsadder]: https://www.spigotmc.org/resources/73355/
 [craftengine]: https://modrinth.com/plugin/craftengine
+[executableitems]: https://www.spigotmc.org/resources/77578/
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
 [jobs reborn]: https://www.spigotmc.org/resources/4216/
