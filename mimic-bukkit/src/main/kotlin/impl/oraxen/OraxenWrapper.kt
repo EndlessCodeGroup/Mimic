@@ -48,6 +48,12 @@ internal class OraxenWrapper {
         return blockId(mechanic.itemID, (mechanic as? NoteBlockMechanic)?.directional)
     }
 
+    /** Returns ID of the block placed by the [item], or `null` if the item places no block. */
+    fun getBlockIdFromItem(item: ItemStack): String? {
+        val itemId = getItemId(item)?.takeIf(OraxenBlocks::isOraxenBlock) ?: return null
+        return blockId(itemId, OraxenBlocks.getNoteBlockMechanic(itemId)?.directional)
+    }
+
     fun placeBlock(block: Block, id: String): Boolean {
         OraxenBlocks.place(id, block.location)
         return OraxenBlocks.isOraxenBlock(block)

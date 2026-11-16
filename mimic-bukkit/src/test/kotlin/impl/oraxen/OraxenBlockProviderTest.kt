@@ -35,8 +35,8 @@ internal class OraxenBlockProviderTest : BukkitTestBase() {
         every { itemIds } returns blocks + "ruby_sword"
         every { blockIds } returns blocks
         every { isBlock(any()) } answers { firstArg() in blocks }
-        every { getItemId(any()) } returns null
         every { getBlockId(any()) } returns null
+        every { getBlockIdFromItem(any()) } returns null
         every { getDrops(any(), any()) } returns null
         every { createItem(any()) } answers { ItemStack(Material.PAPER) }
         every { placeBlock(any(), any()) } returns true
@@ -76,15 +76,13 @@ internal class OraxenBlockProviderTest : BukkitTestBase() {
 
     @Test
     fun `when get block id from block item - should return converted id`() {
-        every { oraxen.getItemId(any()) } returns "Ruby Ore"
+        every { oraxen.getBlockIdFromItem(any()) } returns "Ruby Ore"
 
         provider.getBlockIdFromItem(ItemStack(Material.PAPER)) shouldBe "ruby_ore"
     }
 
     @Test
     fun `when get block id from item placing no block - should return null`() {
-        every { oraxen.getItemId(any()) } returns "ruby_sword"
-
         provider.getBlockIdFromItem(ItemStack(Material.PAPER)).shouldBeNull()
     }
 

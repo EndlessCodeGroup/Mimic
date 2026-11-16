@@ -13,7 +13,7 @@ import ru.endlesscode.mimic.internal.OnceWarnings
 /**
  * Block provider for Oraxen custom blocks. Furniture is not a block.
  * ID of a block is the ID of the Oraxen item placing it, converted in the same way as in [OraxenItemProvider].
- * Variants of a directional block have the ID of their parent block.
+ * Variants of a directional block and their items have the ID of their parent block.
  * Block states are not supported in [setBlock], every state is invalid.
  *
  * Drops in [breakBlock] are rolled from the Oraxen drop configured for the tool.
@@ -41,8 +41,7 @@ internal class OraxenBlockProvider(
 
     override fun getBlockId(block: Block): String? = oraxen.getBlockId(block)?.toMimicId()
 
-    override fun getBlockIdFromItem(item: ItemStack): String? =
-        oraxen.getItemId(item)?.takeIf(oraxen::isBlock)?.toMimicId()
+    override fun getBlockIdFromItem(item: ItemStack): String? = oraxen.getBlockIdFromItem(item)?.toMimicId()
 
     override fun createBlockItem(blockId: String, amount: Int): ItemStack? {
         val oraxenId = findBlock(blockId) ?: return null
