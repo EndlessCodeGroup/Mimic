@@ -76,8 +76,6 @@ internal class IdHintsTest {
             arguments("craftengine:default/t", listOf("craftengine:default/trees/palm_sapling")),
             arguments("craftengine:default/trees/", listOf("craftengine:default/trees/palm_sapling")),
             arguments("minecraft:", listOf("minecraft:stone", "minecraft:stone_stairs")),
-            // Search over all namespaces
-            arguments("mimic:def", listOf("craftengine:default/palm_log", "craftengine:default/palm_planks", "craftengine:default/trees/palm_sapling", "craftengine:default/")),
             // Unknown namespace
             arguments("craft:palm", listOf("craftengine:palm", "minecraft:palm")),
         )

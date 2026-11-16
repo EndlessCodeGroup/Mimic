@@ -92,7 +92,6 @@ internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsStrings(prov
  * Suggests namespaced IDs like `minecraft:stone`, matching the typed input against the path after namespace.
  * - Empty input: hints from [provideEmptyInputHints].
  * - `namespace:path`: [path hints][pathHints] from the namespace, or similar namespaces if the namespace is unknown.
- *   Namespace `mimic` searches over all namespaces.
  * - `path` without namespace: [path hints][pathHints] from all namespaces and namespaces starting with `path`.
  */
 internal fun RequiredArgumentBuilder<CommandSourceStack, *>.suggestsIds(
@@ -130,7 +129,6 @@ private fun collectIdHints(input: String, ids: Collection<String>): List<Suggest
     val namespace = input.substringBefore(':')
     val path = input.substringAfter(':')
     return when (namespace) {
-        SEARCH_ALL_NAMESPACE -> pathHints(path, parsedIds)
         in namespaces -> pathHints(path, parsedIds.filter { it.namespace == namespace })
         else -> namespaces
             .filter { namespace in it }
@@ -174,10 +172,6 @@ internal fun namespaceHints(ids: List<String>, tooltip: (namespace: String) -> S
             SuggestionHint(collapseFolders("$namespace:", namespaceIds), Component.text(tooltip(namespace)))
         }
 
-/** Extends [prefix] with the folders shared by all [ids] starting with it, see [collapseFolders]. */
-internal fun collapseFolders(prefix: String, ids: Collection<String>): String =
-    collapseFolders(prefix, ids.map(::ParsedId))
-
 /**
  * Extends [prefix] with the folders shared by all IDs starting with it,
  * so `craftengine:` becomes `craftengine:default/` if all IDs are inside `default/`.
@@ -208,9 +202,6 @@ private class ParsedId(val id: String) {
         return if (folder.startsWith(prefix)) id.dropLast(path.length) + folder else null
     }
 }
-
-/** Namespace used by Mimic registries to search IDs over all registries. */
-private const val SEARCH_ALL_NAMESPACE = "mimic"
 
 internal fun CommandContext<*>.hasArgument(name: String): Boolean = nodes.any { it.node.name == name }
 
@@ -243,26 +234,6 @@ internal fun commandError(message: String): CommandSyntaxException =
     SimpleCommandExceptionType(LiteralMessage(message)).create()
 
 /**
- * Resource location like `minecraft:stone`, shown to the client as a key.
- * Unlike [ArgumentTypes.key], keeps an ID without namespace as is instead of adding the `minecraft` namespace.
- */
-internal object ResourceLocationArgumentType : CustomArgumentType<String, Key> {
-
-    private val expectedId = SimpleCommandExceptionType(LiteralMessage("Expected ID"))
-
-    override fun parse(reader: StringReader): String {
-        val start = reader.cursor
-        while (reader.canRead() && reader.peek().isAllowedInResourceLocation()) reader.skip()
-        if (reader.cursor == start) throw expectedId.createWithContext(reader)
-        return reader.string.substring(start, reader.cursor)
-    }
-
-    override fun getNativeType(): ArgumentType<Key> = ArgumentTypes.key()
-
-    private fun Char.isAllowedInResourceLocation() = this in 'a'..'z' || this in '0'..'9' || this in "_-.:/"
-}
-
-/**
  * ID with namespace like `minecraft:level`, shown to the client as a key.
  * Unlike [ArgumentTypes.key], requires the namespace instead of adding `minecraft`.
  * The [valueName] and the [example] are used in the error message: `track` and `minecraft:level`.
@@ -275,7 +246,8 @@ internal class KeyArgumentType(valueName: String, example: String) : CustomArgum
 
     override fun parse(reader: StringReader): Key {
         val start = reader.cursor
-        val id = ResourceLocationArgumentType.parse(reader)
+        while (reader.canRead() && reader.peek().isAllowedInKey()) reader.skip()
+        val id = reader.string.substring(start, reader.cursor)
         if (':' !in id || !Key.parseable(id)) {
             reader.cursor = start
             throw invalidId.createWithContext(reader, id)
@@ -284,4 +256,6 @@ internal class KeyArgumentType(valueName: String, example: String) : CustomArgum
     }
 
     override fun getNativeType(): ArgumentType<Key> = ArgumentTypes.key()
+
+    private fun Char.isAllowedInKey() = this in 'a'..'z' || this in '0'..'9' || this in "_-.:/"
 }
