@@ -82,6 +82,21 @@ For major changes, please open an issue first to discuss what you would like to 
 
 Please make sure to update tests as appropriate.
 
+## AI usage
+
+Mimic was started in 2017 and was written by hand for most of its history.
+Since late 2026 it is developed with the help of AI. It is the only way I can keep this project going in the time I have.
+
+**Public API is designed by me.** AI doesn't decide what the API looks like.
+
+**AI helps with:**
+
+- Research: how RPG and item plugins expose their data and how other plugins consume it.
+- Implementation behind the API, and integrations with other plugins.
+- Review, refactoring, tests, and splitting changes into reviewable commits.
+
+I review the code before it is merged.
+
 [codacy]: https://www.codacy.com/app/EndlessCode-Group/MimicAPI?utm_source%3Dgithub.com%26amp;utm_medium%3Dreferral%26amp;utm_content%3DEndlessCodeGroup/MimicAPI%26amp;utm_campaign%3DBadge_Grade
 [mavenCentral]: https://search.maven.org/search?q=g:ru.endlesscode.mimic
 [ci]: https://github.com/EndlessCodeGroup/Mimic/actions/
