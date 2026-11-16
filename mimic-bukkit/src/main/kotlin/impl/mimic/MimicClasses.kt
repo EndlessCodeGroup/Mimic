@@ -31,7 +31,7 @@ internal class MimicClasses(
     preferredProviderId: () -> String,
 ) : Classes {
 
-    val providers = NamespacedProviders(classProviders, "primary class", preferredProviderId)
+    val providers = PrimaryNamespacedProviders(classProviders, "primary class", preferredProviderId)
 
     override fun getAllSlots(): List<ClassSlot> = providers.enabled.flatMap { it.getAllSlots() }
 

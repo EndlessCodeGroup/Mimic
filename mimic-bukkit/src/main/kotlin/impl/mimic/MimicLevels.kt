@@ -29,7 +29,7 @@ internal class MimicLevels(
     preferredProviderId: () -> String,
 ) : Levels {
 
-    val providers = NamespacedProviders(levelProviders, "primary track", preferredProviderId)
+    val providers = PrimaryNamespacedProviders(levelProviders, "primary track", preferredProviderId)
 
     override fun getAllTracks(): List<LevelTrack> =
         providers.enabled.flatMap { provider -> provider.getAllTracks() }

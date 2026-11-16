@@ -32,7 +32,7 @@ internal class MimicResources(
     preferredProviderId: () -> String,
 ) : Resources {
 
-    val providers = NamespacedProviders(resourceProviders, "primary resource", preferredProviderId)
+    val providers = PrimaryNamespacedProviders(resourceProviders, "primary resource", preferredProviderId)
 
     override fun getAllResources(): List<Resource> =
         providers.enabled.flatMap { provider ->
