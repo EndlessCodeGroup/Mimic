@@ -23,6 +23,7 @@ import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemProvider
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsItemProvider
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
+import ru.endlesscode.mimic.impl.ecoitems.EcoItemsItemProvider
 import ru.endlesscode.mimic.impl.executableitems.ExecutableItemsItemProvider
 import ru.endlesscode.mimic.impl.fabled.FabledClassProvider
 import ru.endlesscode.mimic.impl.fabled.FabledLevelProvider
@@ -150,6 +151,10 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("ExecutableItems", "com.ssomar.score.api.executableitems.ExecutableItemsAPI") {
             hookItems(::ExecutableItemsItemProvider)
+        }
+
+        pluginHooks("EcoItems", "com.willfp.ecoitems.items.EcoItems") {
+            hookItems(::EcoItemsItemProvider)
         }
 
         pluginHooks("AuraSkills", "dev.aurelium.auraskills.api.AuraSkillsApi") {

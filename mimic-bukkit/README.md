@@ -88,6 +88,7 @@ An item belongs to the provider with the highest priority that recognizes it, va
 | [Minecraft][MinecraftItemProvider] | `minecraft:[id]`               | Item components¹ |                                                                 |
 | [CraftEngine]                      | `craftengine:[namespace]/[id]` | -                |                                                                 |
 | [CustomItems]                      | `customitems:[id]`             | -                |                                                                 |
+| [EcoItems]                         | `ecoitems:[id]`                | -                |                                                                 |
 | [ExecutableItems]                  | `executableitems:[id]`         | -                | Converted ID², owned by the player                              |
 | [ItemsAdder]                       | `itemsadder:[namespace]/[id]`  | -                | Converted ID², `itemsadder:[id]` for the `itemsadder` namespace |
 | [MMOItems]                         | `mmoitems:[type]/[id]`         | -                | Built by MMOItems for the player                                |
@@ -138,6 +139,7 @@ Content of a storage block is dropped on the ground when the block is broken. Fu
 [nexo]: https://nexomc.com/
 [mythicmobs]: https://modrinth.com/plugin/mythicmobs
 [executableitems]: https://www.spigotmc.org/resources/77578/
+[ecoitems]: https://github.com/Auxilor/EcoItems
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
 [jobs reborn]: https://www.spigotmc.org/resources/4216/

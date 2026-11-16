@@ -38,6 +38,7 @@ bukkit {
             "Nexo",
             "MythicMobs",
             "ExecutableItems",
+            "EcoItems",
         )
     }
 
@@ -97,6 +98,11 @@ repositories {
             includeModule("io.lumine", "Mythic-Dist")
         }
     }
+    maven(url = "https://repo.auxilor.io/repository/maven-public/") {
+        content {
+            includeGroup("com.willfp")
+        }
+    }
     aikar()
     codemc()
     // Uncomment if you want to get Heroes from maven repo
@@ -114,6 +120,7 @@ dependencies {
     implementation(libs.serialization.hocon)
 
     compileOnly(libs.bundles.rpgplugins) { isTransitive = false }
+    compileOnly(variantOf(libs.rpgplugins.libreforge) { classifier("shadow") }) { isTransitive = false }
 
     // From libs/ directory
     compileOnly(":CustomItemsAPI")

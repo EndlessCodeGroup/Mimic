@@ -26,6 +26,9 @@ itemsadder = "4.0.17"
 nexo = "1.30.2"
 mythicmobs = "5.14.0"
 score = "5.25.3.9"
+ecoitems = "2026.46"
+eco = "2026.46"
+libreforge = "2026.46"
 
 junit = "6.1.3"
 kotest = "6.2.6"
@@ -66,6 +69,10 @@ rpgplugins-itemsadder = { module = "beer.devs:itemsadder-api", version.ref = "it
 rpgplugins-nexo = { module = "com.nexomc:nexo", version.ref = "nexo" }
 rpgplugins-mythicmobs = { module = "io.lumine:Mythic-Dist", version.ref = "mythicmobs" }
 rpgplugins-score = { module = "com.github.Ssomar-Developement:SCore", version.ref = "score" }
+rpgplugins-ecoitems = { module = "com.willfp:EcoItems", version.ref = "ecoitems" }
+rpgplugins-eco = { module = "com.willfp:eco", version.ref = "eco" }
+rpgplugins-libreforge = { module = "com.willfp:libreforge", version.ref = "libreforge" }
+rpgplugins-libreforge-loader = { module = "com.willfp:libreforge-loader", version.ref = "libreforge" }
 
 # Test dependencies
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -107,4 +114,7 @@ rpgplugins = [
     "rpgplugins-nexo",
     "rpgplugins-mythicmobs",
     "rpgplugins-score",
+    "rpgplugins-ecoitems",
+    "rpgplugins-eco",
+    "rpgplugins-libreforge-loader",
 ]
