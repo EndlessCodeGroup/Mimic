@@ -1,8 +1,6 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
-
 package ru.endlesscode.mimic.config
 
 import org.bukkit.configuration.Configuration
@@ -10,7 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockProvider
-import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemProvider
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.applyDefaults
 import ru.endlesscode.mimic.internal.setComments
@@ -27,7 +25,7 @@ internal class MimicConfig(
     var classProvider: String by configuration.property(CLASS_PROVIDER)
     var resourceProvider: String by configuration.property(RESOURCE_PROVIDER)
     var inventoryProvider: String by configuration.property(INVENTORY_PROVIDER)
-    var disabledItemsRegistries: Set<String> by configuration.property(DISABLED_ITEMS_REGISTRIES)
+    var disabledItemProviders: Set<String> by configuration.property(DISABLED_ITEM_PROVIDERS)
     var disabledBlockProviders: Set<String> by configuration.property(DISABLED_BLOCK_PROVIDERS)
 
     constructor(plugin: Plugin) : this(plugin.toString(), File(plugin.dataFolder, "config.yml"))
@@ -54,6 +52,7 @@ internal class MimicConfig(
             configuration.load(file)
             migrateOption(LEGACY_LEVEL_SYSTEM_PATH, LEVEL_PROVIDER)
             migrateOption(LEGACY_CLASS_SYSTEM_PATH, CLASS_PROVIDER)
+            migrateOption(LEGACY_DISABLED_ITEMS_REGISTRIES_PATH, DISABLED_ITEM_PROVIDERS)
             migrateOption(LEGACY_DISABLED_BLOCK_REGISTRIES_PATH, DISABLED_BLOCK_PROVIDERS)
             validateConfigValues()
         } catch (e: Throwable) {
@@ -71,12 +70,11 @@ internal class MimicConfig(
     }
 
     private fun validateConfigValues() {
-        val configuredDisabledItemsRegistries = disabledItemsRegistries
-        disabledItemsRegistries = configuredDisabledItemsRegistries - MinecraftItemsRegistry.ID
-
-        val notDisabledRegistries = configuredDisabledItemsRegistries - disabledItemsRegistries
-        if (notDisabledRegistries.isNotEmpty()) {
-            Log.w("Config: Items registries $notDisabledRegistries can not be disabled. It will be removed from config.")
+        val configuredDisabledItemProviders = disabledItemProviders
+        disabledItemProviders = configuredDisabledItemProviders - MinecraftItemProvider.ID
+        val notDisabledItemProviders = configuredDisabledItemProviders - disabledItemProviders
+        if (notDisabledItemProviders.isNotEmpty()) {
+            Log.w("Config: Item providers $notDisabledItemProviders can not be disabled. It will be removed from config.")
         }
 
         val configuredDisabledBlockProviders = disabledBlockProviders
@@ -121,6 +119,7 @@ internal class MimicConfig(
 
         private const val LEGACY_LEVEL_SYSTEM_PATH = "level-system"
         private const val LEGACY_CLASS_SYSTEM_PATH = "class-system"
+        private const val LEGACY_DISABLED_ITEMS_REGISTRIES_PATH = "disabled-items-registries"
         private const val LEGACY_DISABLED_BLOCK_REGISTRIES_PATH = "disabled-block-registries"
 
         val LEVEL_PROVIDER = StringConfigProperty(
@@ -161,13 +160,13 @@ internal class MimicConfig(
                 EMPTY_VALUE_MESSAGE,
             ),
         )
-        val DISABLED_ITEMS_REGISTRIES = StringSetConfigProperty(
-            path = "disabled-items-registries",
-            title = "ItemsRegistry API",
+        val DISABLED_ITEM_PROVIDERS = StringSetConfigProperty(
+            path = "disabled-item-providers",
+            title = "Items API",
             comments = arrayOf(
-                "List here disabled items registry implementations.",
-                "You can't disable 'minecraft' items registry.",
-                "By default, all implementations are enabled.",
+                "List here plugins whose items should not be available via Mimic.",
+                "You can't disable 'minecraft' item provider.",
+                "By default, all item providers are enabled.",
             ),
         )
 
@@ -186,7 +185,7 @@ internal class MimicConfig(
             CLASS_PROVIDER,
             RESOURCE_PROVIDER,
             INVENTORY_PROVIDER,
-            DISABLED_ITEMS_REGISTRIES,
+            DISABLED_ITEM_PROVIDERS,
             DISABLED_BLOCK_PROVIDERS,
         )
     }

@@ -37,6 +37,21 @@ internal class MimicConfigTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when load disabled item providers - should remove default providers`() {
+        file.writeText("disabled-item-providers: [custom, minecraft]\n")
+
+        loadConfig().disabledItemProviders shouldBe setOf("custom")
+    }
+
+    @Test
+    fun `when load legacy disabled items registries option - should move it to disabled item providers`() {
+        file.writeText("disabled-items-registries: [custom, minecraft]\n")
+
+        loadConfig().disabledItemProviders shouldBe setOf("custom")
+        file.readText() shouldNotContain "disabled-items-registries"
+    }
+
+    @Test
     fun `when load legacy level system option - should move it to level provider`() {
         file.writeText("level-system: custom\n")
 

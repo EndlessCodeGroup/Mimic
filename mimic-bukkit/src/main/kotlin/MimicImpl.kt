@@ -73,7 +73,7 @@ internal class MimicImpl(
     val itemProviders = registry<ItemProvider>(
         "ItemProvider",
         defaultId = MinecraftItemProvider.ID,
-        disabledIds = { config.disabledItemsRegistries },
+        disabledIds = { config.disabledItemProviders },
     )
     private val levelSystems = registry<BukkitLevelSystem.Provider>(
         "LevelSystem",

@@ -43,7 +43,7 @@ internal class MimicImplTest : BukkitTestBase() {
     private val config: MimicConfig = mockk {
         every { levelProvider } answers { preferredLevelProvider }
         every { classProvider } answers { preferredClassProvider }
-        every { disabledItemsRegistries } returns emptySet()
+        every { disabledItemProviders } returns emptySet()
     }
 
     // SUT

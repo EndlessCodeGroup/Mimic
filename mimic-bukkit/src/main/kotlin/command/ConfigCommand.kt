@@ -1,8 +1,6 @@
 // Copyright (c) 2023 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
-
 package ru.endlesscode.mimic.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
@@ -12,10 +10,11 @@ import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.mimic.getBlockProviderIds
 import ru.endlesscode.mimic.impl.mimic.getClassProviderIds
+import ru.endlesscode.mimic.impl.mimic.getItemProviderIds
 import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
 import ru.endlesscode.mimic.impl.mimic.getResourceProviderIds
 import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockProvider
-import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftItemProvider
 
 /**
  * Commands to see and change Mimic config.
@@ -72,22 +71,22 @@ internal fun CommandBuilder.configSubcommand(
         }
     }
 
-    // Enable/Disable an item registry in Mimic
-    literal("disabled-items-registries") {
+    // Enable/Disable an item provider in Mimic
+    literal("disabled-item-providers") {
         literal(ACTION_ADD) {
             stringSetArgument(
-                ITEMS_REGISTRY,
-                "items registry",
-                { mimic.getAllItemsRegistries().keys - MinecraftItemsRegistry.ID },
-                permanentOptions = setOf(MinecraftItemsRegistry.ID),
-            ) { sender, itemsRegistry ->
-                config.disabledItemsRegistries += itemsRegistry
+                ITEM_PROVIDER,
+                "item provider",
+                { mimic.getItemProviderIds() - MinecraftItemProvider.ID },
+                permanentOptions = setOf(MinecraftItemProvider.ID),
+            ) { sender, itemProvider ->
+                config.disabledItemProviders += itemProvider
                 showConfig(sender)
             }
         }
         literal(ACTION_REMOVE) {
-            stringSetArgument(ITEMS_REGISTRY, "disabled items registry", { config.disabledItemsRegistries }) { sender, itemsRegistry ->
-                config.disabledItemsRegistries -= itemsRegistry
+            stringSetArgument(ITEM_PROVIDER, "disabled item provider", { config.disabledItemProviders }) { sender, itemProvider ->
+                config.disabledItemProviders -= itemProvider
                 showConfig(sender)
             }
         }
@@ -144,7 +143,7 @@ private fun CommandBuilder.stringSetArgument(
 }
 
 private const val VALUE = "value"
-private const val ITEMS_REGISTRY = "items-registry"
+private const val ITEM_PROVIDER = "item-provider"
 private const val BLOCK_PROVIDER = "block-provider"
 private const val ACTION_ADD = "add"
 private const val ACTION_REMOVE = "remove"
