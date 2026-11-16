@@ -26,7 +26,7 @@ internal fun Plugin.initMetrics(mimic: MimicImpl) {
     metrics.addCustomChart(DrilldownPie("class_providers") { registryChartData(mimic.classProviders) })
     metrics.addCustomChart(DrilldownPie("resource_providers") { registryChartData(mimic.resourceProviders) })
     metrics.addCustomChart(DrilldownPie("items_registries") { registryChartData(mimic.itemsRegistries) })
-    metrics.addCustomChart(DrilldownPie("block_registries") { registryChartData(mimic.blockRegistries) })
+    metrics.addCustomChart(DrilldownPie("block_providers") { registryChartData(mimic.blockProviders) })
     metrics.addCustomChart(SimplePie("inventory_provider") { mimic.getPlayerInventoryProvider().id })
     metrics.addCustomChart(DrilldownPie("dependent_plugins") { dependentPluginsChartData() })
 }

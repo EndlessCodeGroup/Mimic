@@ -8,10 +8,11 @@ import org.bukkit.command.CommandSender
 import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
+import ru.endlesscode.mimic.impl.mimic.getBlockProviderIds
 import ru.endlesscode.mimic.impl.mimic.getClassProviderIds
 import ru.endlesscode.mimic.impl.mimic.getLevelProviderIds
 import ru.endlesscode.mimic.impl.mimic.getResourceProviderIds
-import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockProvider
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 
 /**
@@ -90,23 +91,22 @@ internal fun CommandBuilder.configSubcommand(
         }
     }
 
-    // Enable/Disable a block registry in Mimic
-    @OptIn(ExperimentalMimicApi::class)
-    literal("disabled-block-registries") {
+    // Enable/Disable a block provider in Mimic
+    literal("disabled-block-providers") {
         literal(ACTION_ADD) {
             stringSetArgument(
-                BLOCK_REGISTRY,
-                "block registry",
-                { mimic.getAllBlockRegistries().keys - MinecraftBlockRegistry.ID },
-                permanentOptions = setOf(MinecraftBlockRegistry.ID),
-            ) { sender, blockRegistry ->
-                config.disabledBlockRegistries += blockRegistry
+                BLOCK_PROVIDER,
+                "block provider",
+                { mimic.getBlockProviderIds() - MinecraftBlockProvider.ID },
+                permanentOptions = setOf(MinecraftBlockProvider.ID),
+            ) { sender, blockProvider ->
+                config.disabledBlockProviders += blockProvider
                 showConfig(sender)
             }
         }
         literal(ACTION_REMOVE) {
-            stringSetArgument(BLOCK_REGISTRY, "disabled block registry", { config.disabledBlockRegistries }) { sender, blockRegistry ->
-                config.disabledBlockRegistries -= blockRegistry
+            stringSetArgument(BLOCK_PROVIDER, "disabled block provider", { config.disabledBlockProviders }) { sender, blockProvider ->
+                config.disabledBlockProviders -= blockProvider
                 showConfig(sender)
             }
         }
@@ -143,7 +143,7 @@ private fun CommandBuilder.stringSetArgument(
 
 private const val VALUE = "value"
 private const val ITEMS_REGISTRY = "items-registry"
-private const val BLOCK_REGISTRY = "block-registry"
+private const val BLOCK_PROVIDER = "block-provider"
 private const val ACTION_ADD = "add"
 private const val ACTION_REMOVE = "remove"
 internal const val ACTION_RESET = "reset"

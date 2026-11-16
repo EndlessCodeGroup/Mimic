@@ -3,28 +3,27 @@
 
 package ru.endlesscode.mimic.blocks
 
-import ru.endlesscode.mimic.ExperimentalMimicApi
+import org.bukkit.inventory.ItemStack
 
 /**
- * Consumes items dropped by a block broken via [BlockRegistry.breakBlock].
- * @since 0.9.0
+ * Consumes items dropped by a block broken via [Blocks.breakBlock].
+ * @since 0.11.0
  */
-@ExperimentalMimicApi
-public fun interface DropsConsumer<ItemStackT : Any> {
+public fun interface DropsConsumer {
 
     /**
      * Consumes the [drops] and returns the items to drop on the ground near the broken block.
      * It should not throw exceptions, because the block may already be removed when it is called.
      */
-    public fun consume(drops: Collection<ItemStackT>): Collection<ItemStackT>
+    public fun consume(drops: Collection<ItemStack>): Collection<ItemStack>
 
     public companion object {
         /** Drops all items on the ground. */
         @JvmStatic
-        public fun <ItemStackT : Any> drop(): DropsConsumer<ItemStackT> = DropsConsumer { it }
+        public fun drop(): DropsConsumer = DropsConsumer { it }
 
         /** Drops nothing, the items disappear. */
         @JvmStatic
-        public fun <ItemStackT : Any> disappear(): DropsConsumer<ItemStackT> = DropsConsumer { emptyList() }
+        public fun disappear(): DropsConsumer = DropsConsumer { emptyList() }
     }
 }

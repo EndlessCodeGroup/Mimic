@@ -10,7 +10,7 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.Lowest
 import org.bukkit.plugin.ServicePriority.Normal
 import org.bukkit.plugin.java.JavaPlugin
-import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
+import ru.endlesscode.mimic.blocks.BlockProvider
 import ru.endlesscode.mimic.bukkit.register
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.ClassProvider
@@ -18,7 +18,7 @@ import ru.endlesscode.mimic.command.registerCommand
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.auraskills.AuraSkillsLevelProvider
 import ru.endlesscode.mimic.impl.auraskills.AuraSkillsResourceProvider
-import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockRegistry
+import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockProvider
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.fabled.FabledClassProvider
@@ -87,7 +87,7 @@ public class MimicPlugin : JavaPlugin() {
         hookResources(::MinecraftResourceProvider, priority = Lowest)
         hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
-        hookBlocks(::MinecraftBlockRegistry, priority = Lowest)
+        hookBlocks(::MinecraftBlockProvider, priority = Lowest)
 
         pluginHooks("MMOCore", "net.Indyuce.mmocore.MMOCore") {
             hookLevels(MmoCoreLevelSystem::Provider)
@@ -115,7 +115,7 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("CraftEngine", "net.momirealms.craftengine.bukkit.api.CraftEngineBlocks") {
             hookItems(::CraftEngineItemsRegistry)
-            hookBlocks(::CraftEngineBlockRegistry)
+            hookBlocks(::CraftEngineBlockProvider)
         }
 
         pluginHooks("AuraSkills", "dev.aurelium.auraskills.api.AuraSkillsApi") {
@@ -204,12 +204,11 @@ public class MimicPlugin : JavaPlugin() {
         mimic.registerItemsRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
-    @ExperimentalMimicApi
     private fun hookBlocks(
-        constructor: () -> BukkitBlockRegistry,
+        constructor: () -> BlockProvider,
         priority: ServicePriority = Normal,
     ) {
-        mimic.registerBlockRegistry(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+        mimic.registerBlockProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
     //</editor-fold>
 }

@@ -9,70 +9,69 @@ import net.momirealms.craftengine.core.item.behavior.BlockItem
 import net.momirealms.craftengine.core.util.Key
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
-import ru.endlesscode.mimic.ExperimentalMimicApi
-import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
+import ru.endlesscode.mimic.blocks.BlockProvider
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.internal.Log
 
 /**
- * Block registry for CraftEngine custom blocks.
+ * Block provider for CraftEngine custom blocks.
  * CraftEngine namespace becomes the first path segment of block ID: `default:palm_log` -> `default/palm_log`.
- * Supports block state properties as a payload in [setBlock], for example `[facing=north]`.
+ * Supports block state properties in [setBlock], for example `[facing=north]`.
  *
  * Items held by CraftEngine block entities, like storage contents or an item in a frame,
  * are dropped on the ground by CraftEngine when the block is removed, so [breakBlock] doesn't pass them to the drops consumer.
  * CraftEngine has no API to take these items before removal.
  */
-@ExperimentalMimicApi
-public class CraftEngineBlockRegistry private constructor(
+internal class CraftEngineBlockProvider private constructor(
     private val craftEngine: CraftEngineWrapper,
-) : BukkitBlockRegistry {
+) : BlockProvider {
 
-    internal constructor() : this(CraftEngineWrapper())
+    constructor() : this(CraftEngineWrapper())
 
     override val id: String = ID
     override val isEnabled: Boolean get() = craftEngine.isEnabled
 
-    override val knownIds: Collection<String>
-        get() = craftEngine.loadedBlockIds.map(Key::toMimicId)
+    /** A view of the loaded blocks, so checking that a block exists doesn't convert all IDs. */
+    override val allBlocks: Set<String> = object : AbstractSet<String>() {
+        override val size: Int get() = craftEngine.loadedBlockIds.size
 
-    override fun isBlockExists(blockId: String): Boolean = findBlock(blockId) != null
+        override fun iterator(): Iterator<String> =
+            craftEngine.loadedBlockIds.asSequence().map(Key::toMimicId).iterator()
+
+        override fun contains(element: String): Boolean = craftEngineKey(element) in craftEngine.loadedBlockIds
+    }
 
     override fun getBlockId(block: Block): String? {
         val state = getCustomBlockState(block) ?: return null
         return state.owner().value()?.id()?.toMimicId()
     }
 
-    override fun getBlockIdFromItem(blockItem: ItemStack): String? {
-        val item = craftEngine.getCustomItem(blockItem) ?: return null
-        return item.behavior().getFirst(BlockItem::class.java)?.block()?.toMimicId()
+    override fun getBlockIdFromItem(item: ItemStack): String? {
+        val customItem = craftEngine.getCustomItem(item) ?: return null
+        return customItem.behavior().getFirst(BlockItem::class.java)?.block()?.toMimicId()
     }
 
-    override fun getBlockItem(blockId: String, amount: Int): ItemStack? {
+    override fun createBlockItem(blockId: String, amount: Int): ItemStack? {
         val itemId = findBlock(blockId)?.defaultState()?.settings()?.itemId() ?: return null
         return craftEngine.createCustomItem(itemId, amount)
     }
 
-    override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
-        if (!block.isEmpty) return false
+    override fun setBlock(block: Block, blockId: String, state: String?): Boolean {
         val definition = findBlock(blockId) ?: return false
 
-        val state = when (payload) {
-            // Payload not starting with '[' could continue the ID, so a state of another block is rejected
-            is String -> craftEngine.parseBlockState(definition.id().asString() + payload)
-                ?.takeIf { it.owner().value() == definition }
-                .also { if (it == null) Log.w("[$TAG] Ignoring invalid payload for block $blockId: $payload") }
+        if (state == null) return craftEngine.placeBlock(block.location, definition.defaultState())
 
-            else -> {
-                if (payload != null) Log.w("[$TAG] Ignoring unsupported payload for block $blockId:\n$payload")
-                null
-            }
+        // State not starting with '[' could continue the ID, so a state of another block is rejected
+        val blockState = craftEngine.parseBlockState(definition.id().asString() + state)
+            ?.takeIf { it.owner().value() == definition }
+        if (blockState == null) {
+            Log.w("[$TAG] Invalid state for block $blockId: $state")
+            return false
         }
-
-        return craftEngine.placeBlock(block.location, state ?: definition.defaultState())
+        return craftEngine.placeBlock(block.location, blockState)
     }
 
-    override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>): Boolean {
+    override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer): Boolean {
         val state = getCustomBlockState(block) ?: return false
 
         // CraftEngine applies its loot table to vanilla drops, but checks the tool only if the block is broken by an entity
@@ -91,8 +90,8 @@ public class CraftEngineBlockRegistry private constructor(
 
     private fun findBlock(blockId: String): BlockDefinition? = craftEngineKey(blockId)?.let(craftEngine::getBlock)
 
-    public companion object {
-        public const val ID: String = "craftengine"
-        private const val TAG = "CraftEngineBlockRegistry"
+    companion object {
+        const val ID: String = "craftengine"
+        private const val TAG = "CraftEngineBlockProvider"
     }
 }

@@ -29,7 +29,7 @@ internal class CraftEngineWrapper {
     /** Custom items, excluding vanilla items modified by CraftEngine. */
     val loadedCustomItems: List<ItemDefinition>
         get() = CraftEngineItems.loadedItems().values.filterNot { it.isVanillaItem }
-    val loadedBlockIds: Collection<Key> get() = CraftEngineBlocks.loadedBlocks().keys
+    val loadedBlockIds: Set<Key> get() = CraftEngineBlocks.loadedBlocks().keys
 
     fun getCustomItem(id: Key): BukkitItemDefinition? = CraftEngineItems.byId(id)?.takeUnless { it.isVanillaItem }
     fun getCustomItem(item: ItemStack): BukkitItemDefinition? =

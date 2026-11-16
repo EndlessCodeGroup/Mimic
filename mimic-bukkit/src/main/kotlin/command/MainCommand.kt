@@ -7,7 +7,6 @@ import io.papermc.paper.command.brigadier.Commands
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
-import ru.endlesscode.mimic.ExperimentalMimicApi
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.internal.text
@@ -40,8 +39,7 @@ private fun buildCommand(
     resourcesSubcommand(mimic)
     inventorySubcommand(mimic)
     itemsSubcommand(mimic.itemsRegistry)
-    @OptIn(ExperimentalMimicApi::class)
-    blocksSubcommand(mimic.blockRegistry)
+    blocksSubcommand(mimic.blocks)
 }.build()
 
 private fun infoExecutor(pluginFullName: String): CommandAction<CommandSender> = { sender, _ ->
@@ -54,7 +52,7 @@ private fun infoExecutor(pluginFullName: String): CommandAction<CommandSender> =
             executedCommand("resources", "/$COMMAND_NAME resources", "Player resources: mana, stamina and similar"),
             executedCommand("inventory", "/$COMMAND_NAME inventory", "Player inventory provider"),
             executedCommand("items", "/$COMMAND_NAME items", "Items registries"),
-            executedCommand("blocks", "/$COMMAND_NAME blocks", "Block registries"),
+            executedCommand("blocks", "/$COMMAND_NAME blocks", "Vanilla and custom blocks"),
         )
     }
     sender.sendMessage(message)

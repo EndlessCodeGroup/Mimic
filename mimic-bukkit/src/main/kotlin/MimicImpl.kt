@@ -10,11 +10,12 @@ import org.bukkit.event.Listener
 import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
-import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
-import ru.endlesscode.mimic.blocks.WrappedBlockRegistry
+import ru.endlesscode.mimic.blocks.BlockProvider
+import ru.endlesscode.mimic.blocks.Blocks
+import ru.endlesscode.mimic.blocks.WrappedBlockProvider
 import ru.endlesscode.mimic.classes.*
 import ru.endlesscode.mimic.config.MimicConfig
-import ru.endlesscode.mimic.impl.mimic.MimicBlockRegistry
+import ru.endlesscode.mimic.impl.mimic.MimicBlocks
 import ru.endlesscode.mimic.impl.mimic.MimicClasses
 import ru.endlesscode.mimic.impl.mimic.MimicItemsRegistry
 import ru.endlesscode.mimic.impl.mimic.MimicLevels
@@ -43,10 +44,10 @@ internal class MimicImpl(
     private val config: MimicConfig,
 ) : Mimic, Listener {
 
-    val blockRegistries = registry<BukkitBlockRegistry>(
-        "BlockRegistry",
-        defaultId = MinecraftBlockRegistry.ID,
-        disabledIds = { config.disabledBlockRegistries },
+    val blockProviders = registry<BlockProvider>(
+        "BlockProvider",
+        defaultId = MinecraftBlockProvider.ID,
+        disabledIds = { config.disabledBlockProviders },
     )
     private val classSystems = registry<BukkitClassSystem.Provider>(
         "ClassSystem",
@@ -81,7 +82,7 @@ internal class MimicImpl(
 
     private val registries =
         listOf(
-            blockRegistries,
+            blockProviders,
             classSystems,
             classProviders,
             playerInventories,
@@ -96,24 +97,6 @@ internal class MimicImpl(
         defaultId: String,
         disabledIds: () -> Set<String> = { emptySet() },
     ): ServiceRegistry<T> = ServiceRegistry<T>(apiName, mimicPlugin, defaultId, disabledIds)
-
-    // region Block Registry
-    @ExperimentalMimicApi
-    override fun registerBlockRegistry(
-        registry: BukkitBlockRegistry,
-        apiLevel: Int,
-        plugin: Plugin,
-        priority: ServicePriority
-    ): BukkitBlockRegistry? = blockRegistries.tryRegister(apiLevel, plugin, priority) {
-        WrappedBlockRegistry(registry, plugin)
-    }
-
-    @ExperimentalMimicApi
-    override val blockRegistry: BukkitBlockRegistry = MimicBlockRegistry(blockRegistries)
-
-    @ExperimentalMimicApi
-    override fun getAllBlockRegistries(): Map<String, BukkitBlockRegistry> = blockRegistries.loadAll()
-    // endregion
 
     // region Class System
     override fun registerClassSystem(
@@ -245,6 +228,19 @@ internal class MimicImpl(
 
     override val resources: Resources =
         MimicResources(resourceProviders, preferredProviderId = { config.resourceProvider })
+    // endregion
+
+    // region Blocks
+    override fun registerBlockProvider(
+        provider: BlockProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): BlockProvider? = blockProviders.tryRegister(apiLevel, plugin, priority) {
+        WrappedBlockProvider(provider, plugin)
+    }
+
+    override val blocks: Blocks = MimicBlocks(blockProviders)
     // endregion
 
     // region Bridges from deprecated APIs

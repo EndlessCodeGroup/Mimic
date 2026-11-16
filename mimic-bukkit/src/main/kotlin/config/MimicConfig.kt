@@ -7,8 +7,7 @@ import org.bukkit.configuration.Configuration
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
-import ru.endlesscode.mimic.ExperimentalMimicApi
-import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockRegistry
+import ru.endlesscode.mimic.impl.vanilla.MinecraftBlockProvider
 import ru.endlesscode.mimic.impl.vanilla.MinecraftItemsRegistry
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.internal.applyDefaults
@@ -27,7 +26,7 @@ internal class MimicConfig(
     var resourceProvider: String by configuration.property(RESOURCE_PROVIDER)
     var inventoryProvider: String by configuration.property(INVENTORY_PROVIDER)
     var disabledItemsRegistries: Set<String> by configuration.property(DISABLED_ITEMS_REGISTRIES)
-    var disabledBlockRegistries: Set<String> by configuration.property(DISABLED_BLOCK_REGISTRIES)
+    var disabledBlockProviders: Set<String> by configuration.property(DISABLED_BLOCK_PROVIDERS)
 
     constructor(plugin: Plugin) : this(plugin.toString(), File(plugin.dataFolder, "config.yml"))
 
@@ -53,6 +52,7 @@ internal class MimicConfig(
             configuration.load(file)
             migrateOption(LEGACY_LEVEL_SYSTEM_PATH, LEVEL_PROVIDER)
             migrateOption(LEGACY_CLASS_SYSTEM_PATH, CLASS_PROVIDER)
+            migrateOption(LEGACY_DISABLED_BLOCK_REGISTRIES_PATH, DISABLED_BLOCK_PROVIDERS)
             validateConfigValues()
         } catch (e: Throwable) {
             Log.w(e, "Failed to load config.")
@@ -62,7 +62,7 @@ internal class MimicConfig(
 
     /** Moves the value of the option with [legacyPath] to the [property], if the latter isn't set. */
     private fun migrateOption(legacyPath: String, property: ConfigProperty<*>) {
-        val value = configuration.getString(legacyPath) ?: return
+        val value = configuration.get(legacyPath) ?: return
         if (!configuration.isSet(property.path)) configuration.set(property.path, value)
         configuration.set(legacyPath, null)
         Log.i("Config: Option '$legacyPath' is renamed to '${property.path}'.")
@@ -77,12 +77,11 @@ internal class MimicConfig(
             Log.w("Config: Items registries $notDisabledRegistries can not be disabled. It will be removed from config.")
         }
 
-        val configuredDisabledBlockRegistries = disabledBlockRegistries
-        @OptIn(ExperimentalMimicApi::class)
-        disabledBlockRegistries = configuredDisabledBlockRegistries - MinecraftBlockRegistry.ID
-        val notDisabledBlockRegistries = configuredDisabledBlockRegistries - disabledBlockRegistries
-        if (notDisabledBlockRegistries.isNotEmpty()) {
-            Log.w("Config: Block registries $notDisabledBlockRegistries can not be disabled. It will be removed from config.")
+        val configuredDisabledBlockProviders = disabledBlockProviders
+        disabledBlockProviders = configuredDisabledBlockProviders - MinecraftBlockProvider.ID
+        val notDisabledBlockProviders = configuredDisabledBlockProviders - disabledBlockProviders
+        if (notDisabledBlockProviders.isNotEmpty()) {
+            Log.w("Config: Block providers $notDisabledBlockProviders can not be disabled. It will be removed from config.")
         }
     }
 
@@ -120,6 +119,7 @@ internal class MimicConfig(
 
         private const val LEGACY_LEVEL_SYSTEM_PATH = "level-system"
         private const val LEGACY_CLASS_SYSTEM_PATH = "class-system"
+        private const val LEGACY_DISABLED_BLOCK_REGISTRIES_PATH = "disabled-block-registries"
 
         val LEVEL_PROVIDER = StringConfigProperty(
             path = "level-provider",
@@ -169,13 +169,13 @@ internal class MimicConfig(
             ),
         )
 
-        val DISABLED_BLOCK_REGISTRIES = StringSetConfigProperty(
-            path = "disabled-block-registries",
-            title = "BlockRegistry API",
+        val DISABLED_BLOCK_PROVIDERS = StringSetConfigProperty(
+            path = "disabled-block-providers",
+            title = "Blocks API",
             comments = arrayOf(
-                "List here disabled block registry implementations.",
-                "You can't disable 'minecraft' block registry.",
-                "By default, all implementations are enabled.",
+                "List here plugins whose blocks should not be available via Mimic.",
+                "You can't disable 'minecraft' block provider.",
+                "By default, all block providers are enabled.",
             ),
         )
 
@@ -185,7 +185,7 @@ internal class MimicConfig(
             RESOURCE_PROVIDER,
             INVENTORY_PROVIDER,
             DISABLED_ITEMS_REGISTRIES,
-            DISABLED_BLOCK_REGISTRIES,
+            DISABLED_BLOCK_PROVIDERS,
         )
     }
 }

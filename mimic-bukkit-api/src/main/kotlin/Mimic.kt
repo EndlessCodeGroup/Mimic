@@ -10,7 +10,8 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import org.jetbrains.annotations.ApiStatus
-import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
+import ru.endlesscode.mimic.blocks.BlockProvider
+import ru.endlesscode.mimic.blocks.Blocks
 import ru.endlesscode.mimic.bukkit.load
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.ClassProvider
@@ -25,67 +26,6 @@ import ru.endlesscode.mimic.resources.Resources
 
 /** Mimic provides access to abstraction APIs. */
 public interface Mimic {
-
-    // region Block Registry
-    /**
-     * Registers the given [registry] with normal priority.
-     *
-     * @param registry The [BukkitBlockRegistry] implementation
-     * @param apiLevel Minimal required API level for this block registry implementation:
-     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if the required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
-     * @param plugin The plugin implementing this block registry.
-     * @return registered registry or `null` if it was not registered.
-     * @since 0.9.0
-     */
-    @ExperimentalMimicApi
-    @ApiStatus.Experimental
-    public fun registerBlockRegistry(
-        registry: BukkitBlockRegistry,
-        apiLevel: Int,
-        plugin: Plugin,
-    ): BukkitBlockRegistry? = registerBlockRegistry(registry, apiLevel, plugin, ServicePriority.Normal)
-
-    /**
-     * Registers the given [registry].
-     *
-     * @param registry The [BukkitBlockRegistry] implementation
-     * @param apiLevel Minimal required API level for this block registry implementation:
-     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
-     *                 - if the required API level is lower - will be enabled compatibility mode.
-     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
-     * @param plugin The plugin implementing this block registry.
-     * @param priority Default priority. Service with higher priority will be used if user have not configured
-     *                 preferred service in config.
-     * @return registered registry or `null` if it was not registered.
-     * @since 0.9.0
-     */
-    @ExperimentalMimicApi
-    @ApiStatus.Experimental
-    public fun registerBlockRegistry(
-        registry: BukkitBlockRegistry,
-        apiLevel: Int,
-        plugin: Plugin,
-        priority: ServicePriority,
-    ): BukkitBlockRegistry?
-
-    /**
-     * Returns [BukkitBlockRegistry] implementation.
-     * @since 0.9.0
-     */
-    @ExperimentalMimicApi
-    @get:ApiStatus.Experimental
-    public val blockRegistry: BukkitBlockRegistry
-
-    /**
-     * Returns map containing all known [BukkitBlockRegistry], where key is a block registry ID.
-     * @since 0.9.0
-     */
-    @ExperimentalMimicApi
-    @ApiStatus.Experimental
-    public fun getAllBlockRegistries(): Map<String, BukkitBlockRegistry>
-    // endregion
 
     // region Class System
     /**
@@ -462,6 +402,55 @@ public interface Mimic {
      * @since 0.10.0
      */
     public val resources: Resources
+    // endregion
+
+    // region Blocks
+    /**
+     * Registers the given [provider] of blocks with normal priority.
+     *
+     * @param provider The [BlockProvider] implementation.
+     * @param apiLevel Minimal required API level for this block provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this block provider.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.11.0
+     */
+    public fun registerBlockProvider(
+        provider: BlockProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+    ): BlockProvider? = registerBlockProvider(provider, apiLevel, plugin, ServicePriority.Normal)
+
+    /**
+     * Registers the given [provider] of blocks.
+     *
+     * @param provider The [BlockProvider] implementation.
+     * @param apiLevel Minimal required API level for this block provider implementation:
+     *                 - if the required API level is higher than installed Mimic, provider will not be registered,
+     *                 - if the required API level is lower - will be enabled compatibility mode.
+     *                 Specify `MimicApiLevel.CURRENT` to use API level of Mimic dependency used at compile time.
+     * @param plugin The plugin implementing this block provider.
+     * @param priority Default priority. A block recognized by several providers belongs to the provider
+     *                 with the highest priority.
+     * @return registered provider or `null` if it was not registered.
+     * @since 0.11.0
+     */
+    public fun registerBlockProvider(
+        provider: BlockProvider,
+        apiLevel: Int,
+        plugin: Plugin,
+        priority: ServicePriority,
+    ): BlockProvider?
+
+    /**
+     * Vanilla and custom blocks from all plugins: identify placed blocks, set and break them, get items placing them.
+     * See [Blocks] for details and examples.
+     * To make your plugin's blocks available here, use [registerBlockProvider].
+     * @since 0.11.0
+     */
+    public val blocks: Blocks
     // endregion
 
     public companion object {

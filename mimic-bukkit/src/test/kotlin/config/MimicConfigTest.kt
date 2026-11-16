@@ -22,10 +22,18 @@ internal class MimicConfigTest : BukkitTestBase() {
     private fun loadConfig() = MimicConfig("Mimic", file)
 
     @Test
-    fun `when load disabled block registries - should remove default registries`() {
+    fun `when load disabled block providers - should remove default providers`() {
+        file.writeText("disabled-block-providers: [custom, minecraft]\n")
+
+        loadConfig().disabledBlockProviders shouldBe setOf("custom")
+    }
+
+    @Test
+    fun `when load legacy disabled block registries option - should move it to disabled block providers`() {
         file.writeText("disabled-block-registries: [custom, minecraft]\n")
 
-        loadConfig().disabledBlockRegistries shouldBe setOf("custom")
+        loadConfig().disabledBlockProviders shouldBe setOf("custom")
+        file.readText() shouldNotContain "disabled-block-registries"
     }
 
     @Test
@@ -66,11 +74,11 @@ internal class MimicConfigTest : BukkitTestBase() {
     @Test
     fun `when reset set property - should save empty set`() {
         val config = loadConfig()
-        config.disabledBlockRegistries = setOf("custom")
+        config.disabledBlockProviders = setOf("custom")
 
-        config.reset(MimicConfig.DISABLED_BLOCK_REGISTRIES)
+        config.reset(MimicConfig.DISABLED_BLOCK_PROVIDERS)
 
-        config.disabledBlockRegistries.shouldBeEmpty()
-        loadConfig().disabledBlockRegistries.shouldBeEmpty()
+        config.disabledBlockProviders.shouldBeEmpty()
+        loadConfig().disabledBlockProviders.shouldBeEmpty()
     }
 }

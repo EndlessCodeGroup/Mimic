@@ -1,11 +1,10 @@
 public abstract interface class ru/endlesscode/mimic/Mimic {
 	public static final field Companion Lru/endlesscode/mimic/Mimic$Companion;
-	public abstract fun getAllBlockRegistries ()Ljava/util/Map;
 	public abstract fun getAllClassSystemProviders ()Ljava/util/Map;
 	public abstract fun getAllItemsRegistries ()Ljava/util/Map;
 	public abstract fun getAllLevelSystemProviders ()Ljava/util/Map;
 	public abstract fun getAllPlayerInventoryProviders ()Ljava/util/Map;
-	public abstract fun getBlockRegistry ()Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
+	public abstract fun getBlocks ()Lru/endlesscode/mimic/blocks/Blocks;
 	public fun getClassSystem (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/classes/BukkitClassSystem;
 	public abstract fun getClassSystemProvider ()Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;
 	public abstract fun getClasses ()Lru/endlesscode/mimic/classes/Classes;
@@ -17,8 +16,8 @@ public abstract interface class ru/endlesscode/mimic/Mimic {
 	public fun getPlayerInventory (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/inventory/BukkitPlayerInventory;
 	public abstract fun getPlayerInventoryProvider ()Lru/endlesscode/mimic/inventory/BukkitPlayerInventory$Provider;
 	public abstract fun getResources ()Lru/endlesscode/mimic/resources/Resources;
-	public fun registerBlockRegistry (Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
-	public abstract fun registerBlockRegistry (Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/blocks/BukkitBlockRegistry;
+	public fun registerBlockProvider (Lru/endlesscode/mimic/blocks/BlockProvider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/blocks/BlockProvider;
+	public abstract fun registerBlockProvider (Lru/endlesscode/mimic/blocks/BlockProvider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/blocks/BlockProvider;
 	public fun registerClassProvider (Lru/endlesscode/mimic/classes/ClassProvider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/classes/ClassProvider;
 	public abstract fun registerClassProvider (Lru/endlesscode/mimic/classes/ClassProvider;ILorg/bukkit/plugin/Plugin;Lorg/bukkit/plugin/ServicePriority;)Lru/endlesscode/mimic/classes/ClassProvider;
 	public fun registerClassSystem (Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;ILorg/bukkit/plugin/Plugin;)Lru/endlesscode/mimic/classes/BukkitClassSystem$Provider;
@@ -44,7 +43,41 @@ public abstract interface class ru/endlesscode/mimic/PlayerSystemProviderService
 	public abstract fun getSystem (Lorg/bukkit/entity/Player;)Ljava/lang/Object;
 }
 
-public abstract interface class ru/endlesscode/mimic/blocks/BukkitBlockRegistry : ru/endlesscode/mimic/blocks/BlockRegistry {
+public abstract interface class ru/endlesscode/mimic/blocks/BlockProvider : ru/endlesscode/mimic/MimicService {
+	public abstract fun breakBlock (Lorg/bukkit/block/Block;Lorg/bukkit/inventory/ItemStack;Lru/endlesscode/mimic/blocks/DropsConsumer;)Z
+	public abstract fun createBlockItem (Ljava/lang/String;I)Lorg/bukkit/inventory/ItemStack;
+	public abstract fun getAllBlocks ()Ljava/util/Collection;
+	public abstract fun getBlockId (Lorg/bukkit/block/Block;)Ljava/lang/String;
+	public abstract fun getBlockIdFromItem (Lorg/bukkit/inventory/ItemStack;)Ljava/lang/String;
+	public abstract fun setBlock (Lorg/bukkit/block/Block;Ljava/lang/String;Ljava/lang/String;)Z
+}
+
+public abstract interface class ru/endlesscode/mimic/blocks/Blocks {
+	public fun breakBlock (Lorg/bukkit/block/Block;)Z
+	public fun breakBlock (Lorg/bukkit/block/Block;Lorg/bukkit/inventory/ItemStack;)Z
+	public abstract fun breakBlock (Lorg/bukkit/block/Block;Lorg/bukkit/inventory/ItemStack;Lru/endlesscode/mimic/blocks/DropsConsumer;)Z
+	public static synthetic fun breakBlock$default (Lru/endlesscode/mimic/blocks/Blocks;Lorg/bukkit/block/Block;Lorg/bukkit/inventory/ItemStack;Lru/endlesscode/mimic/blocks/DropsConsumer;ILjava/lang/Object;)Z
+	public fun createBlockItem (Lnet/kyori/adventure/key/Key;)Lorg/bukkit/inventory/ItemStack;
+	public abstract fun createBlockItem (Lnet/kyori/adventure/key/Key;I)Lorg/bukkit/inventory/ItemStack;
+	public abstract fun getAllBlocks ()Ljava/util/List;
+	public abstract fun getBlockId (Lorg/bukkit/block/Block;)Lnet/kyori/adventure/key/Key;
+	public abstract fun getBlockIdFromItem (Lorg/bukkit/inventory/ItemStack;)Lnet/kyori/adventure/key/Key;
+	public abstract fun hasBlock (Lnet/kyori/adventure/key/Key;)Z
+	public abstract fun isBlock (Lorg/bukkit/block/Block;Lnet/kyori/adventure/key/Key;)Z
+	public fun setBlock (Lorg/bukkit/block/Block;Lnet/kyori/adventure/key/Key;)Z
+	public abstract fun setBlock (Lorg/bukkit/block/Block;Lnet/kyori/adventure/key/Key;Ljava/lang/String;)Z
+}
+
+public abstract interface class ru/endlesscode/mimic/blocks/DropsConsumer {
+	public static final field Companion Lru/endlesscode/mimic/blocks/DropsConsumer$Companion;
+	public abstract fun consume (Ljava/util/Collection;)Ljava/util/Collection;
+	public static fun disappear ()Lru/endlesscode/mimic/blocks/DropsConsumer;
+	public static fun drop ()Lru/endlesscode/mimic/blocks/DropsConsumer;
+}
+
+public final class ru/endlesscode/mimic/blocks/DropsConsumer$Companion {
+	public final fun disappear ()Lru/endlesscode/mimic/blocks/DropsConsumer;
+	public final fun drop ()Lru/endlesscode/mimic/blocks/DropsConsumer;
 }
 
 public abstract class ru/endlesscode/mimic/classes/BukkitClassSystem : ru/endlesscode/mimic/classes/ClassSystem {

@@ -11,25 +11,23 @@ import org.bukkit.block.Chest
 import org.bukkit.block.ShulkerBox
 import org.bukkit.inventory.BlockInventoryHolder
 import org.bukkit.inventory.ItemStack
-import ru.endlesscode.mimic.ExperimentalMimicApi
-import ru.endlesscode.mimic.blocks.BukkitBlockRegistry
+import ru.endlesscode.mimic.blocks.BlockProvider
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.internal.Log
 
 /**
- * Block registry implementation using material name as blockId.
- * Supports block state properties in the vanilla format as a payload in [setBlock], for example `[facing=north]`.
+ * Block provider using material name as block ID.
+ * Supports block state properties in the vanilla format in [setBlock], for example `[facing=north]`.
  *
  * Contents of blocks holding items, like chests or campfires, are passed to the drops consumer in [breakBlock].
  * Shulker boxes keep their contents inside the dropped item.
  */
-@ExperimentalMimicApi
-public class MinecraftBlockRegistry : BukkitBlockRegistry {
+internal class MinecraftBlockProvider : BlockProvider {
 
     override val id: String = ID
 
-    override val knownIds: List<String> by lazy {
-        blockMaterials.map { it.name.lowercase() }
+    override val allBlocks: Set<String> by lazy {
+        blockMaterials.mapTo(LinkedHashSet()) { it.name.lowercase() }
     }
 
     /** Maps items to blocks placed by these items, for example `wheat_seeds` -> `wheat`. */
@@ -43,44 +41,37 @@ public class MinecraftBlockRegistry : BukkitBlockRegistry {
     private val blockMaterials: List<Material>
         get() = Material.entries.filter { it.isBlock && !it.isLegacy }
 
-    override fun isBlockExists(blockId: String): Boolean = getMaterial(blockId) != null
-
     override fun getBlockId(block: Block): String = block.type.name.lowercase()
 
-    override fun getBlockIdFromItem(blockItem: ItemStack): String? {
-        if (blockItem.isEmpty) return null
-        return blocksByItem[blockItem.type]?.name?.lowercase()
+    override fun getBlockIdFromItem(item: ItemStack): String? {
+        if (item.isEmpty) return null
+        return blocksByItem[item.type]?.name?.lowercase()
     }
 
-    override fun getBlockItem(blockId: String, amount: Int): ItemStack? {
+    override fun createBlockItem(blockId: String, amount: Int): ItemStack? {
         val item = getMaterial(blockId)?.createBlockData()?.placementMaterial ?: return null
         if (!item.isItem || item.isAir) return null
-        return ItemStack(item, amount.coerceIn(1, item.maxStackSize))
+        return ItemStack(item, amount)
     }
 
-    override fun setBlock(block: Block, blockId: String, payload: Any?): Boolean {
-        if (!block.isEmpty) return false
+    override fun setBlock(block: Block, blockId: String, state: String?): Boolean {
         val material = getMaterial(blockId) ?: return false
 
-        val blockData = when (payload) {
-            is String -> try {
-                Bukkit.createBlockData(material, payload)
-            } catch (e: IllegalArgumentException) {
-                Log.w(e, "[$TAG] Ignoring invalid payload for block $blockId: $payload")
-                null
-            }
-
-            else -> {
-                if (payload != null) Log.w("[$TAG] Ignoring unsupported payload for block $blockId:\n$payload")
-                null
-            }
+        if (state == null) {
+            block.type = material
+            return true
         }
 
-        if (blockData != null) block.blockData = blockData else block.type = material
+        block.blockData = try {
+            Bukkit.createBlockData(material, state)
+        } catch (cause: IllegalArgumentException) {
+            Log.w(cause, "[$TAG] Invalid state for block $blockId: $state")
+            return false
+        }
         return true
     }
 
-    override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer<ItemStack>): Boolean {
+    override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer): Boolean {
         if (block.isEmpty) return false
 
         val drops = block.getDrops(tool) + takeContents(block)
@@ -115,8 +106,8 @@ public class MinecraftBlockRegistry : BukkitBlockRegistry {
     private fun getMaterial(name: String): Material? =
         Material.getMaterial(name.uppercase())?.takeIf { it.isBlock && !it.isLegacy }
 
-    public companion object {
-        public const val ID: String = "minecraft"
-        private const val TAG = "MinecraftBlockRegistry"
+    companion object {
+        const val ID: String = "minecraft"
+        private const val TAG = "MinecraftBlockProvider"
     }
 }
