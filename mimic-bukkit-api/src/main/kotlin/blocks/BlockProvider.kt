@@ -55,9 +55,15 @@ public interface BlockProvider : MimicService {
     /**
      * IDs of all blocks this provider knows.
      * The list may change while the plugin loads or reloads its data, so it is read on every request.
-     * Return a [Set] if you can, Mimic uses it to check that a block exists.
      */
     public val allBlocks: Collection<String>
+
+    /**
+     * Returns `true` if the block with [blockId] exists. By default, looks for the ID in [allBlocks].
+     * Override it if your plugin can check a block faster, or can't list all its blocks.
+     * It should return `true` at least for every ID from [allBlocks].
+     */
+    public fun hasBlock(@KeyPattern.Value blockId: String): Boolean = blockId in allBlocks
 
     /** Returns ID of the [block], or `null` if it isn't a block of this provider. */
     public fun getBlockId(block: Block): String?

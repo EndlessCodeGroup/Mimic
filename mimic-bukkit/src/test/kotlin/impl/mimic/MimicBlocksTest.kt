@@ -85,6 +85,17 @@ internal class MimicBlocksTest : BukkitTestBase() {
         blocks.hasBlock(Key.key(blockId)) shouldBe shouldExist
     }
 
+    @Test
+    fun `when provider can't list its blocks - should ask it whether a block exists`() {
+        blockProviders.register(UnlistedBlockProvider(), plugin, Normal)
+
+        assertSoftly {
+            blocks.hasBlock(Key.key("unlisted:ruby_block")).shouldBeTrue()
+            blocks.hasBlock(Key.key("unlisted:stone")).shouldBeFalse()
+            blocks.getAllBlocks().filter { it.namespace() == "unlisted" }.shouldBeEmpty()
+        }
+    }
+
     @ParameterizedTest
     @CsvSource(
         "STONE,         minecraft:stone",
@@ -413,6 +424,19 @@ private class CustomBlockProvider : BlockProvider {
         block.type = Material.AIR
         return true
     }
+}
+
+/** Provider imitating a plugin which can't list its blocks. */
+private class UnlistedBlockProvider : BlockProvider {
+    override val id = "unlisted"
+    override val allBlocks = emptyList<String>()
+
+    override fun hasBlock(blockId: String): Boolean = blockId == "ruby_block"
+    override fun getBlockId(block: Block): String? = null
+    override fun getBlockIdFromItem(item: ItemStack): String? = null
+    override fun createBlockItem(blockId: String, amount: Int): ItemStack? = null
+    override fun setBlock(block: Block, blockId: String, state: String?): Boolean = false
+    override fun breakBlock(block: Block, tool: ItemStack?, dropsConsumer: DropsConsumer): Boolean = false
 }
 
 /** Provider returning invalid IDs. */

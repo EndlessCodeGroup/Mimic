@@ -31,15 +31,10 @@ internal class CraftEngineBlockProvider private constructor(
     override val id: String = ID
     override val isEnabled: Boolean get() = craftEngine.isEnabled
 
-    /** A view of the loaded blocks, so checking that a block exists doesn't convert all IDs. */
-    override val allBlocks: Set<String> = object : AbstractSet<String>() {
-        override val size: Int get() = craftEngine.loadedBlockIds.size
+    override val allBlocks: Collection<String>
+        get() = craftEngine.loadedBlockIds.map(Key::toMimicId)
 
-        override fun iterator(): Iterator<String> =
-            craftEngine.loadedBlockIds.asSequence().map(Key::toMimicId).iterator()
-
-        override fun contains(element: String): Boolean = craftEngineKey(element) in craftEngine.loadedBlockIds
-    }
+    override fun hasBlock(blockId: String): Boolean = findBlock(blockId) != null
 
     override fun getBlockId(block: Block): String? {
         val state = getCustomBlockState(block) ?: return null

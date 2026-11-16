@@ -60,7 +60,7 @@ internal class MimicBlocks(blockProviders: ServiceRegistry<BlockProvider>) : Blo
     private fun findProvider(blockId: Key): BlockProviderEntry? =
         providers.find(blockId, BLOCK) { path -> hasBlock(path) }
 
-    private fun BlockProviderEntry.hasBlock(path: String): Boolean = call(default = false) { path in allBlocks }
+    private fun BlockProviderEntry.hasBlock(path: String): Boolean = call(default = false) { hasBlock(path) }
 
     // IDs are checked inside call, so a provider returning nulls from Java is skipped
     private fun BlockProviderEntry.getAllBlocks(): List<Key> =

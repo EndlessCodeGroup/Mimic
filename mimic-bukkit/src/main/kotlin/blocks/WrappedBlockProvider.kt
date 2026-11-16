@@ -16,6 +16,7 @@ internal class WrappedBlockProvider(
     override val allBlocks: Collection<String>
         get() = delegate.allBlocks
 
+    override fun hasBlock(blockId: String): Boolean = delegate.hasBlock(blockId)
     override fun getBlockId(block: Block): String? = delegate.getBlockId(block)
     override fun getBlockIdFromItem(item: ItemStack): String? = delegate.getBlockIdFromItem(item)
     override fun createBlockItem(blockId: String, amount: Int): ItemStack? = delegate.createBlockItem(blockId, amount)
