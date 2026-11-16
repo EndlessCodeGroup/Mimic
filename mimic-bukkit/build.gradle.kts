@@ -28,6 +28,7 @@ bukkit {
             "MMOItems",
             "Heroes",
             "CraftEngine",
+            "Oraxen",
             "AuraSkills",
             "mcMMO",
             "Jobs",
@@ -55,6 +56,11 @@ repositories {
     maven(url = "https://repo.momirealms.net/releases/") {
         content {
             includeGroup("net.momirealms")
+        }
+    }
+    maven(url = "https://repo.oraxen.com/releases/") {
+        content {
+            includeGroup("io.th0rgal")
         }
     }
     maven(url = "https://nexus.neetgames.com/repository/maven-releases/") {
@@ -111,6 +117,7 @@ dependencies {
     testImplementation(libs.rpgplugins.fabled) { isTransitive = false }
     testImplementation(libs.rpgplugins.codex) { isTransitive = false }
     testImplementation(libs.rpgplugins.itemsadder)
+    testImplementation(libs.rpgplugins.oraxen) { isTransitive = false }
 }
 
 kotlin {

@@ -48,6 +48,12 @@ See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 - Config option `disabled-block-registries` is renamed to `disabled-block-providers`, the old value is moved automatically.
 - `/mimic blocks` requires block IDs with a namespace, `payload` argument of `/mimic blocks set` is renamed to `state`.
 
+### Integrations
+
+- Added [Oraxen](https://github.com/oraxen/oraxen) items and blocks providers ([#51](https://github.com/EndlessCodeGroup/Mimic/issues/51)).
+  Block ID is the ID of the item placing the block, block states are not supported.
+
+
 ## [v0.10.0] (2026-11-15)
 
 ### Levels API

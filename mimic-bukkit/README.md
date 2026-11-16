@@ -96,6 +96,11 @@ Providers marked with _(deprecated API)_ are provided by the plugin itself via t
 **ID Format:** `craftengine:[namespace]/[id]`\
 **Payload:** *Not supported*
 
+#### [Oraxen]
+
+**ID Format:** `oraxen:[id]`\
+**Payload:** *Not supported*
+
 #### [CustomItems]
 
 **ID Format:** `customitems:[id]`\
@@ -143,6 +148,11 @@ A block belongs to the provider with the highest priority that recognizes it, va
 **ID Format:** `itemsadder:[id]` for the default `itemsadder` namespace, `itemsadder:[namespace]/[id]` for others\
 **State:** *Not supported*
 
+#### [Oraxen]
+
+**ID Format:** `oraxen:[id]`, where ID is the ID of the item placing the block\
+**State:** *Not supported*
+
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
 [item-components]: https://minecraft.wiki/w/Data_component_format
@@ -155,6 +165,7 @@ A block belongs to the provider with the highest priority that recognizes it, va
 [rpginventory]: https://www.spigotmc.org/resources/12498/
 [itemsadder]: https://www.spigotmc.org/resources/73355/
 [craftengine]: https://modrinth.com/plugin/craftengine
+[oraxen]: https://github.com/oraxen/oraxen
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
 [jobs reborn]: https://www.spigotmc.org/resources/4216/
