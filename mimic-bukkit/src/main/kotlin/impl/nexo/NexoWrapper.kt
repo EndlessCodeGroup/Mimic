@@ -33,6 +33,7 @@ internal class NexoWrapper {
 
     fun hasBlock(id: String): Boolean = NexoBlocks.isCustomBlock(id)
     fun getBlockId(block: Block): String? = NexoBlocks.customBlockMechanic(block)?.blockId
+    fun getBlockIdOfItem(itemId: String): String? = NexoBlocks.customBlockMechanic(itemId)?.blockId
 
     fun placeBlock(block: Block, id: String) {
         NexoBlocks.place(id, block.location)

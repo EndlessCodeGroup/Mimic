@@ -148,7 +148,7 @@ A block belongs to the provider with the highest priority that recognizes it, va
 **ID Format:** `nexo:[id]`, the same as the ID of the item placing the block\
 **State:** *Not supported*\
 Note blocks, string blocks and chorus blocks are supported. Furniture is not a block.
-Every variant of a directional block has the ID of its parent block.
+Variants of a directional block and their items have the ID of their parent block.
 Content of a storage block is dropped on the ground when the block is broken.
 
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience

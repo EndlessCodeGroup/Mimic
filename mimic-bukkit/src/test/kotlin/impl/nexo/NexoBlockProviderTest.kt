@@ -39,6 +39,7 @@ internal class NexoBlockProviderTest : BukkitTestBase() {
         every { hasBlock(any()) } answers { firstArg<String>() in blockIds }
         every { getItemId(any()) } returns null
         every { getBlockId(any()) } returns null
+        every { getBlockIdOfItem(any()) } answers { firstArg<String>().takeIf { it in blockIds } }
         every { getDrops(any(), any()) } returns null
         every { createItem("ruby_ore", any()) } answers { ItemStack(Material.PAPER, secondArg()) }
     }
@@ -70,6 +71,14 @@ internal class NexoBlockProviderTest : BukkitTestBase() {
         every { nexo.getBlockId(block) } returns "ruby_log"
 
         provider.getBlockId(block) shouldBe "ruby_log"
+    }
+
+    @Test
+    fun `when get block id from directional variant item - should return id reported by Nexo wrapper`() {
+        every { nexo.getItemId(any()) } returns "ruby_log_x"
+        every { nexo.getBlockIdOfItem("ruby_log_x") } returns "ruby_log"
+
+        provider.getBlockIdFromItem(ruby) shouldBe "ruby_log"
     }
 
     @Test

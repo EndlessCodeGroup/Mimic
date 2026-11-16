@@ -15,7 +15,7 @@ import ru.endlesscode.mimic.internal.Log
  * lowercased, with characters not allowed in block IDs replaced with `_`.
  *
  * Every variant of a directional block is listed as a separate block and can be set by its own ID,
- * but a placed variant has the ID of its parent block.
+ * but a placed variant and its item have the ID of the parent block.
  * Nexo blocks have no states, so [setBlock] with a state always fails.
  *
  * Content of a storage block is dropped on the ground by Nexo when the block is removed,
@@ -37,7 +37,7 @@ internal class NexoBlockProvider(
     override fun getBlockId(block: Block): String? = nexo.getBlockId(block)?.toMimicId()
 
     override fun getBlockIdFromItem(item: ItemStack): String? =
-        nexo.getItemId(item)?.takeIf(nexo::hasBlock)?.toMimicId()
+        nexo.getItemId(item)?.let(nexo::getBlockIdOfItem)?.toMimicId()
 
     override fun createBlockItem(blockId: String, amount: Int): ItemStack? {
         val nexoId = ids.findNexoId(blockId) ?: return null
