@@ -13,7 +13,7 @@ Available services:
 - [BukkitClassSystem.Provider] *(deprecated, use [ClassProvider])*
 - [BukkitPlayerInventory.Provider] *(experimental)*
 - [BukkitItemsRegistry]
-- [BukkitBlockRegistry] *(experimental)*
+- [BlockProvider]
 
 > Experimental APIs may change in future versions.
 > In Kotlin, they require opt-in with `@OptIn(ExperimentalMimicApi::class)`.
@@ -60,7 +60,7 @@ Classes classes = mimic.getClasses();
 Resources resources = mimic.getResources();
 BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
 BukkitItemsRegistry itemsRegistry = mimic.getItemsRegistry();
-BukkitBlockRegistry blockRegistry = mimic.getBlockRegistry();
+Blocks blocks = mimic.getBlocks();
 ```
 
 Now you can use APIs:
@@ -82,12 +82,9 @@ ItemStack stick = itemsRegistry.getItem("minecraft:stick");
 boolean isPalmLogInHand = itemsRegistry.isSameItem(player.getInventory().getItemInMainHand(), "craftengine:default/palm_log");
 boolean isPalmLogExists = itemsRegistry.isItemExists("craftengine:default/palm_log");
 
-// BlockRegistry sets and breaks blocks without firing events, check protection yourself if needed
-blockRegistry.setBlock(location.getBlock(), "minecraft:stone_stairs", "[facing=north]");
-boolean isPalmLog = blockRegistry.isSameBlock(block, "craftengine:default/palm_log");
-// Break a block with a pickaxe, collecting drops into a chest inventory.
-// Items that don't fit are returned from the consumer and dropped on the ground.
-blockRegistry.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.toArray(new ItemStack[0])).values());
+// See the "Blocks" section below for details
+boolean isPalmLog = blocks.isBlock(block, Key.key("craftengine:default/palm_log"));
+blocks.setBlock(location.getBlock(), Key.key("minecraft:stone_stairs"), "[facing=north]");
 ```
 
 ### IDs
@@ -96,7 +93,8 @@ Mimic identifies items, blocks, level tracks, classes and resources by [resource
 where the namespace is the ID of the plugin's implementation: `minecraft:acacia_boat`, `craftengine:default/palm_log`, `auraskills:mining`.
 The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
 
-- **Items and blocks:** ID without namespace, or with the `mimic` namespace, is searched over all registries in order of priority.
+- **Items:** ID without namespace, or with the `mimic` namespace, is searched over all registries in order of priority.
+- **Blocks:** the namespace is required, see [Block IDs](#block-ids).
 - **Level tracks:** the namespace is required, see [Track IDs](#track-ids).
 - **Classes and class slots:** the namespace is required, see [Class IDs](#class-ids).
 - **Resources:** the namespace is required, see [Resource IDs](#resource-ids).
@@ -422,6 +420,61 @@ To make resources of your plugin available, implement [ResourceProvider]: only r
 
 `minecraft:health` is changed directly, as a cost and not as damage: no damage or regain events are fired,
 armor and absorption hearts are ignored, and taking all health kills the player.
+### Blocks
+
+[Blocks] gives access to vanilla blocks and custom blocks of all supported plugins:
+identify a placed block, set and break blocks, get an item placing a block.
+
+#### Block IDs
+
+A block ID is a `Key` like `craftengine:default/palm_log`: the namespace is the ID of the plugin providing the block,
+the path is the block within that plugin.
+The namespace is required, there is no search over all plugins.
+`Key.key("palm_log")` turns into `minecraft:palm_log`, so validate IDs read from configs:
+
+```java
+Key blockId = Key.key(config.getString("block"));
+if (!blocks.hasBlock(blockId)) {
+    getLogger().warning("Unknown block " + blockId.asString());
+}
+```
+
+Block IDs are separate from item IDs: a block and the item placing it may have different IDs.
+
+#### Identifying blocks
+
+A block belongs to the plugin with the highest priority that recognizes it, and vanilla blocks belong to `minecraft`.
+So a custom block built on a note block is never `minecraft:note_block`.
+
+```java
+Key blockId = blocks.getBlockId(block); // null if no plugin recognizes the block
+boolean isPalmLog = blocks.isBlock(block, Key.key("craftengine:default/palm_log"));
+// ID of the block placed by the item, or null if the item doesn't place a block
+Key placedBlockId = blocks.getBlockIdFromItem(player.getInventory().getItemInMainHand());
+```
+
+#### Changing blocks
+
+```java
+// A new stack of the item placing the block, or null if the block has no item
+ItemStack palmLogs = blocks.createBlockItem(Key.key("craftengine:default/palm_log"), 16);
+
+// Set a block in place of an empty one. The state is optional, with an invalid state the block is not set
+blocks.setBlock(location.getBlock(), Key.key("minecraft:stone_stairs"), "[facing=north]");
+
+// Break a block with a pickaxe, collecting drops into a chest inventory.
+// Items that don't fit are returned from the consumer and dropped on the ground.
+blocks.breakBlock(block, pickaxe, drops -> chestInventory.addItem(drops.toArray(new ItemStack[0])).values());
+// Or drop everything on the ground
+blocks.breakBlock(block, pickaxe);
+```
+
+#### Rules
+
+- Use [Blocks] only on the main thread.
+- No place or break events are fired and no protection checks are made, check protection yourself if needed.
+- Block IDs may be unknown until their plugins finish loading, and may change when a plugin reloads.
+- To replace a block, break it first: `setBlock` returns `false` for a non-empty block.
 
 ### How to implement API in my plugin?
 
@@ -484,24 +537,25 @@ public class MyClassProvider implements ClassProvider {
 }
 ```
 
-Item and block registries receive and return IDs without the registry namespace, Mimic adds it.
-Mapping the plugin's own IDs to valid Mimic IDs is up to the registry, for example `default:palm_log` → `default/palm_log`.
-Invalid IDs returned by a registry are ignored with a warning.
+Items registries and block providers receive and return IDs without the namespace, Mimic adds it.
+Mapping the plugin's own IDs to valid Mimic IDs is up to the implementation, for example `default:palm_log` → `default/palm_log`.
+Invalid IDs returned by an implementation are ignored with a warning.
+See [BlockProvider] for the rules about block IDs, ownership of blocks and threading.
 
 <details>
-    <summary>Block registry example</summary>
+    <summary>Block provider example</summary>
 
     ```java
     import org.bukkit.block.Block;
     import org.bukkit.inventory.ItemStack;
     import org.jetbrains.annotations.NotNull;
     import org.jetbrains.annotations.Nullable;
-    import ru.endlesscode.mimic.blocks.BukkitBlockRegistry;
+    import ru.endlesscode.mimic.blocks.BlockProvider;
     import ru.endlesscode.mimic.blocks.DropsConsumer;
 
     import java.util.Collection;
 
-    public class MyBlockRegistry implements BukkitBlockRegistry {
+    public class MyBlockProvider implements BlockProvider {
 
         @NotNull
         @Override
@@ -511,44 +565,42 @@ Invalid IDs returned by a registry are ignored with a warning.
 
         @NotNull
         @Override
-        public Collection<String> getKnownIds() {
+        public Collection<String> getAllBlocks() {
             return MyBlocks.getIds();
-        }
-
-        @Override
-        public boolean isBlockExists(@NotNull String blockId) {
-            return MyBlocks.getIds().contains(blockId);
         }
 
         @Nullable
         @Override
         public String getBlockId(@NotNull Block block) {
+            // Return null for blocks of other plugins and vanilla blocks
             return MyBlocks.getIdOf(block);
         }
 
         @Nullable
         @Override
-        public String getBlockIdFromItem(@NotNull ItemStack blockItem) {
-            return MyBlocks.getIdOfPlacedBy(blockItem);
+        public String getBlockIdFromItem(@NotNull ItemStack item) {
+            return MyBlocks.getIdOfPlacedBy(item);
         }
 
         @Nullable
         @Override
-        public ItemStack getBlockItem(@NotNull String blockId, int amount) {
+        public ItemStack createBlockItem(@NotNull String blockId, int amount) {
+            // Should be a new stack on every call, or null if the ID is unknown
             return MyBlocks.createItem(blockId, amount);
         }
 
         @Override
-        public boolean setBlock(@NotNull Block block, @NotNull String blockId, @Nullable Object payload) {
-            // Every registry should support block state properties like "[facing=north]" as a String payload
-            if (!block.isEmpty() || !isBlockExists(blockId)) return false;
-            MyBlocks.place(block, blockId, payload instanceof String ? (String) payload : null);
-            return true;
+        public boolean setBlock(@NotNull Block block, @NotNull String blockId, @Nullable String state) {
+            // Mimic has already checked that the block is empty.
+            // The state is in your own format, usually block state properties like "[facing=north]".
+            // Return false without setting the block if the ID is unknown or the state is invalid
+            if (!MyBlocks.getIds().contains(blockId)) return false;
+            return MyBlocks.place(block, blockId, state);
         }
 
         @Override
-        public boolean breakBlock(@NotNull Block block, @Nullable ItemStack tool, @NotNull DropsConsumer<ItemStack> dropsConsumer) {
-            if (getBlockId(block) == null) return false;
+        public boolean breakBlock(@NotNull Block block, @Nullable ItemStack tool, @NotNull DropsConsumer dropsConsumer) {
+            // Mimic calls it only for blocks this provider returns an ID for
             Collection<ItemStack> drops = MyBlocks.remove(block, tool);
             // Drop on the ground only items returned by the consumer
             for (ItemStack item : dropsConsumer.consume(drops)) {
@@ -644,7 +696,7 @@ public void onLoad() {
     
     // Register your implementations and specify minimal required Mimic version for it.
     mimic.registerClassProvider(new MyClassProvider(), MimicApiLevel.CURRENT, this);
-    mimic.registerBlockRegistry(new MyBlockRegistry(), MimicApiLevel.CURRENT, this);
+    mimic.registerBlockProvider(new MyBlockProvider(), MimicApiLevel.CURRENT, this);
     mimic.registerLevelProvider(new MyLevelProvider(), MimicApiLevel.CURRENT, this);
 }
 ```
@@ -671,7 +723,8 @@ IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are res
 [BukkitClassSystem]: src/main/kotlin/classes/BukkitClassSystem.kt
 [BukkitPlayerInventory.Provider]: src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: src/main/kotlin/items/BukkitItemsRegistry.kt
-[BukkitBlockRegistry]: src/main/kotlin/blocks/BukkitBlockRegistry.kt
+[Blocks]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.blocks/-blocks/index.html
+[BlockProvider]: https://endlesscodegroup.github.io/Mimic/mimic-bukkit-api/ru.endlesscode.mimic.blocks/-block-provider/index.html
 
 [impl]: ../mimic-bukkit/src/main/kotlin/impl/
 [mimic-bukkit]: ../mimic-bukkit/

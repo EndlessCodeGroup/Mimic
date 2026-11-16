@@ -32,7 +32,7 @@ With Mimic, you don't need to download all RPG plugins and write specific code f
 - [Resources] - API to work with player's resources: mana, stamina and similar. Read them, take costs, give them back.
 - [PlayerInventory] *(experimental)* - API to access player's inventories content.
 - [ItemsRegistry] - API adding the possibility to create and validate custom items created with plugins.
-- [BlockRegistry] *(experimental)* - API to get, set and break custom blocks created with plugins.
+- [Blocks] - API to identify, set and break vanilla blocks and custom blocks created with plugins.
 
 ### Implementations
 
@@ -98,4 +98,4 @@ Please make sure to update tests as appropriate.
 [Resources]: mimic-bukkit-api/src/main/kotlin/resources/Resources.kt
 [PlayerInventory]: mimic-api/src/main/kotlin/inventory/PlayerInventory.kt
 [ItemsRegistry]: mimic-api/src/main/kotlin/items/ItemsRegistry.kt
-[BlockRegistry]: mimic-api/src/main/kotlin/blocks/BlockRegistry.kt
+[Blocks]: mimic-bukkit-api/src/main/kotlin/blocks/Blocks.kt

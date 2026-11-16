@@ -1,5 +1,22 @@
 ## [Unreleased]
 
+### Blocks API
+
+New Blocks API replaces the experimental `BlockRegistry` ([#96](https://github.com/EndlessCodeGroup/Mimic/issues/96)).
+See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#blocks) for details and examples.
+
+- `Mimic.getBlocks()` identifies, sets and breaks blocks, `Mimic.registerBlockProvider()` makes a plugin's blocks available.
+  Requires Mimic API level `MimicApiLevel.VERSION_0_11`. The API is stable.
+- **Breaking:** `DropsConsumer` is moved to `mimic-bukkit-api` and is no longer generic: it consumes `ItemStack`s.
+  The package is the same, it is no longer experimental.
+- Block IDs are `Key`s with a required namespace: `minecraft:stone`, `craftengine:default/palm_log`.
+  IDs without a namespace and the `mimic:` namespace are no longer searched over all providers.
+- **Breaking:** `BlockRegistry`, `BukkitBlockRegistry`, `Mimic.getBlockRegistry()`, `Mimic.registerBlockRegistry()`
+  and `Mimic.getAllBlockRegistries()` are removed without replacement bridges.
+- **Breaking:** A block is not set if its state is invalid. Previously, the default state was used.
+- Config option `disabled-block-registries` is renamed to `disabled-block-providers`, the old value is moved automatically.
+- `/mimic blocks` requires block IDs with a namespace, `payload` argument of `/mimic blocks set` is renamed to `state`.
+
 ## [v0.10.0] (2026-11-15)
 
 ### Levels API

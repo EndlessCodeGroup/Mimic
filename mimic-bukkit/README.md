@@ -120,22 +120,21 @@ Alternatively, [ItemMetaPayload] in HOCON format with MiniMessage support for na
 **ID Format:** `ia:[id]`\
 **Payload:** *Not supported*
 
-### [Block Registries][BukkitBlockRegistry] *(experimental)*
+### [Block Providers][BlockProvider]
 
-#### [MimicBlockRegistry]
+Blocks of all providers are available via [Blocks], with the provider ID as a namespace of block IDs.
+The namespace is required.
+A block belongs to the provider with the highest priority that recognizes it, vanilla blocks belong to `minecraft`.
 
-Block registry combining all others block registries.
-It uses registry ID as a namespace for block IDs, like items registry does.
-
-#### [Minecraft][MinecraftBlockRegistry]
+#### [Minecraft][MinecraftBlockProvider]
 
 **ID Format:** `minecraft:[id]`\
-**Payload:** Block state properties, for example `[facing=north]`
+**State:** Block state properties, for example `[facing=north]`
 
 #### [CraftEngine]
 
 **ID Format:** `craftengine:[namespace]/[id]`\
-**Payload:** Block state properties, for example `[facing=north]`
+**State:** Block state properties, for example `[facing=north]`
 
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
@@ -162,9 +161,9 @@ It uses registry ID as a namespace for block IDs, like items registry does.
 [ResourceProvider]: ../mimic-bukkit-api/src/main/kotlin/resources/ResourceProvider.kt
 [BukkitPlayerInventory.Provider]: ../mimic-bukkit-api/src/main/kotlin/inventory/BukkitPlayerInventory.kt
 [BukkitItemsRegistry]: ../mimic-bukkit-api/src/main/kotlin/items/BukkitItemsRegistry.kt
-[BukkitBlockRegistry]: ../mimic-bukkit-api/src/main/kotlin/blocks/BukkitBlockRegistry.kt
-[MimicBlockRegistry]: src/main/kotlin/impl/mimic/MimicBlockRegistry.kt
-[MinecraftBlockRegistry]: src/main/kotlin/impl/vanilla/MinecraftBlockRegistry.kt
+[BlockProvider]: ../mimic-bukkit-api/src/main/kotlin/blocks/BlockProvider.kt
+[Blocks]: ../mimic-bukkit-api/src/main/kotlin/blocks/Blocks.kt
+[MinecraftBlockProvider]: src/main/kotlin/impl/vanilla/MinecraftBlockProvider.kt
 [MimicItemsRegistry]: src/main/kotlin/impl/mimic/MimicItemsRegistry.kt
 [MinecraftItemsRegistry]: src/main/kotlin/impl/vanilla/MinecraftItemsRegistry.kt
 [ItemMetaPayload]: src/main/kotlin/impl/vanilla/ItemMetaPayload.kt
