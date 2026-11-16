@@ -13,6 +13,7 @@ mmoitems = "6.10.1-SNAPSHOT"
 mythiclib = "1.7.1-SNAPSHOT"
 heroes = "1.9.30-RELEASE"
 craftengine = "26.9.1"
+oraxen = "1.220.1"
 auraskills = "2.4.0"
 mcmmo = "2.3.002"
 jobs = "5.2.6.3"
@@ -50,6 +51,7 @@ rpgplugins-mythiclib = { module = "io.lumine:MythicLib-dist", version.ref = "myt
 rpgplugins-heroes = { module = "com.herocraftonline.heroes:Heroes", version.ref = "heroes" }
 rpgplugins-craftengine-core = { module = "net.momirealms:craft-engine-core", version.ref = "craftengine" }
 rpgplugins-craftengine-bukkit = { module = "net.momirealms:craft-engine-bukkit", version.ref = "craftengine" }
+rpgplugins-oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
 rpgplugins-auraskills = { module = "dev.aurelium:auraskills-api", version.ref = "auraskills" }
 rpgplugins-mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" }
 rpgplugins-jobs = { module = "com.github.Zrips:Jobs", version.ref = "jobs" }
@@ -88,6 +90,7 @@ rpgplugins = [
     "rpgplugins-heroes",
     "rpgplugins-craftengine-core",
     "rpgplugins-craftengine-bukkit",
+    "rpgplugins-oraxen",
     "rpgplugins-auraskills",
     "rpgplugins-mcmmo",
     "rpgplugins-jobs",
