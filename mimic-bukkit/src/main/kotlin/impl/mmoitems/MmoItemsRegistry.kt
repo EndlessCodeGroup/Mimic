@@ -1,12 +1,15 @@
 // Copyright (c) 2021 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.mmoitems
 
 import net.Indyuce.mmoitems.api.item.template.MMOItemTemplate
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
 
+@Deprecated("Use Items API instead, MMOItems IDs include the item type there: `mmoitems:sword/excalibur`.")
 public class MmoItemsRegistry private constructor(private val mmoItems: MmoItemsWrapper) : BukkitItemsRegistry {
 
     internal constructor() : this(MmoItemsWrapper())

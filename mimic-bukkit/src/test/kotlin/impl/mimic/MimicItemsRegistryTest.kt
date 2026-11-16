@@ -1,6 +1,8 @@
 // Copyright (c) 2020 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.mimic
 
 import io.kotest.assertions.assertSoftly

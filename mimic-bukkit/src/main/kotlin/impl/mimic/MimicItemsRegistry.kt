@@ -1,6 +1,8 @@
 // Copyright (c) 2020 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION", "TYPEALIAS_EXPANSION_DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack
@@ -15,6 +17,7 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
  * ID without namespace or with the `mimic` namespace is searched over all registries.
  * Deprecated IDs with uppercase letters or more than one `:` are accepted with a warning.
  */
+@Deprecated("Use Items API instead.")
 public class MimicItemsRegistry internal constructor(
     private val registries: ServiceRegistry<BukkitItemsRegistry>,
 ) : BukkitItemsRegistry {

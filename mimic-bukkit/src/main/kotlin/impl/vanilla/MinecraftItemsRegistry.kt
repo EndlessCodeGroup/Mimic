@@ -1,6 +1,8 @@
 // Copyright (c) 2020 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.vanilla
 
 import org.bukkit.Bukkit
@@ -21,6 +23,7 @@ import ru.endlesscode.mimic.items.BukkitItemsRegistry
  *   Name and lore support MiniMessage formatting.
  * - [ItemMetaPayload] instance.
  */
+@Deprecated("Use Items API instead, vanilla items have the `minecraft` namespace there too.")
 public class MinecraftItemsRegistry : BukkitItemsRegistry {
 
     override val id: String = ID

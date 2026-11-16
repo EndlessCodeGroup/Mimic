@@ -1,7 +1,7 @@
 // Copyright (c) 2022 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
-@file:Suppress("DEPRECATION") // LevelSystem and ClassSystem APIs are deprecated but still supported
+@file:Suppress("DEPRECATION") // LevelSystem, ClassSystem and ItemsRegistry APIs are deprecated but still supported
 
 package ru.endlesscode.mimic
 
@@ -170,6 +170,7 @@ public interface Mimic {
      * @param plugin The plugin implementing this item registry.
      * @return registered registry or `null` if it was not registered.
      */
+    @Deprecated("Use registerItemProvider instead.")
     public fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
         apiLevel: Int,
@@ -189,6 +190,7 @@ public interface Mimic {
      *                 preferred service in config.
      * @return registered registry or `null` if it was not registered.
      */
+    @Deprecated("Use registerItemProvider instead.")
     public fun registerItemsRegistry(
         registry: BukkitItemsRegistry,
         apiLevel: Int,
@@ -197,9 +199,11 @@ public interface Mimic {
     ): BukkitItemsRegistry?
 
     /** Returns [BukkitItemsRegistry] implementation. */
+    @Deprecated("Use items instead.")
     public val itemsRegistry: BukkitItemsRegistry
 
     /** Returns map containing all known [BukkitItemsRegistry], where key is an item registry ID. */
+    @Deprecated("Use items.getAllItems() instead.")
     public fun getAllItemsRegistries(): Map<String, BukkitItemsRegistry>
     // endregion
 

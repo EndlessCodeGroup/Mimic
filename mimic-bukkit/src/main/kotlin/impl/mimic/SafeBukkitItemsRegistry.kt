@@ -1,6 +1,8 @@
 // Copyright (c) 2021 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION", "TYPEALIAS_EXPANSION_DEPRECATION") // ItemsRegistry API is deprecated but still supported
+
 package ru.endlesscode.mimic.impl.mimic
 
 import org.bukkit.inventory.ItemStack

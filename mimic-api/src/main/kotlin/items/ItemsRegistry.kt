@@ -19,6 +19,7 @@ import ru.endlesscode.mimic.MimicService
  * Mapping them to the plugin's own IDs is up to the implementation: `itemsadder:ruby_sword` -> `itemsadder/ruby_sword`.
  * Invalid IDs are ignored.
  */
+@Deprecated("Use Items API from mimic-bukkit-api instead, it identifies items by their owner and creates them for a player.")
 public interface ItemsRegistry<ItemStackT : Any> : MimicService {
 
     /** Returns all known item IDs. */

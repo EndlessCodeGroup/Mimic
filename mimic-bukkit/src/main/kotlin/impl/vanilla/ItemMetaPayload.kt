@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Osip Fatkullin, EndlessCode Group and contributors
 // SPDX-License-Identifier: MIT
 
+@file:Suppress("DEPRECATION") // ItemMetaPayload is deprecated but still supported
 @file:UseSerializers(EnchantmentSerializer::class, ItemFlagsSerializer::class, MiniMessageComponentSerializer::class)
 
 package ru.endlesscode.mimic.impl.vanilla
@@ -30,6 +31,7 @@ import ru.endlesscode.mimic.internal.*
  * @see org.bukkit.inventory.meta.ItemMeta
  * @see ItemMetaPayload.parse
  */
+@Deprecated("Use item components as a payload instead, for example `[damage=10,unbreakable={}]`.")
 @Serializable
 public data class ItemMetaPayload(
     val name: Component? = null,
