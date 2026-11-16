@@ -253,6 +253,14 @@ internal class MimicImplTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when items registry of ItemsAdder is registered - should not bridge it`() {
+        mimic.registerItemsRegistry(TestItemsRegistry("ia"), MimicApiLevel.CURRENT, thirdParty, Normal)
+
+        mimic.items.getAllItems().shouldBeEmpty()
+        mimic.getAllItemsRegistries().keys shouldContainExactly listOf("ia")
+    }
+
+    @Test
     fun `when plugin is disabled - should unregister its items registries and item providers`() {
         mimic.registerItemsRegistry(TestItemsRegistry("legacy"), MimicApiLevel.CURRENT, thirdParty, Normal)
         mimic.registerItemProvider(TestItemProvider("custom"), MimicApiLevel.CURRENT, thirdParty, Normal)

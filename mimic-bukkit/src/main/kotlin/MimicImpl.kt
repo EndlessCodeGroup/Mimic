@@ -15,6 +15,7 @@ import ru.endlesscode.mimic.blocks.Blocks
 import ru.endlesscode.mimic.blocks.WrappedBlockProvider
 import ru.endlesscode.mimic.classes.*
 import ru.endlesscode.mimic.config.MimicConfig
+import ru.endlesscode.mimic.impl.itemsadder.ItemsAdderItemProvider
 import ru.endlesscode.mimic.impl.mimic.MimicBlocks
 import ru.endlesscode.mimic.impl.mimic.MimicClasses
 import ru.endlesscode.mimic.impl.mimic.MimicItems
@@ -164,7 +165,15 @@ internal class MimicImpl(
         val itemsRegistry = itemsRegistries.tryRegister(apiLevel, plugin, priority) {
             WrappedItemsRegistry(registry, plugin)
         }
-        if (itemsRegistry != null) {
+        if (itemsRegistry == null) return null
+
+        // Items registry of ItemsAdder isn't bridged, otherwise its items would have two IDs
+        if (itemsRegistry.id == ItemsAdderItemProvider.REGISTRY_ID) {
+            Log.w(
+                "ItemsRegistry 'ia' by $plugin is deprecated and replaced with the 'itemsadder' item provider " +
+                    "built into Mimic. Use 'itemsadder:<item>' instead of 'ia:itemsadder:<item>'."
+            )
+        } else {
             itemProviders.registerBridge(ItemsRegistryItemProvider(itemsRegistry), plugin, priority) {
                 "ItemsRegistry '${itemsRegistry.id}' by $plugin uses deprecated ItemsRegistry API, " +
                     "so its items are available via Items API as '${itemsRegistry.id}:<item>'. " +

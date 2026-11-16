@@ -31,6 +31,8 @@ import ru.endlesscode.mimic.impl.heroes.HeroesClassSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelProvider
 import ru.endlesscode.mimic.impl.heroes.HeroesLevelSystem
 import ru.endlesscode.mimic.impl.heroes.HeroesResourceProvider
+import ru.endlesscode.mimic.impl.itemsadder.ItemsAdderBlockProvider
+import ru.endlesscode.mimic.impl.itemsadder.ItemsAdderItemProvider
 import ru.endlesscode.mimic.impl.jobs.JobsLevelProvider
 import ru.endlesscode.mimic.impl.mcmmo.McMmoLevelProvider
 import ru.endlesscode.mimic.impl.mimic.PermissionsClassSystem
@@ -147,6 +149,11 @@ public class MimicPlugin : JavaPlugin() {
 
         pluginHooks("ValhallaMMO", "me.athlaeos.valhallammo.ValhallaMMO") {
             hookLevels(::ValhallaMmoLevelProvider)
+        }
+
+        pluginHooks("ItemsAdder", "dev.lone.itemsadder.api.CustomBlock") {
+            hookItems(::ItemsAdderItemProvider)
+            hookBlocks(::ItemsAdderBlockProvider)
         }
     }
 

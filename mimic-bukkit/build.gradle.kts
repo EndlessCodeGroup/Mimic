@@ -33,6 +33,7 @@ bukkit {
             "Jobs",
             "Fabled",
             "ValhallaMMO",
+            "ItemsAdder",
         )
     }
 
@@ -109,6 +110,7 @@ dependencies {
     testImplementation(libs.rpgplugins.mythiclib) { isTransitive = false }
     testImplementation(libs.rpgplugins.fabled) { isTransitive = false }
     testImplementation(libs.rpgplugins.codex) { isTransitive = false }
+    testImplementation(libs.rpgplugins.itemsadder)
 }
 
 kotlin {

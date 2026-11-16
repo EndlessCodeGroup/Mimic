@@ -117,9 +117,9 @@ An item given to a player is built by MMOItems for this player.
 **ID Format:** `rpginventory:[id]`\
 **Payload:** *Not supported*
 
-#### [ItemsAdder] _(deprecated API)_
+#### [ItemsAdder]
 
-**ID Format:** `ia:[id]`\
+**ID Format:** `itemsadder:[id]` for the default `itemsadder` namespace, `itemsadder:[namespace]/[id]` for others\
 **Payload:** *Not supported*
 
 ### [Block Providers][BlockProvider]
@@ -137,6 +137,11 @@ A block belongs to the provider with the highest priority that recognizes it, va
 
 **ID Format:** `craftengine:[namespace]/[id]`\
 **State:** Block state properties, for example `[facing=north]`
+
+#### [ItemsAdder]
+
+**ID Format:** `itemsadder:[id]` for the default `itemsadder` namespace, `itemsadder:[namespace]/[id]` for others\
+**State:** *Not supported*
 
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory

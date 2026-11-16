@@ -100,7 +100,7 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
 - **Resources:** the namespace is required, see [Resource IDs](#resource-ids).
 
 > The deprecated `ItemsRegistry` API still searches an item ID without namespace, or with the `mimic` namespace, over all plugins.
-> It also accepts item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`), with more than one `:` (`ia:itemsadder:ruby_sword`)
+> It also accepts item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`), with more than one `:` (`craftengine:default:palm_log`)
 > and MMOItems IDs without item type (`mmoitems:excalibur`), but logs a warning.
 
 <details>
