@@ -90,6 +90,7 @@ An item belongs to the provider with the highest priority that recognizes it, va
 | [CustomItems]                      | `customitems:[id]`             | -                |                                                  |
 | [ItemsAdder]                       | `itemsadder:[namespace]/[id]`  | -                | `itemsadder:[id]` for the `itemsadder` namespace |
 | [MMOItems]                         | `mmoitems:[type]/[id]`         | -                | Built by MMOItems for the player                 |
+| [MythicMobs]                       | `mythicmobs:[id]`              | -                | Converted ID², includes MythicCrucible items     |
 | [Nexo]                             | `nexo:[id]`                    | -                | Converted ID²                                    |
 | [Oraxen]                           | `oraxen:[id]`                  | -                | Converted ID²                                    |
 | [ProRPGItems]                      | `prorpgitems:[type]/[id]`      | -                | Deprecated API³                                  |
@@ -134,6 +135,7 @@ Content of a storage block is dropped on the ground when the block is broken. Fu
 [craftengine]: https://modrinth.com/plugin/craftengine
 [oraxen]: https://github.com/oraxen/oraxen
 [nexo]: https://nexomc.com/
+[mythicmobs]: https://modrinth.com/plugin/mythicmobs
 [auraskills]: https://modrinth.com/plugin/auraskills
 [mcmmo]: https://www.spigotmc.org/resources/64348/
 [jobs reborn]: https://www.spigotmc.org/resources/4216/

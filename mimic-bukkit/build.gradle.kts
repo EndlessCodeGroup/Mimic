@@ -36,6 +36,7 @@ bukkit {
             "ValhallaMMO",
             "ItemsAdder",
             "Nexo",
+            "MythicMobs",
         )
     }
 
@@ -87,6 +88,11 @@ repositories {
     maven(url = "https://repo.nexomc.com/releases/") {
         content {
             includeGroup("com.nexomc")
+        }
+    }
+    maven(url = "https://mvn.lumine.io/repository/maven-public/") {
+        content {
+            includeModule("io.lumine", "Mythic-Dist")
         }
     }
     aikar()

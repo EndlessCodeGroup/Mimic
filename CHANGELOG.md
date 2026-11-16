@@ -55,7 +55,7 @@ See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
   [Nexo](https://nexomc.com/) ([#50](https://github.com/EndlessCodeGroup/Mimic/issues/50)).
 - **Changed:** The `ia` items registry provided by ItemsAdder itself is not available via Items API, Mimic warns about it.
   Use `itemsadder:ruby_sword` instead of `ia:itemsadder:ruby_sword`.
-
+- New item provider: [MythicMobs](https://modrinth.com/plugin/mythicmobs), including items of MythicCrucible ([#38](https://github.com/EndlessCodeGroup/Mimic/issues/38)).
 
 ## [v0.10.0] (2026-11-15)
 

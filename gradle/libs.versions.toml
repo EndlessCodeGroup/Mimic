@@ -24,6 +24,7 @@ valhallammo = "premium_1.14.1"
 valhallammo-free = "1.10.4"
 itemsadder = "4.0.17"
 nexo = "1.30.2"
+mythicmobs = "5.14.0"
 
 junit = "6.1.3"
 kotest = "6.2.6"
@@ -62,6 +63,7 @@ rpgplugins-codex = { module = "studio.magemonkey:codex", version.ref = "codex" }
 rpgplugins-valhallammo = { module = "me.athlaeos:valhallammo-core", version.ref = "valhallammo" }
 rpgplugins-itemsadder = { module = "beer.devs:itemsadder-api", version.ref = "itemsadder" }
 rpgplugins-nexo = { module = "com.nexomc:nexo", version.ref = "nexo" }
+rpgplugins-mythicmobs = { module = "io.lumine:Mythic-Dist", version.ref = "mythicmobs" }
 
 # Test dependencies
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
@@ -101,4 +103,5 @@ rpgplugins = [
     "rpgplugins-valhallammo",
     "rpgplugins-itemsadder",
     "rpgplugins-nexo",
+    "rpgplugins-mythicmobs",
 ]
