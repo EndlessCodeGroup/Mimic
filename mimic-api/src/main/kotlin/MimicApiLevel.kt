@@ -53,6 +53,7 @@ public object MimicApiLevel {
     /**
      * # Version 0.11
      * - Blocks API, experimental BlockRegistry API is removed
+     * - Items API, ItemsRegistry API is deprecated
      */
     public const val VERSION_0_11: Int = 7
 
