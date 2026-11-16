@@ -58,6 +58,35 @@ internal class NexoItemProviderTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when Nexo ids are not valid - should convert them`() {
+        every { nexo.itemIds } returns listOf("ruby", "Ruby Sword")
+        every { nexo.getItemId(any()) } returns "Ruby Sword"
+        every { nexo.createItem("Ruby Sword", any()) } answers { ItemStack(Material.DIAMOND_SWORD) }
+
+        provider.allItems shouldContainExactly listOf("ruby", "ruby_sword")
+        provider.hasItem("ruby_sword") shouldBe true
+        provider.getItemId(ItemStack(Material.DIAMOND_SWORD)) shouldBe "ruby_sword"
+        provider.createItem("ruby_sword", amount = 1, player = null, payload = null)?.type shouldBe Material.DIAMOND_SWORD
+    }
+
+    @Test
+    fun `when Nexo ids become the same - should use the exact one`() {
+        every { nexo.itemIds } returns listOf("Ruby", "ruby", "RUBY")
+
+        provider.allItems shouldContainExactly listOf("ruby")
+        provider.createItem("ruby", amount = 1, player = null, payload = null)?.type shouldBe Material.EMERALD
+    }
+
+    @Test
+    fun `when Nexo ids become the same and none is exact - should use the first one`() {
+        every { nexo.itemIds } returns listOf("Ruby", "RUBY")
+        every { nexo.createItem("Ruby", any()) } answers { ItemStack(Material.REDSTONE) }
+
+        provider.allItems shouldContainExactly listOf("ruby")
+        provider.createItem("ruby", amount = 1, player = null, payload = null)?.type shouldBe Material.REDSTONE
+    }
+
+    @Test
     fun `when get id of not Nexo item - should return null`() {
         provider.getItemId(ItemStack(Material.EMERALD)).shouldBeNull()
     }

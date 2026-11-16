@@ -103,7 +103,7 @@ Providers marked with _(deprecated API)_ are provided by the plugin itself via t
 
 #### [Nexo]
 
-**ID Format:** `nexo:[id]`\
+**ID Format:** `nexo:[id]`, Nexo ID is lowercased and characters not allowed in IDs are replaced with `_`\
 **Payload:** *Not supported*
 
 #### [MMOItems]
@@ -148,6 +148,8 @@ A block belongs to the provider with the highest priority that recognizes it, va
 **ID Format:** `nexo:[id]`, the same as the ID of the item placing the block\
 **State:** *Not supported*\
 Note blocks, string blocks and chorus blocks are supported. Furniture is not a block.
+Every variant of a directional block has the ID of its parent block.
+Content of a storage block is dropped on the ground when the block is broken.
 
 [minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
 [minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory

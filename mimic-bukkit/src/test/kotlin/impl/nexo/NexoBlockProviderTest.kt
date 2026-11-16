@@ -66,6 +66,29 @@ internal class NexoBlockProviderTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when get id of directional block - should return id reported by Nexo wrapper`() {
+        every { nexo.getBlockId(block) } returns "ruby_log"
+
+        provider.getBlockId(block) shouldBe "ruby_log"
+    }
+
+    @Test
+    fun `when Nexo ids are not valid - should convert them`() {
+        every { nexo.blockIds } returns listOf("Ruby Ore")
+        every { nexo.getItemId(any()) } returns "Ruby Ore"
+        every { nexo.getBlockId(block) } returns "Ruby Ore"
+        every { nexo.createItem("Ruby Ore", any()) } answers { ItemStack(Material.PAPER) }
+
+        provider.allBlocks shouldContainExactly listOf("ruby_ore")
+        provider.hasBlock("ruby_ore").shouldBeTrue()
+        provider.getBlockId(block) shouldBe "ruby_ore"
+        provider.getBlockIdFromItem(ruby) shouldBe "ruby_ore"
+        provider.createBlockItem("ruby_ore", amount = 1)?.type shouldBe Material.PAPER
+        provider.setBlock(block, "ruby_ore", state = null).shouldBeTrue()
+        verify { nexo.placeBlock(block, "Ruby Ore") }
+    }
+
+    @Test
     fun `when create block item - should create Nexo item`() {
         val item = provider.createBlockItem("ruby_ore", amount = 3)
 
