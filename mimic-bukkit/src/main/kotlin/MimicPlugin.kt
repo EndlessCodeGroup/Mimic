@@ -19,7 +19,9 @@ import ru.endlesscode.mimic.config.MimicConfig
 import ru.endlesscode.mimic.impl.auraskills.AuraSkillsLevelProvider
 import ru.endlesscode.mimic.impl.auraskills.AuraSkillsResourceProvider
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineBlockProvider
+import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemProvider
 import ru.endlesscode.mimic.impl.craftengine.CraftEngineItemsRegistry
+import ru.endlesscode.mimic.impl.customitems.CustomItemsItemProvider
 import ru.endlesscode.mimic.impl.customitems.CustomItemsRegistry
 import ru.endlesscode.mimic.impl.fabled.FabledClassProvider
 import ru.endlesscode.mimic.impl.fabled.FabledLevelProvider
@@ -37,12 +39,14 @@ import ru.endlesscode.mimic.impl.mmocore.MmoCoreClassSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelProvider
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreLevelSystem
 import ru.endlesscode.mimic.impl.mmocore.MmoCoreResourceProvider
+import ru.endlesscode.mimic.impl.mmoitems.MmoItemsItemProvider
 import ru.endlesscode.mimic.impl.mmoitems.MmoItemsRegistry
 import ru.endlesscode.mimic.impl.valhallammo.ValhallaMmoLevelProvider
 import ru.endlesscode.mimic.impl.vanilla.*
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.inventory.BukkitPlayerInventory
 import ru.endlesscode.mimic.items.BukkitItemsRegistry
+import ru.endlesscode.mimic.items.ItemProvider
 import ru.endlesscode.mimic.level.BukkitLevelSystem
 import ru.endlesscode.mimic.level.LevelProvider
 import ru.endlesscode.mimic.resources.ResourceProvider
@@ -86,6 +90,7 @@ public class MimicPlugin : JavaPlugin() {
         hookClasses(PermissionsClassSystem::Provider, priority = Lowest)
         hookResources(::MinecraftResourceProvider, priority = Lowest)
         hookInventory(MinecraftPlayerInventory::Provider, priority = Lowest)
+        hookItems(::MinecraftItemProvider, priority = Lowest)
         hookItems(::MinecraftItemsRegistry, priority = Lowest)
         hookBlocks(::MinecraftBlockProvider, priority = Lowest)
 
@@ -106,14 +111,17 @@ public class MimicPlugin : JavaPlugin() {
         }
 
         pluginHooks("CustomItems", "com.jojodmo.customitems.api.CustomItemsAPI") {
+            hookItems(::CustomItemsItemProvider)
             hookItems(::CustomItemsRegistry)
         }
 
         pluginHooks("MMOItems", "net.Indyuce.mmoitems.MMOItems") {
+            hookItems(::MmoItemsItemProvider)
             hookItems(::MmoItemsRegistry)
         }
 
         pluginHooks("CraftEngine", "net.momirealms.craftengine.bukkit.api.CraftEngineBlocks") {
+            hookItems(::CraftEngineItemProvider)
             hookItems(::CraftEngineItemsRegistry)
             hookBlocks(::CraftEngineBlockProvider)
         }
@@ -197,6 +205,14 @@ public class MimicPlugin : JavaPlugin() {
         mimic.registerPlayerInventoryProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
     }
 
+    private fun hookItems(
+        constructor: () -> ItemProvider,
+        priority: ServicePriority = Normal,
+    ) {
+        mimic.registerItemProvider(constructor.invoke(), MimicApiLevel.CURRENT, this, priority)
+    }
+
+    @JvmName("hookItems_deprecated")
     private fun hookItems(
         constructor: () -> BukkitItemsRegistry,
         priority: ServicePriority = Normal,

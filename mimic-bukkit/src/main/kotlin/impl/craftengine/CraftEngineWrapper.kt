@@ -16,6 +16,7 @@ import net.momirealms.craftengine.core.util.Key
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.block.Block
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 /**
@@ -35,9 +36,15 @@ internal class CraftEngineWrapper {
     fun getCustomItem(item: ItemStack): BukkitItemDefinition? =
         CraftEngineItems.byItemStack(item)?.takeUnless { it.isVanillaItem }
 
-    /** Creates custom item with the given [amount], limited to the item's maximum stack size. */
-    fun createCustomItem(id: Key, amount: Int): ItemStack? =
-        getCustomItem(id)?.buildBukkitItem()?.also { it.amount = amount.coerceIn(1, it.maxStackSize) }
+    /**
+     * Creates custom item with the given [amount], limited to the item's maximum stack size.
+     * The item is built for the [player] if it is given.
+     */
+    fun createCustomItem(id: Key, amount: Int, player: Player? = null): ItemStack? {
+        val definition = getCustomItem(id) ?: return null
+        val item = if (player != null) definition.buildBukkitItem(player) else definition.buildBukkitItem()
+        return item?.also { it.amount = amount.coerceIn(1, it.maxStackSize) }
+    }
 
     fun getBlock(id: Key): BlockDefinition? = CraftEngineBlocks.byId(id)
     fun getBlockState(block: Block): ImmutableBlockState? = CraftEngineBlocks.getCustomBlockState(block)
