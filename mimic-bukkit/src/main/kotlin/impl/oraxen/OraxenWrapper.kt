@@ -19,7 +19,6 @@ import org.bukkit.block.data.type.Slab
 import org.bukkit.block.data.type.Tripwire
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemStack
-import ru.endlesscode.mimic.internal.OnceWarnings
 import kotlin.random.Random
 
 /**
@@ -110,26 +109,3 @@ internal fun Drop.roll(tool: ItemStack?): List<ItemStack> {
 private fun Drop.rollLoots(fortuneMultiplier: Int, tool: ItemStack?): List<ItemStack> = loots
     .filter { Random.nextDouble() <= it.probability }
     .mapNotNull { it.getItem(fortuneMultiplier, tool) }
-
-/** Converts Oraxen ID to Mimic ID: `Ruby Sword` -> `ruby_sword`. */
-internal fun String.toMimicId(): String = lowercase().replace(notAllowedChars, "_")
-
-/**
- * Converts the given Oraxen [ids] to Mimic IDs.
- * If two IDs become the same, the ID needing no conversion or the first one is kept,
- * the others are skipped with a warning logged once.
- */
-internal fun mimicIds(ids: Collection<String>, warnings: OnceWarnings, tag: String): Collection<String> {
-    val (exactIds, convertedIds) = ids.partition { it == it.toMimicId() }
-    val result = LinkedHashMap<String, String>()
-    for (id in exactIds + convertedIds) {
-        val mimicId = id.toMimicId()
-        val keptId = result.putIfAbsent(mimicId, id)
-        if (keptId != null) {
-            warnings.warn(id) { "[$tag] '$id' is skipped: its ID '$mimicId' is already used by '$keptId'" }
-        }
-    }
-    return result.keys
-}
-
-private val notAllowedChars = Regex("[^a-z0-9._/-]")

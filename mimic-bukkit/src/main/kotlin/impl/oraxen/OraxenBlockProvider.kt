@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.blocks.BlockProvider
 import ru.endlesscode.mimic.blocks.DropsConsumer
 import ru.endlesscode.mimic.internal.Log
-import ru.endlesscode.mimic.internal.OnceWarnings
+import ru.endlesscode.mimic.internal.NormalizedIds
 
 /**
  * Block provider for Oraxen custom blocks. Furniture is not a block.
@@ -29,27 +29,26 @@ internal class OraxenBlockProvider(
     private val oraxen: OraxenWrapper = OraxenWrapper(),
 ) : BlockProvider {
 
-    private val warnings = OnceWarnings()
+    private val ids = NormalizedIds("Oraxen", oraxen::isBlock, oraxen::blockIds)
 
     override val id: String = ID
     override val isEnabled: Boolean get() = oraxen.isEnabled
 
-    override val allBlocks: Collection<String>
-        get() = mimicIds(oraxen.blockIds, warnings, TAG)
+    override val allBlocks: Collection<String> get() = ids.all
 
-    override fun hasBlock(blockId: String): Boolean = findBlock(blockId) != null
+    override fun hasBlock(blockId: String): Boolean = ids.nativeOf(blockId) != null
 
-    override fun getBlockId(block: Block): String? = oraxen.getBlockId(block)?.toMimicId()
+    override fun getBlockId(block: Block): String? = oraxen.getBlockId(block)?.let(ids::normalizedOf)
 
-    override fun getBlockIdFromItem(item: ItemStack): String? = oraxen.getBlockIdFromItem(item)?.toMimicId()
+    override fun getBlockIdFromItem(item: ItemStack): String? = oraxen.getBlockIdFromItem(item)?.let(ids::normalizedOf)
 
     override fun createBlockItem(blockId: String, amount: Int): ItemStack? {
-        val oraxenId = findBlock(blockId) ?: return null
+        val oraxenId = ids.nativeOf(blockId) ?: return null
         return oraxen.createItem(oraxenId)?.also { it.amount = amount }
     }
 
     override fun setBlock(block: Block, blockId: String, state: String?): Boolean {
-        val oraxenId = findBlock(blockId) ?: return false
+        val oraxenId = ids.nativeOf(blockId) ?: return false
         if (state != null) {
             Log.w("[$TAG] Invalid state for block $blockId: $state")
             return false
@@ -65,11 +64,6 @@ internal class OraxenBlockProvider(
             block.world.dropItemNaturally(block.location, item)
         }
         return true
-    }
-
-    private fun findBlock(blockId: String): String? {
-        if (oraxen.isBlock(blockId)) return blockId
-        return oraxen.itemIds.find { it.toMimicId() == blockId && oraxen.isBlock(it) }
     }
 
     companion object {

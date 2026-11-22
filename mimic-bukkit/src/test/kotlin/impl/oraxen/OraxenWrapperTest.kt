@@ -14,8 +14,6 @@ import org.bukkit.Material
 import org.bukkit.configuration.MemoryConfiguration
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.BukkitTestBase
-import ru.endlesscode.mimic.internal.Log
-import ru.endlesscode.mimic.internal.OnceWarnings
 import kotlin.test.Test
 
 internal class OraxenWrapperTest : BukkitTestBase() {
@@ -31,21 +29,6 @@ internal class OraxenWrapperTest : BukkitTestBase() {
     fun `when get id of block without parent - should return its id`() {
         blockId("ruby_log", DirectionalBlock(MemoryConfiguration())) shouldBe "ruby_log"
         blockId("ruby_ore", directional = null) shouldBe "ruby_ore"
-    }
-
-    @Test
-    fun `when two ids become the same - should keep the id needing no conversion and warn once`() {
-        val loggedWarnings = mutableListOf<String>()
-        Log.init({ _, message, _ -> loggedWarnings += message.orEmpty() })
-        val warnings = OnceWarnings()
-        val ids = listOf("Ruby_Sword", "ruby_sword", "Ruby Ore", "RUBY_ORE")
-
-        repeat(2) { mimicIds(ids, warnings, "Tag").toList() shouldContainExactly listOf("ruby_sword", "ruby_ore") }
-
-        loggedWarnings shouldContainExactly listOf(
-            "[Tag] 'Ruby_Sword' is skipped: its ID 'ruby_sword' is already used by 'ruby_sword'",
-            "[Tag] 'RUBY_ORE' is skipped: its ID 'ruby_ore' is already used by 'Ruby Ore'",
-        )
     }
 
     @Test
