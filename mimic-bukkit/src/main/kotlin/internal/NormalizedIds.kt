@@ -4,6 +4,7 @@
 package ru.endlesscode.mimic.internal
 
 import net.kyori.adventure.key.Key
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Converts native IDs of a plugin to normalized IDs and back.
@@ -22,6 +23,9 @@ internal class NormalizedIds(
 ) {
 
     private val warnings = OnceWarnings()
+
+    /** Native IDs found by normalized IDs. An entry may be outdated, so it should be checked before use. */
+    private val foundNativeIds = ConcurrentHashMap<String, String>()
 
     /** All normalized IDs. */
     val all: List<String>
@@ -42,13 +46,30 @@ internal class NormalizedIds(
     fun normalizedOf(nativeId: String): String? = normalize(nativeId).takeIf { nativeOf(it) == nativeId }
 
     /** Returns native ID for the given [normalizedId], or `null` if there is no such ID. */
-    fun nativeOf(normalizedId: String): String? =
-        normalizedId.takeIf(exists) ?: nativeIds().find { normalize(it) == normalizedId }
+    fun nativeOf(normalizedId: String): String? {
+        if (exists(normalizedId)) return normalizedId
+        foundNativeIds[normalizedId]?.let { if (exists(it)) return it }
+
+        val nativeId = nativeIds().find { it.normalizesTo(normalizedId) }
+        if (nativeId != null) foundNativeIds[normalizedId] = nativeId else foundNativeIds.remove(normalizedId)
+        return nativeId
+    }
 
     companion object {
         /** Normalizes the given [id]: lowercases it and replaces characters not allowed in Mimic IDs with `_`. */
-        fun normalize(id: String): String = buildString {
-            for (char in id.lowercase()) append(if (Key.allowedInValue(char)) char else '_')
+        fun normalize(id: String): String = buildString(id.length) {
+            for (char in id) append(normalize(char))
+        }
+
+        private fun normalize(char: Char): Char = char.lowercaseChar().let { if (Key.allowedInValue(it)) it else '_' }
+
+        /** Checks that [normalizedId] is the normalized form of this ID. Doesn't allocate, unlike [normalize]. */
+        private fun String.normalizesTo(normalizedId: String): Boolean {
+            if (length != normalizedId.length) return false
+            for (index in indices) {
+                if (normalize(this[index]) != normalizedId[index]) return false
+            }
+            return true
         }
     }
 }
