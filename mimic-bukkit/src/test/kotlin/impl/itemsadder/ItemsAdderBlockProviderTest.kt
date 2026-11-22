@@ -32,7 +32,7 @@ internal class ItemsAdderBlockProviderTest : BukkitTestBase() {
     }
 
     private val itemsAdder: ItemsAdderWrapper = mockk {
-        every { blockIds } returns setOf("itemsadder:ruby_ore", "my_blocks:ruby_ore")
+        every { blockIds } returns setOf("itemsadder:ruby_ore", "my_blocks:ruby_ore", "My_Blocks:Ruby_Lamp")
         every { hasBlock(any()) } answers { firstArg<String>() in blockIds }
         every { getCustomBlock(any<String>()) } returns null
         every { getCustomBlock("my_blocks:ruby_ore") } answers { mockCustomBlock() }
@@ -46,13 +46,14 @@ internal class ItemsAdderBlockProviderTest : BukkitTestBase() {
 
     @Test
     fun `when get all blocks - should drop default namespace and keep others as the first segment`() {
-        provider.allBlocks shouldContainExactly listOf("ruby_ore", "my_blocks/ruby_ore")
+        provider.allBlocks shouldContainExactly listOf("ruby_ore", "my_blocks/ruby_ore", "my_blocks/ruby_lamp")
     }
 
     @ParameterizedTest
     @CsvSource(
         "ruby_ore,           true",
         "my_blocks/ruby_ore, true",
+        "my_blocks/ruby_lamp, true",
         "my_blocks/unknown,  false",
         "unknown,            false",
     )
@@ -65,6 +66,13 @@ internal class ItemsAdderBlockProviderTest : BukkitTestBase() {
         every { itemsAdder.getCustomBlock(block) } returns mockCustomBlock()
 
         provider.getBlockId(block) shouldBe "my_blocks/ruby_ore"
+    }
+
+    @Test
+    fun `when get block id of block with converted id - should return converted id`() {
+        every { itemsAdder.getCustomBlock(block) } returns mockCustomBlock("My_Blocks:Ruby_Lamp")
+
+        provider.getBlockId(block) shouldBe "my_blocks/ruby_lamp"
     }
 
     @Test
@@ -104,6 +112,13 @@ internal class ItemsAdderBlockProviderTest : BukkitTestBase() {
         provider.setBlock(block, "my_blocks/ruby_ore", state = null) shouldBe true
 
         verify { itemsAdder.placeBlock("my_blocks:ruby_ore", location) }
+    }
+
+    @Test
+    fun `when set block with converted id - should place the block by original ItemsAdder id`() {
+        provider.setBlock(block, "my_blocks/ruby_lamp", state = null) shouldBe true
+
+        verify { itemsAdder.placeBlock("My_Blocks:Ruby_Lamp", location) }
     }
 
     @ParameterizedTest
@@ -157,8 +172,8 @@ internal class ItemsAdderBlockProviderTest : BukkitTestBase() {
         verify(exactly = 0) { world.dropItemNaturally(any(), any()) }
     }
 
-    private fun mockCustomBlock(): CustomBlock = mockk {
-        every { namespacedID } returns "my_blocks:ruby_ore"
+    private fun mockCustomBlock(id: String = "my_blocks:ruby_ore"): CustomBlock = mockk {
+        every { namespacedID } returns id
         every { itemStack } returns ItemStack(Material.PAPER)
         every { getLoot(any(), any()) } returns listOf(ItemStack(Material.DIAMOND))
         every { remove() } returns true

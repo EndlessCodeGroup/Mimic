@@ -20,11 +20,12 @@ import kotlin.test.Test
 internal class ItemsAdderItemProviderTest : BukkitTestBase() {
 
     private val itemsAdder: ItemsAdderWrapper = mockk {
-        every { itemIds } returns setOf("itemsadder:ruby_sword", "my_items:ruby_sword")
+        every { itemIds } returns setOf("itemsadder:ruby_sword", "my_items:ruby_sword", "My_Items:Ruby_Axe", "itemsadder:swords/ruby")
         every { hasItem(any()) } answers { firstArg<String>() in itemIds }
         every { getCustomStack(any<String>()) } returns null
         every { getCustomStack("itemsadder:ruby_sword") } answers { mockCustomStack(Material.DIAMOND_SWORD) }
         every { getCustomStack("my_items:ruby_sword") } answers { mockCustomStack(Material.IRON_SWORD) }
+        every { getCustomStack("My_Items:Ruby_Axe") } answers { mockCustomStack(Material.IRON_AXE) }
         every { getCustomStack(any<ItemStack>()) } returns null
     }
 
@@ -33,13 +34,14 @@ internal class ItemsAdderItemProviderTest : BukkitTestBase() {
 
     @Test
     fun `when get all items - should drop default namespace and keep others as the first segment`() {
-        provider.allItems shouldContainExactly listOf("ruby_sword", "my_items/ruby_sword")
+        provider.allItems shouldContainExactly listOf("ruby_sword", "my_items/ruby_sword", "my_items/ruby_axe", "itemsadder/swords/ruby")
     }
 
     @ParameterizedTest
     @CsvSource(
         "ruby_sword,          true",
         "my_items/ruby_sword, true",
+        "my_items/ruby_axe,   true",
         "my_items/unknown,    false",
         "unknown,             false",
     )
@@ -51,6 +53,7 @@ internal class ItemsAdderItemProviderTest : BukkitTestBase() {
     @CsvSource(
         "ruby_sword,          DIAMOND_SWORD",
         "my_items/ruby_sword, IRON_SWORD",
+        "my_items/ruby_axe,   IRON_AXE",
     )
     fun `when create item - should return the item of the given namespace`(itemId: String, expected: Material) {
         val item = provider.createItem(itemId, amount = 2, player, payload = "ignored")
@@ -70,6 +73,7 @@ internal class ItemsAdderItemProviderTest : BukkitTestBase() {
         "itemsadder:ruby_sword,  ruby_sword",
         "my_items:ruby_sword,    my_items/ruby_sword",
         "itemsadder:swords/ruby, itemsadder/swords/ruby",
+        "My_Items:Ruby_Axe,      my_items/ruby_axe",
     )
     fun `when get item id - should convert ItemsAdder id`(itemsAdderId: String, expected: String) {
         val item = mockk<ItemStack>()

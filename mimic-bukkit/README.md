@@ -83,19 +83,19 @@ An item belongs to the provider with the highest priority that recognizes it, va
 > The deprecated [ItemsRegistry][MimicItemsRegistry] API also accepts item ID without a namespace or with the `mimic` namespace
 > and searches it over all providers. Plugins using this API accept MMOItems IDs without item type too, if only one type has the item.
 
-| Plugin                             | ID format                      | Payload          | Notes                                            |
-|------------------------------------|--------------------------------|------------------|--------------------------------------------------|
-| [Minecraft][MinecraftItemProvider] | `minecraft:[id]`               | Item components¹ |                                                  |
-| [CraftEngine]                      | `craftengine:[namespace]/[id]` | -                |                                                  |
-| [CustomItems]                      | `customitems:[id]`             | -                |                                                  |
-| [ExecutableItems]                  | `executableitems:[id]`         | -                | Converted ID², owned by the player               |
-| [ItemsAdder]                       | `itemsadder:[namespace]/[id]`  | -                | `itemsadder:[id]` for the `itemsadder` namespace |
-| [MMOItems]                         | `mmoitems:[type]/[id]`         | -                | Built by MMOItems for the player                 |
-| [MythicMobs]                       | `mythicmobs:[id]`              | -                | Converted ID², includes MythicCrucible items     |
-| [Nexo]                             | `nexo:[id]`                    | -                | Converted ID²                                    |
-| [Oraxen]                           | `oraxen:[id]`                  | -                | Converted ID²                                    |
-| [ProRPGItems]                      | `prorpgitems:[type]/[id]`      | -                | Deprecated API³                                  |
-| [RPGInventory]                     | `rpginventory:[id]`            | -                | Deprecated API³                                  |
+| Plugin                             | ID format                      | Payload          | Notes                                                           |
+|------------------------------------|--------------------------------|------------------|-----------------------------------------------------------------|
+| [Minecraft][MinecraftItemProvider] | `minecraft:[id]`               | Item components¹ |                                                                 |
+| [CraftEngine]                      | `craftengine:[namespace]/[id]` | -                |                                                                 |
+| [CustomItems]                      | `customitems:[id]`             | -                |                                                                 |
+| [ExecutableItems]                  | `executableitems:[id]`         | -                | Converted ID², owned by the player                              |
+| [ItemsAdder]                       | `itemsadder:[namespace]/[id]`  | -                | Converted ID², `itemsadder:[id]` for the `itemsadder` namespace |
+| [MMOItems]                         | `mmoitems:[type]/[id]`         | -                | Built by MMOItems for the player                                |
+| [MythicMobs]                       | `mythicmobs:[id]`              | -                | Converted ID², includes MythicCrucible items                    |
+| [Nexo]                             | `nexo:[id]`                    | -                | Converted ID²                                                   |
+| [Oraxen]                           | `oraxen:[id]`                  | -                | Converted ID²                                                   |
+| [ProRPGItems]                      | `prorpgitems:[type]/[id]`      | -                | Deprecated API³                                                 |
+| [RPGInventory]                     | `rpginventory:[id]`            | -                | Deprecated API³                                                 |
 
 ¹ [Item components][item-components] in the format of `/give` command, for example `[damage=10,unbreakable={}]`.\
 ² The plugin's ID is lowercased and characters not allowed in IDs are replaced with `_`: `Ruby Sword` -> `ruby_sword`.
@@ -108,13 +108,13 @@ Blocks of all providers are available via [Blocks], with the provider ID as a na
 The namespace is required.
 A block belongs to the provider with the highest priority that recognizes it, vanilla blocks belong to `minecraft`.
 
-| Plugin                              | ID format                      | State        | Notes                                            |
-|-------------------------------------|--------------------------------|--------------|--------------------------------------------------|
-| [Minecraft][MinecraftBlockProvider] | `minecraft:[id]`               | Block state¹ |                                                  |
-| [CraftEngine]                       | `craftengine:[namespace]/[id]` | Block state¹ |                                                  |
-| [ItemsAdder]                        | `itemsadder:[namespace]/[id]`  | -            | `itemsadder:[id]` for the `itemsadder` namespace |
-| [Nexo]                              | `nexo:[id]`                    | -            | Item-based², note, string and chorus blocks³     |
-| [Oraxen]                            | `oraxen:[id]`                  | -            | Item-based²                                      |
+| Plugin                              | ID format                      | State        | Notes                                                         |
+|-------------------------------------|--------------------------------|--------------|---------------------------------------------------------------|
+| [Minecraft][MinecraftBlockProvider] | `minecraft:[id]`               | Block state¹ |                                                               |
+| [CraftEngine]                       | `craftengine:[namespace]/[id]` | Block state¹ |                                                               |
+| [ItemsAdder]                        | `itemsadder:[namespace]/[id]`  | -            | Item-based², `itemsadder:[id]` for the `itemsadder` namespace |
+| [Nexo]                              | `nexo:[id]`                    | -            | Item-based², note, string and chorus blocks³                  |
+| [Oraxen]                            | `oraxen:[id]`                  | -            | Item-based²                                                   |
 
 ¹ Block state properties, for example `[facing=north]`.\
 ² The block ID is the converted ID of the item placing the block, as for items.
