@@ -23,6 +23,7 @@ See [Items](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-
 - **Changed:** `ItemsRegistry.getItem` returns `null` if an item provider can't use the payload. Previously, the payload was ignored.
   A payload which isn't a `String`, like an `ItemMetaPayload` instance, is passed only to items registries.
 - **Changed:** A built-in item provider is replaced only by an `ItemProvider` with the same ID, not by an `ItemsRegistry`.
+- **Breaking:** `CraftEngineItemsRegistry` is removed, CraftEngine items are still available via Items API and `Mimic.getItemsRegistry()`.
 - **Deprecated:** The HOCON payload (`ItemMetaPayload`) of `minecraft` items still works, but logs a warning.
   Use item components instead, for example `[damage=10,unbreakable={}]`.
 - **Changed:** Empty stacks have no ID, and `minecraft:air` is not an item.
