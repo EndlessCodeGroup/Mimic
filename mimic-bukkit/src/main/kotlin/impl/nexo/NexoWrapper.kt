@@ -28,9 +28,7 @@ internal class NexoWrapper {
     fun hasItem(id: String): Boolean = NexoItems.exists(id)
     fun getItemId(item: ItemStack): String? = NexoItems.idFromItem(item)?.takeIf(NexoItems::exists)
 
-    /** Creates item with the given [amount], limited to the item's maximum stack size. */
-    fun createItem(id: String, amount: Int): ItemStack? =
-        NexoItems.createItem(id)?.also { it.amount = amount.coerceIn(1, it.maxStackSize) }
+    fun createItem(id: String, amount: Int): ItemStack? = NexoItems.createItem(id)?.also { it.amount = amount }
 
     fun hasBlock(id: String): Boolean = NexoBlocks.isCustomBlock(id)
     fun getBlockId(block: Block): String? = NexoBlocks.customBlockMechanic(block)?.blockId

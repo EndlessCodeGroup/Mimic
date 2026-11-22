@@ -37,13 +37,12 @@ internal class CraftEngineWrapper {
         CraftEngineItems.byItemStack(item)?.takeUnless { it.isVanillaItem }
 
     /**
-     * Creates custom item with the given [amount], limited to the item's maximum stack size.
-     * The item is built for the [player] if it is given.
+     * Creates custom item with the given [amount]. The item is built for the [player] if it is given.
      */
     fun createCustomItem(id: Key, amount: Int, player: Player? = null): ItemStack? {
         val definition = getCustomItem(id) ?: return null
         val item = if (player != null) definition.buildBukkitItem(player) else definition.buildBukkitItem()
-        return item?.also { it.amount = amount.coerceIn(1, it.maxStackSize) }
+        return item?.also { it.amount = amount }
     }
 
     fun getBlock(id: Key): BlockDefinition? = CraftEngineBlocks.byId(id)
