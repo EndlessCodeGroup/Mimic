@@ -6,7 +6,7 @@ package ru.endlesscode.mimic.impl.jobs
 import com.gamingmesh.jobs.container.Job
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.classes.ClassSystemSlotProvider
+import ru.endlesscode.mimic.internal.NormalizedIds
 import ru.endlesscode.mimic.level.LevelProgress
 import ru.endlesscode.mimic.level.LevelProvider
 
@@ -107,6 +107,6 @@ internal class JobsLevelProvider(
 
 /** Job name converted to an ID: `Wood Cutter` becomes `wood_cutter`. */
 private val Job.trackId: String
-    get() = ClassSystemSlotProvider.toPath(name)
+    get() = NormalizedIds.normalize(name)
 
 private fun Job.toTrack() = LevelProvider.Track(trackId, Component.text(jobFullName))

@@ -4,7 +4,7 @@
 package ru.endlesscode.mimic.impl.fabled
 
 import org.bukkit.entity.Player
-import ru.endlesscode.mimic.classes.ClassSystemSlotProvider
+import ru.endlesscode.mimic.internal.NormalizedIds
 import studio.magemonkey.fabled.Fabled
 import studio.magemonkey.fabled.api.classes.FabledClass
 import studio.magemonkey.fabled.api.player.PlayerClass
@@ -39,7 +39,7 @@ internal class FabledWrapper {
 
 /** Class name converted to an ID: `Honor Guard` becomes `honor_guard`. */
 internal val FabledClass.classId: String
-    get() = ClassSystemSlotProvider.toPath(name)
+    get() = NormalizedIds.normalize(name)
 
 /** Group name converted to an ID of the slot and the level track. Fabled doesn't lowercase groups from configs. */
-internal fun groupId(group: String): String = ClassSystemSlotProvider.toPath(group)
+internal fun groupId(group: String): String = NormalizedIds.normalize(group)

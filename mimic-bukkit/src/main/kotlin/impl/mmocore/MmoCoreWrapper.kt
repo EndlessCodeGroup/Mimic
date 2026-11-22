@@ -13,7 +13,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
-import ru.endlesscode.mimic.classes.ClassSystemSlotProvider
+import ru.endlesscode.mimic.internal.NormalizedIds
 
 internal class MmoCoreWrapper {
     val isEnabled: Boolean get() = MMOCore.plugin.isEnabled
@@ -41,4 +41,4 @@ internal class MmoCoreWrapper {
 
 /** Class ID converted to a Mimic ID: `ARCANE_MAGE` becomes `arcane_mage`. */
 internal val PlayerClass.classId: String
-    get() = ClassSystemSlotProvider.toPath(id)
+    get() = NormalizedIds.normalize(id)

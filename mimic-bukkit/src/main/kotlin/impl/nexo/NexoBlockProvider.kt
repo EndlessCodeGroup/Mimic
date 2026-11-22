@@ -7,6 +7,7 @@ import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
 import ru.endlesscode.mimic.blocks.BlockProvider
 import ru.endlesscode.mimic.blocks.DropsConsumer
+import ru.endlesscode.mimic.internal.NormalizedIds
 import ru.endlesscode.mimic.internal.Log
 
 /**
@@ -27,27 +28,27 @@ internal class NexoBlockProvider(
     private val nexo: NexoWrapper = NexoWrapper(),
 ) : BlockProvider {
 
-    private val ids = NexoIds(nexo::hasBlock, nexo::blockIds)
+    private val ids = NormalizedIds("Nexo", nexo::hasBlock, nexo::blockIds)
 
     override val id: String = ID
     override val isEnabled: Boolean get() = nexo.isEnabled
 
-    override val allBlocks: Collection<String> get() = ids.mimicIds
+    override val allBlocks: Collection<String> get() = ids.all
 
-    override fun hasBlock(blockId: String): Boolean = ids.findNexoId(blockId) != null
+    override fun hasBlock(blockId: String): Boolean = ids.nativeOf(blockId) != null
 
-    override fun getBlockId(block: Block): String? = nexo.getBlockId(block)?.let(ids::mimicIdOf)
+    override fun getBlockId(block: Block): String? = nexo.getBlockId(block)?.let(ids::normalizedOf)
 
     override fun getBlockIdFromItem(item: ItemStack): String? =
-        nexo.getItemId(item)?.let(nexo::getBlockIdOfItem)?.let(ids::mimicIdOf)
+        nexo.getItemId(item)?.let(nexo::getBlockIdOfItem)?.let(ids::normalizedOf)
 
     override fun createBlockItem(blockId: String, amount: Int): ItemStack? {
-        val nexoId = ids.findNexoId(blockId) ?: return null
+        val nexoId = ids.nativeOf(blockId) ?: return null
         return nexo.createItem(nexoId, amount)
     }
 
     override fun setBlock(block: Block, blockId: String, state: String?): Boolean {
-        val nexoId = ids.findNexoId(blockId) ?: return false
+        val nexoId = ids.nativeOf(blockId) ?: return false
         if (state != null) {
             Log.w("[$TAG] Invalid state for block $blockId: $state")
             return false

@@ -5,9 +5,9 @@
 
 package ru.endlesscode.mimic.classes
 
-import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.internal.NormalizedIds
 import ru.endlesscode.mimic.internal.stripColor
 
 /**
@@ -37,15 +37,8 @@ internal class ClassSystemSlotProvider(
         if (primaryClass.isNullOrEmpty()) return null
         // Old class systems may return display names with legacy color codes
         val name = LegacyComponentSerializer.legacySection().deserialize(primaryClass)
-        val path = toPath(primaryClass.stripColor())
+        val path = NormalizedIds.normalize(primaryClass.stripColor())
         if (path.isEmpty()) return null
         return ClassProvider.ClassDefinition(path, name)
-    }
-
-    companion object {
-        /** Converts the class name to a path: lowercase, characters not allowed in paths are replaced with `_`. */
-        fun toPath(name: String): String = buildString {
-            for (char in name.lowercase()) append(if (Key.allowedInValue(char)) char else '_')
-        }
     }
 }

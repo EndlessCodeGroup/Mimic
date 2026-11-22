@@ -5,6 +5,7 @@ package ru.endlesscode.mimic.impl.nexo
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import ru.endlesscode.mimic.internal.NormalizedIds
 import ru.endlesscode.mimic.items.ItemProvider
 
 /**
@@ -17,19 +18,19 @@ internal class NexoItemProvider(
     private val nexo: NexoWrapper = NexoWrapper(),
 ) : ItemProvider {
 
-    private val ids = NexoIds(nexo::hasItem, nexo::itemIds)
+    private val ids = NormalizedIds("Nexo", nexo::hasItem, nexo::itemIds)
 
     override val id: String = ID
     override val isEnabled: Boolean get() = nexo.isEnabled
 
-    override val allItems: Collection<String> get() = ids.mimicIds
+    override val allItems: Collection<String> get() = ids.all
 
-    override fun hasItem(itemId: String): Boolean = ids.findNexoId(itemId) != null
+    override fun hasItem(itemId: String): Boolean = ids.nativeOf(itemId) != null
 
-    override fun getItemId(item: ItemStack): String? = nexo.getItemId(item)?.let(ids::mimicIdOf)
+    override fun getItemId(item: ItemStack): String? = nexo.getItemId(item)?.let(ids::normalizedOf)
 
     override fun createItem(itemId: String, amount: Int, player: Player?, payload: String?): ItemStack? {
-        val nexoId = ids.findNexoId(itemId) ?: return null
+        val nexoId = ids.nativeOf(itemId) ?: return null
         return nexo.createItem(nexoId, amount)
     }
 

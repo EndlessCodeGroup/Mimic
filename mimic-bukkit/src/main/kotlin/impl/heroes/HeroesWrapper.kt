@@ -10,7 +10,7 @@ import com.herocraftonline.heroes.util.Properties
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
-import ru.endlesscode.mimic.classes.ClassSystemSlotProvider
+import ru.endlesscode.mimic.internal.NormalizedIds
 
 internal class HeroesWrapper {
 
@@ -48,4 +48,4 @@ internal val HeroClass.isPlaceholder: Boolean
 
 /** Class name converted to an ID: `Dark Knight` becomes `dark_knight`. */
 internal val HeroClass.classId: String
-    get() = ClassSystemSlotProvider.toPath(name)
+    get() = NormalizedIds.normalize(name)
