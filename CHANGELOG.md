@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [v0.11.0] (2026-11-24)
+
 ### Items API
 
 New Items API replaces `ItemsRegistry` ([#95](https://github.com/EndlessCodeGroup/Mimic/issues/95)).
@@ -403,7 +405,8 @@ It also allows users to select preferred APIs implementation via config.
 - Update bukkit-gradle to 0.10.0
 - Update Gradle to 7.2
 
-[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.10.0...develop
+[unreleased]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.11.0...develop
+[v0.11.0]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.10.0...v0.11.0
 [v0.10.0]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.9.0...v0.10.0
 [v0.9.0]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.8.0...v0.9.0
 [v0.8.0]: https://github.com/EndlessCodeGroup/Mimic/compare/v0.7.1...v0.8.0
