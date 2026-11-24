@@ -48,3 +48,9 @@ jobs:
           export RELEASE_NOTES="$(cat release-notes.md)"
           # --continue: a failure on one platform doesn't block the other
           ./gradlew :mimic-bukkit:modrinth :mimic-bukkit:publishPluginPublicationToHangar --continue
+
+      - name: Sync Modrinth and Hangar descriptions
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
+        run: ./gradlew :mimic-bukkit:modrinthSyncBody :mimic-bukkit:syncPluginPublicationMainResourcePagePageToHangar --continue

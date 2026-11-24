@@ -167,12 +167,46 @@ tasks.runServer {
     }
 }
 
+tasks.shadowJar {
+    dependencies {
+        exclude(dependency("org.jetbrains:annotations:.*"))
+    }
+
+    val shadePackage = "${project.group}.shade"
+    relocate("kotlin", "$shadePackage.kotlin")
+    relocate("org.bstats", "$shadePackage.bstats")
+    relocate("com.typesafe.config", "$shadePackage.hocon")
+
+    exclude("META-INF/*.kotlin_module")
+    exclude("META-INF/com.android.tools/**")
+    exclude("META-INF/proguard/**")
+    exclude("META-INF/maven/**")
+    exclude("META-INF/**/module-info.class")
+    exclude("LICENSE")
+
+    minimize()
+}
+
+//region Plugin Publishing
 val supportedGameVersions = listOf(
     "1.20.6",
     "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6",
     "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11",
     "26.1", "26.1.1", "26.1.2", "26.2", "26.3",
 )
+
+// Description of the project pages is the part of README between the markers
+val projectDescription = providers
+    .fileContents(rootProject.layout.projectDirectory.file("README.md"))
+    .asText
+    .map { readme ->
+        val startMarker = "<!-- Start of the project description -->"
+        val endMarker = "<!-- End of the project description -->"
+        check(startMarker in readme && endMarker in readme.substringAfter(startMarker)) {
+            "README.md must contain '$startMarker' followed by '$endMarker'"
+        }
+        readme.substringAfter(startMarker).substringBefore(endMarker).trim()
+    }
 
 modrinth {
     token = providers.environmentVariable("MODRINTH_TOKEN")
@@ -188,6 +222,7 @@ modrinth {
         optional.project("craftengine")
         optional.project("valhallammo")
     }
+    syncBodyFrom = projectDescription
 }
 
 hangarPublish {
@@ -209,25 +244,9 @@ hangarPublish {
                 }
             }
         }
+        pages {
+            resourcePage(projectDescription)
+        }
     }
 }
-
-tasks.shadowJar {
-    dependencies {
-        exclude(dependency("org.jetbrains:annotations:.*"))
-    }
-
-    val shadePackage = "${project.group}.shade"
-    relocate("kotlin", "$shadePackage.kotlin")
-    relocate("org.bstats", "$shadePackage.bstats")
-    relocate("com.typesafe.config", "$shadePackage.hocon")
-
-    exclude("META-INF/*.kotlin_module")
-    exclude("META-INF/com.android.tools/**")
-    exclude("META-INF/proguard/**")
-    exclude("META-INF/maven/**")
-    exclude("META-INF/**/module-info.class")
-    exclude("LICENSE")
-
-    minimize()
-}
+//endregion

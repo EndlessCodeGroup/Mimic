@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/github/license/EndlessCodeGroup/Mimic.svg?style=flat-square)][license]
 [![Discord](https://img.shields.io/discord/314362656909819904?color=7389da&logo=discord&style=flat-square)](https://discord.gg/5NfPsgb)
 
-<!-- Start of the Modrinth description -->
+<!-- Start of the project description -->
 
 ![Mimic](https://raw.githubusercontent.com/EndlessCodeGroup/Mimic/develop/images/logo.png)
 
@@ -65,7 +65,7 @@ Commands without arguments show info and list available subcommands: click a sub
 - [Developer guide](https://github.com/EndlessCodeGroup/Mimic/tree/develop/mimic-bukkit-api)
 - [Source code](https://github.com/EndlessCodeGroup/Mimic)
 
-<!-- End of the Modrinth description -->
+<!-- End of the project description -->
 
 ## For developers
 
