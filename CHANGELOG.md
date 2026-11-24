@@ -11,7 +11,7 @@ See [Items](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-
   There is no search over all providers in the new API.
 - An item belongs to the provider with the highest priority recognizing it,
   so a custom item no longer matches the ID of its vanilla base ([#86](https://github.com/EndlessCodeGroup/Mimic/issues/86)).
-- Items can be created for a player, MMOItems and CraftEngine use it.
+- Items can be created for a player, MMOItems, CraftEngine, MythicMobs and ExecutableItems use it.
 - A provider may override `ItemProvider.hasItem` to check an item faster, or if it can't list its items.
 - The payload is a `String` in the format of the item's provider. An item is not created if its payload is invalid.
   A blank payload is the same as no payload.
@@ -59,6 +59,10 @@ See [Blocks](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit
 - New item providers: [MythicMobs](https://modrinth.com/plugin/mythicmobs), including items of MythicCrucible ([#38](https://github.com/EndlessCodeGroup/Mimic/issues/38)),
   [ExecutableItems](https://www.spigotmc.org/resources/77578/) ([#111](https://github.com/EndlessCodeGroup/Mimic/issues/111)),
   [EcoItems](https://github.com/Auxilor/EcoItems) ([#53](https://github.com/EndlessCodeGroup/Mimic/issues/53)).
+
+### Plugin changes
+
+- Added support for Minecraft 26.2 and 26.3.
 
 ## [v0.10.0] (2026-11-15)
 
@@ -269,7 +273,7 @@ BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
 List<ItemStack> equippedItems = inventory.getEquippedItems();
 // Get not equipped items stored in the inventory
 List<ItemStack> storedItems = inventory.getStoredItems();
-// Get both equpped and not equipped items
+// Get both equipped and not equipped items
 List<ItemStack> allItems = inventory.getItems();
 ```
 
@@ -325,7 +329,7 @@ Mimic mimic = Mimic.getInstance();
 // Register ItemsRegistry implementation
 mimic.registerItemsRegistry(new MyItemsRegistry(), plugin);
 
-// Get items registry imlpementation
+// Get items registry implementation
 BukkitItemsRegistry registry = mimic.getItemsRegistry();
 ```
 

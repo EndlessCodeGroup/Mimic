@@ -7,7 +7,7 @@ Bukkit plugin containing Mimic APIs implementations.
 ### For Developers
 
 If you are plugins developer, read [mimic-bukkit-api].
-There you'll find a guide on how to use MimicAPI and how to create your own implementation of Mimic APIs.
+There you'll find a guide on how to use Mimic API and how to create your own implementation of Mimic APIs.
 
 ### For Server Owners
 
@@ -24,42 +24,37 @@ You can configure in `config.yml` what APIs implementations should be used, or u
 
 | Command            | Description                          |
 |--------------------|--------------------------------------|
-| `/mimic`           | Show mimic status                    |
+| `/mimic`           | Show Mimic status                    |
 | `/mimic config`    | Show and change Mimic config         |
 | `/mimic levels`    | Manage player's levels               |
 | `/mimic classes`   | Manage player's classes              |
 | `/mimic resources` | Manage player's mana and similar     |
 | `/mimic inventory` | Player's inventory info              |
 | `/mimic items`     | Give, find and compare items         |
-| `/mimic blocks`    | Deal with blocks                     |
+| `/mimic blocks`    | Set, break, find and compare blocks  |
 
 Commands without arguments show info and list available subcommands: click a subcommand to use it, hover to see usage.
 
-## Supported Implementations 
+## Supported Implementations
 
 You can find code of all built-in implementations [here](src/main/kotlin/impl).
 
-### [Level Systems][BukkitLevelSystem.Provider]
+### [Level Providers][LevelProvider]
 
 - **[Minecraft][minecraft-exp]** _(Default)_
-- **[AuraSkills]** _(Levels API only)_ - every skill is a level track, the power level is the primary track
-- **[mcMMO]** _(Levels API only)_ - every skill is a level track, the power level is the primary track
-- **[Jobs Reborn]** _(Levels API only)_ - every job is a level track, the total level is the primary track
-- **[ValhallaMMO]** _(Levels API only)_ - every skill is a level track, the Power skill is the primary track
-- **[ProSkillAPI]**
+- **[AuraSkills]** - every skill is a level track, the power level is the primary track
+- **[mcMMO]** - every skill is a level track, the power level is the primary track
+- **[Jobs Reborn]** - every job is a level track, the total level is the primary track
+- **[ValhallaMMO]** - every skill is a level track, the Power skill is the primary track
 - **[MMOCore]**
 - **[Heroes]**
-- **[Fabled]** _(Levels API only)_ - every class group is a level track
-- **[ProRPGItems]**
+- **[Fabled]** - every class group is a level track
 
-### [Class Systems][BukkitClassSystem.Provider]
+### [Class Providers][ClassProvider]
 
-- **Permissions-based** _(Default, ClassSystem API only)_ - give permission `mimic.class.[class_name]` to assign class to player
-- **[ProSkillAPI]**
 - **[MMOCore]**
 - **[Heroes]**
-- **[Fabled]** _(Classes API only)_ - every class group is a slot
-- **[ProRPGItems]**
+- **[Fabled]** - every class group is a slot
 
 ### [Resource Providers][ResourceProvider]
 
@@ -68,11 +63,6 @@ You can find code of all built-in implementations [here](src/main/kotlin/impl).
 - **[Heroes]** - `heroes:mana` (primary) and `heroes:stamina`
 - **[AuraSkills]** - `auraskills:mana`
 - **[Fabled]** - `fabled:mana`
-
-### [Player Inventory Providers][BukkitPlayerInventory.Provider]
-
-- **[Minecraft][minecraft-inv]** _(Default)_
-- **[RPGInventory]**
 
 ### [Item Providers][ItemProvider]
 
@@ -83,25 +73,23 @@ An item belongs to the provider with the highest priority that recognizes it, va
 > The deprecated [ItemsRegistry][MimicItemsRegistry] API also accepts item ID without a namespace or with the `mimic` namespace
 > and searches it over all providers. Plugins using this API accept MMOItems IDs without item type too, if only one type has the item.
 
-| Plugin                             | ID format                      | Payload          | Notes                                                           |
-|------------------------------------|--------------------------------|------------------|-----------------------------------------------------------------|
-| [Minecraft][MinecraftItemProvider] | `minecraft:[id]`               | Item components¹ |                                                                 |
-| [CraftEngine]                      | `craftengine:[namespace]/[id]` | -                |                                                                 |
-| [CustomItems]                      | `customitems:[id]`             | -                |                                                                 |
-| [EcoItems]                         | `ecoitems:[id]`                | -                |                                                                 |
-| [ExecutableItems]                  | `executableitems:[id]`         | -                | Converted ID², owned by the player                              |
-| [ItemsAdder]                       | `itemsadder:[namespace]/[id]`  | -                | Converted ID², `itemsadder:[id]` for the `itemsadder` namespace |
-| [MMOItems]                         | `mmoitems:[type]/[id]`         | -                | Built by MMOItems for the player                                |
-| [MythicMobs]                       | `mythicmobs:[id]`              | -                | Converted ID², includes MythicCrucible items                    |
-| [Nexo]                             | `nexo:[id]`                    | -                | Converted ID²                                                   |
-| [Oraxen]                           | `oraxen:[id]`                  | -                | Converted ID²                                                   |
-| [ProRPGItems]                      | `prorpgitems:[type]/[id]`      | -                | Deprecated API³                                                 |
-| [RPGInventory]                     | `rpginventory:[id]`            | -                | Deprecated API³                                                 |
+| Plugin                             | ID format                      | Payload          | Notes                                                                |
+|------------------------------------|--------------------------------|------------------|----------------------------------------------------------------------|
+| [Minecraft][MinecraftItemProvider] | `minecraft:[id]`               | Item components¹ |                                                                      |
+| [CraftEngine]                      | `craftengine:[namespace]/[id]` | -                | Depends on the player³                                               |
+| [CustomItems]                      | `customitems:[id]`             | -                | Can't list its items                                                 |
+| [EcoItems]                         | `ecoitems:[id]`                | -                |                                                                      |
+| [ExecutableItems]                  | `executableitems:[id]`         | -                | Converted ID², depends on the player³                                |
+| [ItemsAdder]                       | `itemsadder:[namespace]/[id]`  | -                | Converted ID², `itemsadder:[id]` for the `itemsadder` namespace      |
+| [MMOItems]                         | `mmoitems:[type]/[id]`         | -                | Depends on the player³                                               |
+| [MythicMobs]                       | `mythicmobs:[id]`              | -                | Converted ID², includes MythicCrucible items, depends on the player³ |
+| [Nexo]                             | `nexo:[id]`                    | -                | Converted ID²                                                        |
+| [Oraxen]                           | `oraxen:[id]`                  | -                | Converted ID²                                                        |
 
 ¹ [Item components][item-components] in the format of `/give` command, for example `[damage=10,unbreakable={}]`.\
 ² The plugin's ID is lowercased and characters not allowed in IDs are replaced with `_`: `Ruby Sword` -> `ruby_sword`.
 If several IDs become the same, only one of the items is available.\
-³ Provided via the deprecated [ItemsRegistry][BukkitItemsRegistry] API.
+³ The item is created for a specific player and may differ from player to player.
 
 ### [Block Providers][BlockProvider]
 
@@ -109,30 +97,26 @@ Blocks of all providers are available via [Blocks], with the provider ID as a na
 The namespace is required.
 A block belongs to the provider with the highest priority that recognizes it, vanilla blocks belong to `minecraft`.
 
-| Plugin                              | ID format                      | State        | Notes                                                         |
-|-------------------------------------|--------------------------------|--------------|---------------------------------------------------------------|
-| [Minecraft][MinecraftBlockProvider] | `minecraft:[id]`               | Block state¹ |                                                               |
-| [CraftEngine]                       | `craftengine:[namespace]/[id]` | Block state¹ |                                                               |
-| [ItemsAdder]                        | `itemsadder:[namespace]/[id]`  | -            | Item-based², `itemsadder:[id]` for the `itemsadder` namespace |
-| [Nexo]                              | `nexo:[id]`                    | -            | Item-based², note, string and chorus blocks³                  |
-| [Oraxen]                            | `oraxen:[id]`                  | -            | Item-based²                                                   |
+| Plugin                              | ID format                      | State        | Notes                                                           |
+|-------------------------------------|--------------------------------|--------------|-----------------------------------------------------------------|
+| [Minecraft][MinecraftBlockProvider] | `minecraft:[id]`               | Block state¹ |                                                                 |
+| [CraftEngine]                       | `craftengine:[namespace]/[id]` | Block state¹ | ⁴                                                               |
+| [ItemsAdder]                        | `itemsadder:[namespace]/[id]`  | -            | Item-based², `itemsadder:[id]` for the `itemsadder` namespace ⁴ |
+| [Nexo]                              | `nexo:[id]`                    | -            | Item-based², note, string and chorus blocks³ ⁴                  |
+| [Oraxen]                            | `oraxen:[id]`                  | -            | Item-based² ⁴                                                   |
 
 ¹ Block state properties, for example `[facing=north]`.\
 ² The block ID is the converted ID of the item placing the block, as for items.
-Variants of a directional block and their items have the ID of their parent block.
-Content of a storage block is dropped on the ground when the block is broken. Furniture is not a block.\
-³ Every level of a stackable block has the ID of the block.
+Variants of a directional block and their items have the ID of their parent block. Furniture is not a block.\
+³ Every level of a stackable block has the ID of the block.\
+⁴ Content of a storage block is dropped on the ground when the block is broken.
 
-[minecraft-exp]: https://minecraft.fandom.com/wiki/Experience
-[minecraft-inv]: https://minecraft.fandom.com/wiki/Inventory
+[minecraft-exp]: https://minecraft.wiki/w/Experience
 [item-components]: https://minecraft.wiki/w/Data_component_format
-[proskillapi]: https://www.spigotmc.org/resources/91913/
 [customitems]: https://www.spigotmc.org/resources/63848/
 [mmocore]: https://www.spigotmc.org/resources/70575/
 [mmoitems]: https://www.spigotmc.org/resources/39267/
 [heroes]: https://www.spigotmc.org/resources/24734/
-[prorpgitems]: https://www.spigotmc.org/resources/91386/
-[rpginventory]: https://www.spigotmc.org/resources/12498/
 [itemsadder]: https://www.spigotmc.org/resources/73355/
 [craftengine]: https://modrinth.com/plugin/craftengine
 [oraxen]: https://github.com/oraxen/oraxen
@@ -148,11 +132,9 @@ Content of a storage block is dropped on the ground when the block is broken. Fu
 
 [mimic-bukkit-api]: ../mimic-bukkit-api
 
-[BukkitLevelSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/level/BukkitLevelSystem.kt
-[BukkitClassSystem.Provider]: ../mimic-bukkit-api/src/main/kotlin/classes/BukkitClassSystem.kt
+[LevelProvider]: ../mimic-bukkit-api/src/main/kotlin/level/LevelProvider.kt
+[ClassProvider]: ../mimic-bukkit-api/src/main/kotlin/classes/ClassProvider.kt
 [ResourceProvider]: ../mimic-bukkit-api/src/main/kotlin/resources/ResourceProvider.kt
-[BukkitPlayerInventory.Provider]: ../mimic-bukkit-api/src/main/kotlin/inventory/BukkitPlayerInventory.kt
-[BukkitItemsRegistry]: ../mimic-bukkit-api/src/main/kotlin/items/BukkitItemsRegistry.kt
 [BlockProvider]: ../mimic-bukkit-api/src/main/kotlin/blocks/BlockProvider.kt
 [Blocks]: ../mimic-bukkit-api/src/main/kotlin/blocks/Blocks.kt
 [MinecraftBlockProvider]: src/main/kotlin/impl/vanilla/MinecraftBlockProvider.kt
@@ -160,4 +142,3 @@ Content of a storage block is dropped on the ground when the block is broken. Fu
 [ItemProvider]: ../mimic-bukkit-api/src/main/kotlin/items/ItemProvider.kt
 [Items]: ../mimic-bukkit-api/src/main/kotlin/items/Items.kt
 [MinecraftItemProvider]: src/main/kotlin/impl/vanilla/MinecraftItemProvider.kt
-[ItemMetaPayload]: src/main/kotlin/impl/vanilla/ItemMetaPayload.kt

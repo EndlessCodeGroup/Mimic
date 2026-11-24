@@ -1,6 +1,6 @@
 # mimic-bukkit-api
 
-Mimic API adopted for Bukkit.
+Mimic API adapted for Bukkit.
 
 ## Usage
 
@@ -11,6 +11,7 @@ Available services:
 - [BukkitLevelSystem.Provider] *(deprecated, use [LevelProvider])*
 - [ClassProvider]
 - [BukkitClassSystem.Provider] *(deprecated, use [ClassProvider])*
+- [ResourceProvider]
 - [BukkitPlayerInventory.Provider] *(experimental)*
 - [ItemProvider]
 - [BukkitItemsRegistry] *(deprecated, use [ItemProvider])*
@@ -30,8 +31,8 @@ private boolean checkMimicEnabled() {
     }
 
     // You can also check if Mimic version is right
-    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)) {
-        getLogger().severe("Required at least Mimic 0.10!");
+    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_11)) {
+        getLogger().severe("Required at least Mimic 0.11!");
         return false;
     }
 
@@ -40,7 +41,7 @@ private boolean checkMimicEnabled() {
 ```
 
 If you want to make Mimic hard dependency for your plugin, you can add it to the `depend` list in `plugin.yml`.
-Another way is to add it to `softdepend` and show a clear error message to the server owner what he should to do:
+Another way is to add it to `softdepend` and show a clear error message to the server owner what they should do:
 ```java
 @Override
 public void onEnable() {
@@ -59,7 +60,6 @@ Mimic mimic = Mimic.getInstance();
 Levels levels = mimic.getLevels();
 Classes classes = mimic.getClasses();
 Resources resources = mimic.getResources();
-BukkitPlayerInventory inventory = mimic.getPlayerInventory(player);
 Items items = mimic.getItems();
 Blocks blocks = mimic.getBlocks();
 ```
@@ -104,75 +104,75 @@ The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
 > and MMOItems IDs without item type (`mmoitems:excalibur`), but logs a warning.
 
 <details>
-    <summary>Full example</summary>
-    
-    ```java
-    import org.bukkit.entity.Player;
-    import org.bukkit.inventory.ItemStack;
-    import org.bukkit.plugin.java.JavaPlugin;
-    import ru.endlesscode.mimic.Mimic;
-    import ru.endlesscode.mimic.MimicApiLevel;
-    import ru.endlesscode.mimic.classes.Classes;
-    import ru.endlesscode.mimic.items.Items;
-    import ru.endlesscode.mimic.level.Levels;
-    import net.kyori.adventure.key.Key;
-    
-    public class MyPlugin extends JavaPlugin {
-    
-        private static Mimic mimic = null;
-    
-        public static Levels getLevels() {
-            return mimic.getLevels();
-        }
-    
-        public static Classes getClasses() {
-            return mimic.getClasses();
-        }
-    
-        public static Items getItems() {
-            return mimic.getItems();
-        }
-    
-        @Override
-        public void onEnable() {
-            if (!checkMimicEnabled()) {
-                getLogger().severe("Download latest version: https://github.com/EndlessCodeGroup/Mimic/releases/latest");
-                getServer().getPluginManager().disablePlugin(this);
-                return;
-            }
-    
-            mimic = Mimic.getInstance();
-        }
+<summary>Full example</summary>
 
-        private boolean checkMimicEnabled() {
-            if (!getServer().getPluginManager().isPluginEnabled("Mimic")) {
-                getLogger().severe("Mimic is required for the plugin!");
-                return false;
-            }
+```java
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import ru.endlesscode.mimic.Mimic;
+import ru.endlesscode.mimic.MimicApiLevel;
+import ru.endlesscode.mimic.classes.Classes;
+import ru.endlesscode.mimic.items.Items;
+import ru.endlesscode.mimic.level.Levels;
+import net.kyori.adventure.key.Key;
 
-            // You can also check if Mimic version is right
-            if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)) {
-                getLogger().severe("Required at least Mimic 0.10!");
-                return false;
-            }
+public class MyPlugin extends JavaPlugin {
 
-            return true;
-        }
-    
-        // Method to demonstrate usage
-        private void useApis(Player player) {
-            Key playerLevel = Key.key("minecraft:level");
-            boolean isExperienced = getLevels().hasLevel(player, playerLevel, 30);
-            getLevels().giveExp(player, playerLevel, 42);
+    private static Mimic mimic = null;
 
-            boolean isWarrior = getClasses().hasClass(player, Key.key("fabled:warrior"));
-    
-            Key excalibur = Key.key("mmoitems:sword/excalibur");
-            ItemStack sword = getItems().createItem(excalibur, 1, player);
-            boolean isSwordInHand = getItems().isItem(player.getInventory().getItemInMainHand(), excalibur);
-        }
+    public static Levels getLevels() {
+        return mimic.getLevels();
     }
-    ```
+
+    public static Classes getClasses() {
+        return mimic.getClasses();
+    }
+
+    public static Items getItems() {
+        return mimic.getItems();
+    }
+
+    @Override
+    public void onEnable() {
+        if (!checkMimicEnabled()) {
+            getLogger().severe("Download latest version: https://github.com/EndlessCodeGroup/Mimic/releases/latest");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        mimic = Mimic.getInstance();
+    }
+
+    private boolean checkMimicEnabled() {
+        if (!getServer().getPluginManager().isPluginEnabled("Mimic")) {
+            getLogger().severe("Mimic is required for the plugin!");
+            return false;
+        }
+
+        // You can also check if Mimic version is right
+        if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_11)) {
+            getLogger().severe("Required at least Mimic 0.11!");
+            return false;
+        }
+
+        return true;
+    }
+
+    // Method to demonstrate usage
+    private void useApis(Player player) {
+        Key playerLevel = Key.key("minecraft:level");
+        boolean isExperienced = getLevels().hasLevel(player, playerLevel, 30);
+        getLevels().giveExp(player, playerLevel, 42);
+
+        boolean isWarrior = getClasses().hasClass(player, Key.key("fabled:warrior"));
+
+        Key excalibur = Key.key("mmoitems:sword/excalibur");
+        ItemStack sword = getItems().createItem(excalibur, 1, player);
+        boolean isSwordInHand = getItems().isItem(player.getInventory().getItemInMainHand(), excalibur);
+    }
+}
+```
 </details>
 
 ### Levels
@@ -424,6 +424,8 @@ armor and absorption hearts are ignored, and taking all health kills the player.
 [Items] gives access to vanilla items and custom items of all supported plugins:
 create an item by its ID, get the ID of a stack, check that a stack is a specific item.
 
+Items API requires Mimic 0.11, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_11)`.
+
 #### Item IDs
 
 An item ID is a `Key` like `mmoitems:sword/excalibur`: the namespace is the ID of the plugin providing the item,
@@ -439,6 +441,7 @@ if (!items.hasItem(itemId)) {
 ```
 
 `items.getAllItems()` lists all IDs, for example, for tab completion.
+Some plugins, like CustomItems, can't list their items: use `hasItem`.
 See ID formats of the supported plugins in [Supported Implementations](../mimic-bukkit/README.md#supported-implementations).
 
 #### Identifying items
@@ -502,6 +505,8 @@ and `Mimic.getItemsRegistry()` shows items of all item providers.
 
 [Blocks] gives access to vanilla blocks and custom blocks of all supported plugins:
 identify a placed block, set and break blocks, get an item placing a block.
+
+Blocks API requires Mimic 0.11, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_11)`.
 
 #### Block IDs
 
@@ -621,189 +626,189 @@ Invalid IDs returned by an implementation are ignored with a warning.
 See [ItemProvider] and [BlockProvider] for the rules about IDs, ownership of items and blocks, and threading.
 
 <details>
-    <summary>Item provider example</summary>
+<summary>Item provider example</summary>
 
-    ```java
-    import org.bukkit.entity.Player;
-    import org.bukkit.inventory.ItemStack;
-    import org.jetbrains.annotations.NotNull;
-    import org.jetbrains.annotations.Nullable;
-    import ru.endlesscode.mimic.items.ItemProvider;
+```java
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.endlesscode.mimic.items.ItemProvider;
 
-    import java.util.Collection;
+import java.util.Collection;
 
-    public class MyItemProvider implements ItemProvider {
+public class MyItemProvider implements ItemProvider {
 
-        @NotNull
-        @Override
-        public String getId() {
-            return "myplugin";
-        }
-
-        // Read on every request, so it can change on the plugin reload
-        @NotNull
-        @Override
-        public Collection<String> getAllItems() {
-            return MyItems.getIds();
-        }
-
-        // Return null for items of other plugins and for vanilla items
-        @Nullable
-        @Override
-        public String getItemId(@NotNull ItemStack item) {
-            return MyItems.getId(item);
-        }
-
-        // Return a new stack on every call, or null if the item is unknown.
-        // This provider takes no payload, so it is ignored
-        @Nullable
-        @Override
-        public ItemStack createItem(@NotNull String itemId, int amount, @Nullable Player player, @Nullable String payload) {
-            return MyItems.create(itemId, amount, player);
-        }
+    @NotNull
+    @Override
+    public String getId() {
+        return "myplugin";
     }
-    ```
+
+    // Read on every request, so it can change on the plugin reload
+    @NotNull
+    @Override
+    public Collection<String> getAllItems() {
+        return MyItems.getIds();
+    }
+
+    // Return null for items of other plugins and for vanilla items
+    @Nullable
+    @Override
+    public String getItemId(@NotNull ItemStack item) {
+        return MyItems.getId(item);
+    }
+
+    // Return a new stack on every call, or null if the item is unknown.
+    // This provider takes no payload, so it is ignored
+    @Nullable
+    @Override
+    public ItemStack createItem(@NotNull String itemId, int amount, @Nullable Player player, @Nullable String payload) {
+        return MyItems.create(itemId, amount, player);
+    }
+}
+```
 </details>
 
 <details>
-    <summary>Block provider example</summary>
+<summary>Block provider example</summary>
 
-    ```java
-    import org.bukkit.block.Block;
-    import org.bukkit.inventory.ItemStack;
-    import org.jetbrains.annotations.NotNull;
-    import org.jetbrains.annotations.Nullable;
-    import ru.endlesscode.mimic.blocks.BlockProvider;
-    import ru.endlesscode.mimic.blocks.DropsConsumer;
+```java
+import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.endlesscode.mimic.blocks.BlockProvider;
+import ru.endlesscode.mimic.blocks.DropsConsumer;
 
-    import java.util.Collection;
+import java.util.Collection;
 
-    public class MyBlockProvider implements BlockProvider {
+public class MyBlockProvider implements BlockProvider {
 
-        @NotNull
-        @Override
-        public String getId() {
-            return "myplugin";
-        }
-
-        @NotNull
-        @Override
-        public Collection<String> getAllBlocks() {
-            return MyBlocks.getIds();
-        }
-
-        @Nullable
-        @Override
-        public String getBlockId(@NotNull Block block) {
-            // Return null for blocks of other plugins and vanilla blocks
-            return MyBlocks.getIdOf(block);
-        }
-
-        @Nullable
-        @Override
-        public String getBlockIdFromItem(@NotNull ItemStack item) {
-            return MyBlocks.getIdOfPlacedBy(item);
-        }
-
-        @Nullable
-        @Override
-        public ItemStack createBlockItem(@NotNull String blockId, int amount) {
-            // Should be a new stack on every call, or null if the ID is unknown
-            return MyBlocks.createItem(blockId, amount);
-        }
-
-        @Override
-        public boolean setBlock(@NotNull Block block, @NotNull String blockId, @Nullable String state) {
-            // Mimic has already checked that the block is empty.
-            // The state is in your own format, usually block state properties like "[facing=north]".
-            // Return false without setting the block if the ID is unknown or the state is invalid
-            if (!MyBlocks.getIds().contains(blockId)) return false;
-            return MyBlocks.place(block, blockId, state);
-        }
-
-        @Override
-        public boolean breakBlock(@NotNull Block block, @Nullable ItemStack tool, @NotNull DropsConsumer dropsConsumer) {
-            // Mimic calls it only for blocks this provider returns an ID for
-            Collection<ItemStack> drops = MyBlocks.remove(block, tool);
-            // Drop on the ground only items returned by the consumer
-            for (ItemStack item : dropsConsumer.consume(drops)) {
-                block.getWorld().dropItemNaturally(block.getLocation(), item);
-            }
-            return true;
-        }
+    @NotNull
+    @Override
+    public String getId() {
+        return "myplugin";
     }
-    ```
+
+    @NotNull
+    @Override
+    public Collection<String> getAllBlocks() {
+        return MyBlocks.getIds();
+    }
+
+    @Nullable
+    @Override
+    public String getBlockId(@NotNull Block block) {
+        // Return null for blocks of other plugins and vanilla blocks
+        return MyBlocks.getIdOf(block);
+    }
+
+    @Nullable
+    @Override
+    public String getBlockIdFromItem(@NotNull ItemStack item) {
+        return MyBlocks.getIdOfPlacedBy(item);
+    }
+
+    @Nullable
+    @Override
+    public ItemStack createBlockItem(@NotNull String blockId, int amount) {
+        // Should be a new stack on every call, or null if the ID is unknown
+        return MyBlocks.createItem(blockId, amount);
+    }
+
+    @Override
+    public boolean setBlock(@NotNull Block block, @NotNull String blockId, @Nullable String state) {
+        // Mimic has already checked that the block is empty.
+        // The state is in your own format, usually block state properties like "[facing=north]".
+        // Return false without setting the block if the ID is unknown or the state is invalid
+        if (!MyBlocks.getIds().contains(blockId)) return false;
+        return MyBlocks.place(block, blockId, state);
+    }
+
+    @Override
+    public boolean breakBlock(@NotNull Block block, @Nullable ItemStack tool, @NotNull DropsConsumer dropsConsumer) {
+        // Mimic calls it only for blocks this provider returns an ID for
+        Collection<ItemStack> drops = MyBlocks.remove(block, tool);
+        // Drop on the ground only items returned by the consumer
+        for (ItemStack item : dropsConsumer.consume(drops)) {
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
+        }
+        return true;
+    }
+}
+```
 </details>
 
 <details>
-    <summary>Level provider example</summary>
+<summary>Level provider example</summary>
 
-    ```java
-    import net.kyori.adventure.text.Component;
-    import org.bukkit.entity.Player;
-    import org.jetbrains.annotations.NotNull;
-    import org.jetbrains.annotations.Nullable;
-    import ru.endlesscode.mimic.level.LevelProgress;
-    import ru.endlesscode.mimic.level.LevelProvider;
+```java
+import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.endlesscode.mimic.level.LevelProgress;
+import ru.endlesscode.mimic.level.LevelProvider;
 
-    import java.util.Collection;
-    import java.util.List;
+import java.util.Collection;
+import java.util.List;
 
-    public class MyLevelProvider implements LevelProvider {
+public class MyLevelProvider implements LevelProvider {
 
-        @NotNull
-        @Override
-        public String getId() {
-            return "myplugin";
-        }
-
-        // Read on every request, so it can change on the plugin reload
-        @NotNull
-        @Override
-        public Collection<Track> getAllTracks() {
-            return MySkills.getAll().stream().map(MyLevelProvider::toTrack).toList();
-        }
-
-        @NotNull
-        @Override
-        public Collection<Track> getTracks(@NotNull Player player) {
-            return MySkills.getUnlocked(player).stream().map(MyLevelProvider::toTrack).toList();
-        }
-
-        @Nullable
-        @Override
-        public Track getPrimaryTrack(@NotNull Player player) {
-            return null; // No track represents the player's level
-        }
-
-        private static Track toTrack(MySkill skill) {
-            return new Track(skill.getId(), Component.text(skill.getDisplayName()));
-        }
-
-        @Nullable
-        @Override
-        public LevelProgress getProgress(@NotNull Player player, @NotNull String trackId) {
-            MySkillData data = MySkills.getData(player, trackId);
-            if (data == null) return null;
-            return LevelProgress.level(data.getLevel())
-                    .minLevel(1)
-                    .maxLevel(data.getMaxLevel())
-                    .exp(data.getExp())
-                    // The whole requirement for the step from the current level to the next one, not the remaining part
-                    .expToNextLevel(data.getExpToNextLevel())
-                    .build();
-        }
-
-        // Writes are optional, override only what your plugin supports
-        @Override
-        public boolean giveExp(@NotNull Player player, @NotNull String trackId, double amount) {
-            MySkillData data = MySkills.getData(player, trackId);
-            if (data == null) return false;
-            data.addRawExp(amount);
-            return true;
-        }
+    @NotNull
+    @Override
+    public String getId() {
+        return "myplugin";
     }
-    ```
+
+    // Read on every request, so it can change on the plugin reload
+    @NotNull
+    @Override
+    public Collection<Track> getAllTracks() {
+        return MySkills.getAll().stream().map(MyLevelProvider::toTrack).toList();
+    }
+
+    @NotNull
+    @Override
+    public Collection<Track> getTracks(@NotNull Player player) {
+        return MySkills.getUnlocked(player).stream().map(MyLevelProvider::toTrack).toList();
+    }
+
+    @Nullable
+    @Override
+    public Track getPrimaryTrack(@NotNull Player player) {
+        return null; // No track represents the player's level
+    }
+
+    private static Track toTrack(MySkill skill) {
+        return new Track(skill.getId(), Component.text(skill.getDisplayName()));
+    }
+
+    @Nullable
+    @Override
+    public LevelProgress getProgress(@NotNull Player player, @NotNull String trackId) {
+        MySkillData data = MySkills.getData(player, trackId);
+        if (data == null) return null;
+        return LevelProgress.level(data.getLevel())
+                .minLevel(1)
+                .maxLevel(data.getMaxLevel())
+                .exp(data.getExp())
+                // The whole requirement for the step from the current level to the next one, not the remaining part
+                .expToNextLevel(data.getExpToNextLevel())
+                .build();
+    }
+
+    // Writes are optional, override only what your plugin supports
+    @Override
+    public boolean giveExp(@NotNull Player player, @NotNull String trackId, double amount) {
+        MySkillData data = MySkills.getData(player, trackId);
+        if (data == null) return false;
+        data.addRawExp(amount);
+        return true;
+    }
+}
+```
 </details>
 
 A level provider returns track IDs without the plugin part: `mining`, and Mimic turns it into `myplugin:mining`.
