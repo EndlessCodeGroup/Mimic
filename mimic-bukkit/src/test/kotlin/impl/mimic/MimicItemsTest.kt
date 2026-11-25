@@ -23,6 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.LookupStatus
 import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.items.ItemProvider
@@ -240,6 +241,16 @@ internal class MimicItemsTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when minecraft item is unknown - should not warn about missing namespace`() {
+        val warnings = mutableListOf<String>()
+        Log.init({ _, message, _ -> warnings += message.orEmpty() })
+
+        items.hasItem(Key.key("minecraft:unknown")).shouldBeFalse()
+
+        warnings.shouldBeEmpty()
+    }
+
+    @Test
     fun `when provider is disabled in config - should ignore it`() {
         disabledProviders = setOf(custom.id)
 
@@ -290,18 +301,21 @@ internal class MimicItemsTest : BukkitTestBase() {
         }
     }
 
-    @Test
-    fun `when minecraft item is unknown - should warn once only if other provider has it`() {
-        val warnings = mutableListOf<String>()
-        Log.init({ _, message, _ -> warnings += message.orEmpty() })
+    @ParameterizedTest
+    @CsvSource(
+        "Minecraft:Ender Pearl,      FOUND,       minecraft:ender_pearl",
+        "diamond,                    FOUND,       minecraft:diamond",
+        "unlisted:ruby,              FOUND,       unlisted:ruby",
+        "ruby,                       AMBIGUOUS,   ",
+        "custom:unknown,             NOT_FOUND,   ",
+    )
+    fun `when look up item - should ask providers whether it exists`(value: String, status: LookupStatus, expected: String?) {
+        itemProviders.register(UnlistedItemProvider(), plugin, Low)
 
-        repeat(2) {
-            items.hasItem(Key.key("minecraft:ruby")).shouldBeFalse()
-            items.hasItem(Key.key("minecraft:unknown")).shouldBeFalse()
-        }
+        val result = items.lookupItem(value)
 
-        warnings.single() shouldContain "'minecraft:ruby' doesn't exist"
-        warnings.single() shouldContain "Did you mean 'custom:ruby'?"
+        result.status shouldBe status
+        result.foundId shouldBe expected?.let(Key::key)
     }
 }
 

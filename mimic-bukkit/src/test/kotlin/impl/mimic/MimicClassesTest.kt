@@ -22,6 +22,7 @@ import org.bukkit.plugin.ServicePriority.Normal
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.LookupStatus
 import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.classes.CharacterClass
 import ru.endlesscode.mimic.classes.ClassProvider
@@ -242,6 +243,30 @@ internal class MimicClassesTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when set class in a slot without namespace - should warn once with suggestions`() {
+        val warnings = mutableListOf<String>()
+        Log.init({ _, message, _ -> warnings += message.orEmpty() })
+
+        repeat(2) { classes.setClass(player, Key.key("rpg:elf"), Key.key("race")).shouldBeFalse() }
+
+        warnings.single() shouldContain "Slot 'minecraft:race' doesn't exist"
+        warnings.single() shouldContain "Did you mean 'rpg:race'?"
+        rpg.writes.shouldBeEmpty()
+    }
+
+    @Test
+    fun `when set class without namespace in a slot - should warn once with suggestions`() {
+        val warnings = mutableListOf<String>()
+        Log.init({ _, message, _ -> warnings += message.orEmpty() })
+
+        repeat(2) { classes.setClass(player, Key.key("elf"), Key.key("rpg:race")).shouldBeFalse() }
+
+        warnings.single() shouldContain "Class 'minecraft:elf' doesn't exist"
+        warnings.single() shouldContain "Did you mean 'rpg:elf'?"
+        rpg.writes.shouldBeEmpty()
+    }
+
+    @Test
     fun `when provider does not support writes - should return false`() {
         val readOnly = object : ClassProvider {
             override val id: String = "readonly"
@@ -278,20 +303,56 @@ internal class MimicClassesTest : BukkitTestBase() {
     }
 
     @Test
-    fun `when minecraft class is unknown - should warn once with suggestions`() {
-        val warnings = mutableListOf<String>()
-        Log.init({ _, message, _ -> warnings += message.orEmpty() })
-
-        repeat(2) { classes.hasClass(player, Key.key("minecraft:warrior")) }
-
-        warnings.single() shouldContain "'minecraft:warrior' doesn't exist"
-        warnings.single() shouldContain "Did you mean 'rpg:warrior'?"
-    }
-
-    @Test
     fun `when set class of non-minecraft namespace - should not read all classes`() {
         classes.setClass(player, Key.key("rpg:warrior"))
         rpg.allClassesReads shouldBe 0
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "RPG:Race,           ,       FOUND,       rpg:race",
+        "race,               ,       FOUND,       rpg:race",
+        "class,              ,       AMBIGUOUS,   ",
+        "class,              legacy, FOUND,       legacy:class",
+        "rpg:warrior,        ,       NOT_FOUND,   ",
+        "permissions:class,  ,       NOT_FOUND,   ",
+    )
+    fun `when look up slot - should find it among slots of providers`(
+        value: String,
+        preferred: String?,
+        status: LookupStatus,
+        expected: String?,
+    ) {
+        preferredProviderId = preferred.orEmpty()
+
+        val result = classes.lookupSlot(value)
+
+        result.status shouldBe status
+        result.foundId shouldBe expected?.let(Key::key)
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "RPG:Paladin,        ,       FOUND,       rpg:paladin",
+        "elf,                ,       FOUND,       rpg:elf",
+        "mage,               ,       AMBIGUOUS,   ",
+        "mage,               legacy, FOUND,       legacy:mage",
+        "class,              ,       NOT_FOUND,   ",
+        "permissions:mage,   ,       NOT_FOUND,   ",
+    )
+    fun `when look up class - should find it among classes of providers`(
+        value: String,
+        preferred: String?,
+        status: LookupStatus,
+        expected: String?,
+    ) {
+        classProviders.register(TestClassProvider(id = "other", classes = listOf(definition("mage"))), thirdParty, Lowest)
+        preferredProviderId = preferred.orEmpty()
+
+        val result = classes.lookupClass(value)
+
+        result.status shouldBe status
+        result.foundId shouldBe expected?.let(Key::key)
     }
 
     private fun Collection<CharacterClass>.keys() = map { it.key().asString() }

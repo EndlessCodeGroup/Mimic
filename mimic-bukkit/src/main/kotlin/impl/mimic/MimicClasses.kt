@@ -6,6 +6,7 @@ package ru.endlesscode.mimic.impl.mimic
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.LookupResult
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.ServiceRegistry
@@ -35,9 +36,15 @@ internal class MimicClasses(
 
     override fun getAllSlots(): List<ClassSlot> = providers.enabled.flatMap { it.getAllSlots() }
 
+    override fun lookupSlot(value: String): LookupResult =
+        providers.lookup(value) { path -> hasSlot(path) }
+
     override fun getAllClasses(): List<CharacterClass> = providers.enabled.flatMap { provider ->
         provider.getAllClasses().map { provider.characterClass(it) }
     }
+
+    override fun lookupClass(value: String): LookupResult =
+        providers.lookup(value) { path -> hasClass(path) }
 
     override fun getClasses(player: Player): Map<Key, CharacterClass> {
         if (!player.isOnline) return emptyMap()
@@ -82,20 +89,34 @@ internal class MimicClasses(
         return false
     }
 
-    override fun setClass(player: Player, classId: Key): Boolean = setClass(player, classId, slotPath = null)
-
-    override fun setClass(player: Player, classId: Key, slotId: Key): Boolean {
-        return slotId.namespace() == classId.namespace() && setClass(player, classId, slotId.value())
+    override fun setClass(player: Player, classId: Key): Boolean {
+        val provider = findProvider(classId) ?: return false
+        return provider.setClass(player, classId, slotPath = null)
     }
 
-    private fun setClass(player: Player, classId: Key, slotPath: String?): Boolean {
+    override fun setClass(player: Player, classId: Key, slotId: Key): Boolean {
+        val provider = findProvider(classId)
+        if (provider == null || provider.service.id != slotId.namespace()) {
+            // The class can't be set, the slot is looked up only to warn about a slot ID without the namespace
+            providers.find(slotId, SLOT) { path -> hasSlot(path) }
+            return false
+        }
+        return provider.setClass(player, classId, slotId.value())
+    }
+
+    private fun ClassProviderEntry.setClass(player: Player, classId: Key, slotPath: String?): Boolean {
         if (!player.isOnline) return false
-        val provider = findProvider(classId) ?: return false
-        return provider.call(default = false) { setClass(player, classId.value(), slotPath) }
+        return call(default = false) { setClass(player, classId.value(), slotPath) }
     }
 
     private fun findProvider(classId: Key): ClassProviderEntry? =
-        providers.find(classId, CLASS) { path -> call(default = false) { allClasses.any { it.id == path } } }
+        providers.find(classId, CLASS) { path -> hasClass(path) }
+
+    private fun ClassProviderEntry.hasSlot(path: String): Boolean =
+        call(default = false) { allSlots.any { it.id == path } }
+
+    private fun ClassProviderEntry.hasClass(path: String): Boolean =
+        call(default = false) { allClasses.any { it.id == path } }
 
     // Values are checked inside call, so a provider returning nulls from Java is skipped
     private fun ClassProviderEntry.getAllSlots(): List<ClassSlot> =

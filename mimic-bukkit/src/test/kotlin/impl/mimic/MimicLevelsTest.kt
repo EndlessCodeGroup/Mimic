@@ -11,7 +11,6 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.mockk.every
 import io.mockk.mockk
 import net.kyori.adventure.key.Key
@@ -24,8 +23,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.LookupStatus
 import ru.endlesscode.mimic.ServiceRegistry
-import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.level.LevelProgress
 import ru.endlesscode.mimic.level.LevelProvider
 import ru.endlesscode.mimic.level.LevelTrack
@@ -234,24 +233,41 @@ internal class MimicLevelsTest : BukkitTestBase() {
     }
 
     @Test
-    fun `when minecraft track is unknown - should warn once with suggestions`() {
-        val warnings = mutableListOf<String>()
-        Log.init({ _, message, _ -> warnings += message.orEmpty() })
-
-        repeat(2) {
-            levels.getProgress(player, key("minecraft:mining"))
-            levels.getProgress(player, key("minecraft:level"))
-        }
-
-        warnings.single() shouldContain "'minecraft:mining' doesn't exist"
-        warnings.single() shouldContain "Did you mean 'skills:mining'?"
-    }
-
-    @Test
     fun `when use track of non-minecraft namespace - should not read all tracks`() {
         levels.getProgress(player, key("skills:mining"))
         levels.giveExp(player, key("skills:mining"), 1.0)
         skills.allTracksReads shouldBe 0
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "Skills:Mining,   ,      FOUND,     skills:mining",
+        "power,           ,      FOUND,     skills:power",
+        "mining,          ,      AMBIGUOUS, ",
+        "mining,          other, FOUND,     other:mining",
+        "skills:unknown,  ,      NOT_FOUND, ",
+    )
+    fun `when look up track - should find it among tracks of providers`(
+        value: String,
+        preferred: String?,
+        status: LookupStatus,
+        expected: String?,
+    ) {
+        levelProviders.register(TestLevelProvider(id = "other", "mining"), thirdParty, Lowest)
+        preferredProviderId = preferred.orEmpty()
+
+        val result = levels.lookupTrack(value)
+
+        result.status shouldBe status
+        result.foundId shouldBe expected?.let(::key)
+    }
+
+    @Test
+    fun `when look up track and provider throws - should not find it`() {
+        skills.failure = IllegalStateException("Test exception")
+
+        levels.lookupTrack("skills:mining").status shouldBe LookupStatus.NOT_FOUND
+        levels.lookupTrack("mining").status shouldBe LookupStatus.NOT_FOUND
     }
 
     private fun key(id: String) = Key.key(id)

@@ -7,6 +7,8 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Keyed
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.LookupResult
+import ru.endlesscode.mimic.LookupStatus
 
 /**
  * Resources of players from all RPG plugins supported by Mimic: mana, stamina and similar.
@@ -40,7 +42,7 @@ import org.bukkit.entity.Player
  *
  * The namespace is required, since the same path in different plugins means a different resource.
  * Note that `Key.key("mana")` turns into `minecraft:mana`,
- * so validate resource IDs read from configs against [getAllResources].
+ * so read resource IDs from configs with [lookupResource].
  *
  * ### Rules
  *
@@ -63,6 +65,22 @@ public interface Resources {
      * Resources are sorted by provider priority, then in the order the provider returns them.
      */
     public fun getAllResources(): List<Resource>
+
+    /**
+     * Looks up the resource ID by a [value] from a config. The result has only IDs of existing resources.
+     * Use it instead of `Key.key(String)`, which turns `mana` into `minecraft:mana`.
+     *
+     * The lookup is lenient:
+     * - Letter case doesn't matter, and characters not allowed in IDs are replaced with `_`: `MMOCore:Mana` is `mmocore:mana`.
+     * - The namespace may be omitted if only one plugin has a resource with this name: `stellium` is `mmocore:stellium`.
+     *   If several plugins have it, the plugin set in the `resource-provider` option of Mimic config is used.
+     *   If the option isn't set, or that plugin doesn't have the resource, the result is [LookupStatus.AMBIGUOUS].
+     *
+     * May be called from any thread.
+     *
+     * @since 0.12.0
+     */
+    public fun lookupResource(value: String): LookupResult
 
     /**
      * Returns the resource the [player] spends on abilities by default, like mana,

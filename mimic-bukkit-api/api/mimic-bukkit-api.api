@@ -84,6 +84,7 @@ public abstract interface class ru/endlesscode/mimic/blocks/Blocks {
 	public abstract fun getBlockIdFromItem (Lorg/bukkit/inventory/ItemStack;)Lnet/kyori/adventure/key/Key;
 	public abstract fun hasBlock (Lnet/kyori/adventure/key/Key;)Z
 	public abstract fun isBlock (Lorg/bukkit/block/Block;Lnet/kyori/adventure/key/Key;)Z
+	public abstract fun lookupBlock (Ljava/lang/String;)Lru/endlesscode/mimic/LookupResult;
 	public fun setBlock (Lorg/bukkit/block/Block;Lnet/kyori/adventure/key/Key;)Z
 	public abstract fun setBlock (Lorg/bukkit/block/Block;Lnet/kyori/adventure/key/Key;Ljava/lang/String;)Z
 }
@@ -150,6 +151,8 @@ public abstract interface class ru/endlesscode/mimic/classes/Classes {
 	public abstract fun getClasses (Lorg/bukkit/entity/Player;)Ljava/util/Map;
 	public abstract fun getPrimaryClass (Lorg/bukkit/entity/Player;)Lru/endlesscode/mimic/classes/CharacterClass;
 	public abstract fun hasClass (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;)Z
+	public abstract fun lookupClass (Ljava/lang/String;)Lru/endlesscode/mimic/LookupResult;
+	public abstract fun lookupSlot (Ljava/lang/String;)Lru/endlesscode/mimic/LookupResult;
 	public abstract fun setClass (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;)Z
 	public abstract fun setClass (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;Lnet/kyori/adventure/key/Key;)Z
 }
@@ -188,6 +191,7 @@ public abstract interface class ru/endlesscode/mimic/items/Items {
 	public abstract fun getItemId (Lorg/bukkit/inventory/ItemStack;)Lnet/kyori/adventure/key/Key;
 	public abstract fun hasItem (Lnet/kyori/adventure/key/Key;)Z
 	public abstract fun isItem (Lorg/bukkit/inventory/ItemStack;Lnet/kyori/adventure/key/Key;)Z
+	public abstract fun lookupItem (Ljava/lang/String;)Lru/endlesscode/mimic/LookupResult;
 }
 
 public abstract class ru/endlesscode/mimic/level/BukkitLevelSystem : ru/endlesscode/mimic/level/LevelSystem {
@@ -251,6 +255,7 @@ public abstract interface class ru/endlesscode/mimic/level/Levels {
 	public abstract fun getTracks (Lorg/bukkit/entity/Player;)Ljava/util/List;
 	public abstract fun giveExp (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
 	public abstract fun hasLevel (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;I)Z
+	public abstract fun lookupTrack (Ljava/lang/String;)Lru/endlesscode/mimic/LookupResult;
 	public abstract fun setLevel (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;I)Z
 	public abstract fun takeExp (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
 }
@@ -290,6 +295,7 @@ public abstract interface class ru/endlesscode/mimic/resources/Resources {
 	public abstract fun getState (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;)Lru/endlesscode/mimic/resources/ResourceState;
 	public abstract fun give (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
 	public abstract fun has (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
+	public abstract fun lookupResource (Ljava/lang/String;)Lru/endlesscode/mimic/LookupResult;
 	public abstract fun set (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
 	public abstract fun take (Lorg/bukkit/entity/Player;Lnet/kyori/adventure/key/Key;D)Z
 }

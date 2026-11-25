@@ -6,6 +6,8 @@ package ru.endlesscode.mimic.blocks
 import net.kyori.adventure.key.Key
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
+import ru.endlesscode.mimic.LookupResult
+import ru.endlesscode.mimic.LookupStatus
 
 /**
  * Vanilla blocks and custom blocks from all plugins supported by Mimic.
@@ -36,9 +38,9 @@ import org.bukkit.inventory.ItemStack
  * - The namespace is the ID of the plugin providing the block: `minecraft`, `craftengine`.
  * - The path is the block within that plugin: `stone`, `default/palm_log`.
  *
- * The namespace is required, there is no search over all plugins.
+ * The namespace is required.
  * Note that `Key.key("palm_log")` turns into `minecraft:palm_log`,
- * so validate block IDs read from configs with [hasBlock] or against [getAllBlocks].
+ * so read block IDs from configs with [lookupBlock].
  * Block IDs are separate from item IDs: a block and the item placing it may have different IDs.
  *
  * ### Ownership
@@ -68,6 +70,22 @@ public interface Blocks {
 
     /** Returns `true` if the block with [blockId] exists. */
     public fun hasBlock(blockId: Key): Boolean
+
+    /**
+     * Looks up the block ID by a [value] from a config. The result has only IDs of existing blocks.
+     * Use it instead of `Key.key(String)`, which turns `palm_log` into `minecraft:palm_log`.
+     *
+     * The lookup is lenient:
+     * - Letter case doesn't matter, and characters not allowed in IDs are replaced with `_`:
+     *   `Minecraft:Note Block` is `minecraft:note_block`.
+     * - The namespace may be omitted if only one plugin has a block with this name: `stone` is `minecraft:stone`.
+     *   If several plugins have it, the result is [LookupStatus.AMBIGUOUS].
+     *
+     * The name should be the same as in the block ID: `palm_log` doesn't match `craftengine:default/palm_log`.
+     *
+     * @since 0.12.0
+     */
+    public fun lookupBlock(value: String): LookupResult
 
     /** Returns ID of the [block] in the provider owning it, or `null` if no provider recognizes the block. */
     public fun getBlockId(block: Block): Key?

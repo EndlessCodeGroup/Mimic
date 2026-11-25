@@ -10,7 +10,6 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.every
 import io.mockk.mockk
@@ -25,6 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.LookupStatus
 import ru.endlesscode.mimic.ServiceRegistry
 import ru.endlesscode.mimic.blocks.BlockProvider
 import ru.endlesscode.mimic.blocks.Blocks
@@ -296,6 +296,16 @@ internal class MimicBlocksTest : BukkitTestBase() {
     }
 
     @Test
+    fun `when minecraft block is unknown - should not warn about missing namespace`() {
+        val warnings = mutableListOf<String>()
+        Log.init({ _, message, _ -> warnings += message.orEmpty() })
+
+        blocks.createBlockItem(Key.key("minecraft:unknown"), 1).shouldBeNull()
+
+        warnings.shouldBeEmpty()
+    }
+
+    @Test
     fun `when provider is disabled in config - should ignore it`() {
         disabledProviders = setOf(custom.id)
 
@@ -347,18 +357,21 @@ internal class MimicBlocksTest : BukkitTestBase() {
         }
     }
 
-    @Test
-    fun `when minecraft block is unknown - should warn once only if other provider has it`() {
-        val warnings = mutableListOf<String>()
-        Log.init({ _, message, _ -> warnings += message.orEmpty() })
+    @ParameterizedTest
+    @CsvSource(
+        "Minecraft:Note Block,       FOUND,       minecraft:note_block",
+        "stone,                      FOUND,       minecraft:stone",
+        "unlisted:ruby_block,        FOUND,       unlisted:ruby_block",
+        "ruby_block,                 AMBIGUOUS,   ",
+        "custom:unknown,             NOT_FOUND,   ",
+    )
+    fun `when look up block - should ask providers whether it exists`(value: String, status: LookupStatus, expected: String?) {
+        blockProviders.register(UnlistedBlockProvider(), plugin, Low)
 
-        repeat(2) {
-            blocks.hasBlock(Key.key("minecraft:ruby_block")).shouldBeFalse()
-            blocks.hasBlock(Key.key("minecraft:unknown")).shouldBeFalse()
-        }
+        val result = blocks.lookupBlock(value)
 
-        warnings.single() shouldContain "'minecraft:ruby_block' doesn't exist"
-        warnings.single() shouldContain "Did you mean 'custom:ruby_block'?"
+        result.status shouldBe status
+        result.foundId shouldBe expected?.let(Key::key)
     }
 
     private fun mockBlock(material: Material): Block = mockk(relaxUnitFun = true) {

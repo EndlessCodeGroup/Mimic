@@ -11,7 +11,6 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.mockk.every
 import io.mockk.mockk
 import net.kyori.adventure.key.Key
@@ -24,8 +23,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import ru.endlesscode.mimic.BukkitTestBase
+import ru.endlesscode.mimic.LookupStatus
 import ru.endlesscode.mimic.ServiceRegistry
-import ru.endlesscode.mimic.internal.Log
 import ru.endlesscode.mimic.resources.Resource
 import ru.endlesscode.mimic.resources.ResourceProvider
 import ru.endlesscode.mimic.resources.ResourceProvider.ResourceDefinition
@@ -280,18 +279,27 @@ internal class MimicResourcesTest : BukkitTestBase() {
         resources.set(player, energy, 5.0).shouldBeFalse()
     }
 
-    @Test
-    fun `when minecraft resource is unknown - should warn once with suggestions`() {
-        val warnings = mutableListOf<String>()
-        Log.init({ _, message, _ -> warnings += message.orEmpty() })
+    @ParameterizedTest
+    @CsvSource(
+        "RPG:Stamina,   ,      FOUND,       rpg:stamina",
+        "food,          ,      FOUND,       minecraft:food",
+        "mana,          ,      AMBIGUOUS,   ",
+        "mana,          other, FOUND,       other:mana",
+        "rpg:unknown,   ,      NOT_FOUND,   ",
+    )
+    fun `when look up resource - should find it among resources of providers`(
+        value: String,
+        preferred: String?,
+        status: LookupStatus,
+        expected: String?,
+    ) {
+        resourceProviders.register(TestResourceProvider(id = "other", "mana"), thirdParty, Lowest)
+        preferredProviderId = preferred.orEmpty()
 
-        repeat(2) {
-            resources.getState(player, Key.key("minecraft:mana"))
-            resources.getState(player, Key.key("minecraft:food"))
-        }
+        val result = resources.lookupResource(value)
 
-        warnings.single() shouldContain "'minecraft:mana' doesn't exist"
-        warnings.single() shouldContain "Did you mean 'rpg:mana'?"
+        result.status shouldBe status
+        result.foundId shouldBe expected?.let(Key::key)
     }
 
     private fun List<Resource>.keys() = map { it.key().asString() }

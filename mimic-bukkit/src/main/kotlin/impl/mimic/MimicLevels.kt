@@ -6,6 +6,7 @@ package ru.endlesscode.mimic.impl.mimic
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.LookupResult
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.ServiceRegistry
@@ -33,6 +34,9 @@ internal class MimicLevels(
 
     override fun getAllTracks(): List<LevelTrack> =
         providers.enabled.flatMap { provider -> provider.getAllTracks() }
+
+    override fun lookupTrack(value: String): LookupResult =
+        providers.lookup(value) { path -> hasTrack(path) }
 
     override fun getTracks(player: Player): List<LevelTrack> {
         if (!player.isOnline) return emptyList()
@@ -84,7 +88,10 @@ internal class MimicLevels(
     }
 
     private fun findProvider(trackId: Key): LevelProviderEntry? =
-        providers.find(trackId, TRACK) { path -> call(default = false) { allTracks.any { it.id == path } } }
+        providers.find(trackId, TRACK) { path -> hasTrack(path) }
+
+    private fun LevelProviderEntry.hasTrack(path: String): Boolean =
+        call(default = false) { allTracks.any { it.id == path } }
 
     private fun requireValidAmount(amount: Double) {
         require(amount >= 0 && amount.isFinite()) { "'amount' should be non-negative and finite, but it was $amount" }

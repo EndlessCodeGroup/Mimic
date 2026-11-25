@@ -158,6 +158,10 @@ internal class MimicImplTest : BukkitTestBase() {
 
         mimic.classes.getAllSlots().map { it.key().asString() } shouldContainExactly listOf("legacy:class")
         mimic.classes.getPrimaryClass(player)?.key()?.asString() shouldBe "legacy:mage"
+        mimic.classes.lookupSlot("class").foundId?.asString() shouldBe "legacy:class"
+        mimic.classes.lookupSlot("permissions:class").status shouldBe LookupStatus.NOT_FOUND
+        // The old API can't list classes
+        mimic.classes.lookupClass("legacy:mage").status shouldBe LookupStatus.NOT_FOUND
     }
 
     @Test

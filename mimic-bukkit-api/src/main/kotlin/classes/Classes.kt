@@ -7,6 +7,8 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Keyed
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.LookupResult
+import ru.endlesscode.mimic.LookupStatus
 
 /**
  * Classes of players from all RPG plugins supported by Mimic. Get it via [Mimic.classes][ru.endlesscode.mimic.Mimic.classes].
@@ -42,7 +44,7 @@ import org.bukkit.entity.Player
  *
  * The namespace is required, since the same path in different plugins means a different class.
  * Note that `Key.key("warrior")` turns into `minecraft:warrior`,
- * so validate class IDs read from configs against [getAllClasses].
+ * so read class IDs from configs with [lookupClass].
  * Classes of plugins using the deprecated `ClassSystem` API are missing from [getAllClasses].
  *
  * ### Rules
@@ -65,10 +67,47 @@ public interface Classes {
     public fun getAllSlots(): List<ClassSlot>
 
     /**
+     * Looks up the slot ID by a [value] from a config. The result has only IDs of existing slots.
+     * Use it instead of `Key.key(String)`, which turns `race` into `minecraft:race`.
+     *
+     * The lookup is lenient:
+     * - Letter case doesn't matter, and characters not allowed in IDs are replaced with `_`: `Fabled:Race` is `fabled:race`.
+     * - The namespace may be omitted if only one plugin has a slot with this name: `secondary` is `heroes:secondary`.
+     *   If several plugins have it, the plugin set in the `class-provider` option of Mimic config is used.
+     *   If the option isn't set, or that plugin doesn't have the slot, the result is [LookupStatus.AMBIGUOUS].
+     *
+     * The built-in `permissions` class system has no slots, so `permissions:class` is never found.
+     *
+     * May be called from any thread.
+     *
+     * @since 0.12.0
+     */
+    public fun lookupSlot(value: String): LookupResult
+
+    /**
      * Returns all classes of all providers, regardless of players. Use it for discovery and config validation.
      * Classes are sorted by provider priority, then in the order the provider returns them.
      */
     public fun getAllClasses(): List<CharacterClass>
+
+    /**
+     * Looks up the class ID by a [value] from a config. The result has only IDs of existing classes.
+     * Use it instead of `Key.key(String)`, which turns `warrior` into `minecraft:warrior`.
+     *
+     * The lookup is lenient:
+     * - Letter case doesn't matter, and characters not allowed in IDs are replaced with `_`:
+     *   `Fabled:Honor Guard` is `fabled:honor_guard`.
+     * - The namespace may be omitted if only one plugin has a class with this name: `honor guard` is `fabled:honor_guard`.
+     *   If several plugins have it, the plugin set in the `class-provider` option of Mimic config is used.
+     *   If the option isn't set, or that plugin doesn't have the class, the result is [LookupStatus.AMBIGUOUS].
+     *
+     * Classes of plugins using the deprecated `ClassSystem` API can't be listed, so they are never found.
+     *
+     * May be called from any thread.
+     *
+     * @since 0.12.0
+     */
+    public fun lookupClass(value: String): LookupResult
 
     /**
      * Returns classes the [player] has, where key is a slot ID. Empty slots are omitted.

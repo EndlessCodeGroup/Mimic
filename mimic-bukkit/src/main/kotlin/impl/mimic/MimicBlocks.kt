@@ -6,6 +6,7 @@ package ru.endlesscode.mimic.impl.mimic
 import net.kyori.adventure.key.Key
 import org.bukkit.block.Block
 import org.bukkit.inventory.ItemStack
+import ru.endlesscode.mimic.LookupResult
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.ServiceRegistry
@@ -31,6 +32,8 @@ internal class MimicBlocks(blockProviders: ServiceRegistry<BlockProvider>) : Blo
     override fun getAllBlocks(): List<Key> = providers.enabled.flatMap { it.getAllBlocks() }
 
     override fun hasBlock(blockId: Key): Boolean = findProvider(blockId)?.hasBlock(blockId.value()) == true
+
+    override fun lookupBlock(value: String): LookupResult = providers.lookup(value) { path -> hasBlock(path) }
 
     override fun getBlockId(block: Block): Key? = providers.owner(BLOCK) { getBlockId(block) }?.second
 

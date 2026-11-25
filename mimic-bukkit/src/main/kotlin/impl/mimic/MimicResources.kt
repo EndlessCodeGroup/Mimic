@@ -6,6 +6,7 @@ package ru.endlesscode.mimic.impl.mimic
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.LookupResult
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.ServiceRegistry
@@ -41,6 +42,9 @@ internal class MimicResources(
                 provider.validValues(allResources, RESOURCE) { it.id }.map { provider.resource(it) }
             }
         }
+
+    override fun lookupResource(value: String): LookupResult =
+        providers.lookup(value) { path -> hasResource(path) }
 
     override fun getPrimaryResource(player: Player): Resource? {
         if (!player.isOnline) return null
@@ -114,7 +118,10 @@ internal class MimicResources(
     }
 
     private fun findProvider(resourceId: Key): ResourceProviderEntry? =
-        providers.find(resourceId, RESOURCE) { path -> call(default = false) { allResources.any { it.id == path } } }
+        providers.find(resourceId, RESOURCE) { path -> hasResource(path) }
+
+    private fun ResourceProviderEntry.hasResource(path: String): Boolean =
+        call(default = false) { allResources.any { it.id == path } }
 
     private fun requireValidAmount(amount: Double) {
         require(amount >= 0 && amount.isFinite()) { "'amount' should be non-negative and finite, but it was $amount" }

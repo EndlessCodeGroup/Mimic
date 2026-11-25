@@ -6,6 +6,8 @@ package ru.endlesscode.mimic.items
 import net.kyori.adventure.key.Key
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import ru.endlesscode.mimic.LookupResult
+import ru.endlesscode.mimic.LookupStatus
 
 /**
  * Vanilla items and custom items from all plugins supported by Mimic.
@@ -33,9 +35,9 @@ import org.bukkit.inventory.ItemStack
  * - The namespace is the ID of the plugin providing the item: `minecraft`, `mmoitems`, `craftengine`.
  * - The path is the item within that plugin: `diamond`, `sword/excalibur`, `default/palm_log`.
  *
- * The namespace is required, there is no search over all plugins.
+ * The namespace is required.
  * Note that `Key.key("excalibur")` turns into `minecraft:excalibur`,
- * so validate item IDs read from configs with [hasItem] or against [getAllItems].
+ * so read item IDs from configs with [lookupItem].
  *
  * ### Ownership
  *
@@ -63,6 +65,22 @@ public interface Items {
 
     /** Returns `true` if the item with [itemId] exists. */
     public fun hasItem(itemId: Key): Boolean
+
+    /**
+     * Looks up the item ID by a [value] from a config. The result has only IDs of existing items.
+     * Use it instead of `Key.key(String)`, which turns `excalibur` into `minecraft:excalibur`.
+     *
+     * The lookup is lenient:
+     * - Letter case doesn't matter, and characters not allowed in IDs are replaced with `_`:
+     *   `Minecraft:Diamond Sword` is `minecraft:diamond_sword`.
+     * - The namespace may be omitted if only one plugin has an item with this name: `diamond` is `minecraft:diamond`.
+     *   If several plugins have it, the result is [LookupStatus.AMBIGUOUS].
+     *
+     * The name should be the same as in the item ID: `excalibur` doesn't match `mmoitems:sword/excalibur`.
+     *
+     * @since 0.12.0
+     */
+    public fun lookupItem(value: String): LookupResult
 
     /** Returns ID of the [item] in the provider owning it, or `null` if no provider recognizes the item. */
     public fun getItemId(item: ItemStack): Key?

@@ -6,6 +6,7 @@ package ru.endlesscode.mimic.impl.mimic
 import net.kyori.adventure.key.Key
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import ru.endlesscode.mimic.LookupResult
 import ru.endlesscode.mimic.Mimic
 import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.ServiceRegistry
@@ -29,6 +30,8 @@ internal class MimicItems(itemProviders: ServiceRegistry<ItemProvider>) : Items 
     override fun getAllItems(): List<Key> = providers.enabled.flatMap { it.getAllItems() }
 
     override fun hasItem(itemId: Key): Boolean = findProvider(itemId)?.hasItem(itemId.value()) == true
+
+    override fun lookupItem(value: String): LookupResult = providers.lookup(value) { path -> hasItem(path) }
 
     override fun getItemId(item: ItemStack): Key? = owner(item)?.second
 

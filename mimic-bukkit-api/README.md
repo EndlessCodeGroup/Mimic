@@ -31,14 +31,17 @@ private boolean checkMimicEnabled() {
     }
 
     // You can also check if Mimic version is right
-    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_11)) {
-        getLogger().severe("Required at least Mimic 0.11!");
+    if (!MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_12)) {
+        getLogger().severe("Required at least Mimic 0.12!");
         return false;
     }
 
     return true;
 }
 ```
+
+Sections below are marked with the API level they require, like ![API level 0.12+][since-0.12].
+Check it with `MimicApiLevel.checkApiLevel` before using the API.
 
 If you want to make Mimic hard dependency for your plugin, you can add it to the `depend` list in `plugin.yml`.
 Another way is to add it to `softdepend` and show a clear error message to the server owner what they should do:
@@ -86,22 +89,6 @@ boolean isSwordInHand = items.isItem(player.getInventory().getItemInMainHand(), 
 boolean isPalmLog = blocks.isBlock(block, Key.key("craftengine:default/palm_log"));
 blocks.setBlock(location.getBlock(), Key.key("minecraft:stone_stairs"), "[facing=north]");
 ```
-
-### IDs
-
-Mimic identifies items, blocks, level tracks, classes and resources by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
-where the namespace is the ID of the plugin's implementation: `minecraft:acacia_boat`, `craftengine:default/palm_log`, `auraskills:mining`.
-The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
-
-- **Items:** the namespace is required, see [Item IDs](#item-ids).
-- **Blocks:** the namespace is required, see [Block IDs](#block-ids).
-- **Level tracks:** the namespace is required, see [Track IDs](#track-ids).
-- **Classes and class slots:** the namespace is required, see [Class IDs](#class-ids).
-- **Resources:** the namespace is required, see [Resource IDs](#resource-ids).
-
-> The deprecated `ItemsRegistry` API still searches an item ID without namespace, or with the `mimic` namespace, over all plugins.
-> It also accepts item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`), with more than one `:` (`craftengine:default:palm_log`)
-> and MMOItems IDs without item type (`mmoitems:excalibur`), but logs a warning.
 
 <details>
 <summary>Full example</summary>
@@ -175,14 +162,60 @@ public class MyPlugin extends JavaPlugin {
 ```
 </details>
 
+### IDs
+
+Mimic identifies items, blocks, level tracks, classes and resources by [resource locations](https://minecraft.wiki/w/Resource_location) `[namespace]:[path]`,
+where the namespace is the ID of the plugin's implementation: `minecraft:acacia_boat`, `craftengine:default/palm_log`, `auraskills:mining`.
+The path may contain lowercase letters, digits, `.`, `_`, `-` and `/`.
+The namespace is required, because different plugins may have values with the same name.
+See details in [Item IDs](#item-ids), [Block IDs](#block-ids), [Track IDs](#track-ids), [Class IDs](#class-ids) and [Resource IDs](#resource-ids).
+
+> The deprecated `ItemsRegistry` API still searches an item ID without namespace, or with the `mimic` namespace, over all plugins.
+> It also accepts item IDs with uppercase letters (`minecraft:DIAMOND_SWORD`), with more than one `:` (`craftengine:default:palm_log`)
+> and MMOItems IDs without item type (`mmoitems:excalibur`), but logs a warning.
+
+#### IDs from configs
+
+[![API level 0.12+][since-0.12]][api-level]
+
+`Key.key("mining")` turns into `minecraft:mining`, so don't use it for IDs written by server owners.
+Look them up with `lookup*` methods.
+Lookups ignore letter case, and find an ID without the namespace if only one plugin has it:
+
+```java
+String value = config.getString("track", "");
+LookupResult result = levels.lookupTrack(value);
+Key trackId = result.getFoundId(); // null if the track isn't found
+
+// Use getStatus for diagnostics of why the track isn't found
+switch (result.getStatus()) {
+    case NOT_FOUND -> getLogger().warning("Track '" + value + "' isn't found, check the spelling.");
+    case AMBIGUOUS -> getLogger().warning("Several plugins have track '" + value + "', use one of: " + result.getIds());
+    case NO_PROVIDER -> getLogger().warning("Plugin of track '" + value + "' isn't installed, or its name is misspelled.");
+    default -> {} // FOUND
+}
+```
+
+Results with mcMMO and AuraSkills installed:
+
+| Config value                                            | Status        | IDs                                   |
+|---------------------------------------------------------|---------------|---------------------------------------|
+| `mcmmo:woodcutting`, `McMMO:Woodcutting`, `woodcutting` | `FOUND`       | `mcmmo:woodcutting`                   |
+| `fishing`                                               | `AMBIGUOUS`   | `mcmmo:fishing`, `auraskills:fishing` |
+| `mcmmo:unknown`                                         | `NOT_FOUND`   |                                       |
+| `jobs:miner`                                            | `NO_PROVIDER` |                                       |
+
+When lookup is ambiguous, the preferred provider wins. 
+For example, with `level-provider: auraskills` in Mimic config, `fishing` is found as `auraskills:fishing`.
+
 ### Levels
+
+[![API level 0.10+][since-0.10]][api-level]
 
 Levels API gives access to players' levels from all RPG plugins at once.
 A plugin may have one level or many: vanilla Minecraft has a single level,
 while skill plugins have a level per skill, and job plugins have a level per job.
 Each of these levels is called a **track**.
-
-Levels API requires Mimic 0.10, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)`.
 
 #### Track IDs
 
@@ -190,11 +223,10 @@ Each track has an ID made of the plugin ID and the track name: `minecraft:level`
 The plugin part is required, because different plugins may have tracks with the same name.
 See [IDs](#ids) for allowed characters.
 
-If you read track IDs from your config, validate them:
+If you read track IDs from your config, look them up with `lookupTrack`, see [IDs from configs](#ids-from-configs):
 
 ```java
-Key trackId = Key.key(config.getString("track"));
-boolean exists = levels.getAllTracks().stream().anyMatch(track -> track.key().equals(trackId));
+Key trackId = levels.lookupTrack(config.getString("track", "")).getFoundId(); // null if the track isn't found
 ```
 
 #### Reading levels
@@ -262,13 +294,13 @@ Plugins that still use the deprecated [BukkitLevelSystem] are available the same
 
 ### Classes
 
+[![API level 0.10+][since-0.10]][api-level]
+
 Classes API gives access to players' classes from all RPG plugins at once.
 A **slot** holds at most one of the player's classes:
 one plugin has a single class per player, another has a primary and a secondary class, or a class and a race.
 Races are classes too, held in a race slot.
 A player may have classes from several plugins at once, for example a class from one plugin and a race from another.
-
-Classes API requires Mimic 0.10, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)`.
 
 #### Class IDs
 
@@ -276,14 +308,15 @@ Slots and classes have IDs made of the plugin ID and the slot or class name: `fa
 The plugin part is required, because different plugins may have classes with the same name.
 See [IDs](#ids) for allowed characters.
 
-If you read class IDs from your config, validate them:
+If you read class IDs from your config, look them up with `lookupClass`, see [IDs from configs](#ids-from-configs):
 
 ```java
-Key classId = Key.key(config.getString("class"));
-boolean exists = classes.getAllClasses().stream().anyMatch(c -> c.key().equals(classId));
+Key classId = classes.lookupClass(config.getString("class", "")).getFoundId(); // null if the class isn't found
 ```
 
-Classes of plugins using the deprecated [BukkitClassSystem] are missing from `getAllClasses()`, see [Built-in classes](#built-in-classes).
+Classes of plugins using the deprecated [BukkitClassSystem] are missing from `getAllClasses()`, so `lookupClass` doesn't find them, see [Built-in classes](#built-in-classes).
+
+Look up slot IDs the same way with `classes.lookupSlot(value)`.
 
 #### Reading classes
 
@@ -343,20 +376,20 @@ The old API has limits:
 
 ### Resources
 
+[![API level 0.10+][since-0.10]][api-level]
+
 Resources API gives access to players' mana, stamina and similar resources from all RPG plugins at once.
 A **resource** is something a player spends and gets back, with a current amount and a maximum.
-
-Resources API requires Mimic 0.10, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_10)`.
 
 #### Resource IDs
 
 Resources have IDs made of the plugin ID and the resource name: `mmocore:mana`, `heroes:stamina`.
 The plugin part is required, because different plugins may have resources with the same name.
-Note that `Key.key("mana")` turns into `minecraft:mana`, so validate IDs read from your config:
+Note that `Key.key("mana")` turns into `minecraft:mana`, so look up IDs read from your config with `lookupResource`,
+see [IDs from configs](#ids-from-configs):
 
 ```java
-Key resourceId = Key.key(config.getString("resource")); // "mmocore:mana"
-boolean exists = resources.getAllResources().stream().anyMatch(r -> r.key().equals(resourceId));
+Key resourceId = resources.lookupResource(config.getString("resource", "")).getFoundId(); // null if the resource isn't found
 ```
 
 If your config just says "mana", use the primary resource. Server owners choose its plugin with `resource-provider` in Mimic config:
@@ -421,22 +454,24 @@ To make resources of your plugin available, implement [ResourceProvider]: only r
 armor and absorption hearts are ignored, and taking all health kills the player.
 ### Items
 
+[![API level 0.11+][since-0.11]][api-level]
+
 [Items] gives access to vanilla items and custom items of all supported plugins:
 create an item by its ID, get the ID of a stack, check that a stack is a specific item.
-
-Items API requires Mimic 0.11, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_11)`.
 
 #### Item IDs
 
 An item ID is a `Key` like `mmoitems:sword/excalibur`: the namespace is the ID of the plugin providing the item,
 the path is the item within that plugin.
-The namespace is required, there is no search over all plugins.
-`Key.key("excalibur")` turns into `minecraft:excalibur`, so validate IDs read from configs:
+The namespace is required.
+`Key.key("excalibur")` turns into `minecraft:excalibur`, so look up IDs read from configs with `lookupItem`,
+see [IDs from configs](#ids-from-configs):
 
 ```java
-Key itemId = Key.key(config.getString("item"));
-if (!items.hasItem(itemId)) {
-    getLogger().warning("Unknown item " + itemId.asString());
+String value = config.getString("item", "");
+Key itemId = items.lookupItem(value).getFoundId();
+if (itemId == null) {
+    getLogger().warning("Unknown item " + value);
 }
 ```
 
@@ -503,22 +538,24 @@ and `Mimic.getItemsRegistry()` shows items of all item providers.
 
 ### Blocks
 
+[![API level 0.11+][since-0.11]][api-level]
+
 [Blocks] gives access to vanilla blocks and custom blocks of all supported plugins:
 identify a placed block, set and break blocks, get an item placing a block.
-
-Blocks API requires Mimic 0.11, check it with `MimicApiLevel.checkApiLevel(MimicApiLevel.VERSION_0_11)`.
 
 #### Block IDs
 
 A block ID is a `Key` like `craftengine:default/palm_log`: the namespace is the ID of the plugin providing the block,
 the path is the block within that plugin.
-The namespace is required, there is no search over all plugins.
-`Key.key("palm_log")` turns into `minecraft:palm_log`, so validate IDs read from configs:
+The namespace is required.
+`Key.key("palm_log")` turns into `minecraft:palm_log`, so look up IDs read from configs with `lookupBlock`,
+see [IDs from configs](#ids-from-configs):
 
 ```java
-Key blockId = Key.key(config.getString("block"));
-if (!blocks.hasBlock(blockId)) {
-    getLogger().warning("Unknown block " + blockId.asString());
+String value = config.getString("block", "");
+Key blockId = blocks.lookupBlock(value).getFoundId();
+if (blockId == null) {
+    getLogger().warning("Unknown block " + value);
 }
 ```
 
@@ -861,3 +898,8 @@ IDs of the default implementations (`mimic`, `minecraft`, `permissions`) are res
 
 [impl]: ../mimic-bukkit/src/main/kotlin/impl/
 [mimic-bukkit]: ../mimic-bukkit/
+
+[api-level]: #how-to-use-mimic-apis
+[since-0.10]: https://img.shields.io/badge/API_level-0.10%2B-blue?style=flat-square
+[since-0.11]: https://img.shields.io/badge/API_level-0.11%2B-blue?style=flat-square
+[since-0.12]: https://img.shields.io/badge/API_level-0.12%2B-blue?style=flat-square

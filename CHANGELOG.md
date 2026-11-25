@@ -1,5 +1,26 @@
 ## [Unreleased]
 
+### Lenient ID lookup
+
+Previous two versions introduced strict IDs with namespace and path. Lenient lookup API simplifies converting config values into IDs.
+
+Methods starting with `lookup*` in APIs search by an ID written in a config: letter case doesn't matter, and the namespace may be omitted if only one plugin has this name.
+Requires Mimic API level `MimicApiLevel.VERSION_0_12`.
+See [IDs from configs](https://github.com/EndlessCodeGroup/Mimic/blob/develop/mimic-bukkit-api/README.md#ids-from-configs) for details and examples.
+
+```java
+// The namespace may be omitted, if only mcMMO has this track
+String configuredTrack = config.getString("track", ""); // "Woodcutting"
+Key trackId = levels.lookupTrack(configuredTrack).getFoundId(); // mcmmo:woodcutting
+if (trackId != null) levels.giveExp(player, trackId, 10);
+
+// The status tells what is wrong with the value
+LookupResult result = classes.lookupSlot("class");
+if (result.getStatus() == LookupStatus.AMBIGUOUS) {
+    getLogger().warning("Several plugins have this slot, use one of: " + result.getIds());
+}
+```
+
 ## [v0.11.0] (2026-11-24)
 
 ### Items API

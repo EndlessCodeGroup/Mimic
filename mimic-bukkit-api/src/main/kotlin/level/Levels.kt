@@ -7,6 +7,8 @@ import net.kyori.adventure.key.Key
 import net.kyori.adventure.key.Keyed
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
+import ru.endlesscode.mimic.LookupResult
+import ru.endlesscode.mimic.LookupStatus
 
 /**
  * Levels of players from all RPG plugins supported by Mimic. Get it via [Mimic.levels][ru.endlesscode.mimic.Mimic.levels].
@@ -43,7 +45,7 @@ import org.bukkit.entity.Player
  *
  * The namespace is required, since the same path in different plugins means a different level.
  * Note that `Key.key("mining")` turns into `minecraft:mining`,
- * so validate track IDs read from configs against [getAllTracks].
+ * so read track IDs from configs with [lookupTrack].
  *
  * ### Rules
  *
@@ -62,6 +64,25 @@ public interface Levels {
      * Tracks are sorted by provider priority, then in the order the provider returns them.
      */
     public fun getAllTracks(): List<LevelTrack>
+
+    /**
+     * Looks up the track ID by a [value] from a config. The result has only IDs of existing tracks.
+     * Use it instead of `Key.key(String)`, which turns `mining` into `minecraft:mining`.
+     *
+     * The lookup is lenient:
+     * - Letter case doesn't matter, and characters not allowed in IDs are replaced with `_`:
+     *   `Jobs:Wood Cutter` is `jobs:wood_cutter`.
+     * - The namespace may be omitted if only one plugin has a track with this name: `woodcutting` is `mcmmo:woodcutting`.
+     *   If several plugins have it, the plugin set in the `level-provider` option of Mimic config is used.
+     *   If the option isn't set, or that plugin doesn't have the track, the result is [LookupStatus.AMBIGUOUS].
+     *
+     * The name should be the same as in the track ID: `mining` doesn't match `mmocore:profession/mining`.
+     *
+     * May be called from any thread.
+     *
+     * @since 0.12.0
+     */
+    public fun lookupTrack(value: String): LookupResult
 
     /**
      * Returns tracks the [player] currently has.
