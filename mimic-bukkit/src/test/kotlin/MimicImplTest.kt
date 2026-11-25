@@ -18,7 +18,6 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.server.PluginDisableEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority.*
 import ru.endlesscode.mimic.classes.BukkitClassSystem
 import ru.endlesscode.mimic.classes.ClassProvider
@@ -33,8 +32,6 @@ import kotlin.test.Test
 
 internal class MimicImplTest : BukkitTestBase() {
 
-    private val enabledPlugins = mutableSetOf("Mimic", "ThirdParty", "Other")
-    private val mimicPlugin = mockPlugin("Mimic")
     private val thirdParty = mockPlugin("ThirdParty")
     private val otherPlugin = mockPlugin("Other")
 
@@ -47,13 +44,13 @@ internal class MimicImplTest : BukkitTestBase() {
     }
 
     // SUT
-    private val mimic = MimicImpl(mimicPlugin, config)
+    private val mimic = MimicImpl(plugin, config)
 
     init {
-        mimic.registerLevelSystem(TestLevelSystemProvider("minecraft"), MimicApiLevel.CURRENT, mimicPlugin, Lowest)
-        mimic.registerLevelProvider(MinecraftLevelProvider(), MimicApiLevel.CURRENT, mimicPlugin, Lowest)
+        mimic.registerLevelSystem(TestLevelSystemProvider("minecraft"), MimicApiLevel.CURRENT, plugin, Lowest)
+        mimic.registerLevelProvider(MinecraftLevelProvider(), MimicApiLevel.CURRENT, plugin, Lowest)
         mimic.registerLevelSystem(TestLevelSystemProvider("custom"), MimicApiLevel.CURRENT, thirdParty, Normal)
-        mimic.registerClassSystem(TestClassSystemProvider("permissions"), MimicApiLevel.CURRENT, mimicPlugin, Lowest)
+        mimic.registerClassSystem(TestClassSystemProvider("permissions"), MimicApiLevel.CURRENT, plugin, Lowest)
     }
 
     @Test
@@ -77,7 +74,7 @@ internal class MimicImplTest : BukkitTestBase() {
 
     @Test
     fun `when plugin of the level system is not enabled - should skip it`() {
-        enabledPlugins -= "ThirdParty"
+        disabledPlugins += "ThirdParty"
 
         mimic.getLevelSystemProvider().id shouldBe "minecraft"
     }
@@ -146,7 +143,7 @@ internal class MimicImplTest : BukkitTestBase() {
 
     @Test
     fun `when level system is replaced - should provide the new one`() {
-        mimic.registerLevelSystem(TestLevelSystemProvider("builtin"), MimicApiLevel.CURRENT, mimicPlugin, Normal)
+        mimic.registerLevelSystem(TestLevelSystemProvider("builtin"), MimicApiLevel.CURRENT, plugin, Normal)
         mimic.registerLevelSystem(TestLevelSystemProvider("builtin"), MimicApiLevel.CURRENT, thirdParty, Normal)
 
         (mimic.levels as MimicLevels).providers.enabled.single { it.service.id == "builtin" }.plugin shouldBe thirdParty
@@ -277,12 +274,6 @@ internal class MimicImplTest : BukkitTestBase() {
     private fun List<LevelTrack>.keys() = map { it.key().asString() }
 
     private fun Levels.trackName(id: String) = getAllTracks().single { it.key().asString() == id }.name()
-
-    private fun mockPlugin(name: String): Plugin = mockk {
-        every { this@mockk.name } returns name
-        every { isEnabled } answers { name in enabledPlugins }
-        every { pluginMeta } returns mockk { every { authors } returns emptyList() }
-    }
 
     private class TestLevelProvider(override val id: String) : LevelProvider {
         private val track = LevelProvider.Track("level", Component.empty())

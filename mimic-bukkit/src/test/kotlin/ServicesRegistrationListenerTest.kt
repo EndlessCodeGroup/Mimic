@@ -10,7 +10,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority.Normal
 import org.bukkit.plugin.SimpleServicesManager
 import ru.endlesscode.mimic.level.BukkitLevelSystem
@@ -22,12 +21,7 @@ internal class ServicesRegistrationListenerTest : BukkitTestBase() {
     private val mimic: Mimic = mockk {
         every { registerLevelSystem(any(), any(), any(), any()) } answers { firstArg() }
     }
-    private val thirdParty: Plugin = mockk {
-        every { name } returns "ThirdParty"
-        every { pluginMeta } returns mockk {
-            every { authors } returns listOf("Plugin Author")
-        }
-    }
+    private val thirdParty = mockPlugin("ThirdParty")
 
     // SUT
     private val listener = ServicesRegistrationListener(servicesManager, mimic)

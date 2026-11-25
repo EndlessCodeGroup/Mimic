@@ -18,7 +18,9 @@ import java.util.*
 /** Base for all Bukkit-related tests. */
 @Suppress("UnstableApiUsage")
 open class BukkitTestBase {
-    protected val plugin: Plugin = mockPlugin(server)
+    /** Names of disabled plugins, see [mockPlugin]. */
+    protected val disabledPlugins: MutableSet<String> = mutableSetOf()
+    protected val plugin: Plugin = mockPlugin("Mimic")
     protected val player: Player = mockPlayer()
 
     init {
@@ -30,10 +32,11 @@ open class BukkitTestBase {
         mockBukkit()
     }
 
-    private fun mockPlugin(mockServer: Server): Plugin = mockk {
-        every { name } returns "Mimic"
-        every { isEnabled } returns true
-        every { server } returns mockServer
+    /** Returns a mock of the plugin with the given [name], enabled unless the name is in [disabledPlugins]. */
+    protected fun mockPlugin(name: String): Plugin = mockk {
+        every { this@mockk.name } returns name
+        every { isEnabled } answers { name !in disabledPlugins }
+        every { server } returns Companion.server
         every { pluginMeta } returns mockk {
             every { authors } returns listOf("Plugin Author")
         }

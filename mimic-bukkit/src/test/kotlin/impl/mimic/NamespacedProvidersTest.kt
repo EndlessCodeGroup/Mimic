@@ -8,10 +8,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import io.mockk.every
-import io.mockk.mockk
 import net.kyori.adventure.key.Key
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority.Low
 import org.bukkit.plugin.ServicePriority.Lowest
 import org.bukkit.plugin.ServicePriority.Normal
@@ -28,7 +25,6 @@ import kotlin.test.Test
 
 internal class NamespacedProvidersTest : BukkitTestBase() {
 
-    private var enabledPlugins = setOf("ThirdParty")
     private val thirdParty = mockPlugin("ThirdParty")
 
     private var disabledIds = emptySet<String>()
@@ -128,12 +124,13 @@ internal class NamespacedProvidersTest : BukkitTestBase() {
 
     @Test
     fun `when look up value before its plugin is enabled - should not find it until then`() {
+        disabledPlugins += "Late"
         registry.register(TestService(id = "late", "combat"), mockPlugin("Late"), Normal)
 
         lookup("late:combat").status shouldBe LookupStatus.NOT_FOUND
         lookup("combat").status shouldBe LookupStatus.NOT_FOUND
 
-        enabledPlugins += "Late"
+        disabledPlugins -= "Late"
         lookup("late:combat").foundId shouldBe Key.key("late:combat")
         lookup("combat").foundId shouldBe Key.key("late:combat")
     }
@@ -187,11 +184,6 @@ internal class NamespacedProvidersTest : BukkitTestBase() {
 
     private fun NamespacedProviders<TestService>.find(id: String) =
         find(Key.key(id), valueName = "value") { path -> service.has(path) }
-
-    private fun mockPlugin(name: String): Plugin = mockk {
-        every { this@mockk.name } returns name
-        every { isEnabled } answers { name in enabledPlugins }
-    }
 
     private class TestService(override val id: String, vararg paths: String) : MimicService {
         private val paths = paths.toSet()

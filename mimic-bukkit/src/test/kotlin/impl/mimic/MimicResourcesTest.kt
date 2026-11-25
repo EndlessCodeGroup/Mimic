@@ -12,11 +12,9 @@ import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockk
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority.Lowest
 import org.bukkit.plugin.ServicePriority.Normal
 import org.junit.jupiter.params.ParameterizedTest
@@ -34,11 +32,7 @@ import kotlin.test.Test
 
 internal class MimicResourcesTest : BukkitTestBase() {
 
-    private val thirdParty: Plugin = mockk {
-        every { name } returns "ThirdParty"
-        every { isEnabled } returns true
-        every { pluginMeta } returns mockk { every { authors } returns listOf("Author") }
-    }
+    private val thirdParty = mockPlugin("ThirdParty")
 
     private val resourceProviders = ServiceRegistry<ResourceProvider>("ResourceProvider", plugin, defaultId = "minecraft")
     private var preferredProviderId = ""

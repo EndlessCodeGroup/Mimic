@@ -8,9 +8,6 @@ import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.mockk.every
-import io.mockk.mockk
-import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.ServicePriority.*
 import org.junit.jupiter.params.ParameterizedTest
@@ -133,7 +130,8 @@ internal class ServiceRegistryTest : BukkitTestBase() {
     @Test
     fun `when get enabled services - should skip disabled plugins, services and IDs`() {
         registry.register(TestService("enabled"), thirdParty, Normal)
-        registry.register(TestService("disabled-plugin"), mockPlugin("DisabledPlugin", isEnabled = false), Normal)
+        disabledPlugins += "DisabledPlugin"
+        registry.register(TestService("disabled-plugin"), mockPlugin("DisabledPlugin"), Normal)
         registry.register(TestService("disabled-service", isEnabled = false), thirdParty, Normal)
         registry.register(TestService("disabled-id"), thirdParty, Normal)
         disabledIds = setOf("disabled-id")
@@ -143,11 +141,6 @@ internal class ServiceRegistryTest : BukkitTestBase() {
 
     private fun ServiceRegistry<TestService>.registeredIds() = entries.map { it.service.id }
     private fun ServiceRegistry<TestService>.registeredPlugins() = entries.map { it.plugin }
-
-    private fun mockPlugin(name: String, isEnabled: Boolean = true): Plugin = mockk {
-        every { this@mockk.name } returns name
-        every { this@mockk.isEnabled } returns isEnabled
-    }
 
     private class TestService(override val id: String, override val isEnabled: Boolean = true) : MimicService
 }
