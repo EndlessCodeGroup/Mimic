@@ -4,9 +4,12 @@
 package ru.endlesscode.mimic.impl.mimic
 
 import net.kyori.adventure.key.Key
+import ru.endlesscode.mimic.LookupResult
+import ru.endlesscode.mimic.LookupStatus
 import ru.endlesscode.mimic.MimicService
 import ru.endlesscode.mimic.ServiceEntry
 import ru.endlesscode.mimic.ServiceRegistry
+import ru.endlesscode.mimic.internal.NormalizedIds
 import ru.endlesscode.mimic.internal.authorsMention
 import ru.endlesscode.mimic.logImplementationError
 
@@ -19,10 +22,13 @@ import ru.endlesscode.mimic.logImplementationError
  *
  * @property hasVanillaValues `true` if the `minecraft:` namespace holds many vanilla values, like blocks.
  *   Then an unknown `minecraft:` ID is rather a typo than a missing namespace, see [find].
+ * @property preferredProviderId Returns ID of the provider preferred when several providers have a value
+ *   with the same path, or an empty string if there is none, see [lookup].
  */
 internal open class NamespacedProviders<T : MimicService>(
     val registry: ServiceRegistry<T>,
     private val hasVanillaValues: Boolean = false,
+    protected val preferredProviderId: () -> String = { "" },
 ) {
 
     /** Enabled providers in order of priority, Mimic default implementations last. */
@@ -74,8 +80,8 @@ internal open class NamespacedProviders<T : MimicService>(
         val provider = enabled.find { it.service.id == id.namespace() }
         if (id.namespace() == Key.MINECRAFT_NAMESPACE && (provider == null || !provider.contains(id.value()))) {
             val suggestions by lazy {
-                enabled
-                    .filter { it.service.id != Key.MINECRAFT_NAMESPACE && it.contains(id.value()) }
+                providersWith(id.value(), contains)
+                    .filter { it.service.id != Key.MINECRAFT_NAMESPACE }
                     .map { it.key(id.value()) }
             }
             if (hasVanillaValues && suggestions.isEmpty()) return provider
@@ -90,6 +96,49 @@ internal open class NamespacedProviders<T : MimicService>(
         }
         return provider
     }
+
+    /**
+     * Looks up the ID by the [value] written in a config: trims it, lowercases the namespace
+     * and [normalizes][NormalizedIds.normalize] the path. A value with several `:` is never found.
+     *
+     * A value without a namespace is found if a single provider has it, or if
+     * the [preferred provider][preferredProviderId] is among the providers having it. Otherwise, it is ambiguous.
+     * A value with a namespace has [LookupStatus.NO_PROVIDER] only if the namespace is neither registered nor reserved.
+     *
+     * The [contains] checks whether a provider has a value with the given path.
+     */
+    fun lookup(value: String, contains: ServiceEntry<T>.(path: String) -> Boolean): LookupResult {
+        val parts = value.trim().split(':')
+        val path = NormalizedIds.normalize(parts.last())
+        if (parts.size > 2 || path.isEmpty()) return MimicLookupResult.NOT_FOUND
+        if (parts.size == 2) return lookupWithNamespace(namespace = parts.first().lowercase(), path, contains)
+
+        val providers = providersWith(path, contains)
+        if (providers.isEmpty()) return MimicLookupResult.NOT_FOUND
+
+        val provider = providers.singleOrNull() ?: providers.find { it.service.id == preferredProviderId() }
+        if (provider != null) return MimicLookupResult.found(provider.key(path))
+        return MimicLookupResult(LookupStatus.AMBIGUOUS, providers.map { it.key(path) })
+    }
+
+    private fun lookupWithNamespace(
+        namespace: String,
+        path: String,
+        contains: ServiceEntry<T>.(path: String) -> Boolean,
+    ): LookupResult {
+        if (namespace.isEmpty() || !Key.parseableNamespace(namespace)) return MimicLookupResult.NOT_FOUND
+
+        val provider = enabled.find { it.service.id == namespace }
+        return when {
+            provider != null && provider.contains(path) -> MimicLookupResult.found(provider.key(path))
+            registry.isReserved(namespace) || namespace in allIds -> MimicLookupResult.NOT_FOUND
+            else -> MimicLookupResult.NO_PROVIDER
+        }
+    }
+
+    /** Returns enabled providers having a value with the given [path], checked with [contains]. */
+    private fun providersWith(path: String, contains: ServiceEntry<T>.(path: String) -> Boolean): List<ServiceEntry<T>> =
+        enabled.filter { it.contains(path) }
 }
 
 /**
@@ -101,8 +150,8 @@ internal open class NamespacedProviders<T : MimicService>(
 internal class PrimaryNamespacedProviders<T : MimicService>(
     registry: ServiceRegistry<T>,
     private val primaryName: String,
-    private val preferredProviderId: () -> String,
-) : NamespacedProviders<T>(registry) {
+    preferredProviderId: () -> String,
+) : NamespacedProviders<T>(registry, preferredProviderId = preferredProviderId) {
 
     /**
      * The preferred provider, or the provider with the highest priority, shown as selected in the config.
@@ -136,6 +185,19 @@ internal class PrimaryNamespacedProviders<T : MimicService>(
             }
         }
         return provider
+    }
+}
+
+/** [LookupResult] of [NamespacedProviders.lookup]. */
+private data class MimicLookupResult(
+    override val status: LookupStatus,
+    override val ids: List<Key> = emptyList(),
+) : LookupResult {
+    companion object {
+        val NOT_FOUND = MimicLookupResult(LookupStatus.NOT_FOUND)
+        val NO_PROVIDER = MimicLookupResult(LookupStatus.NO_PROVIDER)
+
+        fun found(id: Key) = MimicLookupResult(LookupStatus.FOUND, listOf(id))
     }
 }
 

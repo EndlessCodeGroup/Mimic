@@ -107,7 +107,7 @@ internal class ServiceRegistry<T : MimicService>(
     }
 
     /** Returns `true` if the [id] is reserved by Mimic, so other plugins can't register a service with it. */
-    private fun isReserved(id: String): Boolean = id == defaultId || id == MIMIC_ID || id == Key.MINECRAFT_NAMESPACE
+    fun isReserved(id: String): Boolean = id == defaultId || id == MIMIC_ID || id == Key.MINECRAFT_NAMESPACE
 
     /** Unregisters all services registered by the given [plugin]. */
     @Synchronized
