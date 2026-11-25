@@ -58,6 +58,12 @@ public object MimicApiLevel {
     public const val VERSION_0_11: Int = 7
 
     /**
+     * # Version 0.12
+     * - Lenient ID lookup: lookup methods of Levels, Classes, Resources, Items and Blocks
+     */
+    public const val VERSION_0_12: Int = 8
+
+    /**
      * The latest version at the moment of Mimic **COMPILATION**.
      *
      * Usage of this constant will be inlined by the compiler, so use it only
@@ -65,7 +71,7 @@ public object MimicApiLevel {
      * Use [checkApiLevel] if you want to check that the current **RUNNING**
      * Mimic API level meets to the required API level.
      */
-    public const val CURRENT: Int = VERSION_0_11
+    public const val CURRENT: Int = VERSION_0_12
 
     /**
      * Returns `true` if the current **RUNNING** Mimic API level is equal

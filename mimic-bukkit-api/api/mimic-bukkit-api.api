@@ -1,3 +1,19 @@
+public abstract interface class ru/endlesscode/mimic/LookupResult {
+	public fun getFoundId ()Lnet/kyori/adventure/key/Key;
+	public abstract fun getIds ()Ljava/util/List;
+	public abstract fun getStatus ()Lru/endlesscode/mimic/LookupStatus;
+}
+
+public final class ru/endlesscode/mimic/LookupStatus : java/lang/Enum {
+	public static final field AMBIGUOUS Lru/endlesscode/mimic/LookupStatus;
+	public static final field FOUND Lru/endlesscode/mimic/LookupStatus;
+	public static final field NOT_FOUND Lru/endlesscode/mimic/LookupStatus;
+	public static final field NO_PROVIDER Lru/endlesscode/mimic/LookupStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lru/endlesscode/mimic/LookupStatus;
+	public static fun values ()[Lru/endlesscode/mimic/LookupStatus;
+}
+
 public abstract interface class ru/endlesscode/mimic/Mimic {
 	public static final field Companion Lru/endlesscode/mimic/Mimic$Companion;
 	public abstract fun getAllClassSystemProviders ()Ljava/util/Map;

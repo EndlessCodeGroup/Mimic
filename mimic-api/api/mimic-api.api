@@ -6,6 +6,7 @@ public final class ru/endlesscode/mimic/MimicApiLevel {
 	public static final field INSTANCE Lru/endlesscode/mimic/MimicApiLevel;
 	public static final field VERSION_0_10 I
 	public static final field VERSION_0_11 I
+	public static final field VERSION_0_12 I
 	public static final field VERSION_0_6 I
 	public static final field VERSION_0_6_2 I
 	public static final field VERSION_0_7 I
